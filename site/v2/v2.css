@@ -997,8 +997,11 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border:0;border-radiu
   .deck .work canvas{
     --dv:26px;
     animation:deriva linear both;
-    animation-timeline:view();
-    will-change:translate}
+    animation-timeline:view()}
+  /* niente will-change: le animazioni guidate dallo scorrimento sono già
+     composte dal browser, e forzare un livello per ogni visuale su una
+     pagina che regge WebGL più sette canvas è memoria grafica spesa per
+     niente — sulle schede modeste è la ricetta per il riquadro nero. */
 
   /* strato 2 · il numerone d'apertura va al doppio: è lui a dare la
      sensazione di profondità, perché scorre visibilmente più veloce
