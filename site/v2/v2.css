@@ -952,9 +952,15 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border:0;border-radiu
 .sec--chiara.ap-numero .sec__head::before{
   color:#14c08a;-webkit-text-stroke:0}
 
-/* l'etichetta delle dimostrazioni: dal grigio al verde del sito */
-.sec--chiara .work__meta{color:#14c08a}
-.sec--chiara .work__meta b{color:#14c08a}
+/* la linguetta sopra la scheda: fondo verde pieno e scritta bianca.
+   Il verde e' #08805a e non #14c08a perche' il bianco a 11px sul verde
+   acceso fa 2,35:1 — peggio del grigio di partenza. Su questo ne fa
+   4,95:1 e passa la soglia. La scheda ha gia' overflow:hidden, quindi
+   la fascia si arrotonda da sola sugli angoli. */
+.sec--chiara .work__meta{
+  background:#08805a;color:#fff;border-bottom-color:transparent;
+  padding-block:11px}
+.sec--chiara .work__meta b{color:#fff}
 
 /* la barra di avanzamento del brief: l'alone verde su bianco sporcava */
 .sec--chiara .brief__progress i::after{box-shadow:none}

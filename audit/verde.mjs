@@ -18,9 +18,10 @@ const R = await p.evaluate(()=>{
   const num=getComputedStyle(document.querySelector('#lavori .sec__head'),'::before');
   const et=document.querySelector('#lavori .work__meta');
   const cs=et?getComputedStyle(et):null;
+  const fondoEt=(()=>{for(let n=et;n;n=n.parentElement){const c=getComputedStyle(n).backgroundColor;if(c&&!/rgba\(0, 0, 0, 0\)/.test(c))return rgb(c);}return carta})();
   return {
     numerone:`colore ${num.color} · contorno "${num.webkitTextStrokeWidth}" · corpo ${num.fontSize} · contrasto ${rap(rgb(num.color),carta)}:1`,
-    etichetta: cs?`colore ${cs.color} · corpo ${cs.fontSize} · contrasto ${rap(rgb(cs.color),carta)}:1 (soglia per 11px: 4.5)`:'assente'
+    etichetta: cs?`colore ${cs.color} · corpo ${cs.fontSize} · su fondo rgb(${fondoEt}) · contrasto ${rap(rgb(cs.color),fondoEt)}:1 (soglia 4.5)`:'assente'
   };
 });
 console.log(R.numerone); console.log(R.etichetta);
