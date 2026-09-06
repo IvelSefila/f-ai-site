@@ -1,0 +1,11 @@
+import { chromium } from 'playwright';
+const b=await chromium.launch({executablePath:'C:/Users/fabri/AppData/Local/ms-playwright/chromium-1228/chrome-win64/chrome.exe'});
+const p=await b.newPage({viewport:{width:1440,height:900},deviceScaleFactor:2});
+await p.goto('http://localhost:8899/portfolio.html',{waitUntil:'networkidle'});
+await p.waitForTimeout(2500);
+const box=await p.evaluate(()=>{const c=document.querySelector('.hero__copy');const a=document.querySelector('.hero__atlas');
+  const C=c.getBoundingClientRect(),A=a.getBoundingClientRect();
+  return {copy:{x:C.x,y:C.y,w:C.width,h:C.height},atlasX:A.x, clip:{x:Math.max(0,C.x-16),y:C.y-14,width:Math.min(1440-Math.max(0,C.x-16), C.width+120),height:C.height+28}};});
+console.log(JSON.stringify(box));
+await p.screenshot({path:'audit/crops-overlap.png',clip:box.clip});
+await b.close();

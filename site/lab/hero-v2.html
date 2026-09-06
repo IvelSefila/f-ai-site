@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>F/AI — Hero v2 (prototipo)</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%2305070b'/%3E%3Cpath d='M13 15h36v8H22v7h21v8H22v11h-9V15Zm31 33h8v-8h-8v8Z' fill='%2314c08a'/%3E%3C/svg%3E" />
+<style>
+@font-face{font-family:"Barlow Condensed";src:url("../assets/fonts/barlow-condensed-600-latin.woff2") format("woff2");font-weight:600;font-display:swap}
+@font-face{font-family:"Manrope";src:url("../assets/fonts/manrope-latin.woff2") format("woff2");font-weight:400 700;font-display:swap}
+
+:root{
+  --stage:#05070b;
+  --ink:#f5f6f7;
+  --text:#d6dce4;
+  --muted:#98a2ae;
+  --emerald:#14c08a;
+  --emerald-bright:#4fe3b0;
+  --emerald-light:#7fe3bd;
+  --line:rgba(221,231,242,.16);
+  --font-display:"Barlow Condensed","Arial Narrow",sans-serif;
+  --font-body:"Manrope",Arial,sans-serif;
+  --mono:ui-monospace,"SFMono-Regular",Consolas,monospace;
+  --gutter:clamp(20px,4.6vw,64px);
+}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%}
+body{
+  background:var(--stage);color:var(--ink);
+  font-family:var(--font-body);font-size:16px;line-height:1.6;
+  overflow:hidden;-webkit-font-smoothing:antialiased;
+}
+.mono{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;font-weight:600}
+
+/* ── palcoscenico ─────────────────────────────────── */
+.stage{position:fixed;inset:0;isolation:isolate}
+#gl{position:absolute;inset:0;width:100%;height:100%;display:block;touch-action:none;cursor:ew-resize}
+.scrim{position:absolute;inset:0;pointer-events:none;
+  background:linear-gradient(100deg,rgba(5,7,11,.96) 0%,rgba(5,7,11,.88) 30%,rgba(5,7,11,.42) 46%,transparent 60%),
+             linear-gradient(0deg,rgba(5,7,11,.86) 0%,transparent 26%)}
+.vignette{position:absolute;inset:0;pointer-events:none;
+  box-shadow:inset 0 0 200px 40px rgba(5,7,11,.55)}
+.scan{position:absolute;inset:0;pointer-events:none;opacity:.16;mix-blend-mode:soft-light;
+  background:repeating-linear-gradient(0deg,rgba(255,255,255,.5) 0 1px,transparent 1px 3px)}
+
+/* ── contenuto ────────────────────────────────────── */
+.content{position:absolute;inset:0;display:grid;align-content:center;
+  padding:calc(64px + env(safe-area-inset-top)) var(--gutter) 132px;
+  pointer-events:none}
+.inner{width:min(100%,1400px);margin-inline:auto}
+.content .inner{max-width:min(100%,46vw);margin-inline:0}
+@media (max-width:900px){.content .inner{max-width:100%}}
+
+.eyebrow{display:flex;align-items:center;gap:10px;color:var(--emerald);margin-bottom:clamp(18px,3vh,34px)}
+.eyebrow i{width:7px;height:7px;border-radius:50%;background:var(--emerald);flex:none;
+  box-shadow:0 0 0 0 rgba(20,192,138,.55);animation:ping 2.6s ease-out infinite}
+@keyframes ping{0%{box-shadow:0 0 0 0 rgba(20,192,138,.5)}70%,100%{box-shadow:0 0 0 12px rgba(20,192,138,0)}}
+
+h1{margin:0;font-family:var(--font-display);font-weight:600;text-transform:uppercase;
+  font-size:clamp(42px,5.2vw,86px);line-height:.86;letter-spacing:-.032em}
+h1 span{display:block;opacity:0;transform:translateY(.22em);
+  animation:rise .9s cubic-bezier(.2,.75,.2,1) forwards}
+h1 span:nth-child(1){animation-delay:.15s}
+h1 span:nth-child(2){animation-delay:.28s;color:#b9c1cb}
+h1 span:nth-child(3){animation-delay:.41s;
+  background:linear-gradient(96deg,#f4fbf8 6%,var(--emerald-light) 52%,#2a9a72 100%);
+  -webkit-background-clip:text;background-clip:text;color:transparent}
+@keyframes rise{to{opacity:1;transform:none}}
+
+.copy{margin:clamp(20px,3.4vh,38px) 0 0;max-width:44ch;color:var(--text);
+  font-size:clamp(15px,1.15vw,18px);opacity:0;animation:rise .9s .58s cubic-bezier(.2,.75,.2,1) forwards}
+
+/* ── verdetto AI ──────────────────────────────────── */
+.verdict{position:absolute;right:var(--gutter);top:calc(78px + env(safe-area-inset-top));
+  width:min(300px,42vw);pointer-events:none;text-align:right}
+.verdict .mono{color:var(--muted);display:block;margin-bottom:6px}
+.verdict p{margin:0;color:var(--emerald-light);font-family:var(--mono);font-size:12px;
+  line-height:1.65;letter-spacing:.02em;min-height:3.3em}
+.verdict p::after{content:"▌";color:var(--emerald);animation:blink 1s steps(1) infinite}
+@keyframes blink{50%{opacity:0}}
+
+/* ── telemetria ───────────────────────────────────── */
+.hud{position:absolute;left:0;right:0;bottom:0;pointer-events:none;
+  padding:0 var(--gutter) max(16px,env(safe-area-inset-bottom));
+  display:flex;align-items:flex-end;gap:clamp(12px,3vw,44px);flex-wrap:wrap;
+  border-top:1px solid var(--line);padding-top:12px;
+  background:linear-gradient(0deg,rgba(5,7,11,.9),transparent)}
+.hud dl{margin:0;display:flex;gap:clamp(12px,2.6vw,38px);flex-wrap:wrap}
+.hud div{min-width:0}
+.hud dt{color:var(--muted);font-family:var(--mono);font-size:9px;letter-spacing:.16em;
+  text-transform:uppercase;margin-bottom:3px}
+.hud dd{margin:0;color:var(--ink);font-family:var(--mono);font-size:13px;font-weight:700;
+  font-variant-numeric:tabular-nums;letter-spacing:.04em}
+.hud dd.on{color:var(--emerald)}
+.hint{margin-left:auto;color:var(--muted);font-family:var(--mono);font-size:10px;
+  letter-spacing:.14em;text-transform:uppercase;white-space:nowrap}
+.hint b{color:var(--emerald)}
+
+/* barra di split */
+.rail{position:absolute;left:var(--gutter);right:var(--gutter);bottom:64px;height:2px;
+  background:rgba(221,231,242,.14);pointer-events:none}
+.rail i{position:absolute;inset:0 auto 0 0;background:var(--emerald);width:50%;
+  box-shadow:0 0 14px rgba(20,192,138,.7)}
+.rail b{position:absolute;top:50%;width:11px;height:11px;border-radius:50%;
+  background:var(--emerald-bright);transform:translate(-50%,-50%);left:50%;
+  box-shadow:0 0 0 4px rgba(20,192,138,.18)}
+
+.fallback{position:absolute;inset:0;display:none;place-items:center;padding:2rem;
+  text-align:center;color:var(--muted)}
+.no-gl #gl{display:none}
+.no-gl .fallback{display:grid}
+
+@media (prefers-reduced-motion:reduce){
+  h1 span,.copy{animation:none;opacity:1;transform:none}
+  .eyebrow i,.verdict p::after{animation:none}
+  .scan{display:none}
+}
+@media (max-width:760px){
+  .verdict{display:none}
+  .content{align-content:end;padding-bottom:150px}
+  .hint{display:none}
+}
+</style>
+</head>
+<body>
+
+<div class="stage">
+  <canvas id="gl" aria-label="Confine interattivo fra direzione umana e sistema AI: trascina orizzontalmente per spostarlo, tieni premuto per erodere il bordo."></canvas>
+  <div class="fallback"><p>Questo prototipo richiede WebGL2.</p></div>
+  <div class="scrim"></div>
+  <div class="scan"></div>
+  <div class="vignette"></div>
+
+  <div class="content">
+    <div class="inner">
+      <div class="eyebrow mono"><i></i><span id="ey">Sistema di verifica · sessione attiva</span></div>
+      <h1>
+        <span>Creo immagini.</span>
+        <span>Dirigo il movimento.</span>
+        <span>Progetto sistemi AI.</span>
+      </h1>
+      <p class="copy">Il confine qui sopra non è un'immagine: è calcolato fotogramma per fotogramma. Trascinalo e decidi quanta macchina entra nel lavoro.</p>
+    </div>
+  </div>
+
+  <div class="verdict">
+    <span class="mono">Lettura del sistema</span>
+    <p id="verdict"></p>
+  </div>
+
+  <div class="rail"><i id="railFill"></i><b id="railKnob"></b></div>
+
+  <div class="hud">
+    <dl>
+      <div><dt>Sessione</dt><dd id="t">T+00:00</dd></div>
+      <div><dt>Direzione umana</dt><dd id="human">50%</dd></div>
+      <div><dt>Sistema AI</dt><dd id="ai" class="on">50%</dd></div>
+      <div><dt>Erosione</dt><dd id="erode">0.00</dd></div>
+      <div><dt>Frame</dt><dd id="fps">—</dd></div>
+      <div><dt>Scena</dt><dd id="scene">01/03</dd></div>
+    </dl>
+    <span class="hint">↔ Trascina · <b>tieni premuto</b> per erodere</span>
+  </div>
+</div>
+
+<script type="module">
+const canvas = document.getElementById('gl');
+const gl = canvas.getContext('webgl2', { antialias: false, alpha: false, powerPreference: 'high-performance' });
+if (!gl) { document.body.classList.add('no-gl'); throw new Error('no webgl2'); }
+
+const VERT = `#version 300 es
+in vec2 p; out vec2 v;
+void main(){ v = p * .5 + .5; gl_Position = vec4(p, 0., 1.); }`;
+
+const FRAG = `#version 300 es
+precision highp float;
+in vec2 v; out vec4 o;
+uniform sampler2D uA, uB;
+uniform vec2  uRes, uTexA, uTexB;
+uniform float uT, uSplit, uErode;
+
+const vec3 EM   = vec3(.078, .753, .541);
+const vec3 EMLO = vec3(.039, .561, .388);
+
+float hash(vec2 p){ return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453); }
+float vnoise(vec2 p){
+  vec2 i = floor(p), f = fract(p);
+  vec2 u = f * f * (3. - 2. * f);
+  return mix(mix(hash(i), hash(i + vec2(1,0)), u.x),
+             mix(hash(i + vec2(0,1)), hash(i + vec2(1,1)), u.x), u.y);
+}
+float fbm(vec2 p){
+  float s = 0., a = .5;
+  for (int i = 0; i < 5; i++){ s += a * vnoise(p); p *= 2.02; a *= .5; }
+  return s;
+}
+/* copre il rettangolo mantenendo le proporzioni della texture */
+vec2 cover(vec2 uv, vec2 tex){
+  float rs = uRes.x / uRes.y, rt = tex.x / tex.y;
+  vec2 s = rs > rt ? vec2(1., rt / rs) : vec2(rs / rt, 1.);
+  return (uv - .5) * s + .5;
+}
+float lum(vec3 c){ return dot(c, vec3(.2126, .7152, .0722)); }
+
+void main(){
+  vec2 uv = v;
+  float t = uT;
+
+  /* confine dissolto: rumore a due scale + deriva lenta */
+  float big  = fbm(vec2(uv.y * 3.2, t * .06)) - .5;
+  float fine = fbm(vec2(uv.y * 22., t * .35)) - .5;
+  float warp = big * .085 + fine * (.012 + uErode * .07);
+  float edge = uv.x - uSplit + warp;
+
+  /* la materia viene strappata verso il confine */
+  float pull = exp(-abs(edge) * 9.) * (.02 + uErode * .09);
+  vec2 dir   = vec2(sign(edge), 0.);
+
+  vec3 human = texture(uA, cover(uv - dir * pull * .6, uTexA)).rgb;
+  vec3 ai    = texture(uB, cover(uv + dir * pull, uTexB)).rgb;
+
+  /* lato umano: pellicola, desaturato, grana */
+  /* lato umano: pellicola. La cromia originale scende dal 12% al 5%:
+     quel che restava bastava a far leggere ancora l'azzurro della sorgente. */
+  float g = lum(human);
+  human = mix(vec3(g), human, .05);
+  human = pow(human, vec3(1.06)) * 1.04;
+  human += (hash(uv * uRes + t) - .5) * .045;
+
+  /* lato macchina: smeraldo pieno, dalle ombre alla luce */
+  /* lato macchina: prima il canale blu sopravviveva due volte — nel 28% di
+     cromia originale e nel moltiplicatore .78. Ora la sorgente conta il 10%
+     e il blu viene compresso a .34: lo smeraldo arriva anche nelle luci. */
+  float ga = lum(ai);
+  ai = mix(vec3(ga), ai, .10);
+  ai = mix(ai * vec3(.30, 1., .34), EM * (ga * 1.55), .42);
+  ai += EM * smoothstep(.60, 1., ga) * .58;
+
+  float m = smoothstep(-.012, .012, edge);
+  vec3 col = mix(human, ai, m);
+
+  /* la linea di taglio */
+  float line = exp(-pow(edge / .0028, 2.));
+  col += EM * line * 1.5;
+  col += EMLO * exp(-pow(edge / .028, 2.)) * .3;
+
+  /* schegge che si staccano dal bordo */
+  float fl = step(.80, fbm(uv * vec2(28., 46.) + vec2(t * .5, -t * .3)));
+  col += EM * fl * exp(-pow(edge / (.03 + uErode * .1), 2.)) * (.55 + uErode);
+
+  /* reticolo strumentale sul lato macchina */
+  vec2 gp = fract(uv * vec2(46., 26.));
+  float grid = smoothstep(.965, 1., max(gp.x, gp.y));
+  col += EMLO * grid * m * .10;
+
+  col *= 1. - .55 * pow(length((uv - .5) * vec2(1.05, 1.)), 2.4);
+  o = vec4(col, 1.);
+}`;
+
+function shader(type, src){
+  const s = gl.createShader(type);
+  gl.shaderSource(s, src); gl.compileShader(s);
+  if (!gl.getShaderParameter(s, gl.COMPILE_STATUS)) throw new Error(gl.getShaderInfoLog(s));
+  return s;
+}
+const prog = gl.createProgram();
+gl.attachShader(prog, shader(gl.VERTEX_SHADER, VERT));
+gl.attachShader(prog, shader(gl.FRAGMENT_SHADER, FRAG));
+gl.linkProgram(prog);
+if (!gl.getProgramParameter(prog, gl.LINK_STATUS)) throw new Error(gl.getProgramInfoLog(prog));
+gl.useProgram(prog);
+
+const vao = gl.createVertexArray(); gl.bindVertexArray(vao);
+const buf = gl.createBuffer(); gl.bindBuffer(gl.ARRAY_BUFFER, buf);
+gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1,-1, 3,-1, -1,3]), gl.STATIC_DRAW);
+const loc = gl.getAttribLocation(prog, 'p');
+gl.enableVertexAttribArray(loc); gl.vertexAttribPointer(loc, 2, gl.FLOAT, false, 0, 0);
+
+const U = n => gl.getUniformLocation(prog, n);
+const uRes = U('uRes'), uT = U('uT'), uSplit = U('uSplit'), uErode = U('uErode'),
+      uTexA = U('uTexA'), uTexB = U('uTexB');
+gl.uniform1i(U('uA'), 0); gl.uniform1i(U('uB'), 1);
+
+function makeTex(unit){
+  const tex = gl.createTexture();
+  gl.activeTexture(gl.TEXTURE0 + unit);
+  gl.bindTexture(gl.TEXTURE_2D, tex);
+  gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 1, 1, 0, gl.RGBA, gl.UNSIGNED_BYTE, new Uint8Array([8,10,14,255]));
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+  return tex;
+}
+const texA = makeTex(0), texB = makeTex(1);
+const size = { a: [1600, 1024], b: [1600, 1024] };
+
+function upload(unit, tex, img, key){
+  gl.activeTexture(gl.TEXTURE0 + unit);
+  gl.bindTexture(gl.TEXTURE_2D, tex);
+  gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
+  gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, img);
+  size[key] = [img.naturalWidth, img.naturalHeight];
+}
+const load = src => new Promise(res => {
+  const i = new Image(); i.decoding = 'async';
+  i.onload = () => res(i); i.onerror = () => res(null); i.src = src;
+});
+
+const SCENES = [
+  ['../assets/director-scene-film.webp',   '../assets/director-scene-system.webp', 'Regia video'],
+  ['../assets/director-scene-design.webp', '../assets/director-scene-system.webp', 'Sistema visivo'],
+  ['../assets/signal-atlas-v1.webp',       '../assets/director-scene-system.webp', 'Flussi e agenti'],
+];
+let sceneIx = 0;
+async function setScene(i){
+  sceneIx = (i + SCENES.length) % SCENES.length;
+  const [a, b, name] = SCENES[sceneIx];
+  const [ia, ib] = await Promise.all([load(a), load(b)]);
+  if (ia) upload(0, texA, ia, 'a');
+  if (ib) upload(1, texB, ib, 'b');
+  el.scene.textContent = String(sceneIx + 1).padStart(2, '0') + '/0' + SCENES.length;
+  el.ey.textContent = 'Sistema di verifica · ' + name;
+}
+
+/* ── stato ─────────────────────────────────────────── */
+const el = {
+  t: document.getElementById('t'), human: document.getElementById('human'),
+  ai: document.getElementById('ai'), erode: document.getElementById('erode'),
+  fps: document.getElementById('fps'), scene: document.getElementById('scene'),
+  fill: document.getElementById('railFill'), knob: document.getElementById('railKnob'),
+  verdict: document.getElementById('verdict'), ey: document.getElementById('ey'),
+};
+const reduce = matchMedia('(prefers-reduced-motion: reduce)');
+let split = .5, target = .5, erode = 0, erodeT = 0, holding = false, dragging = false;
+let frames = 0, fpsAcc = 0, lastFps = performance.now(), dpr = 1;
+
+function resize(){
+  dpr = Math.min(devicePixelRatio || 1, 2);
+  const w = Math.round(canvas.clientWidth * dpr), h = Math.round(canvas.clientHeight * dpr);
+  if (canvas.width !== w || canvas.height !== h){ canvas.width = w; canvas.height = h; }
+  gl.viewport(0, 0, canvas.width, canvas.height);
+}
+new ResizeObserver(resize).observe(canvas);
+
+const setTargetFromX = x => {
+  const r = canvas.getBoundingClientRect();
+  target = Math.min(.94, Math.max(.06, (x - r.left) / r.width));
+};
+canvas.addEventListener('pointerdown', e => {
+  canvas.setPointerCapture(e.pointerId); dragging = true; holding = true; setTargetFromX(e.clientX);
+});
+canvas.addEventListener('pointermove', e => { if (dragging) setTargetFromX(e.clientX); });
+for (const ev of ['pointerup', 'pointercancel'])
+  canvas.addEventListener(ev, () => { dragging = false; holding = false; });
+canvas.addEventListener('dblclick', () => setScene(sceneIx + 1));
+addEventListener('keydown', e => {
+  if (e.key === 'ArrowLeft')  { target = Math.max(.06, target - .04); e.preventDefault(); }
+  if (e.key === 'ArrowRight') { target = Math.min(.94, target + .04); e.preventDefault(); }
+  if (e.key === ' ')          { setScene(sceneIx + 1); e.preventDefault(); }
+});
+
+/* il sistema commenta ciò che stai facendo */
+const READS = [
+  [0,   'Direzione quasi interamente umana. Il sistema osserva e non interviene.'],
+  [.28, 'La macchina assiste sui formati. Le decisioni di ritmo restano tue.'],
+  [.52, 'Regia condivisa. Tu scegli l’intenzione, il sistema moltiplica le varianti.'],
+  [.74, 'Il sistema guida la produzione. Tu tieni il controllo qualità.'],
+  [.9,  'Automazione spinta. Serve una revisione umana prima dell’output.'],
+];
+let readIx = -1, typed = '', typeTo = '', typeAt = 0;
+function pickRead(s){
+  let i = 0; for (let k = 0; k < READS.length; k++) if (s >= READS[k][0]) i = k;
+  if (i !== readIx){ readIx = i; typeTo = READS[i][1]; typed = ''; typeAt = 0; }
+}
+
+const mmss = ms => {
+  const s = Math.floor(ms / 1000);
+  return 'T+' + String(Math.floor(s / 60)).padStart(2, '0') + ':' + String(s % 60).padStart(2, '0');
+};
+
+let raf = 0, startedAt = 0;
+function start(){ if (raf) return; last = performance.now(); if (!startedAt) startedAt = last; raf = requestAnimationFrame(frame); }
+function stop(){ cancelAnimationFrame(raf); raf = 0; }
+new IntersectionObserver(([e]) => { e.isIntersecting ? start() : stop(); }).observe(canvas);
+document.addEventListener('visibilitychange', () => { document.hidden ? stop() : start(); });
+
+let last = performance.now();
+function frame(now){
+  raf = requestAnimationFrame(frame);
+  const dt = Math.min((now - last) / 1000, .05); last = now;
+
+  /* deriva lenta quando nessuno tocca */
+  if (!dragging && !reduce.matches) target += Math.sin(now * .00016) * .00035;
+  split += (target - split) * Math.min(1, dt * 6);
+  erodeT = holding ? 1 : 0;
+  erode  += (erodeT - erode) * Math.min(1, dt * (holding ? 3.2 : 1.8));
+
+  resize();
+  gl.uniform2f(uRes, canvas.width, canvas.height);
+  gl.uniform2f(uTexA, size.a[0], size.a[1]);
+  gl.uniform2f(uTexB, size.b[0], size.b[1]);
+  gl.uniform1f(uT, reduce.matches ? 12 : (now - startedAt) / 1000);
+  gl.uniform1f(uSplit, split);
+  gl.uniform1f(uErode, erode);
+  gl.drawArrays(gl.TRIANGLES, 0, 3);
+
+  /* telemetria: valori reali, non decorativi */
+  frames++; fpsAcc += dt;
+  if (now - lastFps > 500){
+    el.fps.textContent = Math.round(frames / fpsAcc) + ' fps';
+    frames = 0; fpsAcc = 0; lastFps = now;
+  }
+  const ai = Math.round(split * 100);
+  el.t.textContent = mmss(now - startedAt);
+  el.human.textContent = (100 - ai) + '%';
+  el.ai.textContent = ai + '%';
+  el.erode.textContent = erode.toFixed(2);
+  el.fill.style.width = ai + '%';
+  el.knob.style.left = ai + '%';
+
+  pickRead(split);
+  if (typed.length < typeTo.length){
+    typeAt += dt * 1000;
+    if (typeAt > 16){ typed = typeTo.slice(0, typed.length + 1); typeAt = 0; el.verdict.textContent = typed; }
+  }
+  if (reduce.matches && typed !== typeTo){ typed = typeTo; el.verdict.textContent = typed; }
+}
+
+await setScene(0);
+start();
+</script>
+</body>
+</html>

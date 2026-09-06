@@ -1,0 +1,16 @@
+# dipendenze: si ricostruiscono con `npm install`
+node_modules/
+
+# materiale di terze parti clonato durante la ricerca (68 MB, ha già
+# i suoi repository di origine)
+research/
+
+# le schermate di misura si rigenerano con gli script in audit/
+audit/**/*.png
+audit/**/*.jpg
+audit/*.png
+audit/*.jpg
+
+# roba di sistema
+Thumbs.db
+.DS_Store

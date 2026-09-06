@@ -1,0 +1,11 @@
+<!DOCTYPE html><html lang="it"><head><meta charset="UTF-8">
+<title>Baseline</title><style>body{margin:0;background:#05070b;color:#4fe3b0;
+font:14px ui-monospace,monospace;display:grid;place-items:center;height:100vh}
+b{font-size:64px;display:block;text-align:center}</style></head><body>
+<div><b id="v">—</b><span>rAF al secondo · pagina vuota, nessun canvas</span></div>
+<script>
+let n=0,t0=performance.now();
+const k=()=>{n++;const d=performance.now()-t0;
+ if(d>1000){document.getElementById('v').textContent=(n/(d/1000)).toFixed(1);n=0;t0=performance.now();}
+ requestAnimationFrame(k)};requestAnimationFrame(k);
+</script></body></html>

@@ -1,0 +1,119 @@
+/*
+ * F/AI — tokens.css
+ * UNICO punto di verità per il sistema visivo.
+ *
+ * Prima di questo file i tre fogli definivano tre :root diversi e l'ultimo
+ * vinceva. È da lì che nascevano gli offset orfani che facevano finire il
+ * paragrafo dell'hero sotto l'immagine. Un solo :root, qui.
+ *
+ * Direzione: verde smeraldo. Spaziature, larghezze e raggi sono quelli
+ * originali del progetto — qui cambia il colore, non la composizione.
+ */
+
+:root {
+  /* ── superfici ────────────────────────────────────────────── */
+  --studio-black:    #05070b;
+  --studio-graphite: #0d1118;
+  --studio-panel:    #131923;
+  --studio-white:    #f5f6f7;
+  --studio-mist:     #b8c1cc;
+
+  --stage:   var(--studio-black);
+  --panel:   var(--studio-graphite);
+  --panel-2: var(--studio-panel);
+  --paper:   var(--studio-white);
+  --ink:     var(--studio-white);
+  --text:    #d6dce4;
+  --muted:   #98a2ae;
+
+  /* ── smeraldo ──────────────────────────────────────────────
+     Una sola famiglia, quattro temperature. Il chiaro per gli
+     stati attivi e i gradienti, il profondo per i fondi chiari. */
+  --emerald:        #14c08a;   /* accento principale su scuro   ~8.5:1 */
+  --emerald-bright: #4fe3b0;   /* stati attivi, evidenziazioni         */
+  --emerald-light:  #7fe3bd;   /* gradienti, scope                     */
+  --emerald-deep:   #0a8f63;   /* superfici piene, layer profondo      */
+  --emerald-ink:    #0f9c70;   /* su fondo chiaro               ~3.2:1 */
+
+  --studio-blue:      var(--emerald);        /* alias storici: i tre fogli */
+  --studio-blue-deep: var(--emerald-deep);   /* chiamano ancora così       */
+  --studio-amber:     var(--emerald-bright);
+
+  --cut:          var(--emerald-bright);
+  --cut-ink:      var(--emerald-ink);
+  --cut-progress: var(--emerald);
+  --selected:     var(--emerald);
+  --ai-layer:     var(--emerald-deep);
+  --ai-surface:   #0d7b57;
+  --ai-ink:       #0a6f4e;
+  --scope:        var(--emerald-light);
+  --ultraviolet:  #3fd6a0;
+
+  /* ── linee e ombre ────────────────────────────────────────── */
+  --studio-line:      rgba(221, 231, 242, .16);
+  --studio-dark-line: rgba(5, 7, 11, .14);
+  --line:          var(--studio-line);
+  --paper-line:    var(--studio-dark-line);
+  --paper-control: #7f827c;
+  --signal-line:   rgba(20, 192, 138, .58);
+  --film-stock:    var(--studio-white);
+  --shadow-ink:    rgba(2, 6, 18, .56);
+  --studio-glow:   0 34px 90px rgba(12, 92, 68, .26);
+  --tap-flash:     rgba(79, 227, 176, .22);
+
+  /* ── caratteri ────────────────────────────────────────────── */
+  --font-display:  "Barlow Condensed", "Arial Narrow", sans-serif;
+  --font-body:     "Manrope", Arial, sans-serif;
+  --font-timecode: ui-monospace, "SFMono-Regular", Consolas, monospace;
+
+  /* Pavimento tipografico: sotto gli 11px il testo non è più testo.
+     Vale per la UI reale, non per i mockup disegnati dentro le card. */
+  --fs-micro: 11px;
+
+  /* ── griglia e ritmo: valori originali ────────────────────── */
+  --gutter:        clamp(18px, 4.8vw, 34px);
+  --content:       1500px;
+  --topbar-height: 72px;
+  --dock-height:   72px;
+  --tap-target:    48px;
+  --section-space: clamp(96px, 17vw, 168px);
+
+  /* ── raggi: morbidi, come in origine ──────────────────────── */
+  --studio-radius: clamp(22px, 4vw, 42px);
+
+  /* ── movimento ────────────────────────────────────────────── */
+  --ease-cinema: cubic-bezier(.22, .72, .18, 1);
+  --ease-cut:    cubic-bezier(.22, .76, .22, 1);
+  --ease-snap:   cubic-bezier(.2, .9, .25, 1);
+
+  /* ── stato runtime (scritto da script.js) ─────────────────── */
+  --director-reveal: 50%;
+  --director-image-scale: 1.1;
+  --director-image-x: -2%;
+  --director-image-y: 0%;
+  --director-image-rotate: -1deg;
+  --director-image-hue: 16deg;
+  --director-image-saturation: 1.35;
+  --director-energy: .66;
+}
+
+/* Sullo smeraldo pieno il fondo chiaro scende a 2.1:1. Dentro le sezioni
+   su carta l'accento passa alla variante profonda: stesso verde, contrasto
+   che regge sui titoli grandi. */
+.work,
+.method,
+.profile,
+.brief {
+  --studio-blue:  var(--emerald-ink);
+  --studio-amber: var(--emerald-ink);
+  --cut:          var(--emerald-ink);
+  --selected:     var(--emerald-ink);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --ease-cinema: linear;
+    --ease-cut: linear;
+    --ease-snap: linear;
+  }
+}
