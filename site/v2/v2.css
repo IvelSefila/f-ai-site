@@ -947,9 +947,14 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border:0;border-radiu
 /* il marchio ART × AI: contorno verde al 28% su bianco è invisibile */
 .sec--chiara .profilo__mark{-webkit-text-stroke:1.5px rgba(6,113,79,.42)}
 
-/* il numerone d'apertura di "lavori" e "laboratorio" */
+/* il numerone d'apertura di "lavori" e "laboratorio": pieno, nel verde
+   del sito, non piu' contornato. A 176px e' un segno grafico, non testo. */
 .sec--chiara.ap-numero .sec__head::before{
-  -webkit-text-stroke:1.5px rgba(6,113,79,.30)}
+  color:#14c08a;-webkit-text-stroke:0}
+
+/* l'etichetta delle dimostrazioni: dal grigio al verde del sito */
+.sec--chiara .work__meta{color:#14c08a}
+.sec--chiara .work__meta b{color:#14c08a}
 
 /* la barra di avanzamento del brief: l'alone verde su bianco sporcava */
 .sec--chiara .brief__progress i::after{box-shadow:none}
