@@ -1,3 +1,4 @@
+import { accentoGL } from './palette.js';
 /* ═══════════════════════════════════════════════════════════════════
  * materia.js — Prova 07.
  *
@@ -56,6 +57,7 @@ precision highp float;
 varying vec3 vColor;
 varying float vDepth;
 uniform float uBurst;
+uniform vec3  uEm;      /* l'accento: arriva dal foglio di stile, non e' piu' fisso */
 
 void main(){
   vec2 c = gl_PointCoord - .5;
@@ -64,7 +66,7 @@ void main(){
   float soft = smoothstep(.25, .02, d);
 
   /* verso lo smeraldo quando la materia si disperde */
-  vec3 em = vec3(.078, .753, .541);
+  vec3 em = uEm;
   vec3 col = mix(vColor, em, .22 + uBurst * .45);
   col *= .78 + vDepth * .55;
 
@@ -178,7 +180,10 @@ export async function initMateria(canvas, onState) {
   const uniforms = {
     uMixA: { value: 1 }, uMixB: { value: 0 }, uMixC: { value: 0 },
     uTime: { value: 0 }, uBurst: { value: 0 }, uSize: { value: 4.2 },
+    uEm: { value: accentoGL() },
   };
+  document.addEventListener('palette', () => { uniforms.uEm.value = accentoGL(); });
+
   const program = new Program(gl, {
     vertex: VERT, fragment: FRAG, uniforms,
     transparent: true, depthTest: false, depthWrite: false, cullFace: null,

@@ -4,11 +4,27 @@
  * l'elenco delle decisioni prese: è quello che rende la prova leggibile.
  * ═══════════════════════════════════════════════════════════════════ */
 
-export const EM = '#14c08a';
-export const EM_BRIGHT = '#4fe3b0';
-export const EM_LIGHT = '#7fe3bd';
-export const EM_DEEP = '#0a8f63';
+/* I colori dell'accento non sono piu' costanti: il sito lascia scegliere
+   la palette, e questi vanno riletti dalle variabili del foglio di stile.
+   Sono `let` esportati: chi li importa vede il valore aggiornato, perche'
+   fra moduli i binding sono vivi. */
+export let EM = '#14c08a';
+export let EM_BRIGHT = '#4fe3b0';
+export let EM_LIGHT = '#7fe3bd';
+export let EM_DEEP = '#0a8f63';
+
+export function leggiColori() {
+  const c = getComputedStyle(document.documentElement);
+  const v = (k, d) => (c.getPropertyValue(k).trim() || d);
+  EM        = v('--em', EM);
+  EM_BRIGHT = v('--em-bright', EM_BRIGHT);
+  EM_LIGHT  = v('--em-light', EM_LIGHT);
+  EM_DEEP   = v('--em-deep', EM_DEEP);
+}
 const INK = '#f2f4f7';
+/* l'accento con una trasparenza: prima era un rgba() verde fisso, che
+   con una palette diversa restava verde in mezzo a tutto il resto */
+const misto = (col, a) => `color-mix(in srgb, ${col} ${Math.round(a * 100)}%, transparent)`;
 const BG = '#06090e';
 
 /* rumore riproducibile: stesso seed, stesso disegno */
@@ -211,7 +227,7 @@ export function keyVisual(ctx, o) {
   for (let i = 0; i < accents; i++) {
     const bw = maxW * (i === 0 ? lerp(0.34, 0.15, ai) : 0.05 + r() * 0.12);
     const bx = margin + (i === 0 ? 0 : maxW * (0.4 + r() * 0.55));
-    ctx.fillStyle = i === 0 ? EM : `rgba(20,192,138,${(0.45 + r() * 0.4).toFixed(2)})`;
+    ctx.fillStyle = i === 0 ? EM : misto(EM, 0.45 + r() * 0.4);
     ctx.fillRect(Math.round(bx), Math.round(barY), Math.round(bw), barH);
   }
 

@@ -1,3 +1,4 @@
+import { accentoGL } from './palette.js';
 /* ═══════════════════════════════════════════════════════════════════
  * hero.js — il confine fra mano e macchina, calcolato a ogni frame.
  * WebGL2, nessuna libreria. Se manca, la pagina resta intera.
@@ -14,7 +15,8 @@ uniform sampler2D uA, uB;
 uniform vec2  uRes, uTexA, uTexB;
 uniform float uT, uSplit, uErode;
 
-const vec3 EM   = vec3(.078, .753, .541);
+uniform vec3 uEm;                 /* l'accento arriva dal foglio di stile */
+#define EM uEm
 const vec3 EMLO = vec3(.039, .561, .388);
 
 float hash(vec2 p){ return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453); }
@@ -93,6 +95,8 @@ const SCENES = [
 ];
 
 export function initHero(canvas, onState) {
+  let accento = accentoGL();
+  document.addEventListener('palette', () => { accento = accentoGL(); });
   /* preserveDrawingBuffer costa una copia per fotogramma e in produzione non
      serve. Ma senza, uno screenshot del canvas cattura un buffer già svuotato
      e viene bianco: mi ha fatto inseguire un difetto che non esisteva.
@@ -126,7 +130,7 @@ export function initHero(canvas, onState) {
 
   const U = n => gl.getUniformLocation(prog, n);
   const uRes = U('uRes'), uT = U('uT'), uSplit = U('uSplit'), uErode = U('uErode'),
-        uTexA = U('uTexA'), uTexB = U('uTexB');
+        uTexA = U('uTexA'), uTexB = U('uTexB'), uEm = U('uEm');
   gl.uniform1i(U('uA'), 0); gl.uniform1i(U('uB'), 1);
 
   const mk = unit => {
@@ -221,6 +225,7 @@ export function initHero(canvas, onState) {
     gl.uniform1f(uT, reduce.matches ? 12 : (now - startedAt) / 1000);
     gl.uniform1f(uSplit, split);
     gl.uniform1f(uErode, erode);
+    gl.uniform3fv(uEm, accento);
     gl.drawArrays(gl.TRIANGLES, 0, 3);
 
     frames++;

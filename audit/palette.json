@@ -1,0 +1,114 @@
+[
+ [
+  "smeraldo",
+  {
+   "em": "#10a56f",
+   "em-bright": "#14c584",
+   "em-light": "#16da92",
+   "em-deep": "#0c774f",
+   "em-c": "#0b714c",
+   "em-c-bright": "#0a6342",
+   "em-c-deep": "#085539",
+   "banda": "#0d8056"
+  },
+  "quello attuale"
+ ],
+ [
+  "ciano",
+  {
+   "em": "#109fb5",
+   "em-bright": "#13bed8",
+   "em-light": "#25d2ec",
+   "em-deep": "#0b7282",
+   "em-c": "#0b6d7c",
+   "em-c-bright": "#095f6c",
+   "em-c-deep": "#08525d",
+   "banda": "#0c7b8c"
+  },
+  "freddo, da strumento"
+ ],
+ [
+  "indaco",
+  {
+   "em": "#9183ec",
+   "em-bright": "#aea4f1",
+   "em-light": "#c0b8f4",
+   "em-deep": "#624ee5",
+   "em-c": "#5c47e4",
+   "em-c-bright": "#4b34e1",
+   "em-c-deep": "#3920d8",
+   "banda": "#6c5ae6"
+  },
+  "il colore con cui il mondo disegna l’AI"
+ ],
+ [
+  "magenta",
+  {
+   "em": "#e95cb5",
+   "em-bright": "#ef8dcb",
+   "em-light": "#f3a9d8",
+   "em-deep": "#c11a84",
+   "em-c": "#b8197e",
+   "em-c-bright": "#a2166f",
+   "em-c-deep": "#8c1360",
+   "banda": "#d01c8e"
+  },
+  "contemporaneo, da manifesto"
+ ],
+ [
+  "ambra",
+  {
+   "em": "#cc800d",
+   "em-bright": "#f09a1a",
+   "em-light": "#f4b353",
+   "em-deep": "#925b09",
+   "em-c": "#8c5709",
+   "em-c-bright": "#7a4c08",
+   "em-c-deep": "#694207",
+   "banda": "#9e630a"
+  },
+  "caldo, editoriale — era il colore d’origine"
+ ],
+ [
+  "lime",
+  {
+   "em": "#6ca014",
+   "em-bright": "#81bf18",
+   "em-light": "#8fd31a",
+   "em-deep": "#4e720e",
+   "em-c": "#4a6d0d",
+   "em-c-bright": "#415f0c",
+   "em-c-deep": "#38520a",
+   "banda": "#547c0f"
+  },
+  "acido, il più rumoroso"
+ ],
+ [
+  "corallo",
+  {
+   "em": "#eb6a49",
+   "em-bright": "#f1967f",
+   "em-light": "#f4af9d",
+   "em-deep": "#be3715",
+   "em-c": "#b63414",
+   "em-c-bright": "#9f2e12",
+   "em-c-deep": "#89280f",
+   "banda": "#cd3b17"
+  },
+  "cinematografico, urgente"
+ ],
+ [
+  "viola",
+  {
+   "em": "#b874e5",
+   "em-bright": "#cb9aec",
+   "em-light": "#d7b1f0",
+   "em-deep": "#9633d8",
+   "em-c": "#9129d6",
+   "em-c-bright": "#7f24bc",
+   "em-c-deep": "#6e1fa2",
+   "banda": "#9e42db"
+  },
+  "sobrio, meno battuto"
+ ]
+]

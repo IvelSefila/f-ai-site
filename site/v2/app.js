@@ -3,7 +3,8 @@
 * e alla fine scrive il dossier. Nessuna libreria.
 * ═══════════════════════════════════════════════════════════════════ */
 import { initHero } from './hero.js';
-import { keyVisual, timeline, radar, MODES, rng } from './engine.js';
+import { initPalette } from './palette.js';
+import { keyVisual, timeline, radar, MODES, rng, leggiColori} from './engine.js';
 import { initBrief } from './brief.js';
 
 const $ = (s, r = document) => r.querySelector(s);
@@ -189,6 +190,9 @@ const WORKS = [
     ],
   },
 ];
+/* ogni motore che disegna su canvas registra qui il suo ridisegno:
+   al cambio di palette vanno rifatti tutti, i colori li tengono in JS */
+const RIDISEGNI = [];
 const deck = $('#deck');
 WORKS.forEach((w, i) => {
     const el = document.createElement('article');
@@ -220,6 +224,7 @@ WORKS.forEach((w, i) => {
         say('Stesso linguaggio, composizione nuova. È questa la differenza fra un sistema e un colpo di fortuna.');
       });
     el.querySelector('details').addEventListener('toggle', e => { if (e.target.open) { act(); proof('lavori'); } });
+    RIDISEGNI.push(draw);
     queueMicrotask(draw);
   });
 
@@ -633,3 +638,22 @@ drawSocial();
 drawRadar(0);
 renderDossier();
 setTimeout(() => say('Sessione aperta. Ti mostro cosa so fare, non te lo racconto.'), 900);
+
+/* ══════════ COLORE DEL SITO ══════════
+   Pressione lunga su un riquadro (o tasto destro col mouse) per
+   scegliere fra sette palette. La scelta resta nel browser.
+
+   Il foglio di stile si ribalta da solo: tutto chiede il colore alle
+   variabili. I canvas no — i loro colori stanno in JavaScript, quindi
+   vanno riletti e i disegni rifatti. */
+document.addEventListener('palette', () => {
+  leggiColori();
+  const modo = $$('.modes button[data-mode]').findIndex(b => b.getAttribute('aria-pressed') === 'true');
+  try { drawKv(); } catch {}
+  try { drawFormats(); } catch {}
+  try { drawTl(); } catch {}
+  try { drawSocial(); } catch {}
+  try { drawRadar(Math.max(0, modo)); } catch {}
+  RIDISEGNI.forEach(f => { try { f(); } catch {} });
+});
+initPalette();

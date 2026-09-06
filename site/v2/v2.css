@@ -8,6 +8,13 @@
   --ink:#f2f4f7; --text:#c3ccd6; --muted:#7f8b98;
   --em:#14c08a; --em-bright:#4fe3b0; --em-light:#7fe3bd; --em-deep:#0a8f63;
   --em-dim:rgba(20,192,138,.14);
+  /* il tono pieno, usato dove il colore e' decorazione e non testo */
+  --em-vivo:#14c08a;
+  /* gli stessi ruoli, calibrati per i blocchi su carta. Stanno qui e non
+     dentro .sec--chiara perche' cambiare palette deve toccare un punto solo */
+  --em-c:#06714f; --em-c-bright:#056347; --em-c-light:#08805a;
+  --em-c-deep:#04553d; --em-c-dim:rgba(6,113,79,.10);
+  --em-banda:#08805a;
   --display:"Barlow Condensed","Arial Narrow",sans-serif;
   --body:"Manrope",system-ui,Arial,sans-serif;
   --mono:ui-monospace,"SFMono-Regular",Consolas,monospace;
@@ -64,7 +71,7 @@ strong{color:var(--ink);font-weight:700}
   color:var(--muted);display:none}
 .no-gl #gl{display:none}
 .no-gl .hero__fallback{display:block}
-.no-gl .hero{background:radial-gradient(circle at 72% 30%,rgba(20,192,138,.16),transparent 55%),var(--stage)}
+.no-gl .hero{background:radial-gradient(circle at 72% 30%,color-mix(in srgb,var(--em) 16%,transparent),transparent 55%),var(--stage)}
 .hero__scrim{position:absolute;inset:0;z-index:1;pointer-events:none;
   background:linear-gradient(100deg,rgba(5,7,11,.96) 0%,rgba(5,7,11,.88) 30%,rgba(5,7,11,.4) 47%,transparent 62%),
              linear-gradient(0deg,rgba(5,7,11,.92) 0%,transparent 30%)}
@@ -90,7 +97,7 @@ strong{color:var(--ink);font-weight:700}
 .eyebrow i{width:7px;height:7px;border-radius:50%;background:var(--em);flex:none;
   animation:ping 2.6s ease-out infinite}
 .eyebrow .n{color:var(--muted);padding-right:9px;margin-right:2px;border-right:1px solid var(--rule)}
-@keyframes ping{0%{box-shadow:0 0 0 0 rgba(20,192,138,.5)}70%,100%{box-shadow:0 0 0 11px rgba(20,192,138,0)}}
+@keyframes ping{0%{box-shadow:0 0 0 0 color-mix(in srgb,var(--em) 50%,transparent)}70%,100%{box-shadow:0 0 0 11px transparent}}
 
 .read{position:absolute;z-index:2;right:var(--gutter);top:calc(var(--bar) + 32px);
   width:min(300px,40vw);text-align:right;pointer-events:none}
@@ -111,9 +118,9 @@ strong{color:var(--ink);font-weight:700}
 .hud__hint b{color:var(--em)}
 @media(max-width:760px){.hud__hint{display:none}}
 .rail{position:absolute;z-index:2;left:var(--gutter);right:var(--gutter);bottom:142px;height:2px;background:var(--rule)}
-.rail i{position:absolute;inset:0 auto 0 0;width:50%;background:var(--em);box-shadow:0 0 12px rgba(20,192,138,.7)}
+.rail i{position:absolute;inset:0 auto 0 0;width:50%;background:var(--em);box-shadow:0 0 12px color-mix(in srgb,var(--em) 70%,transparent)}
 .rail b{position:absolute;top:50%;left:50%;width:11px;height:11px;border-radius:50%;
-  background:var(--em-bright);transform:translate(-50%,-50%);box-shadow:0 0 0 4px rgba(20,192,138,.16)}
+  background:var(--em-bright);transform:translate(-50%,-50%);box-shadow:0 0 0 4px color-mix(in srgb,var(--em) 16%,transparent)}
 
 /* ═══ sezioni ═══ */
 .sec{position:relative;padding:var(--space) var(--gutter);
@@ -160,9 +167,9 @@ input[type=range]::-webkit-slider-runnable-track{height:3px;border-radius:2px;
 input[type=range]::-moz-range-track{height:3px;border-radius:2px;background:rgba(221,231,242,.16)}
 input[type=range]::-moz-range-progress{height:3px;border-radius:2px;background:var(--em)}
 input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;height:18px;margin-top:-7.5px;
-  border-radius:50%;background:var(--em-bright);box-shadow:0 0 0 4px rgba(20,192,138,.16)}
+  border-radius:50%;background:var(--em-bright);box-shadow:0 0 0 4px color-mix(in srgb,var(--em) 16%,transparent)}
 input[type=range]::-moz-range-thumb{width:18px;height:18px;border:0;border-radius:50%;
-  background:var(--em-bright);box-shadow:0 0 0 4px rgba(20,192,138,.16)}
+  background:var(--em-bright);box-shadow:0 0 0 4px color-mix(in srgb,var(--em) 16%,transparent)}
 
 .decis{margin-top:22px;padding-top:16px;border-top:1px solid var(--rule-2)}
 .decis>.mono{color:var(--muted);display:block;margin-bottom:10px}
@@ -247,7 +254,7 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border:0;border-radiu
 .node .mono{color:var(--muted);font-size:11px}
 .node b{font-family:var(--display);font-size:20px;text-transform:uppercase;letter-spacing:-.02em}
 .node span.out{color:var(--muted);font-family:var(--mono);font-size:11px;min-height:1.4em}
-.node.run{border-color:var(--em);background:rgba(20,192,138,.1);box-shadow:0 0 0 3px rgba(20,192,138,.12)}
+.node.run{border-color:var(--em);background:color-mix(in srgb,var(--em) 10%,transparent);box-shadow:0 0 0 3px color-mix(in srgb,var(--em) 12%,transparent)}
 .node.ok{border-color:var(--em-deep)}
 .node.ok span.out{color:var(--em-light)}
 .node.human{border-style:dashed}
@@ -436,7 +443,7 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border:0;border-radiu
   text-transform:uppercase;color:var(--muted)}
 .brief__progress i{display:block;height:2px;background:var(--rule);position:relative}
 .brief__progress i::after{content:"";position:absolute;inset:0 auto 0 0;width:var(--progress,16%);
-  background:var(--em);box-shadow:0 0 10px rgba(20,192,138,.6);transition:width .45s var(--ease)}
+  background:var(--em);box-shadow:0 0 10px color-mix(in srgb,var(--em) 60%,transparent);transition:width .45s var(--ease)}
 
 .brief-step{margin:0;padding:0;border:0;min-width:0}
 .brief-step[hidden]{display:none}
@@ -459,7 +466,7 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border:0;border-radiu
 .brief-options input[type=checkbox]{border-radius:4px}
 .brief-options input:checked{border-color:var(--em);background:var(--em);
   box-shadow:inset 0 0 0 3px var(--panel-2)}
-.brief-options label:has(input:checked){border-color:var(--em);background:rgba(20,192,138,.09);color:var(--ink)}
+.brief-options label:has(input:checked){border-color:var(--em);background:color-mix(in srgb,var(--em) 9%,transparent);color:var(--ink)}
 .brief-options input:focus-visible{outline:2px solid var(--em-bright);outline-offset:3px}
 
 .brief-date{grid-column:1/-1}
@@ -534,7 +541,7 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border:0;border-radiu
 .profilo__mark{display:flex;align-items:center;justify-content:center;gap:.12em;
   font-family:var(--display);font-weight:600;text-transform:uppercase;letter-spacing:-.04em;
   font-size:clamp(64px,11vw,150px);line-height:.8;color:transparent;
-  -webkit-text-stroke:1px rgba(20,192,138,.28);user-select:none}
+  -webkit-text-stroke:1px color-mix(in srgb,var(--em) 28%,transparent);user-select:none}
 .profilo__mark b{color:var(--em);-webkit-text-stroke:0;font-weight:600}
 @media(max-width:899px){.profilo__mark{justify-content:flex-start;font-size:clamp(52px,18vw,96px)}}
 
@@ -617,7 +624,7 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border:0;border-radiu
   .ap-numero .sec__head{padding-left:clamp(96px,10vw,168px)}
   .ap-numero .sec__head::before{content:attr(data-num);position:absolute;left:0;top:-.06em;
     font-family:var(--display);font-weight:600;font-size:clamp(96px,11vw,176px);line-height:.8;
-    color:transparent;-webkit-text-stroke:1px rgba(20,192,138,.34);letter-spacing:-.04em;
+    color:transparent;-webkit-text-stroke:1px color-mix(in srgb,var(--em) 34%,transparent);letter-spacing:-.04em;
     pointer-events:none;user-select:none}
 }
 
@@ -907,11 +914,13 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border:0;border-radiu
   --ink:#0b0f16;                         /* 18,06:1 */
   --text:#3c4653;                        /*  9,01:1 */
   --muted:#5f6a76;                       /*  5,26:1 */
-  --em:#06714f;                          /*  5,67:1 — verde da testo   */
-  --em-bright:#056347;                   /*  6,86:1 — stati attivi     */
-  --em-light:#08805a;                    /*  4,65:1 */
-  --em-deep:#04553d;                     /*  8,33:1 */
-  --em-dim:rgba(6,113,79,.10);
+  /* i ruoli dell'accento arrivano dalla radice: cosi' una palette nuova
+     ribalta scuro e chiaro insieme, senza toccare una sola regola */
+  --em:var(--em-c);                      /*  5,67:1 — accento da testo */
+  --em-bright:var(--em-c-bright);        /*  6,86:1 — stati attivi     */
+  --em-light:var(--em-c-light);          /*  4,65:1 */
+  --em-deep:var(--em-c-deep);            /*  8,33:1 */
+  --em-dim:var(--em-c-dim);
   background:var(--stage);
   color:var(--ink);
 }
@@ -945,12 +954,12 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border:0;border-radiu
       e aloni calibrati su fondo scuro che sulla carta si dissolvono. ── */
 
 /* il marchio ART × AI: contorno verde al 28% su bianco è invisibile */
-.sec--chiara .profilo__mark{-webkit-text-stroke:1.5px rgba(6,113,79,.42)}
+.sec--chiara .profilo__mark{-webkit-text-stroke:1.5px color-mix(in srgb,var(--em-c) 42%,transparent)}
 
 /* il numerone d'apertura di "lavori" e "laboratorio": pieno, nel verde
    del sito, non piu' contornato. A 176px e' un segno grafico, non testo. */
 .sec--chiara.ap-numero .sec__head::before{
-  color:#14c08a;-webkit-text-stroke:0}
+  color:var(--em-vivo);-webkit-text-stroke:0}
 
 /* la linguetta sopra la scheda: fondo verde pieno e scritta bianca.
    Il verde e' #08805a e non #14c08a perche' il bianco a 11px sul verde
@@ -958,7 +967,7 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border:0;border-radiu
    4,95:1 e passa la soglia. La scheda ha gia' overflow:hidden, quindi
    la fascia si arrotonda da sola sugli angoli. */
 .sec--chiara .work__meta{
-  background:#08805a;color:#fff;border-bottom-color:transparent;
+  background:var(--em-banda);color:#fff;border-bottom-color:transparent;
   padding-block:11px}
 .sec--chiara .work__meta b{color:#fff}
 
@@ -968,7 +977,7 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border:0;border-radiu
 
 /* la risposta scelta nel brief: 9% di verde su bianco non si vedeva */
 .sec--chiara .brief-options label:has(input:checked){
-  background:rgba(6,113,79,.08);box-shadow:inset 0 0 0 1px var(--em)}
+  background:color-mix(in srgb,var(--em-c) 8%,transparent);box-shadow:inset 0 0 0 1px var(--em)}
 
 /* le tracce dei cursori usano un grigio chiaro pensato per lo scuro */
 .sec--chiara input[type=range]::-webkit-slider-runnable-track{
@@ -976,7 +985,7 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border:0;border-radiu
 .sec--chiara input[type=range]::-moz-range-track{background:rgba(5,7,11,.14)}
 .sec--chiara input[type=range]::-webkit-slider-thumb,
 .sec--chiara input[type=range]::-moz-range-thumb{
-  background:var(--em);box-shadow:0 0 0 4px rgba(6,113,79,.14)}
+  background:var(--em);box-shadow:0 0 0 4px color-mix(in srgb,var(--em-c) 14%,transparent)}
 
 /* ═══════════════════════════════════════════════════════════════════
  * PARALLASSE — 06.09.2026
@@ -1103,11 +1112,182 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border:0;border-radiu
 .sec--chiara + .sec::before{
   left:34px;right:34px;top:0;height:2px;border-radius:2px}
 .sec--chiara::before{
-  height:3px;background:linear-gradient(90deg,transparent,#14c08a 22%,#14c08a 78%,transparent)}
+  height:3px;background:linear-gradient(90deg,transparent,var(--em-vivo) 22%,var(--em-vivo) 78%,transparent)}
 
 @media (max-width:900px){
   .sec--chiara,.sec--chiara + .sec{
     margin-top:-28px;
     border-start-start-radius:22px;border-start-end-radius:22px}
   .sec--chiara::before,.sec--chiara + .sec::before{left:22px;right:22px}
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+ * SELETTORE DI PALETTE — 06.09.2026
+ * Si apre tenendo premuto un riquadro (o col tasto destro sul mouse).
+ * Il pannello resta sempre sul tema scuro: è uno strumento del sito,
+ * non una sua sezione, e così i campioni si giudicano su fondo neutro.
+ * ═══════════════════════════════════════════════════════════════════ */
+
+/* il riquadro sotto il dito dà un segno che sta succedendo qualcosa,
+   altrimenti mezzo secondo di attesa sembra che non funzioni */
+.pal-attesa{outline:1px solid var(--em);outline-offset:2px;
+  transition:outline-color .5s var(--ease)}
+@media (hover:none){.pal-attesa{-webkit-touch-callout:none;-webkit-user-select:none;user-select:none}}
+
+.pal{
+  color-scheme:dark;
+  border:1px solid rgba(221,231,242,.14);border-radius:18px;padding:0;
+  background:#0b0f16;color:#f2f4f7;
+  width:min(560px,calc(100vw - 32px));max-height:calc(100dvh - 32px);
+  font:400 15px/1.6 var(--body)}
+.pal::backdrop{background:rgba(5,7,11,.72);backdrop-filter:blur(6px)}
+.pal__tit{margin:0;padding:18px 20px 0;color:#7f8b98;font-size:11px;
+  letter-spacing:.14em;text-transform:uppercase}
+.pal__sub{margin:8px 20px 0;color:#c3ccd6;font-size:14px;line-height:1.55}
+.pal__griglia{display:grid;gap:8px;padding:16px 20px;
+  grid-template-columns:repeat(auto-fit,minmax(150px,1fr))}
+.pal__griglia button{
+  display:grid;grid-template-columns:auto 1fr;grid-template-rows:auto auto;
+  gap:2px 11px;align-items:center;text-align:left;
+  padding:11px 13px;border:1px solid rgba(221,231,242,.14);border-radius:12px;
+  background:transparent;color:inherit;cursor:pointer;font:inherit;
+  transition:border-color .18s,background .18s}
+.pal__griglia i{grid-row:1/3;width:30px;height:30px;border-radius:9px;
+  background:linear-gradient(135deg,var(--campione),var(--campione2));
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.14)}
+.pal__griglia b{font-family:var(--display);font-size:19px;letter-spacing:-.01em;
+  text-transform:uppercase;line-height:1}
+.pal__griglia span{color:#7f8b98;font-size:12px;line-height:1.35}
+.pal__griglia button[aria-checked="true"]{
+  border-color:var(--campione);background:color-mix(in srgb,var(--campione) 12%,transparent)}
+.pal__griglia button:focus-visible{outline:2px solid var(--campione);outline-offset:2px}
+.pal__piede{display:flex;align-items:center;justify-content:space-between;gap:14px;
+  padding:14px 20px 18px;border-top:1px solid rgba(221,231,242,.08)}
+.pal__piede .mono{color:#7f8b98;font-size:11px;letter-spacing:.08em}
+
+/* l'accenno: senza, la pressione lunga non la scopre nessuno */
+.pal-accenno{position:fixed;z-index:320;left:50%;bottom:78px;translate:-50% 12px;
+  display:flex;align-items:center;gap:12px;max-width:calc(100vw - 28px);
+  padding:11px 12px 11px 16px;border:1px solid var(--em-dim);border-radius:999px;
+  background:rgba(11,15,22,.95);backdrop-filter:blur(10px);
+  color:#c3ccd6;font-size:12px;letter-spacing:.03em;
+  opacity:0;transition:opacity .35s var(--ease),translate .35s var(--ease)}
+.pal-accenno.in{opacity:1;translate:-50% 0}
+.pal-accenno button{width:44px;height:44px;flex:none;border-radius:50%;
+  border:1px solid rgba(221,231,242,.14);background:transparent;color:#7f8b98;
+  cursor:pointer;font-size:13px;line-height:1}
+
+@media (max-width:760px){
+  .pal__griglia{grid-template-columns:1fr;padding:14px 16px}
+  .pal__griglia button{min-height:56px}
+  .pal-accenno{bottom:70px;font-size:12.5px;padding-block:13px}
+  .pal-accenno button{width:46px;height:46px}
+  .pal__piede{flex-wrap:wrap}
+  .pal__piede .btn{min-height:46px;flex:1}
+}
+
+/* ── i campioni in testata: quattro a vista, il resto dietro i tre punti.
+      Sono bersagli da 44px anche se il pallino ne mostra 18: la parte
+      che si tocca non deve coincidere con la parte che si vede. ── */
+.bar__pal{display:flex;align-items:center;gap:2px;margin-left:auto}
+.bar__pal button{
+  width:32px;height:32px;padding:0;display:grid;place-items:center;
+  border:0;background:transparent;cursor:pointer;border-radius:9px}
+.bar__pal button[data-pal-veloce]::before{
+  content:"";width:16px;height:16px;border-radius:50%;
+  background:var(--campione,#14c08a);
+  box-shadow:0 0 0 1px rgba(221,231,242,.22) inset;
+  transition:transform .18s var(--ease),box-shadow .18s var(--ease)}
+.bar__pal button[aria-checked="true"]::before{
+  transform:scale(1.18);
+  box-shadow:0 0 0 2px var(--stage),0 0 0 3.5px var(--campione)}
+.bar__pal button:focus-visible{outline:2px solid var(--em-bright);outline-offset:1px}
+.bar__pal__piu{color:var(--muted);font:600 15px/1 var(--mono);letter-spacing:.06em}
+.bar__pal__piu:hover{color:var(--em)}
+@media (pointer:coarse){.bar__pal button{width:44px;height:44px}}
+/* Sul telefono quattro campioni mandavano la testata a capo: da 113 a
+   165px, cioe' un quinto dello schermo occupato da una barra fissa.
+   Resta un pallino solo, nel colore attuale, che apre il pannello con
+   tutte e sette. Su desktop i quattro restano. */
+@media (max-width:900px){
+  .bar__pal{order:2;margin-left:auto;margin-right:2px;gap:0}
+  .bar__pal button[data-pal-veloce]{display:none}
+  .bar__pal__piu{width:44px;height:44px;font-size:0}
+  .bar__pal__piu::before{content:"";width:18px;height:18px;border-radius:50%;
+    background:var(--em);box-shadow:0 0 0 2px var(--stage),0 0 0 3.5px var(--em-dim)}
+}
+
+
+/* ═══════════════════════════════════════════════════════════════════
+ * GRIGLIA A DODICI COLONNE — 06.09.2026
+ * Invisibile: c'è sempre, si vede solo se la accendi. Stessa idea di
+ * Bootstrap in trenta righe. Dodici perché si divide per 2, 3, 4 e 6.
+ *
+ * I preset di partenza riproducono l'impaginazione misurata prima di
+ * introdurla — deck 3 in fila, offerta e laboratorio 4, formati 3 —
+ * così la griglia non cambia niente finché non la usi.
+ * ═══════════════════════════════════════════════════════════════════ */
+
+:root{--colonne:12; --gronda:clamp(14px,1.6vw,22px)}
+
+[data-gr]{display:grid;gap:var(--gronda);
+  grid-template-columns:repeat(var(--colonne),minmax(0,1fr))}
+[data-gr] > *{grid-column:span var(--sp,12);min-width:0}
+
+[data-gr="1"]{--sp:12}
+[data-gr="2"]{--sp:6}
+[data-gr="3"]{--sp:4}
+[data-gr="4"]{--sp:3}
+[data-gr="8-4"] > *:nth-child(2n+1){grid-column:span 8}
+[data-gr="8-4"] > *:nth-child(2n)  {grid-column:span 4}
+[data-gr="4-8"] > *:nth-child(2n+1){grid-column:span 4}
+[data-gr="4-8"] > *:nth-child(2n)  {grid-column:span 8}
+[data-gr="6-3-3"] > *:nth-child(3n+1){grid-column:span 6}
+[data-gr="6-3-3"] > *:nth-child(3n+2),
+[data-gr="6-3-3"] > *:nth-child(3n)  {grid-column:span 3}
+
+/* Su schermo stretto tutto scende a colonna piena: dodici colonne su
+   390px sono 26px l'una, cioè niente. L'eccezione sono i tre formati,
+   che restano affiancati perché è così che si confrontano — e quella
+   misura l'abbiamo già verificata. */
+@media (max-width:900px){
+  [data-gr] > *{grid-column:span 12}
+  .formats[data-gr] > *{grid-column:span 4}
+  :root{--gronda:12px}
+}
+
+/* la griglia accesa: si vede la struttura sotto al sito */
+[data-gr-visibile] [data-gr]{
+  background-image:repeating-linear-gradient(90deg,
+    color-mix(in srgb,var(--em) 12%,transparent) 0,
+    color-mix(in srgb,var(--em) 12%,transparent)
+      calc((100% - 11 * var(--gronda)) / 12),
+    transparent calc((100% - 11 * var(--gronda)) / 12),
+    transparent calc((100% - 11 * var(--gronda)) / 12 + var(--gronda)));
+  outline:1px dashed color-mix(in srgb,var(--em) 34%,transparent);
+  outline-offset:3px}
+[data-gr-visibile] [data-gr] > *{
+  box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--em) 26%,transparent)}
+
+/* ── la sezione griglia dentro il pannello ── */
+.pal__sez{margin:0;padding:16px 20px 0;border-top:1px solid rgba(221,231,242,.08)}
+.pal__sez .pal__tit{padding:0}
+.pal__gr{display:grid;gap:6px;padding:12px 0 0;
+  grid-template-columns:repeat(auto-fit,minmax(158px,1fr))}
+.pal__gr button{display:grid;gap:3px;text-align:left;padding:9px 11px;
+  border:1px solid rgba(221,231,242,.14);border-radius:10px;
+  background:transparent;color:inherit;cursor:pointer;font:inherit}
+.pal__gr button i{font-style:normal;font-family:var(--mono);font-size:9px;
+  letter-spacing:-1px;color:var(--em);line-height:1}
+.pal__gr button b{font-size:13px;font-weight:600}
+.pal__gr button span{color:#7f8b98;font-size:11px}
+.pal__gr button[aria-checked="true"]{border-color:var(--em);
+  background:color-mix(in srgb,var(--em) 12%,transparent)}
+.pal__gr button:focus-visible{outline:2px solid var(--em-bright);outline-offset:2px}
+.pal__vedi{display:flex;align-items:center;gap:10px;margin:12px 0 0;
+  color:#c3ccd6;font-size:13px;cursor:pointer;min-height:44px}
+.pal__vedi input{width:20px;height:20px;accent-color:var(--em)}
+@media (max-width:760px){
+  .pal__gr{grid-template-columns:1fr}
+  .pal__gr button{min-height:52px}
 }

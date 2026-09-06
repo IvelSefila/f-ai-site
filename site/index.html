@@ -2,6 +2,12 @@
 <meta charset="utf-8">
 <title>F/AI</title>
 <meta http-equiv="refresh" content="0; url=v2/index.html">
+<script>
+  /* Il refresh via meta perde la stringa di query: con ?probe=1 il sito
+     conserva il buffer di disegno per le misure, e senza non lo fa.
+     Questo la porta dietro; il meta resta come rete di sicurezza. */
+  location.replace('v2/index.html' + location.search + location.hash);
+</script>
 <link rel="canonical" href="v2/index.html">
 <style>
   html{background:#05070b;color:#7f8b98;
