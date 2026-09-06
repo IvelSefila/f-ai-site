@@ -1,0 +1,69 @@
+/* ═══════════════════════════════════════════════════════════════════
+ * La pagina attorno allo schermo. Poca: il protagonista è il quadro.
+ * Il carattere del testo resta leggibile — un font a pixel per i
+ * paragrafi lunghi è una posa, non una scelta. I pixel stanno dentro
+ * il canvas, dove sono disegnati per davvero.
+ * ═══════════════════════════════════════════════════════════════════ */
+:root{
+  --fondo:#140f1a; --ombra:#241a2e; --porpora:#7b3f9d;
+  --oro:#d4af37; --orpimento:#e8a317; --pergamena:#e8dcc0; --calce:#f6efe0;
+  --corpo:ui-sans-serif,system-ui,"Segoe UI",Roboto,sans-serif;
+  --mono:ui-monospace,SFMono-Regular,Consolas,monospace;
+}
+*{box-sizing:border-box}
+html{color-scheme:dark}
+body{margin:0;min-width:320px;background:var(--fondo);color:var(--pergamena);
+  font:400 17px/1.65 var(--corpo);-webkit-font-smoothing:antialiased}
+
+.salta{position:fixed;z-index:9;top:8px;left:8px;padding:10px 14px;
+  background:var(--oro);color:var(--fondo);font:600 13px/1 var(--mono);
+  border-radius:4px;text-decoration:none;transform:translateY(-160%)}
+.salta:focus{transform:none}
+
+.quadro{min-height:100svh;display:grid;align-content:center;gap:18px;
+  padding:clamp(16px,4vw,48px)}
+
+/* Il telaio tiene la proporzione 16:9 e non lascia mai che il canvas
+   venga interpolato: un pixel del disegno deve restare un quadrato. */
+.quadro__telaio{width:min(100%,1180px);margin-inline:auto;
+  aspect-ratio:320/180;border:2px solid var(--ombra);border-radius:6px;
+  overflow:hidden;background:var(--fondo);
+  box-shadow:0 0 0 1px rgba(212,175,55,.22), 0 30px 90px -40px rgba(0,0,0,.9)}
+#schermo{display:block;width:100%;height:100%;
+  image-rendering:pixelated;image-rendering:crisp-edges;
+  touch-action:pan-y;cursor:crosshair;
+  -webkit-touch-callout:none;-webkit-user-select:none;user-select:none}
+
+.comandi{width:min(100%,1180px);margin-inline:auto;display:flex;
+  flex-wrap:wrap;align-items:center;gap:12px 18px}
+.tasto{min-height:46px;padding:0 18px;border:2px solid var(--oro);border-radius:4px;
+  background:transparent;color:var(--oro);cursor:pointer;
+  font:600 12px/1 var(--mono);letter-spacing:.12em;text-transform:uppercase;
+  transition:background .15s,color .15s}
+.tasto:active{background:var(--oro);color:var(--fondo)}
+@media (hover:hover){.tasto:hover{background:var(--oro);color:var(--fondo)}}
+.tasto:focus-visible{outline:2px solid var(--calce);outline-offset:3px}
+.nota{margin:0;color:var(--porpora);font:400 12px/1.5 var(--mono);letter-spacing:.08em}
+
+.pergamena{width:min(100%,760px);margin-inline:auto;
+  padding:clamp(40px,8vw,110px) clamp(16px,4vw,24px)}
+.pergamena h1{margin:0 0 .7em;font-size:clamp(30px,5vw,52px);line-height:1.06;
+  letter-spacing:-.02em;color:var(--calce)}
+.pergamena h1 em{font-style:normal;color:var(--oro)}
+.pergamena p{margin:0 0 1.1em;color:var(--pergamena)}
+.pergamena strong{color:var(--orpimento)}
+
+.tavolozza{list-style:none;margin:2em 0 0;padding:0;display:grid;gap:6px}
+.tavolozza li{display:grid;grid-template-columns:26px minmax(0,10em) 1fr auto;
+  gap:12px;align-items:center;padding:7px 10px;border:1px solid var(--ombra);
+  border-radius:5px;font-size:14px}
+.tavolozza i{width:26px;height:26px;border-radius:4px;background:var(--p);
+  box-shadow:inset 0 0 0 1px rgba(246,239,224,.16)}
+.tavolozza b{color:var(--calce);font-weight:600}
+.tavolozza span{color:var(--porpora);font-size:12.5px}
+.tavolozza code{color:var(--oro);font:400 12px var(--mono)}
+@media (max-width:620px){
+  .tavolozza li{grid-template-columns:26px 1fr auto;row-gap:2px}
+  .tavolozza span{grid-column:2/-1;font-size:12px}
+}
+@media (prefers-reduced-motion:reduce){*{animation-duration:.01ms!important}}

@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>F/AI — versione pixel</title>
+<meta name="description" content="Il portfolio F/AI in pixel art: torre alchemica generata a codice, pigmenti medievali, niente immagini caricate.">
+<link rel="icon" href="../favicon.svg">
+<link rel="stylesheet" href="pixel.css">
+</head>
+<body>
+<a class="salta" href="#dopo">Vai al contenuto</a>
+
+<main>
+  <section class="quadro" aria-label="Scena giocabile">
+    <div class="quadro__telaio">
+      <canvas id="schermo" width="320" height="180"
+        aria-label="Torre alchemica di notte, disegnata pixel per pixel dalla pagina. Tocca o premi invio per evocare scintille; tieni premuto per accendere la torcia."></canvas>
+    </div>
+    <div class="comandi">
+      <button id="rigenera" type="button" class="tasto">Rigenera il mondo</button>
+      <p class="nota">320×180 pixel · 15 pigmenti · nessuna immagine caricata</p>
+    </div>
+  </section>
+
+  <section id="dopo" class="pergamena">
+    <h1>Non è un&rsquo;immagine.<br><em>La disegna questa pagina.</em></h1>
+    <p>La torre non esiste come file. Esiste come <strong>seme</strong>: un numero da cui
+      nascono altezza, merli, finestre e la stanza illuminata. Cambia il seme e nasce
+      un&rsquo;altra torre, nello stesso linguaggio.</p>
+    <p>I quindici colori sono pigmenti veri, quelli di prima della chimica industriale.
+      L&rsquo;orpimento è solfuro d&rsquo;arsenico e avvelenava chi lo macinava. Il cinabro è
+      solfuro di mercurio. L&rsquo;oltremare si ricavava dal lapislazzuli e costava più
+      dell&rsquo;oro: per questo nelle miniature lo si teneva per il manto della Vergine.</p>
+    <ul class="tavolozza" id="listaPigmenti"></ul>
+  </section>
+</main>
+
+<script type="module" src="gioco.js"></script>
+<script type="module">
+  import { TAVOLOZZA } from './tavolozza.js';
+  const ul = document.querySelector('#listaPigmenti');
+  ul.innerHTML = TAVOLOZZA.map(([hex, nome, ruolo]) => `
+    <li><i style="--p:${hex}"></i><b>${nome}</b><span>${ruolo}</span><code>${hex}</code></li>`).join('');
+</script>
+</body>
+</html>
