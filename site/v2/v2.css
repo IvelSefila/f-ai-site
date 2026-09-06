@@ -1085,6 +1085,15 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border:0;border-radiu
    l'ombra sotto una superficie chiara non si vede, serve uno stacco */
 .sec--chiara + .sec{box-shadow:0 -22px 46px -24px rgba(5,7,11,.42)}
 
+/* E soprattutto ha bisogno di un fondo PROPRIO. Le sezioni scure non ne
+   avevano mai avuto uno: prendevano quello del body, e a filo non si
+   notava. Da scheda sovrapposta invece si vedeva attraverso, e nei 44px
+   di sovrapposizione compariva il chiaro di sotto con un taglio netto
+   più giù, dove riprendeva il fondo della pagina.
+   Uso background-color e non la scorciatoia, così il gradiente del
+   verdetto — che è una di queste sezioni — resta al suo posto. */
+.sec--chiara + .sec{background-color:var(--stage)}
+
 /* la riga verde corre sul bordo della scheda, non più fra due campiture.
    Sul blocco scuro il verde del tema si legge già. Su carta no: #06714f
    è il verde da testo, giusto per le parole e invisibile come filo di
