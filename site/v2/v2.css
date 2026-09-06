@@ -883,3 +883,208 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border:0;border-radiu
      provato, e non separa più il comando dal suo risultato */
   .bench__panel > p        {order:0;margin-top:18px}
 }
+
+/* ═══════════════════════════════════════════════════════════════════
+ * BLOCCHI CHIARI — 06.09.2026
+ * Cinque sezioni passano su carta bianca: lavori, metodo, laboratorio,
+ * profilo, brief. Dalla seconda in poi la pagina alterna scuro e chiaro
+ * a ogni blocco, così ogni sezione si stacca dalla precedente.
+ *
+ * Funziona ridefinendo gli stessi token dentro il blocco: nessuna regola
+ * del foglio va riscritta, si ribaltano tutte da sole. I rapporti di
+ * contrasto sono misurati su #f7f8fa, non scelti a occhio — il verde
+ * #14c08a su bianco fa 2,21:1 e come testo era illeggibile.
+ * ═══════════════════════════════════════════════════════════════════ */
+
+.sec--chiara{
+  color-scheme:light;                    /* i controlli di sistema seguono */
+  --stage:#f7f8fa;                       /* la carta */
+  --panel:#ffffff;
+  --panel-2:#eef1f5;
+  --alt:#eceff3;
+  --rule:rgba(5,7,11,.13);
+  --rule-2:rgba(5,7,11,.07);
+  --ink:#0b0f16;                         /* 18,06:1 */
+  --text:#3c4653;                        /*  9,01:1 */
+  --muted:#5f6a76;                       /*  5,26:1 */
+  --em:#06714f;                          /*  5,67:1 — verde da testo   */
+  --em-bright:#056347;                   /*  6,86:1 — stati attivi     */
+  --em-light:#08805a;                    /*  4,65:1 */
+  --em-deep:#04553d;                     /*  8,33:1 */
+  --em-dim:rgba(6,113,79,.10);
+  background:var(--stage);
+  color:var(--ink);
+}
+
+/* i motori disegnano con colori scritti dentro il codice e restano scuri:
+   sulla carta diventano strumenti incassati. Li incornicio perché si
+   leggano come tali invece che come buchi neri nella pagina. */
+.sec--chiara .bench__stage,
+.sec--chiara .work__visual,
+.sec--chiara .formats figure,
+.sec--chiara .mat-holder{
+  border-radius:var(--r);overflow:hidden;
+  box-shadow:0 1px 2px rgba(5,7,11,.06), 0 18px 44px -22px rgba(5,7,11,.34)}
+
+/* i pannelli su carta: bordo leggero invece del fondo scuro */
+.sec--chiara .bench__panel,
+.sec--chiara .offerta__card,
+.sec--chiara .lab__card,
+.sec--chiara .dossier,
+.sec--chiara .metrics{background:var(--panel);border-color:var(--rule)}
+
+/* il numerone d'apertura era bianco al 6%: su carta sparirebbe */
+.sec--chiara.ap-numero .sec__head::before{color:rgba(5,7,11,.07)}
+
+/* la barra fissa resta scura e ci passa sopra: è un oggetto che galleggia,
+   non parte della sezione. Sul chiaro le serve un bordo che la stacchi. */
+.sec--chiara{border-block:1px solid var(--rule-2)}
+
+/* ── i colori scritti a mano che il ribaltamento dei token non tocca.
+      Sono quattro, e cadono tutti dentro sezioni ora chiare: contorni
+      e aloni calibrati su fondo scuro che sulla carta si dissolvono. ── */
+
+/* il marchio ART × AI: contorno verde al 28% su bianco è invisibile */
+.sec--chiara .profilo__mark{-webkit-text-stroke:1.5px rgba(6,113,79,.42)}
+
+/* il numerone d'apertura di "lavori" e "laboratorio" */
+.sec--chiara.ap-numero .sec__head::before{
+  -webkit-text-stroke:1.5px rgba(6,113,79,.30)}
+
+/* la barra di avanzamento del brief: l'alone verde su bianco sporcava */
+.sec--chiara .brief__progress i::after{box-shadow:none}
+.sec--chiara .brief__progress i{background:var(--rule-2)}
+
+/* la risposta scelta nel brief: 9% di verde su bianco non si vedeva */
+.sec--chiara .brief-options label:has(input:checked){
+  background:rgba(6,113,79,.08);box-shadow:inset 0 0 0 1px var(--em)}
+
+/* le tracce dei cursori usano un grigio chiaro pensato per lo scuro */
+.sec--chiara input[type=range]::-webkit-slider-runnable-track{
+  background:linear-gradient(90deg,var(--em) 0 var(--v,50%),rgba(5,7,11,.14) var(--v,50%) 100%)}
+.sec--chiara input[type=range]::-moz-range-track{background:rgba(5,7,11,.14)}
+.sec--chiara input[type=range]::-webkit-slider-thumb,
+.sec--chiara input[type=range]::-moz-range-thumb{
+  background:var(--em);box-shadow:0 0 0 4px rgba(6,113,79,.14)}
+
+/* ═══════════════════════════════════════════════════════════════════
+ * PARALLASSE — 06.09.2026
+ * Profondità legata allo scorrimento, non al tempo: ogni strato si
+ * muove a una velocità diversa mentre attraversa lo schermo.
+ *
+ * Fatta con animation-timeline:view(), cioè animazioni guidate dalla
+ * posizione dell'elemento nella finestra. Nessun JavaScript, nessun
+ * listener sullo scorrimento: il browser la esegue fuori dal thread
+ * principale, quindi non ruba fotogrammi al dito che scorre.
+ *
+ * Uso la proprietà `translate` e non `transform`, così non calpesto le
+ * trasformazioni che il foglio già applica altrove (.rv, i knob, ecc.).
+ *
+ * Chi non ha view() vede la pagina ferma e integra: nessun ripiego in
+ * JavaScript, che sarebbe la cosa che fa scattare lo scorrimento.
+ * ═══════════════════════════════════════════════════════════════════ */
+
+@supports (animation-timeline: view()) {
+@media (prefers-reduced-motion: no-preference) {
+
+  @keyframes deriva{from{translate:0 var(--dv)}to{translate:0 calc(var(--dv) * -1)}}
+
+  /* strato 1 · i visuali derivano contro la pagina */
+  .bench__stage,
+  .mat-holder,
+  .formats,
+  .work__visual,
+  .deck .work canvas{
+    --dv:26px;
+    animation:deriva linear both;
+    animation-timeline:view();
+    will-change:translate}
+
+  /* strato 2 · il numerone d'apertura va al doppio: è lui a dare la
+     sensazione di profondità, perché scorre visibilmente più veloce
+     del titolo che gli sta accanto */
+  .ap-numero .sec__head::before{
+    --dv:62px;
+    animation:deriva linear both;
+    animation-timeline:view()}
+
+  /* strato 3 · il marchio ART × AI deriva al contrario del testo */
+  .profilo__mark{
+    --dv:-38px;
+    animation:deriva linear both;
+    animation-timeline:view()}
+
+  /* strato 4 · l'hero si allontana mentre esce, invece di sparire
+     di colpo sotto il primo blocco */
+  @keyframes allontana{to{opacity:.3;scale:.97;translate:0 -34px}}
+  .hero__content{
+    animation:allontana linear both;
+    animation-timeline:view();
+    animation-range:exit 0% exit 100%}
+
+  /* strato 5 · la soglia. A ogni passaggio scuro↔chiaro una linea si
+     apre dal centro: è il segnale che il blocco è cambiato. */
+  @keyframes soglia{from{scale:0 1;opacity:0}to{scale:1 1;opacity:1}}
+  .sec--chiara::before,
+  .sec--chiara + .sec::before{
+    content:"";position:absolute;z-index:1;top:0;height:2px;
+    left:var(--gutter);right:var(--gutter);
+    background:linear-gradient(90deg,transparent,var(--em),transparent);
+    transform-origin:50% 50%;
+    animation:soglia linear both;
+    animation-timeline:view();
+    animation-range:entry 0% entry 80%}
+
+  /* sul telefono l'ampiezza si dimezza: schermo corto, escursione corta,
+     altrimenti la deriva diventa un sobbalzo invece che profondità */
+  @media (max-width:900px){
+    .bench__stage,.mat-holder,.formats,.work__visual,.deck .work canvas{--dv:12px}
+    .ap-numero .sec__head::before{--dv:26px}
+    .profilo__mark{--dv:-18px}
+    @keyframes allontana{to{opacity:.4;scale:.985;translate:0 -18px}}
+  }
+}
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+ * LA CUCITURA FRA I BLOCCHI — 06.09.2026
+ * Il salto di tono da solo è un taglio netto. Una riga verde da 2px
+ * sopra non si legge (misurata: c'è, ma a pagina intera sparisce).
+ *
+ * Invece il blocco che cambia tono sale SOPRA il precedente: angoli
+ * arrotondati, ombra verso l'alto, sovrapposizione di 44px. Il taglio
+ * diventa una scheda che scivola addosso a quella prima, e la riga
+ * verde ci corre sopra come rifinitura invece che come separatore.
+ *
+ * Vale solo dove il tono cambia davvero: hero e regia restano attaccati
+ * perché sono lo stesso blocco scuro d'apertura.
+ * ═══════════════════════════════════════════════════════════════════ */
+
+.sec--chiara,
+.sec--chiara + .sec{
+  margin-top:-44px;
+  border-start-start-radius:34px;
+  border-start-end-radius:34px;
+  box-shadow:0 -26px 54px -26px rgba(5,7,11,.55)}
+
+/* il blocco scuro che risale su uno chiaro ha bisogno del contrario:
+   l'ombra sotto una superficie chiara non si vede, serve uno stacco */
+.sec--chiara + .sec{box-shadow:0 -22px 46px -24px rgba(5,7,11,.42)}
+
+/* la riga verde corre sul bordo della scheda, non più fra due campiture.
+   Sul blocco scuro il verde del tema si legge già. Su carta no: #06714f
+   è il verde da testo, giusto per le parole e invisibile come filo di
+   luce. Lì torna il verde vivo, che qui è decorazione e non deve
+   rispettare la soglia di leggibilità. */
+.sec--chiara::before,
+.sec--chiara + .sec::before{
+  left:34px;right:34px;top:0;height:2px;border-radius:2px}
+.sec--chiara::before{
+  height:3px;background:linear-gradient(90deg,transparent,#14c08a 22%,#14c08a 78%,transparent)}
+
+@media (max-width:900px){
+  .sec--chiara,.sec--chiara + .sec{
+    margin-top:-28px;
+    border-start-start-radius:22px;border-start-end-radius:22px}
+  .sec--chiara::before,.sec--chiara + .sec::before{left:22px;right:22px}
+}
