@@ -1304,3 +1304,10 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border:0;border-radiu
   .pal__gr{grid-template-columns:1fr}
   .pal__gr button{min-height:52px}
 }
+
+/* l'etichetta dei campioni: senza, quattro pallini in una barra non
+   dicono a cosa servono. Sparisce quando lo spazio non basta. */
+.bar__pal__eti{margin-left:auto;color:var(--muted);font-size:10px;
+  letter-spacing:.14em;text-transform:uppercase;white-space:nowrap}
+.bar__pal__eti + .bar__pal{margin-left:8px}
+@media (max-width:1120px){.bar__pal__eti{display:none}}

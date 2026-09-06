@@ -22,9 +22,26 @@ export function leggiColori() {
   EM_DEEP   = v('--em-deep', EM_DEEP);
 }
 const INK = '#f2f4f7';
-/* l'accento con una trasparenza: prima era un rgba() verde fisso, che
-   con una palette diversa restava verde in mezzo a tutto il resto */
-const misto = (col, a) => `color-mix(in srgb, ${col} ${Math.round(a * 100)}%, transparent)`;
+
+/* ── i colori del disegno seguono la palette ──────────────────────
+   Qui dentro c'erano quattordici rgba() verdi scritti a mano piu' tre
+   quasi-neri con la dominante verde: cambiando palette il sito virava
+   e il disegno restava smeraldo. Ora ogni tinta nasce da uno dei
+   quattro ruoli dell'accento.
+   Costruisco rgba() a mano invece di usare color-mix perche' dentro un
+   gradiente di canvas la funzione non e' supportata ovunque. */
+const _tri = h => { const v = parseInt(h.slice(1), 16);
+  return [v >> 16 & 255, v >> 8 & 255, v & 255]; };
+const alfa = (col, a) => { const [r, g, b] = _tri(col);
+  /* +a perche' le espressioni di partenza finivano gia' con .toFixed(),
+     che restituisce una stringa: chiamarci sopra .toFixed() esplodeva */
+  return `rgba(${r},${g},${b},${(+a).toFixed(3)})`; };
+/* il campo non e' nero piatto: e' quasi-nero con dentro un soffio di
+   accento. Le percentuali riproducono il duotono verde di partenza. */
+const NERO = [4, 7, 8];
+const campo = (col, forza) => { const [r, g, b] = _tri(col);
+  const m = i => Math.round(NERO[i] + forza * ([r, g, b][i] - NERO[i]));
+  return `rgb(${m(0)},${m(1)},${m(2)})`; };
 const BG = '#06090e';
 
 /* rumore riproducibile: stesso seed, stesso disegno */
@@ -94,16 +111,16 @@ export function keyVisual(ctx, o) {
 
   /* 1 · campo — duotono, non nero piatto */
   const field = ctx.createLinearGradient(0, 0, w, h);
-  field.addColorStop(0, '#050a09');
-  field.addColorStop(lerp(0.55, 0.38, ai), '#06110d');
-  field.addColorStop(1, '#040707');
+  field.addColorStop(0, campo(EM, .02));
+  field.addColorStop(lerp(0.55, 0.38, ai), campo(EM, .06));
+  field.addColorStop(1, campo(EM, 0));
   ctx.fillStyle = field;
   ctx.fillRect(0, 0, w, h);
 
   const gx = lerp(0.74, 0.52, ai) * w, gy = lerp(0.3, 0.42, ai) * h;
   const glow = ctx.createRadialGradient(gx, gy, 0, gx, gy, Math.max(w, h) * lerp(0.52, 0.8, ai));
-  glow.addColorStop(0, `rgba(20,192,138,${(0.3 + ai * 0.22).toFixed(3)})`);
-  glow.addColorStop(0.45, `rgba(10,143,99,${(0.1 + ai * 0.1).toFixed(3)})`);
+  glow.addColorStop(0, `${alfa(EM, (0.3 + ai * 0.22).toFixed(3))}`);
+  glow.addColorStop(0.45, `${alfa(EM_DEEP, (0.1 + ai * 0.1).toFixed(3))}`);
   glow.addColorStop(1, 'rgba(4,7,7,0)');
   ctx.fillStyle = glow;
   ctx.fillRect(0, 0, w, h);
@@ -123,13 +140,13 @@ export function keyVisual(ctx, o) {
       i ? ctx.lineTo(x, y) : ctx.moveTo(x, y);
     }
     ctx.closePath();
-    ctx.strokeStyle = `rgba(127,227,189,${(0.26 + ai * 0.32 - ring * 0.07).toFixed(3)})`;
+    ctx.strokeStyle = `${alfa(EM_LIGHT, (0.26 + ai * 0.32 - ring * 0.07).toFixed(3))}`;
     ctx.lineWidth = Math.max(1, (2.4 - ring * 0.6) * S);
     ctx.stroke();
     if (ring === 1) {
       const inner = ctx.createRadialGradient(0, 0, 0, 0, 0, rr);
-      inner.addColorStop(0, `rgba(20,192,138,${(0.14 + ai * 0.26).toFixed(2)})`);
-      inner.addColorStop(1, 'rgba(20,192,138,0)');
+      inner.addColorStop(0, `${alfa(EM, (0.14 + ai * 0.26).toFixed(2))}`);
+      inner.addColorStop(1, `${alfa(EM, 0)}`);
       ctx.fillStyle = inner; ctx.fill();
     }
   }
@@ -141,9 +158,9 @@ export function keyVisual(ctx, o) {
   ctx.rotate(diag * 0.5);
   const bandH = h * lerp(0.035, 0.11, ai);
   const band = ctx.createLinearGradient(-w, 0, w, 0);
-  band.addColorStop(0, 'rgba(20,192,138,0)');
-  band.addColorStop(0.5, `rgba(79,227,176,${(0.1 + ai * 0.14).toFixed(3)})`);
-  band.addColorStop(1, 'rgba(20,192,138,0)');
+  band.addColorStop(0, `${alfa(EM, 0)}`);
+  band.addColorStop(0.5, `${alfa(EM_BRIGHT, (0.1 + ai * 0.14).toFixed(3))}`);
+  band.addColorStop(1, `${alfa(EM, 0)}`);
   ctx.fillStyle = band;
   ctx.fillRect(-w, -bandH / 2, w * 2, bandH);
   ctx.restore();
@@ -153,7 +170,7 @@ export function keyVisual(ctx, o) {
   ctx.beginPath();
   ctx.rect(margin, margin, w - margin * 2, h - margin * 2);
   ctx.clip();
-  ctx.strokeStyle = `rgba(127,227,189,${(0.06 + ai * 0.07).toFixed(3)})`;
+  ctx.strokeStyle = `${alfa(EM_LIGHT, (0.06 + ai * 0.07).toFixed(3))}`;
   ctx.lineWidth = 1;
   const step = (w - margin * 2) / cols;
   ctx.beginPath();
@@ -182,12 +199,12 @@ export function keyVisual(ctx, o) {
     const a = lerp(0.4, 0.2, ai) + r() * 0.24;
     if (r() < 0.3 + ai * 0.34) {
       const g = ctx.createLinearGradient(-sw / 2, -sh / 2, sw / 2, sh / 2);
-      g.addColorStop(0, `rgba(20,192,138,${(a * 0.55).toFixed(3)})`);
-      g.addColorStop(1, 'rgba(20,192,138,0.02)');
+      g.addColorStop(0, `${alfa(EM, (a * 0.55).toFixed(3))}`);
+      g.addColorStop(1, `${alfa(EM, 0.02)}`);
       ctx.fillStyle = g;
       ctx.fillRect(-sw / 2, -sh / 2, sw, sh);
     }
-    ctx.strokeStyle = `rgba(127,227,189,${a.toFixed(3)})`;
+    ctx.strokeStyle = `${alfa(EM_LIGHT, a.toFixed(3))}`;
     ctx.lineWidth = Math.max(1, 1.3 * S);
     ctx.strokeRect(-sw / 2, -sh / 2, sw, sh);
     ctx.restore();
@@ -227,7 +244,7 @@ export function keyVisual(ctx, o) {
   for (let i = 0; i < accents; i++) {
     const bw = maxW * (i === 0 ? lerp(0.34, 0.15, ai) : 0.05 + r() * 0.12);
     const bx = margin + (i === 0 ? 0 : maxW * (0.4 + r() * 0.55));
-    ctx.fillStyle = i === 0 ? EM : misto(EM, 0.45 + r() * 0.4);
+    ctx.fillStyle = i === 0 ? EM : alfa(EM, 0.45 + r() * 0.4);
     ctx.fillRect(Math.round(bx), Math.round(barY), Math.round(bw), barH);
   }
 
@@ -294,16 +311,16 @@ export function timeline(ctx, o) {
         const bars = Math.max(3, Math.round(cw / 5));
         for (let b = 0; b < bars; b++) {
           const amp = (0.2 + r() * 0.8) * (rowH * 0.42);
-          ctx.fillStyle = `rgba(20,192,138,${(0.35 + r() * 0.4).toFixed(2)})`;
+          ctx.fillStyle = `${alfa(EM, (0.35 + r() * 0.4).toFixed(2))}`;
           ctx.fillRect(x + b * 5, y + rowH / 2 - amp / 2, 2, amp);
         }
       } else {
         const on = row === 1 ? r() < 0.45 + pace * 0.3 : row === 3 ? r() < 0.6 : true;
         if (on) {
           const a = row === 0 ? 0.9 : row === 3 ? 0.34 : 0.5;
-          ctx.fillStyle = i % 2 ? `rgba(20,192,138,${a * 0.42})` : `rgba(79,227,176,${a * 0.3})`;
+          ctx.fillStyle = i % 2 ? `${alfa(EM, a * 0.42)}` : `${alfa(EM_BRIGHT, a * 0.3)}`;
           ctx.fillRect(x + 1, y + 3, Math.max(2, cw - 3), rowH - 6);
-          ctx.strokeStyle = `rgba(127,227,189,${a * 0.45})`;
+          ctx.strokeStyle = `${alfa(EM_LIGHT, a * 0.45)}`;
           ctx.lineWidth = 1;
           ctx.strokeRect(x + 1.5, y + 3.5, Math.max(2, cw - 4), rowH - 7);
         }
@@ -319,7 +336,7 @@ export function timeline(ctx, o) {
   for (let i = 0; i < n; i++) {
     const cw = (durs[i] / total) * usable;
     const bh = (durs[i] / Math.max(...durs)) * hh;
-    ctx.fillStyle = `rgba(20,192,138,${(0.2 + (durs[i] / Math.max(...durs)) * 0.55).toFixed(2)})`;
+    ctx.fillStyle = `${alfa(EM, (0.2 + (durs[i] / Math.max(...durs)) * 0.55).toFixed(2))}`;
     ctx.fillRect(x + 1, hy + hh - bh, Math.max(2, cw - 3), bh);
     x += cw;
   }
@@ -400,7 +417,7 @@ export function radar(ctx, o) {
     ctx.beginPath();
     m.v.forEach((v, i) => { const [x, y] = pt(i, v); i ? ctx.lineTo(x, y) : ctx.moveTo(x, y); });
     ctx.closePath();
-    ctx.fillStyle = on ? 'rgba(20,192,138,.2)' : 'rgba(221,231,242,.03)';
+    ctx.fillStyle = on ? `${alfa(EM, .2)}` : 'rgba(221,231,242,.03)';
     ctx.fill();
     ctx.strokeStyle = on ? EM : 'rgba(221,231,242,.18)';
     ctx.lineWidth = on ? 2 : 1;
