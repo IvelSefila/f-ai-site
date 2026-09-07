@@ -3,45 +3,170 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>F/AI — versione pixel</title>
-<meta name="description" content="Il portfolio F/AI in pixel art: torre alchemica generata a codice, pigmenti medievali, niente immagini caricate.">
+<title>F/AI — la torre</title>
+<meta name="description" content="Il portfolio di Fabrizio Mana in pixel art: otto stanze giocabili, disegnate a codice con quindici pigmenti alchemici. Grafica pubblicitaria, video, social e sistemi AI.">
 <link rel="icon" href="../favicon.svg">
 <link rel="stylesheet" href="pixel.css">
 </head>
 <body>
-<a class="salta" href="#dopo">Vai al contenuto</a>
+<a class="salta" href="#s-bilancia">Vai al contenuto</a>
 
-<main>
-  <section class="quadro" aria-label="Scena giocabile">
+<div class="mondo">
+
+  <!-- ══ lo schermo, appiccicato mentre la pagina scorre ══ -->
+  <div class="quadro">
     <div class="quadro__telaio">
       <canvas id="schermo" width="320" height="180"
-        aria-label="Torre alchemica di notte, disegnata pixel per pixel dalla pagina. Tocca o premi invio per evocare scintille; tieni premuto per accendere la torcia."></canvas>
+        aria-label="Schermo di gioco a pixel: la stanza cambia mentre scorri la pagina. Tocca per interagire."></canvas>
     </div>
+
+    <nav class="stanze" aria-label="Stanze della torre">
+      <button type="button" class="stanza" data-vai="0" aria-current="true">00 Soglia</button>
+      <button type="button" class="stanza" data-vai="1">01 Bilancia</button>
+      <button type="button" class="stanza" data-vai="2">02 Scriptorium</button>
+      <button type="button" class="stanza" data-vai="3">03 Banchi</button>
+      <button type="button" class="stanza" data-vai="4">04 Forgia</button>
+      <button type="button" class="stanza" data-vai="5">05 Materia</button>
+      <button type="button" class="stanza" data-vai="6">06 Scheda</button>
+      <button type="button" class="stanza" data-vai="7">07 Alchimista</button>
+    </nav>
+
     <div class="comandi">
       <button id="rigenera" type="button" class="tasto">Rigenera il mondo</button>
-      <p class="nota">320×180 pixel · 15 pigmenti · nessuna immagine caricata</p>
+      <p class="nota">Sei in <b id="nomeStanza">LA SOGLIA</b> · 320×180 pixel ·
+        15 pigmenti · nessuna immagine caricata</p>
     </div>
-  </section>
+  </div>
 
-  <section id="dopo" class="pergamena">
-    <h1>Non è un&rsquo;immagine.<br><em>La disegna questa pagina.</em></h1>
-    <p>La torre non esiste come file. Esiste come <strong>seme</strong>: un numero da cui
-      nascono altezza, merli, finestre e la stanza illuminata. Cambia il seme e nasce
-      un&rsquo;altra torre, nello stesso linguaggio.</p>
-    <p>I quindici colori sono pigmenti veri, quelli di prima della chimica industriale.
-      L&rsquo;orpimento è solfuro d&rsquo;arsenico e avvelenava chi lo macinava. Il cinabro è
-      solfuro di mercurio. L&rsquo;oltremare si ricavava dal lapislazzuli e costava più
-      dell&rsquo;oro: per questo nelle miniature lo si teneva per il manto della Vergine.</p>
-    <ul class="tavolozza" id="listaPigmenti"></ul>
-  </section>
-</main>
+  <!-- ══ il contenuto: ogni sezione accende la sua stanza ══ -->
+  <div class="testo">
+
+    <section id="s-soglia" data-stanza="soglia">
+      <p class="occhiello">00 · La soglia</p>
+      <h1>Creo immagini.<br>Dirigo il movimento.<br><em>Progetto sistemi AI.</em></h1>
+      <p class="guida">Grafico pubblicitario, video editor e AI builder. Trasformo campagne,
+        video e contenuti social in sistemi creativi coerenti. Lavoro con strumenti
+        tradizionali, modelli locali e piattaforme cloud: scelgo ogni tecnologia per
+        qualità, controllo e risultato.</p>
+      <p>Questa versione del portfolio è un gioco. Otto stanze, una per ogni cosa che so
+        fare — e ogni stanza si manovra invece di leggersi. <strong>Nessuna immagine è
+        caricata:</strong> la torre, la luna, le montagne e le pagine miniate le disegna
+        questo browser, adesso, un pixel alla volta.</p>
+      <p class="istruzioni">Scorri per cambiare stanza · frecce ← → · oppure i tasti qui a fianco</p>
+    </section>
+
+    <section id="s-bilancia" data-stanza="bilancia">
+      <p class="occhiello">01 · La bilancia</p>
+      <h2>Non è «con AI» o «senza AI».<br><em>È una scelta di regia.</em></h2>
+      <p>Trascina la leva e guarda la bilancia inclinarsi. A sinistra quello che decido io,
+        a destra quello che genera il sistema. Sopra, <strong>l&rsquo;artefatto cambia
+        davvero</strong>: non una barra che scorre, una composizione che si ricostruisce
+        con altre forme e altri colori.</p>
+      <p>Ora la macchina pesa <b id="bilanciaVal">30%</b>. È la decisione che prendo per
+        prima su ogni lavoro, prima di aprire qualsiasi programma.</p>
+    </section>
+
+    <section id="s-scriptorium" data-stanza="scriptorium">
+      <p class="occhiello">02 · Lo scriptorium</p>
+      <h2>Il risultato davanti.<br><em>Il processo subito dopo.</em></h2>
+      <p>Tre pagine miniate. Non sono immagini caricate: <strong>le disegna questa pagina,
+        adesso</strong>. Ognuna nasce da un seme — un numero da cui discendono la cornice,
+        il capolettera, i pigmenti e la miniatura in basso.</p>
+      <p>Toccane una e cambia seme: nasce una variante diversa che <strong>resta nello
+        stesso linguaggio</strong>. È quello che vuol dire avere un sistema visivo invece
+        di un pezzo fortunato.</p>
+    </section>
+
+    <section id="s-banchi" data-stanza="banchi">
+      <p class="occhiello">03 · I quattro banchi</p>
+      <h2>Quattro modi per trasformare un&rsquo;idea<br><em>in qualcosa che funziona.</em></h2>
+      <ul class="elenco">
+        <li><b>Pennelli</b> — grafica pubblicitaria: dal key visual alle declinazioni
+          statiche e animate, mantenendo le stesse regole.</li>
+        <li><b>Moviola</b> — video e post-produzione: il montaggio decide prima del
+          contenuto. Tagli lunghi respirano, tagli corti spingono.</li>
+        <li><b>Araldica</b> — social: lo stesso concetto declinato dove serve. Cambiano
+          zona sicura, peso del testo e densità.</li>
+        <li><b>Automi</b> — flussi e prototipi AI: un contenuto guida che alimenta versioni
+          per più canali, con revisione umana prima dell&rsquo;uscita.</li>
+      </ul>
+      <p>Uno strumento vero per mestiere. Non spiegano cosa faccio: lo fanno mentre li usi.</p>
+    </section>
+
+    <section id="s-forgia" data-stanza="forgia">
+      <p class="occhiello">04 · La forgia</p>
+      <h2>La tecnologia giusta.<br><em>Non quella di moda.</em></h2>
+      <p>Ho una workstation su cui installo, confronto e integro modelli. Nella forgia
+        scegli fra il <strong>ferro in casa</strong>, il <strong>fuoco lontano</strong> e
+        l&rsquo;ibrido, e vedi accendersi quello che hai scelto.</p>
+      <p>Il locale dà controllo su file, configurazioni e iterazioni, ma chiede hardware e
+        manutenzione. Il cloud dà accesso ai modelli più grandi senza gestire nulla, ma il
+        costo cresce con l&rsquo;uso e i dati escono di casa. <strong>Prototipo in locale,
+        produco in cloud quando serve potenza:</strong> è così che tengo insieme costo,
+        riservatezza e resa.</p>
+    </section>
+
+    <section id="s-materia" data-stanza="materia">
+      <p class="occhiello">05 · La materia</p>
+      <h2>Grafica, video e sistemi<br><em>sono la stessa materia.</em></h2>
+      <p>Millequattrocento punti, ognuno col suo pigmento. Cambia disposizione — griglia,
+        nastro, rete — e li vedi riorganizzarsi. <strong>Non è una dissolvenza fra tre
+        immagini: è una sola materia che cambia ordine.</strong></p>
+      <p>Che è poi il mestiere. La griglia è come si legge una pagina; il nastro è come
+        scorre un video; la rete è come si tiene insieme un sistema.</p>
+    </section>
+
+    <section id="s-scheda" data-stanza="scheda">
+      <p class="occhiello">06 · La scheda</p>
+      <h2>Un profilo visivo.<br><em>Un metodo tecnico.</em></h2>
+      <p>Sono un grafico pubblicitario, video editor e web designer. Lavoro tra immagine,
+        montaggio, social media, vibe coding e automazione; creo anche app e agenti per
+        trasformare attività ripetitive in flussi chiari e controllabili.</p>
+      <p>Conosco il panorama AI perché lo provo sul campo: uso piattaforme professionali,
+        installo modelli sul mio PC e confronto qualità, velocità, costi e limiti.
+        <strong>Il valore non è «usare l&rsquo;AI», ma sapere quale usare, quando evitarla
+        e come dirigere il risultato.</strong></p>
+    </section>
+
+    <section id="s-alchimista" data-stanza="alchimista">
+      <p class="occhiello">07 · L&rsquo;alchimista</p>
+      <h2>Sei domande.<br><em>Poi costruiamo il quadro.</em></h2>
+      <p>Nella stanza qui accanto c&rsquo;è chi fa le domande. Rispondi toccando, o con i tasti
+        da <kbd>1</kbd> a <kbd>4</kbd>. Le risposte si accumulano qui sotto, in chiaro:
+        niente si perde nel gioco.</p>
+      <ul class="riepilogo" id="riepilogo"></ul>
+      <p class="azioni">
+        <a class="tasto tasto--pieno" id="mandaBrief" href="#" hidden>Manda il brief ↗</a>
+        <button class="tasto" id="azzeraBrief" type="button">Ricomincia le domande</button>
+      </p>
+      <p>Preferisci scrivere e basta? <a href="mailto:hello@f-ai.studio">hello@f-ai.studio</a>.</p>
+    </section>
+
+    <section class="chiusa">
+      <h2>La tavolozza</h2>
+      <p>Quindici pigmenti, e sono pigmenti veri: quelli con cui si dipingeva prima della
+        chimica industriale. L&rsquo;orpimento è solfuro d&rsquo;arsenico e avvelenava chi
+        lo macinava. Il cinabro è solfuro di mercurio. L&rsquo;oltremare si ricavava dal
+        lapislazzuli e costava più dell&rsquo;oro: per questo nelle miniature lo si teneva
+        per il manto della Vergine. Il fondo non è nero — è inchiostro ferro-gallico, un
+        viola bruciato.</p>
+      <p>Accanto a ogni pigmento c&rsquo;è il suo rapporto di contrasto misurato sul fondo.
+        Chi non arriva a 4,5:1 resta pigmento: si usa per il disegno, non per le scritte.</p>
+      <ul class="tavolozza" id="listaPigmenti"></ul>
+      <p class="istruzioni">Preferisci la versione classica?
+        <a href="../v2/index.html">Il sito normale è qui</a>.</p>
+    </section>
+
+  </div>
+</div>
 
 <script type="module" src="gioco.js"></script>
 <script type="module">
   import { TAVOLOZZA } from './tavolozza.js';
-  const ul = document.querySelector('#listaPigmenti');
-  ul.innerHTML = TAVOLOZZA.map(([hex, nome, ruolo]) => `
-    <li><i style="--p:${hex}"></i><b>${nome}</b><span>${ruolo}</span><code>${hex}</code></li>`).join('');
+  document.querySelector('#listaPigmenti').innerHTML = TAVOLOZZA
+    .map(([hex, nome, ruolo]) =>
+      `<li><i style="--p:${hex}"></i><b>${nome}</b><span>${ruolo}</span><code>${hex}</code></li>`)
+    .join('');
 </script>
 </body>
 </html>

@@ -1,69 +1,136 @@
 /* ═══════════════════════════════════════════════════════════════════
- * La pagina attorno allo schermo. Poca: il protagonista è il quadro.
- * Il carattere del testo resta leggibile — un font a pixel per i
- * paragrafi lunghi è una posa, non una scelta. I pixel stanno dentro
- * il canvas, dove sono disegnati per davvero.
+ * La pagina attorno allo schermo.
+ *
+ * Il protagonista è il quadro: resta appiccicato mentre il testo scorre,
+ * e la stanza cambia da sé. Su schermo largo stanno affiancati, su
+ * telefono lo schermo va in cima e il testo scorre sotto.
+ *
+ * Il carattere del testo resta leggibile: un font a pixel per i
+ * paragrafi lunghi è una posa, non una scelta. I pixel stanno dentro il
+ * canvas, dove sono disegnati per davvero.
  * ═══════════════════════════════════════════════════════════════════ */
+
 :root{
-  --fondo:#140f1a; --ombra:#241a2e; --porpora:#7b3f9d;
-  --oro:#d4af37; --orpimento:#e8a317; --pergamena:#e8dcc0; --calce:#f6efe0;
+  --fondo:#140f1a; --ombra:#241a2e; --porpora-cupa:#3d2b4f; --porpora:#7b3f9d;
+  --lapis:#2e5f8a; --azzurrite:#4a90c2; --malachite:#3fae7f;
+  --cinabro:#c8102e; --minio:#e2622f; --orpimento:#e8a317;
+  --oro:#d4af37; --pergamena:#e8dcc0; --calce:#f6efe0;
   --corpo:ui-sans-serif,system-ui,"Segoe UI",Roboto,sans-serif;
   --mono:ui-monospace,SFMono-Regular,Consolas,monospace;
+  --barra:0px;                 /* quanto occupa il quadro appiccicato */
 }
 *{box-sizing:border-box}
-html{color-scheme:dark}
+html{color-scheme:dark;scroll-behavior:smooth;scroll-padding-top:calc(var(--barra) + 16px)}
 body{margin:0;min-width:320px;background:var(--fondo);color:var(--pergamena);
   font:400 17px/1.65 var(--corpo);-webkit-font-smoothing:antialiased}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
 
-.salta{position:fixed;z-index:9;top:8px;left:8px;padding:10px 14px;
+.salta{position:fixed;z-index:99;top:8px;left:8px;
+  display:inline-flex;align-items:center;min-height:44px;padding:0 18px;
   background:var(--oro);color:var(--fondo);font:600 13px/1 var(--mono);
-  border-radius:4px;text-decoration:none;transform:translateY(-160%)}
+  border-radius:4px;text-decoration:none;transform:translateY(-200%)}
 .salta:focus{transform:none}
 
-.quadro{min-height:100svh;display:grid;align-content:center;gap:18px;
-  padding:clamp(16px,4vw,48px)}
+/* ── impianto ────────────────────────────────────────────────────── */
+.mondo{max-width:1400px;margin-inline:auto;padding:0 clamp(14px,3vw,32px)}
+
+@media (min-width:1000px){
+  .mondo{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,.78fr);
+    gap:clamp(28px,4vw,64px);align-items:start}
+  .quadro{position:sticky;top:24px}
+  html{--barra:0px}
+}
+
+/* ── il quadro ───────────────────────────────────────────────────── */
+.quadro{padding-block:clamp(16px,3vh,32px);display:grid;gap:12px}
+@media (max-width:999px){
+  .quadro{position:sticky;top:0;z-index:20;
+    background:linear-gradient(180deg,var(--fondo) 86%,transparent);
+    padding-block:10px 14px;margin-inline:calc(clamp(14px,3vw,32px) * -1);
+    padding-inline:clamp(14px,3vw,32px)}
+  html{--barra:64vw}
+}
 
 /* Il telaio tiene la proporzione 16:9 e non lascia mai che il canvas
    venga interpolato: un pixel del disegno deve restare un quadrato. */
-.quadro__telaio{width:min(100%,1180px);margin-inline:auto;
-  aspect-ratio:320/180;border:2px solid var(--ombra);border-radius:6px;
-  overflow:hidden;background:var(--fondo);
-  box-shadow:0 0 0 1px rgba(212,175,55,.22), 0 30px 90px -40px rgba(0,0,0,.9)}
+.quadro__telaio{aspect-ratio:320/180;border:2px solid var(--porpora-cupa);
+  border-radius:6px;overflow:hidden;background:var(--fondo);
+  box-shadow:0 0 0 1px rgba(212,175,55,.2), 0 26px 70px -34px #000}
 #schermo{display:block;width:100%;height:100%;
   image-rendering:pixelated;image-rendering:crisp-edges;
   touch-action:pan-y;cursor:crosshair;
   -webkit-touch-callout:none;-webkit-user-select:none;user-select:none}
 
-.comandi{width:min(100%,1180px);margin-inline:auto;display:flex;
-  flex-wrap:wrap;align-items:center;gap:12px 18px}
-.tasto{min-height:46px;padding:0 18px;border:2px solid var(--oro);border-radius:4px;
-  background:transparent;color:var(--oro);cursor:pointer;
-  font:600 12px/1 var(--mono);letter-spacing:.12em;text-transform:uppercase;
+/* ── la scelta delle stanze ──────────────────────────────────────── */
+.stanze{display:flex;gap:5px;overflow-x:auto;scrollbar-width:none;
+  -webkit-overflow-scrolling:touch;scroll-snap-type:x proximity}
+.stanze::-webkit-scrollbar{display:none}
+.stanza{flex:none;min-height:38px;padding:0 11px;scroll-snap-align:start;
+  border:1px solid var(--porpora-cupa);border-radius:4px;background:transparent;
+  color:var(--porpora);cursor:pointer;white-space:nowrap;
+  font:500 11px/1 var(--mono);letter-spacing:.07em;text-transform:uppercase;
+  transition:color .15s,border-color .15s,background .15s}
+.stanza[aria-current="true"]{color:var(--fondo);background:var(--oro);border-color:var(--oro)}
+.stanza:focus-visible{outline:2px solid var(--calce);outline-offset:2px}
+@media (hover:hover){.stanza:hover{color:var(--orpimento);border-color:var(--orpimento)}}
+@media (pointer:coarse){.stanza{min-height:44px}}
+
+.comandi{display:flex;flex-wrap:wrap;align-items:center;gap:10px 16px}
+.nota{margin:0;color:var(--porpora);font:400 11.5px/1.5 var(--mono);letter-spacing:.05em}
+.nota b{color:var(--orpimento)}
+@media (max-width:999px){.comandi{display:none}}
+
+.tasto{display:inline-flex;align-items:center;min-height:44px;padding:0 18px;
+  border:2px solid var(--oro);border-radius:4px;background:transparent;
+  color:var(--oro);cursor:pointer;text-decoration:none;
+  font:600 12px/1 var(--mono);letter-spacing:.11em;text-transform:uppercase;
   transition:background .15s,color .15s}
 .tasto:active{background:var(--oro);color:var(--fondo)}
 @media (hover:hover){.tasto:hover{background:var(--oro);color:var(--fondo)}}
 .tasto:focus-visible{outline:2px solid var(--calce);outline-offset:3px}
-.nota{margin:0;color:var(--porpora);font:400 12px/1.5 var(--mono);letter-spacing:.08em}
+.tasto--pieno{background:var(--oro);color:var(--fondo)}
 
-.pergamena{width:min(100%,760px);margin-inline:auto;
-  padding:clamp(40px,8vw,110px) clamp(16px,4vw,24px)}
-.pergamena h1{margin:0 0 .7em;font-size:clamp(30px,5vw,52px);line-height:1.06;
-  letter-spacing:-.02em;color:var(--calce)}
-.pergamena h1 em{font-style:normal;color:var(--oro)}
-.pergamena p{margin:0 0 1.1em;color:var(--pergamena)}
-.pergamena strong{color:var(--orpimento)}
+/* ── il testo ────────────────────────────────────────────────────── */
+.testo section{padding-block:clamp(40px,9vh,110px);max-width:62ch}
+.testo section:first-child{padding-top:clamp(20px,4vh,60px)}
+.occhiello{margin:0 0 14px;color:var(--orpimento);
+  font:500 11px/1 var(--mono);letter-spacing:.18em;text-transform:uppercase}
+.testo h1,.testo h2{margin:0 0 .6em;line-height:1.05;letter-spacing:-.02em;
+  color:var(--calce);text-wrap:balance}
+.testo h1{font-size:clamp(32px,5.4vw,58px)}
+.testo h2{font-size:clamp(26px,4vw,44px)}
+.testo em{font-style:normal;color:var(--oro)}
+.testo p{margin:0 0 1.05em;color:var(--pergamena)}
+.testo strong{color:var(--orpimento);font-weight:600}
+.testo a{color:var(--azzurrite);text-underline-offset:3px}
+.guida{font-size:clamp(17px,1.4vw,19px);color:var(--calce)}
+.istruzioni{color:var(--porpora);font:400 13px/1.6 var(--mono);letter-spacing:.04em}
+kbd{padding:2px 6px;border:1px solid var(--porpora-cupa);border-radius:3px;
+  background:var(--ombra);color:var(--oro);font:600 12px var(--mono)}
 
-.tavolozza{list-style:none;margin:2em 0 0;padding:0;display:grid;gap:6px}
-.tavolozza li{display:grid;grid-template-columns:26px minmax(0,10em) 1fr auto;
-  gap:12px;align-items:center;padding:7px 10px;border:1px solid var(--ombra);
-  border-radius:5px;font-size:14px}
-.tavolozza i{width:26px;height:26px;border-radius:4px;background:var(--p);
-  box-shadow:inset 0 0 0 1px rgba(246,239,224,.16)}
+.elenco{list-style:none;margin:0 0 1.2em;padding:0;display:grid;gap:10px}
+.elenco li{padding:12px 14px;border:1px solid var(--porpora-cupa);border-radius:5px;
+  background:var(--ombra);font-size:15.5px;line-height:1.55}
+.elenco b{color:var(--oro)}
+
+.riepilogo{list-style:none;margin:0 0 1.2em;padding:0;display:grid;gap:6px}
+.riepilogo li{padding:10px 13px;border:1px solid var(--porpora-cupa);border-radius:4px;
+  background:var(--ombra);font:400 14.5px/1.5 var(--mono);color:var(--calce)}
+.riepilogo b{color:var(--orpimento);margin-right:6px}
+.riepilogo .vuoto{color:var(--porpora);font-family:var(--corpo);font-size:15px}
+.azioni{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:1.4em}
+
+.chiusa{border-top:1px solid var(--porpora-cupa);max-width:none!important}
+.tavolozza{list-style:none;margin:1.6em 0;padding:0;display:grid;gap:5px}
+.tavolozza li{display:grid;grid-template-columns:24px minmax(0,9.5em) 1fr auto;
+  gap:12px;align-items:center;padding:6px 10px;border:1px solid var(--ombra);
+  border-radius:4px;font-size:14px}
+.tavolozza i{width:24px;height:24px;border-radius:3px;background:var(--p);
+  box-shadow:inset 0 0 0 1px rgba(246,239,224,.15)}
 .tavolozza b{color:var(--calce);font-weight:600}
 .tavolozza span{color:var(--porpora);font-size:12.5px}
 .tavolozza code{color:var(--oro);font:400 12px var(--mono)}
 @media (max-width:620px){
-  .tavolozza li{grid-template-columns:26px 1fr auto;row-gap:2px}
-  .tavolozza span{grid-column:2/-1;font-size:12px}
+  .tavolozza li{grid-template-columns:24px 1fr auto;row-gap:2px}
+  .tavolozza span{grid-column:2/-1}
 }
-@media (prefers-reduced-motion:reduce){*{animation-duration:.01ms!important}}

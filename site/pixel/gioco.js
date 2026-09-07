@@ -1,18 +1,24 @@
 /* ═══════════════════════════════════════════════════════════════════
  * IL CICLO
  *
- * Risoluzione fissa 320×180: la stessa proporzione degli schermi di
- * oggi con la densità di pixel del 1988. Il browser la ingrandisce
- * senza interpolare, quindi ogni pixel disegnato resta un quadrato.
+ * Risoluzione fissa 320×180: la proporzione degli schermi di oggi con
+ * la densità di pixel del 1988. Il browser la ingrandisce senza
+ * interpolare, quindi ogni pixel disegnato resta un quadrato.
  *
- * Il fotogramma si ridisegna intero ogni volta — a 57.600 pixel si può
- * fare, e semplifica tutto: niente stato sporco, niente rettangoli da
- * invalidare. Il ciclo si ferma quando la finestra non è a vista.
+ * Lo schermo resta appiccicato in alto mentre la pagina scorre, e la
+ * stanza cambia quando entra la sezione corrispondente: si legge il
+ * sito e si gioca lo stesso schermo. Chi non vuole scorrere ha i tasti
+ * sotto e le frecce.
+ *
+ * Il fondo di ogni stanza si calcola una volta sola e si ricopia: a
+ * 57.600 pixel ridisegnare tutto sessanta volte al secondo si potrebbe
+ * anche fare, ma il muro di pietra non cambia mai.
  * ═══════════════════════════════════════════════════════════════════ */
 
 import { Schermo } from './motore.js';
 import { C } from './tavolozza.js';
-import { torre, rune, bagliore, Scintille } from './scena.js';
+import { Scintille } from './scena.js';
+import { STANZE, perId } from './stanze.js';
 
 export const LARGO = 320, ALTO = 180;
 
@@ -25,170 +31,169 @@ const sc = new Schermo(LARGO, ALTO);
 const scintille = new Scintille();
 const lento = matchMedia('(prefers-reduced-motion: reduce)');
 
-/* ── stato ─────────────────────────────────────────────────────── */
-const S = {
-  t: 0,
-  torcia: { x: LARGO * 0.24, y: ALTO * 0.52, viva: false },
-  seme: 4821,
-  evocazioni: 0,
-  avviato: false,
-};
+const S = { t: 0, seme: 4821, evocazioni: 0, stanza: 0, torcia: null };
 
-/* ── il fondo, ridisegnato solo quando cambia il seme ─────────────
-   Il cielo e le montagne non si muovono: calcolarli sessanta volte al
-   secondo sarebbe sprecato. Li tengo in un fotogramma a parte e li
-   ricopio. */
-let fondo = null;
-function preparaFondo() {
-  fondo = new Schermo(LARGO, ALTO);
-  const salva = sc.buf;
-  sc.buf = fondo.buf;
-  import('./scena.js').then(() => {});
-  cieloEMonti(sc, S.seme);
-  S.torre = torre(sc, Math.round(LARGO * 0.62), Math.round(ALTO * 0.78), S.seme);
-  sc.buf = salva;
-}
-
-/* cielo e monti stanno in scena.js ma non sono esportati: li richiamo
-   attraverso una funzione che li mette insieme */
-import { RAMPE } from './tavolozza.js';
-import { caso, rumore1 } from './motore.js';
-function cieloEMonti(s, seme) {
-  s.sfuma(0, 0, s.w, Math.round(s.h * 0.62), RAMPE.notte);
-  s.sfuma(0, Math.round(s.h * 0.44), s.w, Math.round(s.h * 0.2),
-          [C.PORPORA_CUPA, C.LAPIS, C.PORPORA_CUPA]);
-  const lx = Math.round(s.w * 0.82), ly = Math.round(s.h * 0.16);
-  s.alone(lx, ly, 30, C.PORPORA, 0.5);
-  s.alone(lx, ly, 18, C.LAPIS, 0.35);
-  s.cerchio(lx, ly, 11, C.PERGAMENA, true);
-  s.cerchio(lx, ly, 11, C.CALCE);
-  const rl = caso(7);
-  for (let i = 0; i < 9; i++) {
-    const a = rl() * 6.28, d = rl() * 8;
-    s.cerchio(lx + Math.cos(a) * d, ly + Math.sin(a) * d, 1 + Math.floor(rl() * 2), C.ORO, true);
+/* ── i fondali, uno per stanza ────────────────────────────────────
+   Ricalcolati solo quando cambia il seme: dentro c'è il muro di pietra,
+   il pavimento, la torre. Roba che non si muove. */
+const fondali = new Map();
+function fondale(i) {
+  const st = STANZE[i];
+  if (!fondali.has(st.id)) {
+    const f = new Schermo(LARGO, ALTO);
+    const salva = sc.buf;
+    sc.buf = f.buf;
+    st.fondo ? st.fondo(sc, S) : sc.pulisci(C.FONDO);
+    sc.buf = salva;
+    fondali.set(st.id, f);
   }
-  const oriz = Math.round(s.h * 0.66);
-  for (const [sm, amp, base, col, cresta] of
-       [[seme + 11, 22, oriz - 6, C.PORPORA_CUPA, C.PORPORA],
-        [seme + 29, 34, oriz + 4, C.OMBRA, C.PORPORA_CUPA]]) {
-    for (let x = 0; x < s.w; x++) {
-      const n = rumore1(x / 46, sm) * 0.7 + rumore1(x / 17, sm + 1) * 0.3;
-      const y = Math.round(base - n * amp);
-      s.rettPieno(x, y, 1, s.h - y, col);
-      s.punto(x, y, cresta);
-    }
-  }
-  s.rettPieno(0, Math.round(s.h * 0.86), s.w, s.h, C.FONDO);
-  s.sfuma(0, Math.round(s.h * 0.86), s.w, 8, [C.OMBRA, C.FONDO]);
+  return fondali.get(st.id);
 }
+function rifaiFondali() { fondali.clear(); }
 
-/* le stelle pulsano, quindi vanno sopra il fondo a ogni fotogramma */
-function stelle(s, t) {
-  const r = caso(20260906);
-  for (let i = 0; i < 60; i++) {
-    const x = Math.floor(r() * s.w), y = Math.floor(r() * s.h * 0.5);
-    const fase = r() * 6.28, vel = 0.6 + r() * 1.6;
-    const b = Math.sin(t * vel + fase);
-    if (b > 0.55) s.punto(x, y, b > 0.9 ? C.CALCE : C.PERGAMENA);
-    else if (b > 0) s.punto(x, y, C.PORPORA);
-  }
-}
-
-/* ── il titolo ────────────────────────────────────────────────────── */
-function titolo(s, t) {
-  const y = 26;
-  const scala = 4;
-  const larg = s.misura('F/AI', { scala });
-  const x = 22;
-  /* L'alone respira. Con rettangoli annidati si vedeva la scatola e
-     copriva il sottotitolo: ora e' radiale, centrato sulle lettere. */
-  const respiro = (Math.sin(t * 1.6) + 1) / 2;
-  s.alone(x + larg / 2, y + 7 * scala / 2, larg * 0.62,
-          C.PORPORA, 0.30 + respiro * 0.22);
-  s.testo(x, y, 'F/AI', C.ORO, { scala, ombra: C.FONDO });
-  s.testo(x, y + 7 * scala + 8, 'GRAFICA · MOVIMENTO · SISTEMI', C.PERGAMENA, { scala: 1 });
-  s.testo(x, y + 7 * scala + 20, 'UN PORTFOLIO CHE SI GIOCA', C.ORPIMENTO, { scala: 1 });
-}
-
-/* ── la barra di stato, come in un gioco di ruolo ─────────────────── */
+/* ── la barra di stato ────────────────────────────────────────────── */
 function hud(s, t) {
-  const y = ALTO - 13;
-  s.rettPieno(0, y - 1, LARGO, 14, C.FONDO);
-  s.linea(0, y - 1, LARGO, y - 1, C.PORPORA_CUPA);
-  s.testo(4, y + 3, 'EVOCAZIONI', C.PORPORA, { scala: 1 });
-  s.testo(70, y + 3, String(S.evocazioni).padStart(3, '0'), C.ORPIMENTO, { scala: 1 });
-  s.testo(110, y + 3, 'SEME', C.PORPORA, { scala: 1 });
-  s.testo(140, y + 3, String(S.seme), C.ORO, { scala: 1 });
-  if (!S.avviato && Math.sin(t * 3) > -0.3)
-    s.testo(LARGO - 4 - s.misura('TOCCA PER EVOCARE'), y + 3,
-            'TOCCA PER EVOCARE', C.CALCE, { scala: 1 });
-  else if (S.avviato)
-    s.testo(LARGO - 4 - s.misura('TIENI PREMUTO: TORCIA'), y + 3,
-            'TIENI PREMUTO: TORCIA', C.PERGAMENA, { scala: 1 });
+  const y = ALTO - 11;
+  s.rettPieno(0, y - 2, LARGO, 13, C.FONDO);
+  s.linea(0, y - 2, LARGO, y - 2, C.PORPORA_CUPA);
+  const st = STANZE[S.stanza];
+  s.testo(4, y + 1, st.num, C.ORO);
+  s.testo(20, y + 1, st.nome, C.PERGAMENA);
+  s.testo(LARGO - 4 - s.misura('SEME ' + S.seme), y + 1, 'SEME ' + S.seme, C.PORPORA);
 }
 
 /* ── ciclo ────────────────────────────────────────────────────────── */
-let raf = 0, ultimo = 0, aVista = true;
+let raf = 0, ultimo = 0;
 
 function fotogramma(ora) {
   raf = requestAnimationFrame(fotogramma);
   const dt = Math.min((ora - ultimo) / 1000, 0.05);
   ultimo = ora;
-  S.t += lento.matches ? 0 : dt;
+  if (!lento.matches) S.t += dt;
 
-  sc.buf.set(fondo.buf);
-  stelle(sc, S.t);
-  rune(sc, S.t);
-  if (S.torcia.viva) bagliore(sc, S.torcia.x, S.torcia.y, S.t);
+  sc.buf.set(fondale(S.stanza).buf);
+  STANZE[S.stanza].disegna(sc, S, S.t);
+  if (S.torcia) bagliorePiccolo(sc, S.torcia, S.t);
   scintille.passo(dt);
   scintille.disegna(sc);
-  titolo(sc, S.t);
   hud(sc, S.t);
   sc.presenta(ctx);
 }
 
-function avvia() { if (!raf) { ultimo = performance.now(); raf = requestAnimationFrame(fotogramma); } }
-function ferma() { cancelAnimationFrame(raf); raf = 0; }
+function bagliorePiccolo(s, p, t) {
+  s.alone(p.x, p.y, 26, C.DRAGO, 0.4);
+  s.alone(p.x, p.y, 13, C.MINIO, 0.6);
+  const r = 2 + Math.sin(t * 6);
+  s.cerchio(p.x, p.y, r + 1, C.ORPIMENTO, true);
+  s.cerchio(p.x, p.y, Math.max(1, r - 0.5), C.CALCE, true);
+}
+
+const avvia = () => { if (!raf) { ultimo = performance.now(); raf = requestAnimationFrame(fotogramma); } };
+const ferma = () => { cancelAnimationFrame(raf); raf = 0; };
+
+/* ── cambio stanza ────────────────────────────────────────────────── */
+const tastiStanza = [...document.querySelectorAll('[data-vai]')];
+
+export function vaiA(i, scorri = false) {
+  i = (i + STANZE.length) % STANZE.length;
+  if (i === S.stanza && !scorri) return;
+  S.stanza = i;
+  tastiStanza.forEach(b => b.setAttribute('aria-current',
+    String(Number(b.dataset.vai) === i)));
+  document.querySelector('#nomeStanza').textContent = STANZE[i].nome;
+  if (scorri) document.querySelector(`#s-${STANZE[i].id}`)
+    ?.scrollIntoView({ behavior: lento.matches ? 'auto' : 'smooth', block: 'start' });
+}
+
+tastiStanza.forEach(b => b.addEventListener('click',
+  () => vaiA(Number(b.dataset.vai), true)));
+
+/* la stanza segue la sezione che stai leggendo */
+const secIO = new IntersectionObserver(es => {
+  for (const e of es) if (e.isIntersecting) {
+    const id = e.target.id.replace(/^s-/, '');
+    const i = STANZE.findIndex(x => x.id === id);
+    if (i >= 0) vaiA(i);
+  }
+}, { rootMargin: '-45% 0px -45% 0px' });
+document.querySelectorAll('[data-stanza]').forEach(s => secIO.observe(s));
 
 /* ── comandi ──────────────────────────────────────────────────────── */
-function coord(e) {
+const coord = e => {
   const r = cv.getBoundingClientRect();
   return { x: (e.clientX - r.left) / r.width * LARGO,
            y: (e.clientY - r.top) / r.height * ALTO };
-}
+};
 
 cv.addEventListener('pointerdown', e => {
   cv.setPointerCapture(e.pointerId);
   const p = coord(e);
-  S.torcia = { ...p, viva: true };
-  S.avviato = true;
+  S.torcia = p;
   S.evocazioni++;
-  scintille.soffia(p.x, p.y, 26, (p.x * 977 + p.y * 31 + S.evocazioni) | 0);
+  const st = STANZE[S.stanza];
+  const preso = st.tocca ? st.tocca(p, sc) : false;
+  /* se la stanza non ha usato il tocco, resta una scintilla */
+  if (!preso) scintille.soffia(p.x, p.y, 18, (p.x * 977 + p.y * 31 + S.evocazioni) | 0);
+  else scintille.soffia(p.x, p.y, 8, S.evocazioni * 131);
+  aggiornaRiepilogo();
 });
-cv.addEventListener('pointermove', e => { if (S.torcia.viva) Object.assign(S.torcia, coord(e)); });
+cv.addEventListener('pointermove', e => {
+  if (!S.torcia) return;
+  const p = coord(e);
+  S.torcia = p;
+  const st = STANZE[S.stanza];
+  if (st.tocca && st.id === 'bilancia') { st.tocca(p, sc); aggiornaRiepilogo(); }
+});
 for (const ev of ['pointerup', 'pointercancel'])
-  cv.addEventListener(ev, () => { S.torcia.viva = false; });
-
-document.querySelector('#rigenera')?.addEventListener('click', () => {
-  S.seme = 1000 + Math.floor(Math.random() * 8999);
-  preparaFondo();
-  scintille.soffia(LARGO / 2, ALTO / 2, 40, S.seme);
-});
+  cv.addEventListener(ev, () => { S.torcia = null; });
 
 addEventListener('keydown', e => {
-  if (e.key === ' ' || e.key === 'Enter') {
-    e.preventDefault();
-    S.avviato = true; S.evocazioni++;
-    scintille.soffia(LARGO * 0.5, ALTO * 0.5, 30, Date.now() | 0);
+  if (e.target.matches('input, textarea, select')) return;
+  if (e.key === 'ArrowRight') { vaiA(S.stanza + 1, true); e.preventDefault(); }
+  if (e.key === 'ArrowLeft')  { vaiA(S.stanza - 1, true); e.preventDefault(); }
+  const st = STANZE[S.stanza];
+  if (st.id === 'alchimista' && /^[1-4]$/.test(e.key)) {
+    if (st.rispondi(Number(e.key) - 1)) { scintille.soffia(160, 90, 12, Date.now() | 0); aggiornaRiepilogo(); }
   }
 });
 
-new IntersectionObserver(es => {
-  aVista = es[0].isIntersecting;
-  aVista ? avvia() : ferma();
-}, { threshold: 0.05 }).observe(cv);
+document.querySelector('#rigenera')?.addEventListener('click', () => {
+  S.seme = 1000 + Math.floor(Math.random() * 8999);
+  rifaiFondali();
+  scintille.soffia(LARGO / 2, ALTO / 2, 34, S.seme);
+});
 
-preparaFondo();
+document.querySelector('#azzeraBrief')?.addEventListener('click', () => {
+  perId.alchimista.azzera();
+  vaiA(STANZE.findIndex(s => s.id === 'alchimista'), true);
+  aggiornaRiepilogo();
+});
+
+/* ── il riepilogo del brief, in pagina e leggibile ────────────────── */
+function aggiornaRiepilogo() {
+  const ul = document.querySelector('#riepilogo');
+  if (!ul) return;
+  const { scelte, fatto } = perId.alchimista.stato;
+  ul.innerHTML = scelte.length
+    ? scelte.map((s, i) => `<li><b>${i + 1}.</b> ${s}</li>`).join('')
+    : '<li class="vuoto">Nessuna risposta ancora. Le domande sono nella stanza dell’alchimista.</li>';
+  const cta = document.querySelector('#mandaBrief');
+  if (cta) {
+    cta.hidden = !fatto;
+    if (fatto) {
+      const corpo = scelte.map((s, i) => `${i + 1}. ${s}`).join('%0D%0A');
+      cta.href = `mailto:hello@f-ai.studio?subject=${encodeURIComponent('Brief F/AI — versione pixel')}&body=${corpo}`;
+    }
+  }
+  const b = document.querySelector('#bilanciaVal');
+  if (b) b.textContent = Math.round(perId.bilancia.stato.mix * 100) + '%';
+}
+
+new IntersectionObserver(es => (es[0].isIntersecting ? avvia() : ferma()),
+  { threshold: 0.02 }).observe(cv);
+
+vaiA(0);
+aggiornaRiepilogo();
 avvia();
 
-export { S, sc };
+export { S, sc, STANZE };
