@@ -12,10 +12,10 @@
  * il dito ci scivola sopra.
  * ═══════════════════════════════════════════════════════════════════ */
 
-import { Schermo } from './motore.js';
-import { C, VERSO_ORO } from './tavolozza.js';
-import { Scintille } from './scena.js';
-import { STANZE, perId } from './stanze.js';
+import { Schermo } from './motore.js?v=20260907-181840';
+import { C, VERSO_ORO } from './tavolozza.js?v=20260907-181840';
+import { Scintille } from './scena.js?v=20260907-181840';
+import { STANZE, perId } from './stanze.js?v=20260907-181840';
 
 export const LARGO = 320, ALTO = 180;
 /* La scala del fotogramma. Si disegna sempre a 320×180 — le stanze
