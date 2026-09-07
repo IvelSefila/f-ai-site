@@ -50,9 +50,13 @@ body{margin:0;min-width:320px;background:var(--fondo);color:var(--pergamena);
 /* Largo: colonna a sinistra, schermo incorniciato e centrato. La
    larghezza è limitata perché il disegno è 320px di lato: oltre gli 820
    i pixel diventano mattoni e il carattere 5×7 grida. */
+/* Lo schermo si prende piu' spazio di prima: il fotogramma e' 960
+   pixel di larghezza e mostrarlo a 690 ne buttava un quarto. A 66vw la
+   cornice arriva a circa 940 su uno schermo da 1440, cioe' quasi uno a
+   uno — ogni pixel disegnato e' un pixel visto. */
 @media (min-width:900px){
-  .scena{inset:0 auto 0 0;width:54vw;padding-inline:clamp(20px,3vw,52px)}
-  .telaio{width:min(100%,820px)}
+  .scena{inset:0 auto 0 0;width:66vw;padding-inline:clamp(16px,2vw,36px)}
+  .telaio{width:min(100%,960px)}
 }
 /* Stretto: una banda in alto, alta quanto chiede il 16:9. */
 @media (max-width:899px){
@@ -97,8 +101,8 @@ body{margin:0;min-width:320px;background:var(--fondo);color:var(--pergamena);
 /* La carta si allinea alla colonna dello schermo invece di andarsene
    al bordo della finestra: prima restavano 245px di vuoto in mezzo. */
 @media (min-width:900px){
-  .pagina{grid-template-columns:54vw minmax(0,1fr);
-    justify-items:start;padding-inline:0 clamp(24px,3vw,56px)}
+  .pagina{grid-template-columns:66vw minmax(0,1fr);
+    justify-items:start;padding-inline:0 clamp(18px,2vw,40px)}
   .pagina > .carta{grid-column:2}
 }
 @media (max-width:899px){
@@ -108,7 +112,7 @@ body{margin:0;min-width:320px;background:var(--fondo);color:var(--pergamena);
 
 /* La carta non deve più essere un vetro sopra il disegno: il disegno sta
    a fianco, non sotto. Un pannello sobrio basta, e il testo respira. */
-.carta{width:min(100%,48ch);padding:clamp(20px,2.3vw,30px);
+.carta{width:min(100%,38ch);padding:clamp(20px,2.3vw,30px);
   border:1px solid var(--ombra);border-radius:14px;background:var(--carta)}
 .carta--larga{width:min(100%,58ch)}
 

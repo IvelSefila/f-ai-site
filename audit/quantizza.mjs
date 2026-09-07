@@ -22,7 +22,7 @@ import path from 'path';
 const RADICE = path.resolve('site/pixel');
 const DENTRO = path.join(RADICE, 'immagini');
 const FUORI  = path.join(RADICE, 'sfondi.js');
-const LARGO = 640, ALTO = 360;   /* la risoluzione vera del fotogramma */
+const LARGO = 960, ALTO = 540;   /* la risoluzione vera del fotogramma */
 
 /* la tavolozza, letta dal file vero per non tenerne due copie */
 const tav = fs.readFileSync(path.join(RADICE, 'tavolozza.js'), 'utf8');
@@ -136,7 +136,7 @@ const testa = `/* ════════════════════�
  * I FONDALI GENERATI
  *
  * Immagini fatte con Higgsfield (nano_banana_pro), poi riportate a
- * 640×360 e rimappate sui pigmenti della tavolozza con retino
+ * 960×540 e rimappate sui pigmenti della tavolozza con retino
  * di Floyd-Steinberg. Non sono PNG: sono array di indici, lo stesso
  * formato con cui disegna il motore — così un fondale generato e uno
  * disegnato a codice si mescolano senza accorgersene.

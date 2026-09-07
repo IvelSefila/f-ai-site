@@ -13,13 +13,17 @@
  * ═══════════════════════════════════════════════════════════════════ */
 
 import { Schermo } from './motore.js';
-import { C } from './tavolozza.js';
+import { C, VERSO_ORO } from './tavolozza.js';
 import { Scintille } from './scena.js';
 import { STANZE, perId } from './stanze.js';
 
 export const LARGO = 320, ALTO = 180;
-/* la scala del fotogramma: si disegna a 320×180, si mostra a 640×360 */
-export const SCALA = 2;
+/* La scala del fotogramma. Si disegna sempre a 320×180 — le stanze
+   parlano quella lingua — ma il fotogramma vero e' tre volte tanto:
+   960×540. Su telefono, dove il rapporto pixel del dispositivo e' 3,
+   quei 960 diventano piu' nitidi del vero; su desktop la cornice arriva
+   a circa 940, cioe' quasi uno a uno. */
+export const SCALA = 3;
 
 const $ = s => document.querySelector(s);
 const $$ = s => [...document.querySelectorAll(s)];
@@ -52,6 +56,69 @@ function fondale(i) {
   return fondali.get(st.id);
 }
 
+/* ── LA TRASMUTAZIONE ─────────────────────────────────────────────
+   Il clic non fa solo cambiare stato: cambia l'immagine. Un'onda parte
+   dal dito e, mentre si allarga, trasmuta i pigmenti che incontra verso
+   la famiglia dell'oro — conservando le luci e le ombre, perche' la
+   tabella accoppia i colori per luminosita'.
+   Il cambiamento resta: ogni stanza tiene una mappa di quello che e'
+   stato trasmutato, e "Rigenera il mondo" la azzera. Cosi' il quadro
+   porta i segni di chi ci ha giocato. */
+const trasmutate = new Map();          /* id stanza → Uint8Array o null */
+const onde = [];                       /* { id, x, y, r, max } in pixel veri */
+
+function mappaDi(id) {
+  if (!trasmutate.has(id)) trasmutate.set(id, new Uint8Array(sc.rw * sc.rh));
+  return trasmutate.get(id);
+}
+
+export function trasmuta(xLog, yLog) {
+  onde.push({ id: STANZE[Math.max(0, S.stanza)].id,
+              x: xLog * SCALA, y: yLog * SCALA, r: 0, max: 46 * SCALA });
+}
+
+/* l'onda avanza: scrive nella mappa una corona di pixel trasmutati */
+function avanzaOnde(dt) {
+  for (let k = onde.length - 1; k >= 0; k--) {
+    const o = onde[k];
+    const r0 = o.r;
+    o.r = Math.min(o.max, o.r + dt * 190 * SCALA);
+    const m = mappaDi(o.id);
+    const y0 = Math.max(0, Math.floor(o.y - o.r)), y1 = Math.min(sc.rh, Math.ceil(o.y + o.r));
+    const x0 = Math.max(0, Math.floor(o.x - o.r)), x1 = Math.min(sc.rw, Math.ceil(o.x + o.r));
+    const R1 = o.r * o.r, R0 = r0 * r0;
+    for (let y = y0; y < y1; y++)
+      for (let x = x0; x < x1; x++) {
+        const d2 = (x - o.x) * (x - o.x) + (y - o.y) * (y - o.y);
+        if (d2 > R1 || d2 < R0) continue;
+        /* A chiazza piena sembrava una macchia. Qui la densita' cala
+           dal centro al bordo e passa da un retino irregolare: l'oro
+           si insinua per vene, come farebbe un metallo dentro la
+           pietra, e sotto continua a vedersi il disegno. */
+        const q = 1 - Math.sqrt(d2) / o.max;
+        const grana = ((x * 7 + y * 13 + ((x >> 2) * (y >> 2))) & 15) / 16;
+        if (grana < q * 0.92) m[y * sc.rw + x] = 1;
+      }
+    if (o.r >= o.max) onde.splice(k, 1);
+  }
+}
+
+/* e ogni fotogramma la mappa si applica sopra il fondale */
+function applicaTrasmutazione(id, t) {
+  const m = trasmutate.get(id);
+  if (!m) return;
+  const b = sc.buf;
+  for (let i = 0; i < b.length; i++) if (m[i]) b[i] = VERSO_ORO[b[i]];
+  /* il bordo delle onde ancora vive brilla */
+  for (const o of onde) {
+    if (o.id !== id) continue;
+    const q = 1 - o.r / o.max;
+    sc.alone(o.x / SCALA, o.y / SCALA, o.r / SCALA + 3, C.CALCE, 0.30 * q);
+  }
+}
+
+export function azzeraTrasmutazioni() { trasmutate.clear(); onde.length = 0; }
+
 /* ── la barra di stato, in basso nel disegno ─────────────────────── */
 function hud(s) {
   const y = ALTO - 11;
@@ -70,8 +137,11 @@ function fotogramma(ora) {
   ultimo = ora;
   if (!lento.matches) S.t += dt;
 
+  const st = STANZE[Math.max(0, S.stanza)];
   sc.buf.set(fondale(Math.max(0, S.stanza)).buf);
-  STANZE[Math.max(0, S.stanza)].disegna(sc, S, S.t);
+  avanzaOnde(dt);
+  applicaTrasmutazione(st.id, S.t);
+  st.disegna(sc, S, S.t);
   scintille.passo(dt);
   scintille.disegna(sc);
   hud(sc);
@@ -228,6 +298,7 @@ disegnaBrief();
 $('#rigenera').addEventListener('click', () => {
   S.seme = 1000 + Math.floor(Math.random() * 8999);
   fondali.clear();
+  azzeraTrasmutazioni();
   scintillaAl(160, 90, 30);
 });
 
@@ -250,6 +321,7 @@ for (const ev of ['pointerup', 'pointercancel'])
     if (!giu || giu.mosso) { giu = null; return; }
     const p = giu; giu = null;
     const st = STANZE[Math.max(0, S.stanza)];
+    trasmuta(p.x, p.y);
     scintille.soffia(p.x, p.y, 16, (p.x * 977 + p.y * 31 + Date.now()) | 0);
     if (st.colpetto) st.colpetto(p, S, aggiorna);
   });
