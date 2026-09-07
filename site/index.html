@@ -1,23 +1,91 @@
 <!doctype html>
+<html lang="it">
+<head>
 <meta charset="utf-8">
-<title>F/AI</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>F/AI — due versioni</title>
+<meta name="description" content="Il portfolio di Fabrizio Mana in due versioni: quella classica e una giocabile in pixel art.">
 <link rel="icon" href="favicon.svg">
-<meta http-equiv="refresh" content="0; url=v2/index.html">
-<script>
-  /* Il refresh via meta perde la stringa di query: con ?probe=1 il sito
-     conserva il buffer di disegno per le misure, e senza non lo fa.
-     Questo la porta dietro; il meta resta come rete di sicurezza. */
-  location.replace('v2/index.html' + location.search + location.hash);
-</script>
-<link rel="canonical" href="v2/index.html">
 <style>
-  html{background:#05070b;color:#7f8b98;
-    font:400 14px/1.6 ui-monospace,SFMono-Regular,Consolas,monospace}
-  body{margin:0;min-height:100vh;display:grid;place-items:center;text-align:center}
-  a{color:#14c08a}
+  /* Questa pagina prima reindirizzava di forza al sito classico, e la
+     versione pixel non la incontrava nessuno. Ora la radice è una
+     scelta: due porte, uguali di dignità. */
+  :root{
+    --nero:#05070b; --pannello:#0b0f16; --riga:rgba(221,231,242,.14);
+    --testo:#c3ccd6; --chiaro:#f2f4f7; --spento:#7f8b98;
+    --smeraldo:#14c08a; --oro:#d4af37; --viola:#7b3f9d;
+    --corpo:ui-sans-serif,system-ui,"Segoe UI",Roboto,sans-serif;
+    --mono:ui-monospace,SFMono-Regular,Consolas,monospace;
+  }
+  *{box-sizing:border-box}
+  html{color-scheme:dark}
+  body{margin:0;min-height:100svh;background:var(--nero);color:var(--testo);
+    font:400 17px/1.6 var(--corpo);-webkit-font-smoothing:antialiased;
+    display:grid;place-items:center;padding:clamp(20px,5vw,56px)}
+  main{width:min(100%,880px)}
+  .marchio{margin:0 0 6px;font:600 34px/1 var(--corpo);letter-spacing:-.03em;color:var(--chiaro)}
+  .marchio span{color:var(--smeraldo)}
+  .sotto{margin:0 0 clamp(28px,5vw,46px);color:var(--spento);
+    font:400 12px/1.5 var(--mono);letter-spacing:.14em;text-transform:uppercase}
+  .porte{display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(min(100%,280px),1fr))}
+  .porta{display:grid;gap:10px;align-content:start;
+    padding:clamp(20px,3vw,30px);border:1px solid var(--riga);border-radius:16px;
+    background:var(--pannello);color:inherit;text-decoration:none;
+    transition:border-color .18s,transform .18s}
+  .porta:focus-visible{outline:2px solid var(--chiaro);outline-offset:3px}
+  @media (hover:hover){.porta:hover{transform:translateY(-3px)}}
+  .porta--classica:hover,.porta--classica:focus-visible{border-color:var(--smeraldo)}
+  .porta--pixel:hover,.porta--pixel:focus-visible{border-color:var(--oro)}
+  .porta h2{margin:0;font-size:26px;letter-spacing:-.01em;color:var(--chiaro)}
+  .porta p{margin:0;font-size:15.5px;line-height:1.55}
+  .etichetta{font:500 11px/1 var(--mono);letter-spacing:.16em;text-transform:uppercase}
+  .porta--classica .etichetta{color:var(--smeraldo)}
+  .porta--pixel .etichetta{color:var(--oro)}
+  .vai{margin-top:6px;font:600 12px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase}
+  .porta--classica .vai{color:var(--smeraldo)}
+  .porta--pixel .vai{color:var(--oro)}
+  /* un'anteprima disegnata in CSS: nessuna immagine da caricare */
+  .cima{height:74px;border-radius:9px;border:1px solid var(--riga)}
+  .porta--classica .cima{background:
+    radial-gradient(circle at 74% 34%,rgba(20,192,138,.42),transparent 58%),
+    linear-gradient(100deg,#05070b 0%,#05070b 44%,#0f2b22 62%,#14c08a 130%)}
+  .porta--pixel .cima{image-rendering:pixelated;background:
+    repeating-linear-gradient(90deg,#3d2b4f 0 6px,#241a2e 6px 12px) bottom/100% 22px no-repeat,
+    radial-gradient(circle at 82% 30%,#e8dcc0 0 7px,transparent 8px),
+    linear-gradient(180deg,#140f1a 0%,#3d2b4f 62%,#2e5f8a 100%)}
+  .nota{margin:clamp(24px,4vw,38px) 0 0;color:var(--spento);
+    font:400 13px/1.6 var(--mono);letter-spacing:.03em}
+  .nota code{color:var(--oro)}
 </style>
+</head>
 <body>
-  <!-- La radice del server mostrava l'elenco delle cartelle: chi apriva
-       l'anteprima non trovava il sito. Questo lo porta dove sta davvero. -->
-  <p>F/AI — apertura del sito…<br><a href="v2/index.html">Vai al sito</a></p>
+<main>
+  <p class="marchio">F<span>/</span>AI</p>
+  <p class="sotto">Fabrizio Mana · grafica, movimento, sistemi AI</p>
+
+  <div class="porte">
+    <a class="porta porta--classica" href="v2/index.html">
+      <span class="cima" aria-hidden="true"></span>
+      <span class="etichetta">Versione classica</span>
+      <h2>Il sito</h2>
+      <p>Undici sezioni con strumenti veri da manovrare: la testina umano/AI,
+        i lavori generati, i banchi, la nuvola di punti, il brief in sei passi.
+        Sette palette e una griglia a dodici colonne.</p>
+      <span class="vai">Entra →</span>
+    </a>
+
+    <a class="porta porta--pixel" href="pixel/index.html">
+      <span class="cima" aria-hidden="true"></span>
+      <span class="etichetta">Versione pixel</span>
+      <h2>La torre</h2>
+      <p>Lo stesso portfolio come gioco a 8 bit: otto stanze, quindici pigmenti
+        alchemici, tutto disegnato dal codice un pixel alla volta. Il brief
+        te lo chiede l&rsquo;alchimista.</p>
+      <span class="vai">Entra →</span>
+    </a>
+  </div>
+
+  <p class="nota">Indirizzi diretti: <code>/v2/index.html</code> · <code>/pixel/index.html</code></p>
+</main>
 </body>
+</html>
