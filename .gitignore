@@ -14,3 +14,7 @@ audit/*.jpg
 # roba di sistema
 Thumbs.db
 .DS_Store
+
+# i PNG grezzi di Higgsfield: 7,4 MB. Quello che serve al sito e'
+# sfondi.js, che li contiene gia' ridotti e quantizzati.
+site/pixel/immagini/*.png

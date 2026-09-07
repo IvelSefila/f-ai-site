@@ -15,6 +15,19 @@
 import { C, RAMPE } from './tavolozza.js';
 import { caso, rumore1 } from './motore.js';
 import { torre, rune, bagliore } from './scena.js';
+import { sfondo } from './sfondi.js';
+
+/* ── i fondali generati ───────────────────────────────────────────
+   Higgsfield dipinge la scenografia, il codice l'accende. Le immagini
+   sono gia' ridotte a 320×180 e ai quindici pigmenti, quindi versarle
+   nel fotogramma e' una copia di byte. Se un fondale manca — file non
+   rigenerato — si ricade sul disegno a codice di prima. */
+function versa(sc, nome) {
+  const a = sfondo(nome);
+  if (!a || a.length !== sc.buf.length) return false;
+  sc.buf.set(a);
+  return true;
+}
 
 /* ── mattoni comuni ──────────────────────────────────────────────── */
 
@@ -71,43 +84,15 @@ function fumetto(sc, x, y, w, h, righe, colore = C.PERGAMENA) {
 const soglia = {
   id: 'soglia', nome: 'LA SOGLIA', num: '00',
   fondo(sc, S) {
+    if (versa(sc, 'soglia')) return;
+    /* ripiego: la scena disegnata a codice */
     sc.sfuma(0, 0, sc.w, Math.round(sc.h * 0.62), RAMPE.notte);
-    sc.sfuma(0, Math.round(sc.h * 0.44), sc.w, Math.round(sc.h * 0.2),
-             [C.PORPORA_CUPA, C.LAPIS, C.PORPORA_CUPA]);
-    const lx = Math.round(sc.w * 0.82), ly = Math.round(sc.h * 0.16);
-    sc.alone(lx, ly, 30, C.PORPORA, 0.5);
-    sc.alone(lx, ly, 18, C.LAPIS, 0.35);
-    sc.cerchio(lx, ly, 11, C.PERGAMENA, true);
-    sc.cerchio(lx, ly, 11, C.CALCE);
-    const rl = caso(7);
-    for (let i = 0; i < 9; i++) {
-      const a = rl() * 6.28, d = rl() * 8;
-      sc.cerchio(lx + Math.cos(a) * d, ly + Math.sin(a) * d, 1 + Math.floor(rl() * 2), C.ORO, true);
-    }
-    const oriz = Math.round(sc.h * 0.66);
-    for (const [sm, amp, base, col, cresta] of
-         [[S.seme + 11, 22, oriz - 6, C.PORPORA_CUPA, C.PORPORA],
-          [S.seme + 29, 34, oriz + 4, C.OMBRA, C.PORPORA_CUPA]])
-      for (let x = 0; x < sc.w; x++) {
-        const n = rumore1(x / 46, sm) * 0.7 + rumore1(x / 17, sm + 1) * 0.3;
-        const y = Math.round(base - n * amp);
-        sc.rettPieno(x, y, 1, sc.h - y, col);
-        sc.punto(x, y, cresta);
-      }
-    sc.rettPieno(0, Math.round(sc.h * 0.86), sc.w, sc.h, C.FONDO);
-    sc.sfuma(0, Math.round(sc.h * 0.86), sc.w, 8, [C.OMBRA, C.FONDO]);
     torre(sc, Math.round(sc.w * 0.62), Math.round(sc.h * 0.78), S.seme);
   },
   disegna(sc, S, t) {
-    const r = caso(20260906);
-    for (let i = 0; i < 60; i++) {
-      const x = Math.floor(r() * sc.w), y = Math.floor(r() * sc.h * 0.5);
-      const fase = r() * 6.28, vel = 0.6 + r() * 1.6;
-      const b = Math.sin(t * vel + fase);
-      if (b > 0.55) sc.punto(x, y, b > 0.9 ? C.CALCE : C.PERGAMENA);
-      else if (b > 0) sc.punto(x, y, C.PORPORA);
-    }
-    rune(sc, t);
+    /* le stelle le ha gia' dipinte l'immagine: qui restano le rune,
+       che sono l'unica cosa viva della soglia */
+    rune(sc, t, 5);
   },
 };
 
@@ -160,7 +145,7 @@ const bilancia = {
 const scriptorium = {
   id: 'scriptorium', nome: 'LO SCRIPTORIUM', num: '02',
   stato: { semi: [1207, 3390, 7714], scelta: 0 },
-  fondo(sc) { muro(sc, 21); assi(sc, sc.h - 26); },
+  fondo(sc) { if (!versa(sc, 'scriptorium')) { muro(sc, 21); assi(sc, sc.h - 26); } },
   disegna(sc, S, t) {
     const titoli = ['GRAFICA', 'MOVIMENTO', 'SISTEMI'];
     this.stato.semi.forEach((seme, i) => {
@@ -229,23 +214,20 @@ function pagina(sc, x, y, w, h, seme, viva, t) {
 const banchi = {
   id: 'banchi', nome: 'I QUATTRO BANCHI', num: '03',
   stato: { scelto: 0 },
-  fondo(sc) { muro(sc, 33); assi(sc, sc.h - 40); },
+  fondo(sc) { if (!versa(sc, 'banchi')) { muro(sc, 33); assi(sc, sc.h - 40); } },
   disegna(sc, S, t) {
-    const NOMI = ['PENNELLI', 'MOVIOLA', 'ARALDICA', 'AUTOMI'];
-    const SOTTO = ['grafica pubblicitaria', 'video e montaggio',
-                   'social e declinazioni', 'flussi e prototipi AI'];
-    const COL = [C.CINABRO, C.LAPIS, C.MALACHITE, C.PORPORA];
-    for (let i = 0; i < 4; i++) {
-      const x = 8 + i * 77, y = 26, w = 68, h = 62;
-      const sel = i === this.stato.scelto;
-      if (sel) sc.alone(x + w / 2, y + h / 2, 56, COL[i], 0.3);
-      sc.rettPieno(x, y, w, h, C.FONDO);
-      sc.rett(x, y, w, h, sel ? C.ORO : C.PORPORA_CUPA);
-      banco(sc, x, y, w, h, i, t, sel);
-      sc.testo(x + 4, y + h + 5, NOMI[i], sel ? C.ORO : C.PERGAMENA);
-    }
-    /* il nome esteso del banco scelto: la scelta si fa nella carta */
+    /* i quattro banchi sono dipinti nel fondale: il codice illumina
+       quello scelto invece di ridisegnarlo sopra */
+    const COL = [C.CINABRO, C.LAPIS, C.MALACHITE, C.ORPIMENTO];
+    const X = [46, 122, 198, 274];
     const i = this.stato.scelto;
+    const respiro = 0.5 + (Math.sin(t * 2.2) + 1) / 2 * 0.5;
+    sc.alone(X[i], 104, 46, COL[i], 0.30 * respiro);
+    sc.alone(X[i], 104, 26, C.ORO, 0.22 * respiro);
+    /* una lucciola sopra il banco acceso, perche' si veda dov'e' */
+    const fy = 62 + Math.sin(t * 2) * 2;
+    sc.cerchio(X[i], fy, 2, C.CALCE, true);
+    sc.alone(X[i], fy, 10, C.ORPIMENTO, 0.5);
   },
 };
 
@@ -300,30 +282,33 @@ function banco(sc, x, y, w, h, tipo, t, viva) {
 const forgia = {
   id: 'forgia', nome: 'LA FORGIA', num: '04',
   stato: { modo: 2 },                       /* 0 locale · 1 cloud · 2 ibrido */
-  fondo(sc) { muro(sc, 44); assi(sc, sc.h - 34); },
+  fondo(sc) { if (!versa(sc, 'forgia')) { muro(sc, 44); assi(sc, sc.h - 34); } },
   disegna(sc, S, t) {
-    const MODI = ['LOCALE', 'CLOUD', 'IBRIDO'];
-    const NOTE = [
-      ['CONTROLLO SU FILE E ITERAZIONI', 'CHIEDE FERRO E MANUTENZIONE'],
-      ['I MODELLI PIU GRANDI, SUBITO', 'IL COSTO CRESCE COL CONSUMO'],
-      ['PROTOTIPO QUI, PRODUCO LA', 'E COSI CHE TENGO INSIEME I CONTI'],
-    ];
+    /* la fornace e la finestra col temporale sono dipinte: il codice
+       accende l'una, l'altra o tutte e due secondo la scelta */
     const m = this.stato.modo;
-    /* la fornace di sinistra: il ferro in casa */
-    const f1 = m === 0 || m === 2 ? 1 : 0.18;
-    fornace(sc, 46, 92, t, f1, C.MINIO);
-    sc.testo(30, 116, 'FERRO IN CASA', f1 > 0.5 ? C.ORPIMENTO : C.PORPORA);
-    /* la nuvola di destra: il fuoco lontano */
-    const f2 = m === 1 || m === 2 ? 1 : 0.18;
-    nuvola(sc, 246, 74, t, f2);
-    sc.testo(226, 116, 'FUOCO LONTANO', f2 > 0.5 ? C.AZZURRITE || C.LAPIS : C.PORPORA);
-    /* il condotto fra le due */
-    for (let x = 74; x < 226; x += 6) {
-      const on = m === 2 && Math.sin(t * 4 - x * 0.08) > 0;
-      sc.punto(x, 96, on ? C.ORO : C.PORPORA_CUPA);
-      sc.punto(x + 1, 96, on ? C.ORPIMENTO : C.PORPORA_CUPA);
+    const locale = m === 0 || m === 2, cloud = m === 1 || m === 2;
+    if (locale) {
+      const f = 0.7 + Math.sin(t * 6) * 0.3;
+      sc.alone(42, 118, 54, C.DRAGO, 0.30 * f);
+      sc.alone(42, 118, 30, C.MINIO, 0.42 * f);
+      sc.alone(42, 118, 16, C.ORPIMENTO, 0.5 * f);
     }
-    /* la scelta si fa nella carta: qui resta il nome acceso */
+    if (cloud) {
+      sc.alone(268, 108, 42, C.LAPIS, 0.26);
+      if (Math.sin(t * 2.4) > 0.82) {
+        sc.alone(268, 104, 50, C.CALCE, 0.45);
+        sc.linea(268, 86, 262, 104, C.CALCE);
+        sc.linea(262, 104, 272, 100, C.CALCE);
+        sc.linea(272, 100, 264, 122, C.ORPIMENTO);
+      }
+    }
+    /* il condotto fra le due, acceso solo in ibrido */
+    if (m === 2) for (let x = 74; x < 246; x += 6) {
+      const on = Math.sin(t * 4 - x * 0.08) > 0;
+      sc.punto(x, 150, on ? C.ORO : C.PORPORA_CUPA);
+      sc.punto(x + 1, 150, on ? C.ORPIMENTO : C.PORPORA_CUPA);
+    }
   },
 };
 
@@ -488,49 +473,20 @@ const alchimista = {
   id: 'alchimista', nome: "L'ALCHIMISTA", num: '07',
   stato: { passo: 0, scelte: [], fatto: false },
   fondo(sc) {
+    if (versa(sc, 'alchimista')) return;
     muro(sc, 66); assi(sc, sc.h - 26);
-    /* Lo scrittoio sta a sinistra e il dialogo a destra. Prima erano
-       sovrapposti: il personaggio spariva dietro le sue stesse
-       risposte, cioe' proprio la cosa che rende viva la stanza. */
-    sc.rettPieno(92, 108, 136, 6, C.PORPORA);
-    sc.rettPieno(100, 114, 6, 32, C.PORPORA_CUPA);
-    sc.rettPieno(214, 114, 6, 32, C.PORPORA_CUPA);
-    /* la libreria dietro */
-    for (let r = 0; r < 3; r++) {
-      const y = 30 + r * 22;
-      sc.rettPieno(24, y + 16, 40, 3, C.PORPORA_CUPA);
-      sc.rettPieno(252, y + 16, 40, 3, C.PORPORA_CUPA);
-      for (let i = 0; i < 7; i++)
-        for (const bx of [25 + i * 5, 253 + i * 5])
-        sc.rettPieno(bx, y + 16 - (7 + (i * 3 + r * 5) % 8), 4,
-                     7 + (i * 3 + r * 5) % 8,
-                     [C.DRAGO, C.LAPIS, C.VERDERAME, C.PORPORA][(i + r) % 4]);
-    }
   },
   disegna(sc, S, t) {
-    /* l'alchimista, di tre quarti allo scrittoio */
-    ritratto(sc, 135, 44, t);
-
-    /* la candela */
-    sc.rettPieno(108, 96, 4, 12, C.PERGAMENA);
-    const fh = 4 + Math.sin(t * 7) * 1.5;
-    sc.alone(110, 94, 26, C.MINIO, 0.4);
-    sc.alone(110, 94, 12, C.ORPIMENTO, 0.7);
-    for (let k = 0; k < fh; k++) sc.punto(110, 94 - k, k > fh - 2 ? C.CALCE : C.ORPIMENTO);
-
-    /* l'alambicco che bolle */
-    sc.cerchio(206, 100, 8, C.LAPIS, true);
-    sc.cerchio(206, 100, 8, C.AZZURRITE);
-    sc.rettPieno(204, 86, 4, 10, C.PORPORA_CUPA);
-    for (let i = 0; i < 4; i++)
-      sc.punto(206 + Math.sin(t * 3 + i) * 2, 84 - ((t * 20 + i * 6) % 24), C.MALACHITE);
-
-    /* Le domande e le risposte stanno nella carta del testo: qui
-       resta la scena, con un fumetto corto che dice a che punto sei.
-       Prima il dialogo copriva il personaggio, cioe' la cosa viva. */
-    /* Le parole stanno tutte nella carta del testo. Qui resta la
-       scena: quando il brief e' finito, la stanza si illumina. */
-    if (this.stato.fatto) sc.alone(160, 74, 74, C.MALACHITE, 0.26);
+    /* la stanza e' dipinta: qui vive solo la fiamma della candela e,
+       a brief finito, la luce verde dell'alambicco */
+    const fh = 0.7 + Math.sin(t * 7) * 0.3;
+    sc.alone(128, 92, 34, C.MINIO, 0.20 * fh);
+    sc.alone(128, 92, 16, C.ORPIMENTO, 0.34 * fh);
+    sc.alone(162, 108, 18, C.MALACHITE, 0.22 + Math.sin(t * 3) * 0.08);
+    if (this.stato.fatto) {
+      sc.alone(162, 108, 46, C.MALACHITE, 0.30);
+      sc.alone(162, 108, 22, C.CALCE, 0.22);
+    }
   },
   rispondi(i) {
     const [, risp] = DOMANDE[this.stato.passo];

@@ -6,7 +6,7 @@ await p.goto('http://localhost:8899/pixel/index.html',{waitUntil:'networkidle'})
 await p.addStyleTag({content:'html{scroll-behavior:auto!important;scroll-snap-type:none!important}'});
 await p.waitForTimeout(2200);
 const dorme=ms=>new Promise(r=>setTimeout(r,ms));
-for (const id of ['soglia','scriptorium','scheda','alchimista']){
+for (const id of ['soglia','scriptorium','banchi','forgia','alchimista']){
   await p.evaluate(i=>document.querySelector('#s-'+i).scrollIntoView({block:'center'}), id);
   await dorme(800);
   await p.screenshot({path:`audit/vetrina-${id}.png`});
