@@ -108,12 +108,6 @@ const soglia = {
       else if (b > 0) sc.punto(x, y, C.PORPORA);
     }
     rune(sc, t);
-    const scala = 4, larg = sc.misura('F/AI', { scala }), x = 22, y = 26;
-    sc.alone(x + larg / 2, y + 14, larg * 0.62, C.PORPORA,
-             0.30 + (Math.sin(t * 1.6) + 1) / 2 * 0.22);
-    sc.testo(x, y, 'F/AI', C.ORO, { scala, ombra: C.FONDO });
-    sc.testo(x, y + 36, 'GRAFICA · MOVIMENTO · SISTEMI', C.PERGAMENA);
-    sc.testo(x, y + 48, 'UN PORTFOLIO CHE SI GIOCA', C.ORPIMENTO);
   },
 };
 
@@ -145,7 +139,6 @@ const bilancia = {
 
     /* l'artefatto, a sinistra, con l'etichetta sopra */
     const ax = 10, ay = 96, aw = 96, ah = 44;
-    sc.testo(ax, ay - 9, 'ARTEFATTO', C.PORPORA);
     sc.rettPieno(ax, ay, aw, ah, C.FONDO);
     sc.rett(ax - 1, ay - 1, aw + 2, ah + 2, C.PORPORA);
     const ra = caso(1000 + Math.round(q * 20));
@@ -157,21 +150,9 @@ const bilancia = {
       if (ra() > 0.5) sc.rett(x, y, w, h, c); else sc.rettPieno(x, y, w, h, c);
     }
 
-    /* la leva, a destra, con i due testi sopra e sotto ben staccati */
-    const lx = 120, ly = 118, ll = sc.w - 132;
-    sc.testo(lx, ly - 22, `MACCHINA ${String(Math.round(q * 100)).padStart(3)}%`, C.ORPIMENTO);
-    sc.testo(lx, ly - 11, 'TRASCINA LA LEVA', C.PORPORA);
-    sc.rettPieno(lx, ly, ll, 3, C.PORPORA_CUPA);
-    sc.rettPieno(lx, ly, Math.round(ll * q), 3, C.ORPIMENTO);
-    const kx = lx + Math.round(ll * q);
-    sc.cerchio(kx, ly + 1, 5, C.ORO, true);
-    sc.cerchio(kx, ly + 1, 5, C.CALCE);
-    cartiglio(sc, 'REGIA · CHI DECIDE');
-  },
-  tocca(p, sc) {
-    const lx = 120, ll = sc.w - 132;
-    this.stato.mix = Math.max(0, Math.min(1, (p.x - lx) / ll));
-    return true;
+    /* La leva vera sta nella carta del testo, non qui: disegnarla
+       due volte era un doppione, e sul largo finiva pure tagliata.
+       Nel quadro resta solo la lettura. */
   },
 };
 
@@ -192,15 +173,7 @@ const scriptorium = {
       sc.testo(x + (w - sc.misura('SEME ' + seme)) / 2, y + h + 15, 'SEME ' + seme,
                sel ? C.ORPIMENTO : C.PORPORA_CUPA);
     });
-    cartiglio(sc, 'LAVORI · LE DISEGNA QUESTA PAGINA');
     sc.testo(4, sc.h - 11, 'TOCCA UNA PAGINA PER RIMINIARLA', C.PERGAMENA);
-  },
-  tocca(p, sc) {
-    const i = Math.floor((p.x - 8) / 100);
-    if (i < 0 || i > 2) return false;
-    this.stato.scelta = i;
-    this.stato.semi[i] = 1000 + Math.floor(Math.random() * 8999);
-    return true;
   },
 };
 
@@ -271,16 +244,8 @@ const banchi = {
       banco(sc, x, y, w, h, i, t, sel);
       sc.testo(x + 4, y + h + 5, NOMI[i], sel ? C.ORO : C.PERGAMENA);
     }
+    /* il nome esteso del banco scelto: la scelta si fa nella carta */
     const i = this.stato.scelto;
-    fumetto(sc, 8, sc.h - 46, sc.w - 16, 40,
-            [NOMI[i], SOTTO[i].toUpperCase(),
-             'TOCCA UN BANCO PER CAMBIARE STRUMENTO']);
-    cartiglio(sc, 'SERVIZI · UNO STRUMENTO PER MESTIERE');
-  },
-  tocca(p, sc) {
-    const i = Math.floor((p.x - 4) / 77);
-    if (i < 0 || i > 3 || p.y > 100) return false;
-    this.stato.scelto = i; return true;
   },
 };
 
@@ -358,22 +323,7 @@ const forgia = {
       sc.punto(x, 96, on ? C.ORO : C.PORPORA_CUPA);
       sc.punto(x + 1, 96, on ? C.ORPIMENTO : C.PORPORA_CUPA);
     }
-    /* i tre tasti */
-    MODI.forEach((n, i) => {
-      const x = 18 + i * 96, y = 26, w = 84;
-      const sel = i === m;
-      sc.rettPieno(x, y, w, 16, sel ? C.PORPORA : C.FONDO);
-      sc.rett(x, y, w, 16, sel ? C.ORO : C.PORPORA_CUPA);
-      sc.testo(x + (w - sc.misura(n)) / 2, y + 5, n, sel ? C.CALCE : C.PERGAMENA);
-    });
-    fumetto(sc, 8, sc.h - 40, sc.w - 16, 34, [MODI[m], ...NOTE[m]]);
-    cartiglio(sc, 'TECNOLOGIA · NON QUELLA DI MODA');
-  },
-  tocca(p) {
-    if (p.y < 20 || p.y > 48) return false;
-    const i = Math.floor((p.x - 14) / 96);
-    if (i < 0 || i > 2) return false;
-    this.stato.modo = i; return true;
+    /* la scelta si fa nella carta: qui resta il nome acceso */
   },
 };
 
@@ -444,21 +394,6 @@ const materia = {
               : w > 0.42 ? C.LAPIS : w > 0.2 ? C.PORPORA : C.MINIO;
       sc.punto(x, y, c);
     }
-    NOMI.forEach((n, i) => {
-      const x = 18 + i * 96, y = 26, wq = 84, sel = i === f;
-      sc.rettPieno(x, y, wq, 16, sel ? C.PORPORA : C.FONDO);
-      sc.rett(x, y, wq, 16, sel ? C.ORO : C.PORPORA_CUPA);
-      sc.testo(x + (wq - sc.misura(n)) / 2, y + 5, n, sel ? C.CALCE : C.PERGAMENA);
-    });
-    sc.testo(6, sc.h - 22, '1.400 PUNTI · OGNUNO TIENE IL SUO COLORE', C.PERGAMENA);
-    sc.testo(6, sc.h - 12, 'NON E UNA DISSOLVENZA: E LA STESSA MATERIA', C.PORPORA);
-    cartiglio(sc, 'MATERIA · LA STESSA SOSTANZA');
-  },
-  tocca(p) {
-    if (p.y < 20 || p.y > 48) return false;
-    const i = Math.floor((p.x - 14) / 96);
-    if (i < 0 || i > 2) return false;
-    this.stato.forma = i; return true;
   },
 };
 
@@ -499,13 +434,16 @@ const scheda = {
     });
 
     /* l'inventario: gli strumenti veri */
-    sc.testo(x + 12, y + 108, 'INVENTARIO', C.DRAGO);
+    sc.testo(x + 12, y + 104, 'INVENTARIO', C.DRAGO);
     const INV = ['PHOTOSHOP', 'AFTER EFFECTS', 'PREMIERE', 'BLENDER',
                  'COMFYUI', 'OLLAMA', 'N8N', 'FIGMA'];
     /* tre colonne e non quattro: a quattro "AFTER EFFECTS" finiva
        addosso a "PREMIERE" — tredici lettere sono 78px, la colonna 68 */
     INV.forEach((n, i) => {
-      const ix = x + 12 + (i % 3) * 88, iy = y + 118 + Math.floor(i / 3) * 11;
+      /* tre righe da 10px a partire da y+114: cosi' l'ultima riga
+         finisce a y+134, dentro la scheda alta 140 — prima l'ultima
+         coppia di strumenti restava tagliata dal bordo */
+      const ix = x + 12 + (i % 3) * 88, iy = y + 114 + Math.floor(i / 3) * 10;
       sc.punto(ix, iy + 3, C.ORO); sc.punto(ix + 1, iy + 2, C.ORO);
       sc.punto(ix + 1, iy + 4, C.ORO); sc.punto(ix + 2, iy + 3, C.ORO);
       sc.testo(ix + 6, iy, n, C.OMBRA);
@@ -554,72 +492,45 @@ const alchimista = {
     /* Lo scrittoio sta a sinistra e il dialogo a destra. Prima erano
        sovrapposti: il personaggio spariva dietro le sue stesse
        risposte, cioe' proprio la cosa che rende viva la stanza. */
-    sc.rettPieno(14, 108, 112, 6, C.PORPORA);
-    sc.rettPieno(22, 114, 6, 32, C.PORPORA_CUPA);
-    sc.rettPieno(112, 114, 6, 32, C.PORPORA_CUPA);
+    sc.rettPieno(92, 108, 136, 6, C.PORPORA);
+    sc.rettPieno(100, 114, 6, 32, C.PORPORA_CUPA);
+    sc.rettPieno(214, 114, 6, 32, C.PORPORA_CUPA);
     /* la libreria dietro */
     for (let r = 0; r < 3; r++) {
       const y = 30 + r * 22;
-      sc.rettPieno(10, y + 16, 40, 3, C.PORPORA_CUPA);
+      sc.rettPieno(24, y + 16, 40, 3, C.PORPORA_CUPA);
+      sc.rettPieno(252, y + 16, 40, 3, C.PORPORA_CUPA);
       for (let i = 0; i < 7; i++)
-        sc.rettPieno(11 + i * 5, y + 16 - (7 + (i * 3 + r * 5) % 8), 4,
+        for (const bx of [25 + i * 5, 253 + i * 5])
+        sc.rettPieno(bx, y + 16 - (7 + (i * 3 + r * 5) % 8), 4,
                      7 + (i * 3 + r * 5) % 8,
                      [C.DRAGO, C.LAPIS, C.VERDERAME, C.PORPORA][(i + r) % 4]);
     }
   },
   disegna(sc, S, t) {
     /* l'alchimista, di tre quarti allo scrittoio */
-    ritratto(sc, 58, 44, t);
+    ritratto(sc, 135, 44, t);
 
     /* la candela */
-    sc.rettPieno(30, 96, 4, 12, C.PERGAMENA);
+    sc.rettPieno(108, 96, 4, 12, C.PERGAMENA);
     const fh = 4 + Math.sin(t * 7) * 1.5;
-    sc.alone(32, 94, 26, C.MINIO, 0.4);
-    sc.alone(32, 94, 12, C.ORPIMENTO, 0.7);
-    for (let k = 0; k < fh; k++) sc.punto(32, 94 - k, k > fh - 2 ? C.CALCE : C.ORPIMENTO);
+    sc.alone(110, 94, 26, C.MINIO, 0.4);
+    sc.alone(110, 94, 12, C.ORPIMENTO, 0.7);
+    for (let k = 0; k < fh; k++) sc.punto(110, 94 - k, k > fh - 2 ? C.CALCE : C.ORPIMENTO);
 
     /* l'alambicco che bolle */
-    sc.cerchio(112, 100, 8, C.LAPIS, true);
-    sc.cerchio(112, 100, 8, C.AZZURRITE);
-    sc.rettPieno(110, 86, 4, 10, C.PORPORA_CUPA);
+    sc.cerchio(206, 100, 8, C.LAPIS, true);
+    sc.cerchio(206, 100, 8, C.AZZURRITE);
+    sc.rettPieno(204, 86, 4, 10, C.PORPORA_CUPA);
     for (let i = 0; i < 4; i++)
-      sc.punto(112 + Math.sin(t * 3 + i) * 2, 84 - ((t * 20 + i * 6) % 24), C.MALACHITE);
+      sc.punto(206 + Math.sin(t * 3 + i) * 2, 84 - ((t * 20 + i * 6) % 24), C.MALACHITE);
 
-    const DX = 134, DW = sc.w - DX - 8;
-
-    if (this.stato.fatto) {
-      sc.alone(92, 74, 60, C.MALACHITE, 0.22);
-      fumetto(sc, DX, 24, DW, 116, [
-        'IL BRIEF E PRONTO.',
-        '',
-        ...this.stato.scelte.map((x, i) => `${i + 1}. ${x}`),
-        '',
-        'IL RIEPILOGO E IN PAGINA.',
-      ]);
-      cartiglio(sc, 'BRIEF · FATTO', C.MALACHITE);
-      return;
-    }
-
-    const [dom, risp] = DOMANDE[this.stato.passo];
-    fumetto(sc, DX, 24, DW, 30, [`${this.stato.passo + 1} DI 6`, dom]);
-    risp.forEach((r, i) => {
-      const y = 60 + i * 18;
-      sc.rettPieno(DX, y, DW, 16, C.FONDO);
-      sc.rett(DX, y, DW, 16, C.PORPORA_CUPA);
-      sc.rettPieno(DX + 3, y + 3, 10, 10, C.PORPORA);
-      sc.testo(DX + 6, y + 5, String(i + 1), C.CALCE);
-      sc.testo(DX + 18, y + 5, r, C.PERGAMENA);
-    });
-    sc.testo(DX, 136, 'TOCCA UNA RISPOSTA · TASTI 1-4', C.PORPORA);
-    cartiglio(sc, 'BRIEF · SEI DOMANDE');
-  },
-  tocca(p, sc) {
-    if (this.stato.fatto) return false;
-    if (p.x < 130) return false;
-    const [, risp] = DOMANDE[this.stato.passo];
-    const i = Math.floor((p.y - 60) / 18);
-    if (i < 0 || i >= risp.length) return false;
-    return this.rispondi(i);
+    /* Le domande e le risposte stanno nella carta del testo: qui
+       resta la scena, con un fumetto corto che dice a che punto sei.
+       Prima il dialogo copriva il personaggio, cioe' la cosa viva. */
+    /* Le parole stanno tutte nella carta del testo. Qui resta la
+       scena: quando il brief e' finito, la stanza si illumina. */
+    if (this.stato.fatto) sc.alone(160, 74, 74, C.MALACHITE, 0.26);
   },
   rispondi(i) {
     const [, risp] = DOMANDE[this.stato.passo];

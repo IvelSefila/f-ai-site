@@ -1,136 +1,181 @@
 /* ═══════════════════════════════════════════════════════════════════
- * La pagina attorno allo schermo.
+ * UNA PAGINA SOLA, DA SFOGLIARE COL DITO
  *
- * Il protagonista è il quadro: resta appiccicato mentre il testo scorre,
- * e la stanza cambia da sé. Su schermo largo stanno affiancati, su
- * telefono lo schermo va in cima e il testo scorre sotto.
+ * La versione precedente era un pasticcio, per due motivi precisi:
  *
- * Il carattere del testo resta leggibile: un font a pixel per i
- * paragrafi lunghi è una posa, non una scelta. I pixel stanno dentro il
- * canvas, dove sono disegnati per davvero.
+ *  1 · il disegno faceva da sfondo a tutta la finestra, quindi a 1440px
+ *      ogni pixel diventava un quadratone da 4,5 e le lettere dentro il
+ *      canvas erano più grandi del titolo della pagina. Due tipografie
+ *      che litigavano, e vinceva la più rumorosa.
+ *  2 · nel disegno c'erano scritte le stesse cose della carta accanto.
+ *
+ * Ora lo schermo è uno schermo: incorniciato, di misura sua, con la
+ * scala dei pixel tenuta bassa. Le parole stanno nel testo; nel quadro
+ * restano le immagini e la barra di stato, che è cromatura da gioco.
  * ═══════════════════════════════════════════════════════════════════ */
 
 :root{
-  --fondo:#140f1a; --ombra:#241a2e; --porpora-cupa:#3d2b4f; --porpora:#7b3f9d;
-  --lapis:#2e5f8a; --azzurrite:#4a90c2; --malachite:#3fae7f;
-  --cinabro:#c8102e; --minio:#e2622f; --orpimento:#e8a317;
-  --oro:#d4af37; --pergamena:#e8dcc0; --calce:#f6efe0;
+  --fondo:#0c0910;             /* la pagina: più cupa del disegno */
+  --carta:#16101f;
+  --ombra:#241a2e; --porpora-cupa:#3d2b4f; --porpora:#a473bf;   /* 5,13:1 sul fondo della carta; a #8b58a8 faceva 3,60 */
+  --azzurrite:#6aa8d4; --malachite:#3fae7f;
+  --orpimento:#e8a317; --oro:#d4af37;
+  --pergamena:#ddd2ba; --calce:#f6efe0;
   --corpo:ui-sans-serif,system-ui,"Segoe UI",Roboto,sans-serif;
   --mono:ui-monospace,SFMono-Regular,Consolas,monospace;
-  --barra:0px;                 /* quanto occupa il quadro appiccicato */
+  --banda:0px;
 }
 *{box-sizing:border-box}
-html{color-scheme:dark;scroll-behavior:smooth;scroll-padding-top:calc(var(--barra) + 16px)}
-body{margin:0;min-width:320px;background:var(--fondo);color:var(--pergamena);
-  font:400 17px/1.65 var(--corpo);-webkit-font-smoothing:antialiased}
+html{color-scheme:dark;scroll-behavior:smooth;scroll-snap-type:y proximity}
 @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+body{margin:0;min-width:320px;background:var(--fondo);color:var(--pergamena);
+  font:400 17px/1.62 var(--corpo);-webkit-font-smoothing:antialiased}
 
-.salta{position:fixed;z-index:99;top:8px;left:8px;
+.visuale-solo{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)}
+
+.salta{position:fixed;z-index:99;top:10px;left:10px;
   display:inline-flex;align-items:center;min-height:44px;padding:0 18px;
-  background:var(--oro);color:var(--fondo);font:600 13px/1 var(--mono);
-  border-radius:4px;text-decoration:none;transform:translateY(-200%)}
+  background:var(--oro);color:#150f0a;font:600 13px/1 var(--mono);
+  border-radius:5px;text-decoration:none;transform:translateY(-220%)}
 .salta:focus{transform:none}
 
-/* ── impianto ────────────────────────────────────────────────────── */
-.mondo{max-width:1400px;margin-inline:auto;padding:0 clamp(14px,3vw,32px)}
+/* ── lo schermo ──────────────────────────────────────────────────── */
+.scena{position:fixed;z-index:1;display:grid;place-items:center;
+  pointer-events:none}                 /* il dito ci scorre sopra: scorre */
 
-@media (min-width:1000px){
-  .mondo{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,.78fr);
-    gap:clamp(28px,4vw,64px);align-items:start}
-  .quadro{position:sticky;top:24px}
-  html{--barra:0px}
+/* Largo: colonna a sinistra, schermo incorniciato e centrato. La
+   larghezza è limitata perché il disegno è 320px di lato: oltre gli 820
+   i pixel diventano mattoni e il carattere 5×7 grida. */
+@media (min-width:900px){
+  .scena{inset:0 auto 0 0;width:54vw;padding-inline:clamp(20px,3vw,52px)}
+  .telaio{width:min(100%,820px)}
+}
+/* Stretto: una banda in alto, alta quanto chiede il 16:9. */
+@media (max-width:899px){
+  :root{--banda:min(56.25vw,40svh)}
+  .scena{inset:0 0 auto;height:calc(var(--banda) + 18px);padding:9px 9px 0;
+    background:linear-gradient(180deg,var(--fondo) 86%,transparent)}
+  .telaio{width:100%}
 }
 
-/* ── il quadro ───────────────────────────────────────────────────── */
-.quadro{padding-block:clamp(16px,3vh,32px);display:grid;gap:12px}
-@media (max-width:999px){
-  .quadro{position:sticky;top:0;z-index:20;
-    background:linear-gradient(180deg,var(--fondo) 86%,transparent);
-    padding-block:10px 14px;margin-inline:calc(clamp(14px,3vw,32px) * -1);
-    padding-inline:clamp(14px,3vw,32px)}
-  html{--barra:64vw}
-}
-
-/* Il telaio tiene la proporzione 16:9 e non lascia mai che il canvas
-   venga interpolato: un pixel del disegno deve restare un quadrato. */
-.quadro__telaio{aspect-ratio:320/180;border:2px solid var(--porpora-cupa);
-  border-radius:6px;overflow:hidden;background:var(--fondo);
-  box-shadow:0 0 0 1px rgba(212,175,55,.2), 0 26px 70px -34px #000}
+.telaio{position:relative;aspect-ratio:320/180;background:#140f1a;
+  border:1px solid var(--porpora-cupa);border-radius:10px;overflow:hidden;
+  box-shadow:0 0 0 1px rgba(212,175,55,.13), 0 30px 70px -36px #000}
 #schermo{display:block;width:100%;height:100%;
-  image-rendering:pixelated;image-rendering:crisp-edges;
-  touch-action:pan-y;cursor:crosshair;
-  -webkit-touch-callout:none;-webkit-user-select:none;user-select:none}
+  image-rendering:pixelated;image-rendering:crisp-edges}
 
-/* ── la scelta delle stanze ──────────────────────────────────────── */
-.stanze{display:flex;gap:5px;overflow-x:auto;scrollbar-width:none;
-  -webkit-overflow-scrolling:touch;scroll-snap-type:x proximity}
-.stanze::-webkit-scrollbar{display:none}
-.stanza{flex:none;min-height:38px;padding:0 11px;scroll-snap-align:start;
-  border:1px solid var(--porpora-cupa);border-radius:4px;background:transparent;
-  color:var(--porpora);cursor:pointer;white-space:nowrap;
-  font:500 11px/1 var(--mono);letter-spacing:.07em;text-transform:uppercase;
-  transition:color .15s,border-color .15s,background .15s}
-.stanza[aria-current="true"]{color:var(--fondo);background:var(--oro);border-color:var(--oro)}
-.stanza:focus-visible{outline:2px solid var(--calce);outline-offset:2px}
-@media (hover:hover){.stanza:hover{color:var(--orpimento);border-color:var(--orpimento)}}
-@media (pointer:coarse){.stanza{min-height:44px}}
-
-.comandi{display:flex;flex-wrap:wrap;align-items:center;gap:10px 16px}
-.nota{margin:0;color:var(--porpora);font:400 11.5px/1.5 var(--mono);letter-spacing:.05em}
-.nota b{color:var(--orpimento)}
-@media (max-width:999px){.comandi{display:none}}
-
-.tasto{display:inline-flex;align-items:center;min-height:44px;padding:0 18px;
-  border:2px solid var(--oro);border-radius:4px;background:transparent;
-  color:var(--oro);cursor:pointer;text-decoration:none;
-  font:600 12px/1 var(--mono);letter-spacing:.11em;text-transform:uppercase;
-  transition:background .15s,color .15s}
-.tasto:active{background:var(--oro);color:var(--fondo)}
-@media (hover:hover){.tasto:hover{background:var(--oro);color:var(--fondo)}}
-.tasto:focus-visible{outline:2px solid var(--calce);outline-offset:3px}
-.tasto--pieno{background:var(--oro);color:var(--fondo)}
-
-/* ── il testo ────────────────────────────────────────────────────── */
-.testo section{padding-block:clamp(40px,9vh,110px);max-width:62ch}
-.testo section:first-child{padding-top:clamp(20px,4vh,60px)}
-.occhiello{margin:0 0 14px;color:var(--orpimento);
-  font:500 11px/1 var(--mono);letter-spacing:.18em;text-transform:uppercase}
-.testo h1,.testo h2{margin:0 0 .6em;line-height:1.05;letter-spacing:-.02em;
-  color:var(--calce);text-wrap:balance}
-.testo h1{font-size:clamp(32px,5.4vw,58px)}
-.testo h2{font-size:clamp(26px,4vw,44px)}
-.testo em{font-style:normal;color:var(--oro)}
-.testo p{margin:0 0 1.05em;color:var(--pergamena)}
-.testo strong{color:var(--orpimento);font-weight:600}
-.testo a{color:var(--azzurrite);text-underline-offset:3px}
-.guida{font-size:clamp(17px,1.4vw,19px);color:var(--calce)}
-.istruzioni{color:var(--porpora);font:400 13px/1.6 var(--mono);letter-spacing:.04em}
-kbd{padding:2px 6px;border:1px solid var(--porpora-cupa);border-radius:3px;
-  background:var(--ombra);color:var(--oro);font:600 12px var(--mono)}
-
-.elenco{list-style:none;margin:0 0 1.2em;padding:0;display:grid;gap:10px}
-.elenco li{padding:12px 14px;border:1px solid var(--porpora-cupa);border-radius:5px;
-  background:var(--ombra);font-size:15.5px;line-height:1.55}
-.elenco b{color:var(--oro)}
-
-.riepilogo{list-style:none;margin:0 0 1.2em;padding:0;display:grid;gap:6px}
-.riepilogo li{padding:10px 13px;border:1px solid var(--porpora-cupa);border-radius:4px;
-  background:var(--ombra);font:400 14.5px/1.5 var(--mono);color:var(--calce)}
-.riepilogo b{color:var(--orpimento);margin-right:6px}
-.riepilogo .vuoto{color:var(--porpora);font-family:var(--corpo);font-size:15px}
-.azioni{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:1.4em}
-
-.chiusa{border-top:1px solid var(--porpora-cupa);max-width:none!important}
-.tavolozza{list-style:none;margin:1.6em 0;padding:0;display:grid;gap:5px}
-.tavolozza li{display:grid;grid-template-columns:24px minmax(0,9.5em) 1fr auto;
-  gap:12px;align-items:center;padding:6px 10px;border:1px solid var(--ombra);
-  border-radius:4px;font-size:14px}
-.tavolozza i{width:24px;height:24px;border-radius:3px;background:var(--p);
-  box-shadow:inset 0 0 0 1px rgba(246,239,224,.15)}
-.tavolozza b{color:var(--calce);font-weight:600}
-.tavolozza span{color:var(--porpora);font-size:12.5px}
-.tavolozza code{color:var(--oro);font:400 12px var(--mono)}
-@media (max-width:620px){
-  .tavolozza li{grid-template-columns:24px 1fr auto;row-gap:2px}
-  .tavolozza span{grid-column:2/-1}
+/* ── dove sei: tacche, niente da cliccare ────────────────────────── */
+.tacche{position:fixed;z-index:3;display:grid;gap:7px;pointer-events:none}
+.tacche i{background:var(--porpora-cupa);border-radius:2px;
+  transition:background .25s,height .25s,width .25s}
+.tacche i.qui{background:var(--oro)}
+@media (min-width:900px){
+  .tacche{right:15px;top:50%;translate:0 -50%}
+  .tacche i{width:4px;height:13px}
+  .tacche i.qui{height:21px}
 }
+@media (max-width:899px){
+  .tacche{left:0;right:0;bottom:11px;justify-content:center;grid-auto-flow:column;gap:6px}
+  .tacche i{width:13px;height:4px}
+  .tacche i.qui{width:21px}
+}
+
+/* ── le pagine ───────────────────────────────────────────────────── */
+.pagine{position:relative;z-index:2}
+.pagina{min-height:100svh;scroll-snap-align:center;
+  display:grid;align-items:center;padding:clamp(18px,4vw,40px)}
+/* La carta si allinea alla colonna dello schermo invece di andarsene
+   al bordo della finestra: prima restavano 245px di vuoto in mezzo. */
+@media (min-width:900px){
+  .pagina{grid-template-columns:54vw minmax(0,1fr);
+    justify-items:start;padding-inline:0 clamp(24px,3vw,56px)}
+  .pagina > .carta{grid-column:2}
+}
+@media (max-width:899px){
+  .pagina{align-items:end;justify-items:stretch;
+    padding-top:calc(var(--banda) + 30px);padding-bottom:60px}
+}
+
+/* La carta non deve più essere un vetro sopra il disegno: il disegno sta
+   a fianco, non sotto. Un pannello sobrio basta, e il testo respira. */
+.carta{width:min(100%,48ch);padding:clamp(20px,2.3vw,30px);
+  border:1px solid var(--ombra);border-radius:14px;background:var(--carta)}
+.carta--larga{width:min(100%,58ch)}
+
+.occhiello{margin:0 0 14px;color:var(--oro);
+  font:500 11px/1 var(--mono);letter-spacing:.2em;text-transform:uppercase}
+.carta h1,.carta h2{margin:0 0 .5em;line-height:1.07;letter-spacing:-.02em;
+  color:var(--calce);text-wrap:balance}
+.carta h1{font-size:clamp(28px,3.4vw,42px)}
+.carta h2{font-size:clamp(23px,2.7vw,34px)}
+.carta em{font-style:normal;color:var(--oro)}
+.carta p{margin:0 0 .85em;color:var(--pergamena);font-size:clamp(15px,1.02vw,16.5px)}
+.carta p:last-child{margin-bottom:0}
+.carta strong,.carta b{color:var(--orpimento);font-weight:600}
+.carta a{color:var(--azzurrite);text-underline-offset:3px}
+.guida{color:var(--calce)}
+.piccolo{color:var(--porpora);font-size:14px!important;line-height:1.55}
+.giu{margin-top:1.1em!important;color:var(--oro);
+  font:500 12px/1 var(--mono);letter-spacing:.15em;text-transform:uppercase;
+  animation:respira 2.6s ease-in-out infinite}
+@keyframes respira{50%{opacity:.34}}
+@media (prefers-reduced-motion:reduce){.giu{animation:none}}
+
+/* ── i comandi ───────────────────────────────────────────────────── */
+.tasti{display:flex;flex-wrap:wrap;gap:7px;margin:0 0 1em}
+.tasto{display:inline-flex;align-items:center;min-height:44px;padding:0 15px;
+  border:1px solid var(--porpora-cupa);border-radius:7px;background:transparent;
+  color:var(--pergamena);cursor:pointer;text-decoration:none;
+  font:600 11.5px/1 var(--mono);letter-spacing:.08em;text-transform:uppercase;
+  transition:border-color .15s,color .15s,background .15s}
+.tasto[aria-checked="true"]{border-color:var(--oro);background:var(--oro);color:#150f0a}
+.tasto:active{border-color:var(--oro);color:var(--oro)}
+@media (hover:hover){
+  .tasto:hover{border-color:var(--oro);color:var(--oro)}
+  .tasto[aria-checked="true"]:hover{color:#150f0a}
+}
+.tasto:focus-visible{outline:2px solid var(--calce);outline-offset:3px}
+.tasto--pieno{border-color:var(--oro);background:var(--oro);color:#150f0a}
+
+/* Due inciampi del CSS, tutti e due dovuti alla specificita':
+   · display:inline-flex sulla classe batteva la regola [hidden] del
+     browser, quindi "manda il brief" si vedeva anche da nascosto;
+   · .carta a (0-2-0) batteva .tasto--pieno (0-1-0), quindi il testo
+     del tasto pieno restava azzurro su oro: illeggibile. */
+.tasto[hidden]{display:none}
+.carta a.tasto{color:var(--pergamena)}
+.carta a.tasto--pieno{color:#150f0a}
+@media (hover:hover){.carta a.tasto:hover{color:var(--oro)}
+  .carta a.tasto--pieno:hover{color:#150f0a}}
+
+.leva{display:grid;gap:7px;margin-top:4px}
+.leva__nome{color:var(--porpora);font:500 11px/1 var(--mono);
+  letter-spacing:.15em;text-transform:uppercase}
+.leva__val{color:var(--oro);font:600 15px/1 var(--mono)}
+#levaMix{width:100%;height:44px;margin:0;background:transparent;
+  -webkit-appearance:none;appearance:none;cursor:pointer;touch-action:pan-y}
+#levaMix::-webkit-slider-runnable-track{height:4px;border-radius:2px;
+  background:linear-gradient(90deg,var(--oro) 0 var(--v,30%),var(--porpora-cupa) var(--v,30%) 100%)}
+#levaMix::-moz-range-track{height:4px;border-radius:2px;background:var(--porpora-cupa)}
+#levaMix::-moz-range-progress{height:4px;border-radius:2px;background:var(--oro)}
+#levaMix::-webkit-slider-thumb{-webkit-appearance:none;width:26px;height:26px;
+  margin-top:-11px;border-radius:50%;background:var(--oro);
+  box-shadow:0 0 0 4px color-mix(in srgb,var(--oro) 20%,transparent)}
+#levaMix::-moz-range-thumb{width:26px;height:26px;border:0;border-radius:50%;
+  background:var(--oro);box-shadow:0 0 0 4px color-mix(in srgb,var(--oro) 20%,transparent)}
+#levaMix:focus-visible{outline:2px solid var(--calce);outline-offset:4px}
+
+.riepilogo{list-style:none;margin:0 0 1em;padding:0;display:grid;gap:5px}
+.riepilogo li{padding:9px 12px;border:1px solid var(--ombra);border-radius:6px;
+  background:#110b18;font:400 13.5px/1.45 var(--mono);color:var(--calce)}
+.riepilogo b{color:var(--orpimento);margin-right:6px}
+.riepilogo .vuoto{color:var(--porpora);font-family:var(--corpo);font-size:14.5px}
+
+.tavolozza{list-style:none;margin:0 0 1.2em;padding:0;display:grid;gap:4px;
+  grid-template-columns:repeat(auto-fit,minmax(min(100%,12rem),1fr))}
+.tavolozza li{display:grid;grid-template-columns:18px 1fr;gap:9px;align-items:center;
+  padding:5px 8px;border:1px solid var(--ombra);border-radius:5px;font-size:13px}
+.tavolozza i{width:18px;height:18px;border-radius:3px;background:var(--p);
+  box-shadow:inset 0 0 0 1px rgba(246,239,224,.14)}
+.tavolozza b{color:var(--calce);font-weight:600}
+.tavolozza span{display:none}

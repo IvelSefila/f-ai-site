@@ -1,18 +1,15 @@
 /* ═══════════════════════════════════════════════════════════════════
  * IL CICLO
  *
- * Risoluzione fissa 320×180: la proporzione degli schermi di oggi con
- * la densità di pixel del 1988. Il browser la ingrandisce senza
- * interpolare, quindi ogni pixel disegnato resta un quadrato.
+ * Una pagina sola. Lo schermo sta fermo dietro, le pagine gli scorrono
+ * sopra e si agganciano una alla volta: una passata di dito, una stanza.
+ * Nessun menù — la navigazione è il dito, e le frecce per chi ha la
+ * tastiera.
  *
- * Lo schermo resta appiccicato in alto mentre la pagina scorre, e la
- * stanza cambia quando entra la sezione corrispondente: si legge il
- * sito e si gioca lo stesso schermo. Chi non vuole scorrere ha i tasti
- * sotto e le frecce.
- *
- * Il fondo di ogni stanza si calcola una volta sola e si ricopia: a
- * 57.600 pixel ridisegnare tutto sessanta volte al secondo si potrebbe
- * anche fare, ma il muro di pietra non cambia mai.
+ * I comandi delle stanze non stanno sul disegno ma nella carta del
+ * testo, come elementi veri. Così il tocco non litiga mai con lo
+ * scorrimento: il canvas non riceve puntatori (pointer-events:none) e
+ * il dito ci scivola sopra.
  * ═══════════════════════════════════════════════════════════════════ */
 
 import { Schermo } from './motore.js';
@@ -22,7 +19,10 @@ import { STANZE, perId } from './stanze.js';
 
 export const LARGO = 320, ALTO = 180;
 
-const cv = document.querySelector('#schermo');
+const $ = s => document.querySelector(s);
+const $$ = s => [...document.querySelectorAll(s)];
+
+const cv = $('#schermo');
 const ctx = cv.getContext('2d', { alpha: false });
 cv.width = LARGO; cv.height = ALTO;
 ctx.imageSmoothingEnabled = false;
@@ -31,11 +31,11 @@ const sc = new Schermo(LARGO, ALTO);
 const scintille = new Scintille();
 const lento = matchMedia('(prefers-reduced-motion: reduce)');
 
-const S = { t: 0, seme: 4821, evocazioni: 0, stanza: 0, torcia: null };
+/* stanza -1 all'avvio: cosi' la prima chiamata a segnaStanza(0) fa
+   davvero il suo lavoro invece di uscire subito perche' "e' gia' li'" */
+const S = { t: 0, seme: 4821, stanza: -1 };
 
-/* ── i fondali, uno per stanza ────────────────────────────────────
-   Ricalcolati solo quando cambia il seme: dentro c'è il muro di pietra,
-   il pavimento, la torre. Roba che non si muove. */
+/* ── i fondali, uno per stanza, calcolati una volta sola ─────────── */
 const fondali = new Map();
 function fondale(i) {
   const st = STANZE[i];
@@ -49,151 +49,193 @@ function fondale(i) {
   }
   return fondali.get(st.id);
 }
-function rifaiFondali() { fondali.clear(); }
 
-/* ── la barra di stato ────────────────────────────────────────────── */
-function hud(s, t) {
+/* ── la barra di stato, in basso nel disegno ─────────────────────── */
+function hud(s) {
   const y = ALTO - 11;
   s.rettPieno(0, y - 2, LARGO, 13, C.FONDO);
   s.linea(0, y - 2, LARGO, y - 2, C.PORPORA_CUPA);
-  const st = STANZE[S.stanza];
+  const st = STANZE[Math.max(0, S.stanza)];
   s.testo(4, y + 1, st.num, C.ORO);
   s.testo(20, y + 1, st.nome, C.PERGAMENA);
   s.testo(LARGO - 4 - s.misura('SEME ' + S.seme), y + 1, 'SEME ' + S.seme, C.PORPORA);
 }
 
-/* ── ciclo ────────────────────────────────────────────────────────── */
 let raf = 0, ultimo = 0;
-
 function fotogramma(ora) {
   raf = requestAnimationFrame(fotogramma);
   const dt = Math.min((ora - ultimo) / 1000, 0.05);
   ultimo = ora;
   if (!lento.matches) S.t += dt;
 
-  sc.buf.set(fondale(S.stanza).buf);
-  STANZE[S.stanza].disegna(sc, S, S.t);
-  if (S.torcia) bagliorePiccolo(sc, S.torcia, S.t);
+  sc.buf.set(fondale(Math.max(0, S.stanza)).buf);
+  STANZE[Math.max(0, S.stanza)].disegna(sc, S, S.t);
   scintille.passo(dt);
   scintille.disegna(sc);
-  hud(sc, S.t);
+  hud(sc);
   sc.presenta(ctx);
 }
-
-function bagliorePiccolo(s, p, t) {
-  s.alone(p.x, p.y, 26, C.DRAGO, 0.4);
-  s.alone(p.x, p.y, 13, C.MINIO, 0.6);
-  const r = 2 + Math.sin(t * 6);
-  s.cerchio(p.x, p.y, r + 1, C.ORPIMENTO, true);
-  s.cerchio(p.x, p.y, Math.max(1, r - 0.5), C.CALCE, true);
-}
-
 const avvia = () => { if (!raf) { ultimo = performance.now(); raf = requestAnimationFrame(fotogramma); } };
 const ferma = () => { cancelAnimationFrame(raf); raf = 0; };
 
-/* ── cambio stanza ────────────────────────────────────────────────── */
-const tastiStanza = [...document.querySelectorAll('[data-vai]')];
+/* ── le tacche: dove sei, senza niente da cliccare ───────────────── */
+const tacche = $('#tacche');
+tacche.innerHTML = STANZE.map(() => '<i></i>').join('');
+const pezzi = [...tacche.children];
 
-export function vaiA(i, scorri = false) {
-  i = (i + STANZE.length) % STANZE.length;
-  if (i === S.stanza && !scorri) return;
+function segnaStanza(i) {
+  if (i === S.stanza) return;
   S.stanza = i;
-  tastiStanza.forEach(b => b.setAttribute('aria-current',
-    String(Number(b.dataset.vai) === i)));
-  document.querySelector('#nomeStanza').textContent = STANZE[i].nome;
-  if (scorri) document.querySelector(`#s-${STANZE[i].id}`)
-    ?.scrollIntoView({ behavior: lento.matches ? 'auto' : 'smooth', block: 'start' });
+  pezzi.forEach((p, k) => p.classList.toggle('qui', k === i));
+  $('#statoStanza').textContent = `Stanza ${STANZE[i].num}: ${STANZE[i].nome}`;
 }
 
-tastiStanza.forEach(b => b.addEventListener('click',
-  () => vaiA(Number(b.dataset.vai), true)));
-
-/* la stanza segue la sezione che stai leggendo */
-const secIO = new IntersectionObserver(es => {
+/* la stanza segue la pagina che stai sfogliando */
+const io = new IntersectionObserver(es => {
   for (const e of es) if (e.isIntersecting) {
-    const id = e.target.id.replace(/^s-/, '');
-    const i = STANZE.findIndex(x => x.id === id);
-    if (i >= 0) vaiA(i);
+    const i = STANZE.findIndex(x => x.id === e.target.dataset.stanza);
+    if (i >= 0) segnaStanza(i);
   }
-}, { rootMargin: '-45% 0px -45% 0px' });
-document.querySelectorAll('[data-stanza]').forEach(s => secIO.observe(s));
+}, { rootMargin: '-40% 0px -40% 0px' });
+$$('[data-stanza]').forEach(s => io.observe(s));
 
-/* ── comandi ──────────────────────────────────────────────────────── */
-const coord = e => {
-  const r = cv.getBoundingClientRect();
-  return { x: (e.clientX - r.left) / r.width * LARGO,
-           y: (e.clientY - r.top) / r.height * ALTO };
+/* frecce e pagina su/giù per chi ha la tastiera */
+const vaiA = i => {
+  i = Math.max(0, Math.min(STANZE.length - 1, i));
+  $(`#s-${STANZE[i].id}`)?.scrollIntoView({ behavior: lento.matches ? 'auto' : 'smooth' });
 };
-
-cv.addEventListener('pointerdown', e => {
-  cv.setPointerCapture(e.pointerId);
-  const p = coord(e);
-  S.torcia = p;
-  S.evocazioni++;
-  const st = STANZE[S.stanza];
-  const preso = st.tocca ? st.tocca(p, sc) : false;
-  /* se la stanza non ha usato il tocco, resta una scintilla */
-  if (!preso) scintille.soffia(p.x, p.y, 18, (p.x * 977 + p.y * 31 + S.evocazioni) | 0);
-  else scintille.soffia(p.x, p.y, 8, S.evocazioni * 131);
-  aggiornaRiepilogo();
-});
-cv.addEventListener('pointermove', e => {
-  if (!S.torcia) return;
-  const p = coord(e);
-  S.torcia = p;
-  const st = STANZE[S.stanza];
-  if (st.tocca && st.id === 'bilancia') { st.tocca(p, sc); aggiornaRiepilogo(); }
-});
-for (const ev of ['pointerup', 'pointercancel'])
-  cv.addEventListener(ev, () => { S.torcia = null; });
-
 addEventListener('keydown', e => {
-  if (e.target.matches('input, textarea, select')) return;
-  if (e.key === 'ArrowRight') { vaiA(S.stanza + 1, true); e.preventDefault(); }
-  if (e.key === 'ArrowLeft')  { vaiA(S.stanza - 1, true); e.preventDefault(); }
-  const st = STANZE[S.stanza];
-  if (st.id === 'alchimista' && /^[1-4]$/.test(e.key)) {
-    if (st.rispondi(Number(e.key) - 1)) { scintille.soffia(160, 90, 12, Date.now() | 0); aggiornaRiepilogo(); }
+  if (e.target.matches('input, textarea, select, button, a')) return;
+  if (e.key === 'ArrowRight' || e.key === 'ArrowDown') { vaiA(S.stanza + 1); e.preventDefault(); }
+  if (e.key === 'ArrowLeft'  || e.key === 'ArrowUp')   { vaiA(S.stanza - 1); e.preventDefault(); }
+});
+
+/* ── i comandi, uno per stanza ───────────────────────────────────── */
+const scintillaAl = (x = 160, y = 90, n = 14) =>
+  scintille.soffia(x, y, n, (Date.now() + x) | 0);
+
+/* 01 · la leva della bilancia */
+const leva = $('#levaMix'), levaVal = $('#levaVal');
+function aggiornaLeva() {
+  const v = Number(leva.value);
+  perId.bilancia.stato.mix = v / 100;
+  leva.style.setProperty('--v', v + '%');
+  levaVal.textContent = `${v}% macchina · ${100 - v}% mano`;
+}
+leva.addEventListener('input', aggiornaLeva);
+aggiornaLeva();
+
+/* 02 · rigenerare una pagina miniata */
+$$('[data-mina]').forEach(b => b.addEventListener('click', () => {
+  const i = Number(b.dataset.mina);
+  perId.scriptorium.stato.scelta = i;
+  perId.scriptorium.stato.semi[i] = 1000 + Math.floor(Math.random() * 8999);
+  scintillaAl(60 + i * 100, 80, 16);
+}));
+
+/* 03 · i banchi */
+const DESC_BANCO = [
+  '<b>Pennelli</b> — grafica pubblicitaria: dal key visual alle declinazioni statiche e animate, mantenendo le stesse regole.',
+  '<b>Moviola</b> — video e post-produzione: il montaggio decide prima del contenuto. Tagli lunghi respirano, tagli corti spingono.',
+  '<b>Araldica</b> — social: lo stesso concetto declinato dove serve. Cambiano zona sicura, peso del testo e densità.',
+  '<b>Automi</b> — flussi e prototipi AI: un contenuto guida che alimenta versioni per più canali, con revisione umana prima dell’uscita.',
+];
+gruppo('[data-banco]', (i, b) => {
+  perId.banchi.stato.scelto = i;
+  $('#descBanco').innerHTML = DESC_BANCO[i];
+  scintillaAl(42 + i * 77, 58, 10);
+});
+
+/* 04 · la forgia */
+const DESC_FORGIA = [
+  '<b>Locale</b> — controllo su file, configurazioni e iterazioni; chiede hardware e manutenzione.',
+  '<b>Cloud</b> — i modelli più grandi senza gestire nulla; il costo cresce con l’uso e i dati escono di casa.',
+  '<b>Ibrido</b> — prototipo in locale, produco in cloud quando serve potenza. È così che tengo insieme costo, riservatezza e resa.',
+];
+gruppo('[data-forgia]', (i) => {
+  perId.forgia.stato.modo = i;
+  $('#descForgia').innerHTML = DESC_FORGIA[i];
+  scintillaAl(i === 1 ? 246 : 46, 90, 12);
+});
+
+/* 05 · la materia */
+const DESC_MATERIA = [
+  'La <b>griglia</b> è come si legge una pagina: tutto su un asse, niente profondità.',
+  'Il <b>nastro</b> è come scorre un video: una linea che si torce nel tempo.',
+  'La <b>rete</b> è come si tiene insieme un sistema: legami, non file.',
+];
+gruppo('[data-materia]', (i) => {
+  perId.materia.stato.forma = i;
+  $('#descMateria').innerHTML = DESC_MATERIA[i];
+  scintillaAl(160, 92, 18);
+});
+
+function gruppo(sel, quando) {
+  const bs = $$(sel);
+  bs.forEach((b, i) => b.addEventListener('click', () => {
+    bs.forEach(x => x.setAttribute('aria-checked', String(x === b)));
+    quando(i, b);
+  }));
+}
+
+/* 07 · le sei domande */
+const DOMANDE = [
+  ['Che cosa ti serve?',      ['Una campagna', 'Un video', 'I social', 'Un flusso AI']],
+  ['Da cosa partiamo?',       ['Da zero', 'Ho del materiale', 'Ho già un marchio']],
+  ['Dove deve funzionare?',   ['Stampa', 'Social', 'Sito', 'Dappertutto']],
+  ['Quando ti serve?',        ['Subito', 'Fra un mese', 'Non ho fretta']],
+  ['Che supporto cerchi?',    ['Un pezzo solo', 'Un percorso', 'Non lo so']],
+  ['Come ti ricontatto?',     ['Scrivimi tu', 'Ti scrivo io']],
+];
+const alch = perId.alchimista;
+
+function disegnaBrief() {
+  const { passo, scelte, fatto } = alch.stato;
+  const dom = $('#domandaBrief'), risp = $('#risposteBrief'), tit = $('#titoloBrief');
+  if (fatto) {
+    tit.innerHTML = 'Il brief è pronto.<br><em>Sei risposte, in chiaro.</em>';
+    dom.textContent = 'Puoi mandarmelo così com’è, o ricominciare.';
+    risp.innerHTML = '';
+  } else {
+    tit.innerHTML = 'Sei domande.<br><em>Poi costruiamo il quadro.</em>';
+    const [d, r] = DOMANDE[passo];
+    dom.innerHTML = `<b>${passo + 1} di 6</b> — ${d}`;
+    risp.innerHTML = r.map((x, i) =>
+      `<button type="button" class="tasto" data-risposta="${i}">${x}</button>`).join('');
+    risp.querySelectorAll('[data-risposta]').forEach(b =>
+      b.addEventListener('click', () => {
+        alch.rispondi(Number(b.dataset.risposta));
+        scintillaAl(200, 80, 14);
+        disegnaBrief();
+      }));
   }
-});
-
-document.querySelector('#rigenera')?.addEventListener('click', () => {
-  S.seme = 1000 + Math.floor(Math.random() * 8999);
-  rifaiFondali();
-  scintille.soffia(LARGO / 2, ALTO / 2, 34, S.seme);
-});
-
-document.querySelector('#azzeraBrief')?.addEventListener('click', () => {
-  perId.alchimista.azzera();
-  vaiA(STANZE.findIndex(s => s.id === 'alchimista'), true);
-  aggiornaRiepilogo();
-});
-
-/* ── il riepilogo del brief, in pagina e leggibile ────────────────── */
-function aggiornaRiepilogo() {
-  const ul = document.querySelector('#riepilogo');
-  if (!ul) return;
-  const { scelte, fatto } = perId.alchimista.stato;
+  const ul = $('#riepilogo');
   ul.innerHTML = scelte.length
     ? scelte.map((s, i) => `<li><b>${i + 1}.</b> ${s}</li>`).join('')
-    : '<li class="vuoto">Nessuna risposta ancora. Le domande sono nella stanza dell’alchimista.</li>';
-  const cta = document.querySelector('#mandaBrief');
-  if (cta) {
-    cta.hidden = !fatto;
-    if (fatto) {
-      const corpo = scelte.map((s, i) => `${i + 1}. ${s}`).join('%0D%0A');
-      cta.href = `mailto:hello@f-ai.studio?subject=${encodeURIComponent('Brief F/AI — versione pixel')}&body=${corpo}`;
-    }
-  }
-  const b = document.querySelector('#bilanciaVal');
-  if (b) b.textContent = Math.round(perId.bilancia.stato.mix * 100) + '%';
+    : '<li class="vuoto">Nessuna risposta ancora.</li>';
+  const cta = $('#mandaBrief');
+  cta.hidden = !fatto;
+  if (fatto) cta.href = 'mailto:hello@f-ai.studio?subject='
+    + encodeURIComponent('Brief F/AI — la torre')
+    + '&body=' + scelte.map((s, i) => `${i + 1}. ${s}`).join('%0D%0A');
 }
+$('#azzeraBrief').addEventListener('click', () => { alch.azzera(); disegnaBrief(); });
+disegnaBrief();
 
+/* il mondo da capo */
+$('#rigenera').addEventListener('click', () => {
+  S.seme = 1000 + Math.floor(Math.random() * 8999);
+  fondali.clear();
+  scintillaAl(160, 90, 30);
+});
+
+/* ── si ferma quando non lo guardi ───────────────────────────────── */
 new IntersectionObserver(es => (es[0].isIntersecting ? avvia() : ferma()),
-  { threshold: 0.02 }).observe(cv);
+  { threshold: 0.01 }).observe(cv);
+document.addEventListener('visibilitychange',
+  () => (document.hidden ? ferma() : avvia()));
 
-vaiA(0);
-aggiornaRiepilogo();
+segnaStanza(0);
 avvia();
 
 export { S, sc, STANZE };
