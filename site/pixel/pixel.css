@@ -41,7 +41,11 @@ body{margin:0;min-width:320px;background:var(--fondo);color:var(--pergamena);
 
 /* ── lo schermo ──────────────────────────────────────────────────── */
 .scena{position:fixed;z-index:1;display:grid;place-items:center;
-  pointer-events:none}                 /* il dito ci scorre sopra: scorre */
+  pointer-events:none}      /* il vuoto attorno allo schermo non prende il dito */
+/* Lo schermo invece il tocco lo vuole: un colpetto fa succedere qualcosa,
+   ma touch-action pan-y lascia allo scorrimento il movimento verticale,
+   quindi sfogliare col dito continua a funzionare. */
+.telaio{pointer-events:auto;touch-action:pan-y;cursor:crosshair}
 
 /* Largo: colonna a sinistra, schermo incorniciato e centrato. La
    larghezza è limitata perché il disegno è 320px di lato: oltre gli 820
@@ -81,7 +85,13 @@ body{margin:0;min-width:320px;background:var(--fondo);color:var(--pergamena);
 }
 
 /* ── le pagine ───────────────────────────────────────────────────── */
-.pagine{position:relative;z-index:2}
+/* Le pagine stanno sopra lo schermo e, anche se trasparenti, si
+   prendevano il clic: il tocco non arrivava mai al disegno. Qui lo
+   lasciano passare, e restano sensibili solo le carte del testo.
+   Lo scorrimento non ne soffre: il dito cade sul canvas, che ha
+   touch-action pan-y e lascia scorrere la pagina. */
+.pagine{position:relative;z-index:2;pointer-events:none}
+.carta{pointer-events:auto}
 .pagina{min-height:100svh;scroll-snap-align:center;
   display:grid;align-items:center;padding:clamp(18px,4vw,40px)}
 /* La carta si allinea alla colonna dello schermo invece di andarsene

@@ -29,6 +29,23 @@ export const TAVOLOZZA = [
   /* 12 */ ['#d4af37', 'oro',             'testo · 8,97:1'],
   /* 13 */ ['#e8dcc0', 'pergamena',       'testo · 13,86:1'],
   /* 14 */ ['#f6efe0', 'calce',           'testo · 16,48:1'],
+
+  /* ── le mezze tinte ────────────────────────────────────────────
+     Aggiunte dopo, per i fondali generati: con quindici pigmenti una
+     parete di pietra diventava una campitura sola, e il retino faceva
+     tutto il lavoro. Un miniaturista le mescolava sulla tavolozza —
+     terre, ocre, grigi di pietra — e sono queste. Vanno in coda:
+     gli indici da 0 a 14 restano quelli di prima, quindi nessun
+     disegno gia' scritto cambia. */
+  /* 15 */ ['#5a4632', 'terra d’ombra',   'mezza tinta'],
+  /* 16 */ ['#8a5a2b', 'terra di Siena',  'mezza tinta'],
+  /* 17 */ ['#c9973f', 'ocra gialla',     'mezza tinta'],
+  /* 18 */ ['#6b6a78', 'grigio di pietra','mezza tinta'],
+  /* 19 */ ['#9a97a8', 'pietra chiara',   'mezza tinta'],
+  /* 20 */ ['#35406b', 'indaco',          'mezza tinta'],
+  /* 21 */ ['#4a7a5c', 'verde terra',     'mezza tinta'],
+  /* 22 */ ['#b9736f', 'rosa antico',     'mezza tinta'],
+  /* 23 */ ['#6e3a2e', 'bruno rosso',     'mezza tinta'],
 ];
 
 /* nomi comodi, così il codice del disegno si legge */
@@ -37,6 +54,8 @@ export const C = {
   LAPIS: 4, AZZURRITE: 5, VERDERAME: 6, MALACHITE: 7,
   DRAGO: 8, CINABRO: 9, MINIO: 10, ORPIMENTO: 11,
   ORO: 12, PERGAMENA: 13, CALCE: 14,
+  OMBRA_TERRA: 15, SIENA: 16, OCRA: 17, PIETRA: 18, PIETRA_CHIARA: 19,
+  INDACO: 20, VERDE_TERRA: 21, ROSA: 22, BRUNO: 23,
 };
 
 /* la tavolozza in byte, pronta per essere versata nel fotogramma */

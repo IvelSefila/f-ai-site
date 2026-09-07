@@ -22,12 +22,12 @@ import path from 'path';
 const RADICE = path.resolve('site/pixel');
 const DENTRO = path.join(RADICE, 'immagini');
 const FUORI  = path.join(RADICE, 'sfondi.js');
-const LARGO = 320, ALTO = 180;
+const LARGO = 640, ALTO = 360;   /* la risoluzione vera del fotogramma */
 
 /* la tavolozza, letta dal file vero per non tenerne due copie */
 const tav = fs.readFileSync(path.join(RADICE, 'tavolozza.js'), 'utf8');
 const PIGMENTI = [...tav.matchAll(/\['(#[0-9a-f]{6})',\s*'([^']+)'/g)].map(m => m[1]);
-if (PIGMENTI.length !== 15) { console.error('pigmenti trovati:', PIGMENTI.length); process.exit(1); }
+if (PIGMENTI.length < 15) { console.error('pigmenti trovati:', PIGMENTI.length); process.exit(1); }
 console.log('tavolozza:', PIGMENTI.join(' '));
 
 const file = fs.readdirSync(DENTRO).filter(f => f.endsWith('.png')).sort();
@@ -52,7 +52,7 @@ for (const f of file) {
        morbido: un salto secco da 1376 a 320 perde i dettagli fini
        (i mattoni, i libri sugli scaffali) e resta una poltiglia. */
     const mezzo = document.createElement('canvas');
-    mezzo.width = LARGO * 2; mezzo.height = ALTO * 2;
+    mezzo.width = Math.round(LARGO * 1.6); mezzo.height = Math.round(ALTO * 1.6);
     const gm = mezzo.getContext('2d');
     gm.imageSmoothingEnabled = true; gm.imageSmoothingQuality = 'high';
     gm.drawImage(img, 0, 0, mezzo.width, mezzo.height);
@@ -128,7 +128,7 @@ for (const f of file) {
   const usati = r.conta.filter(c => c > 0).length;
   const top = r.conta.map((c, i) => [c, i]).sort((a, b) => b[0] - a[0]).slice(0, 3)
     .map(([c, i]) => `${PIGMENTI[i]}·${Math.round(c / (LARGO * ALTO) * 100)}%`).join(' ');
-  console.log(`  ${nome.padEnd(13)} ${usati}/15 pigmenti in campo · ${top}`);
+  console.log(`  ${nome.padEnd(13)} ${usati}/${PIGMENTI.length} pigmenti in campo · ${top}`);
 }
 await b.close();
 
@@ -136,7 +136,7 @@ const testa = `/* ════════════════════�
  * I FONDALI GENERATI
  *
  * Immagini fatte con Higgsfield (nano_banana_pro), poi riportate a
- * 320×180 e rimappate sui quindici pigmenti della tavolozza con retino
+ * 640×360 e rimappate sui pigmenti della tavolozza con retino
  * di Floyd-Steinberg. Non sono PNG: sono array di indici, lo stesso
  * formato con cui disegna il motore — così un fondale generato e uno
  * disegnato a codice si mescolano senza accorgersene.

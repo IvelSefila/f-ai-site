@@ -18,16 +18,18 @@ import { Scintille } from './scena.js';
 import { STANZE, perId } from './stanze.js';
 
 export const LARGO = 320, ALTO = 180;
+/* la scala del fotogramma: si disegna a 320×180, si mostra a 640×360 */
+export const SCALA = 2;
 
 const $ = s => document.querySelector(s);
 const $$ = s => [...document.querySelectorAll(s)];
 
 const cv = $('#schermo');
 const ctx = cv.getContext('2d', { alpha: false });
-cv.width = LARGO; cv.height = ALTO;
+cv.width = LARGO * SCALA; cv.height = ALTO * SCALA;
 ctx.imageSmoothingEnabled = false;
 
-const sc = new Schermo(LARGO, ALTO);
+const sc = new Schermo(LARGO, ALTO, SCALA);
 const scintille = new Scintille();
 const lento = matchMedia('(prefers-reduced-motion: reduce)');
 
@@ -40,7 +42,7 @@ const fondali = new Map();
 function fondale(i) {
   const st = STANZE[i];
   if (!fondali.has(st.id)) {
-    const f = new Schermo(LARGO, ALTO);
+    const f = new Schermo(LARGO, ALTO, SCALA);
     const salva = sc.buf;
     sc.buf = f.buf;
     st.fondo ? st.fondo(sc, S) : sc.pulisci(C.FONDO);
@@ -228,6 +230,47 @@ $('#rigenera').addEventListener('click', () => {
   fondali.clear();
   scintillaAl(160, 90, 30);
 });
+
+/* ── il tocco sullo schermo ───────────────────────────────────────
+   Un colpetto fa succedere qualcosa; un trascinamento verticale e'
+   scorrimento e non deve scattare. Distinguo col movimento: oltre dieci
+   pixel non e' piu' un colpetto. */
+let giu = null;
+cv.addEventListener('pointerdown', e => {
+  const r = cv.getBoundingClientRect();
+  giu = { x: (e.clientX - r.left) / r.width * LARGO,
+          y: (e.clientY - r.top) / r.height * ALTO,
+          sx: e.clientX, sy: e.clientY, mosso: false };
+});
+cv.addEventListener('pointermove', e => {
+  if (giu && Math.hypot(e.clientX - giu.sx, e.clientY - giu.sy) > 10) giu.mosso = true;
+});
+for (const ev of ['pointerup', 'pointercancel'])
+  cv.addEventListener(ev, e => {
+    if (!giu || giu.mosso) { giu = null; return; }
+    const p = giu; giu = null;
+    const st = STANZE[Math.max(0, S.stanza)];
+    scintille.soffia(p.x, p.y, 16, (p.x * 977 + p.y * 31 + Date.now()) | 0);
+    if (st.colpetto) st.colpetto(p, S, aggiorna);
+  });
+
+/* quando una stanza cambia stato da sé, la carta deve seguirla */
+function aggiorna() {
+  const b = perId.bilancia.stato.mix;
+  if (leva && Math.abs(Number(leva.value) / 100 - b) > 0.001) {
+    leva.value = Math.round(b * 100); aggiornaLeva();
+  }
+  $$('[data-banco]').forEach((x, i) =>
+    x.setAttribute('aria-checked', String(i === perId.banchi.stato.scelto)));
+  const db = $('#descBanco'); if (db) db.innerHTML = DESC_BANCO[perId.banchi.stato.scelto];
+  $$('[data-forgia]').forEach((x, i) =>
+    x.setAttribute('aria-checked', String(i === perId.forgia.stato.modo)));
+  const df = $('#descForgia'); if (df) df.innerHTML = DESC_FORGIA[perId.forgia.stato.modo];
+  $$('[data-materia]').forEach((x, i) =>
+    x.setAttribute('aria-checked', String(i === perId.materia.stato.forma)));
+  const dm = $('#descMateria'); if (dm) dm.innerHTML = DESC_MATERIA[perId.materia.stato.forma];
+  disegnaBrief();
+}
 
 /* ── si ferma quando non lo guardi ───────────────────────────────── */
 new IntersectionObserver(es => (es[0].isIntersecting ? avvia() : ferma()),

@@ -22,34 +22,49 @@ const BAYER4 = [
 ];
 
 export class Schermo {
-  constructor(larghezza, altezza) {
+  /* Due misure. `w`/`h` sono quelle in cui si disegna — 320×180, e tutte
+     le stanze parlano questa lingua. `rw`/`rh` sono quelle vere del
+     fotogramma: w×scala. Con scala 2 il disegno resta identico ma i
+     fondali generati possono portare quattro volte i pixel, che era il
+     punto: le immagini di Higgsfield arrivano a 1376×768 e a 320 ne
+     buttavo via il novantacinque per cento.
+     Retini e aloni lavorano alla risoluzione vera, quindi le sfumature
+     diventano piu' fini invece di limitarsi a raddoppiare. */
+  constructor(larghezza, altezza, scala = 1) {
     this.w = larghezza;
     this.h = altezza;
-    this.buf = new Uint8Array(larghezza * altezza);
+    this.k = scala;
+    this.rw = larghezza * scala;
+    this.rh = altezza * scala;
+    this.buf = new Uint8Array(this.rw * this.rh);
     this._img = null;
+  }
+
+  /* scrive un pixel alla risoluzione vera, senza passare dalla logica */
+  puntoR(x, y, c) {
+    x |= 0; y |= 0;
+    if (x < 0 || y < 0 || x >= this.rw || y >= this.rh) return;
+    this.buf[y * this.rw + x] = c;
   }
 
   /* ── inchiostro ───────────────────────────────────────────────── */
 
   pulisci(c = 0) { this.buf.fill(c); }
 
-  punto(x, y, c) {
-    x |= 0; y |= 0;
-    if (x < 0 || y < 0 || x >= this.w || y >= this.h) return;
-    this.buf[y * this.w + x] = c;
-  }
+  punto(x, y, c) { this.rettPieno(x, y, 1, 1, c); }
 
   leggi(x, y) {
-    x |= 0; y |= 0;
-    if (x < 0 || y < 0 || x >= this.w || y >= this.h) return 0;
-    return this.buf[y * this.w + x];
+    const rx = Math.round(x * this.k), ry = Math.round(y * this.k);
+    if (rx < 0 || ry < 0 || rx >= this.rw || ry >= this.rh) return 0;
+    return this.buf[ry * this.rw + rx];
   }
 
   rettPieno(x, y, w, h, c) {
-    const x0 = Math.max(0, x | 0), y0 = Math.max(0, y | 0);
-    const x1 = Math.min(this.w, (x | 0) + (w | 0));
-    const y1 = Math.min(this.h, (y | 0) + (h | 0));
-    for (let j = y0; j < y1; j++) this.buf.fill(c, j * this.w + x0, j * this.w + x1);
+    const k = this.k;
+    const x0 = Math.max(0, Math.round(x * k)), y0 = Math.max(0, Math.round(y * k));
+    const x1 = Math.min(this.rw, Math.round((x + w) * k));
+    const y1 = Math.min(this.rh, Math.round((y + h) * k));
+    for (let j = y0; j < y1; j++) this.buf.fill(c, j * this.rw + x0, j * this.rw + x1);
   }
 
   rett(x, y, w, h, c) {
@@ -97,11 +112,13 @@ export class Schermo {
      sfumatura con una tavolozza fissa. */
   retino(x, y, w, h, sotto, sopra, quanto) {
     const soglia = Math.max(0, Math.min(16, Math.round(quanto * 16)));
-    for (let j = 0; j < h; j++)
-      for (let i = 0; i < w; i++) {
-        const b = BAYER4[(y + j) & 3][(x + i) & 3];
-        this.punto(x + i, y + j, b < soglia ? sopra : sotto);
-      }
+    const k = this.k;
+    const x0 = Math.max(0, Math.round(x * k)), y0 = Math.max(0, Math.round(y * k));
+    const x1 = Math.min(this.rw, Math.round((x + w) * k));
+    const y1 = Math.min(this.rh, Math.round((y + h) * k));
+    for (let j = y0; j < y1; j++)
+      for (let i = x0; i < x1; i++)
+        this.buf[j * this.rw + i] = BAYER4[j & 3][i & 3] < soglia ? sopra : sotto;
   }
 
   /* Un alone vero: la densità del retino cala col quadrato della
@@ -109,15 +126,16 @@ export class Schermo {
      scatola — si vedevano gli spigoli, ed era il difetto piu' evidente
      della prima versione. */
   alone(cx, cy, raggio, colore, forza = 1) {
-    const r2 = raggio * raggio;
-    const x0 = Math.max(0, Math.floor(cx - raggio)), x1 = Math.min(this.w, Math.ceil(cx + raggio));
-    const y0 = Math.max(0, Math.floor(cy - raggio)), y1 = Math.min(this.h, Math.ceil(cy + raggio));
+    const k = this.k;
+    const px = cx * k, py = cy * k, pr = raggio * k, r2 = pr * pr;
+    const x0 = Math.max(0, Math.floor(px - pr)), x1 = Math.min(this.rw, Math.ceil(px + pr));
+    const y0 = Math.max(0, Math.floor(py - pr)), y1 = Math.min(this.rh, Math.ceil(py + pr));
     for (let y = y0; y < y1; y++)
       for (let x = x0; x < x1; x++) {
-        const d2 = (x - cx) * (x - cx) + (y - cy) * (y - cy);
+        const d2 = (x - px) * (x - px) + (y - py) * (y - py);
         if (d2 > r2) continue;
         const q = (1 - d2 / r2) ** 2 * forza;
-        if (BAYER4[y & 3][x & 3] < q * 16) this.buf[y * this.w + x] = colore;
+        if (BAYER4[y & 3][x & 3] < q * 16) this.buf[y * this.rw + x] = colore;
       }
   }
 
@@ -163,9 +181,9 @@ export class Schermo {
   /* ── consegna ─────────────────────────────────────────────────── */
 
   presenta(ctx) {
-    const n = this.w * this.h;
-    if (!this._img || this._img.width !== this.w) {
-      this._img = ctx.createImageData(this.w, this.h);
+    const n = this.rw * this.rh;
+    if (!this._img || this._img.width !== this.rw) {
+      this._img = ctx.createImageData(this.rw, this.rh);
       this._img.data.fill(255);          /* opaco una volta per tutte */
     }
     const d = this._img.data;

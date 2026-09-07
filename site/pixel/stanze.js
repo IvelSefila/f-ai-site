@@ -83,6 +83,8 @@ function fumetto(sc, x, y, w, h, righe, colore = C.PERGAMENA) {
 /* ═══ 1 · LA SOGLIA — il titolo ═══════════════════════════════════ */
 const soglia = {
   id: 'soglia', nome: 'LA SOGLIA', num: '00',
+  /* un colpetto accende una stella cadente dove hai toccato */
+  colpetto(p, S) { this.stella = { x: p.x, y: p.y, t: 0 }; },
   fondo(sc, S) {
     if (versa(sc, 'soglia')) return;
     /* ripiego: la scena disegnata a codice */
@@ -93,12 +95,31 @@ const soglia = {
     /* le stelle le ha gia' dipinte l'immagine: qui restano le rune,
        che sono l'unica cosa viva della soglia */
     rune(sc, t, 5);
+    if (this.stella) {
+      this.stella.t += 0.016;
+      const q = this.stella.t / 1.1;
+      if (q >= 1) { this.stella = null; }
+      else {
+        const x = this.stella.x + q * 70, y = this.stella.y + q * 34;
+        for (let i = 0; i < 16; i++) {
+          const f = i / 16;
+          sc.punto(x - f * 26, y - f * 13, f < .3 ? C.CALCE : f < .6 ? C.ORPIMENTO : C.PORPORA);
+        }
+        sc.alone(x, y, 9 * (1 - q), C.CALCE, 0.6 * (1 - q));
+      }
+    }
   },
 };
 
 /* ═══ 2 · LA BILANCIA — la regia, umano contro macchina ══════════ */
 const bilancia = {
   id: 'bilancia', nome: 'LA BILANCIA', num: '01',
+  /* il colpetto sposta la bilancia dove hai toccato, come una mano
+     che appoggia un peso sul piatto */
+  colpetto(p, S, aggiorna) {
+    this.stato.mix = Math.max(0, Math.min(1, (p.x - 20) / (320 - 40)));
+    aggiorna();
+  },
   stato: { mix: 0.3 },
   fondo(sc) { muro(sc, 12); assi(sc, sc.h - 24); },
   disegna(sc, S, t) {
@@ -144,6 +165,12 @@ const bilancia = {
 /* ═══ 3 · LO SCRIPTORIUM — i lavori, tre pagine miniate ══════════ */
 const scriptorium = {
   id: 'scriptorium', nome: 'LO SCRIPTORIUM', num: '02',
+  /* tocchi una pagina e la riminia */
+  colpetto(p, S, aggiorna) {
+    const i = Math.max(0, Math.min(2, Math.floor((p.x - 14) / 100)));
+    this.stato.scelta = i;
+    this.stato.semi[i] = 1000 + Math.floor(Math.random() * 8999);
+  },
   stato: { semi: [1207, 3390, 7714], scelta: 0 },
   fondo(sc) { if (!versa(sc, 'scriptorium')) { muro(sc, 21); assi(sc, sc.h - 26); } },
   disegna(sc, S, t) {
@@ -213,6 +240,11 @@ function pagina(sc, x, y, w, h, seme, viva, t) {
 /* ═══ 4 · I QUATTRO BANCHI — i servizi ═══════════════════════════ */
 const banchi = {
   id: 'banchi', nome: 'I QUATTRO BANCHI', num: '03',
+  /* tocchi un banco e diventa quello scelto */
+  colpetto(p, S, aggiorna) {
+    this.stato.scelto = Math.max(0, Math.min(3, Math.floor(p.x / 80)));
+    aggiorna();
+  },
   stato: { scelto: 0 },
   fondo(sc) { if (!versa(sc, 'banchi')) { muro(sc, 33); assi(sc, sc.h - 40); } },
   disegna(sc, S, t) {
@@ -281,6 +313,11 @@ function banco(sc, x, y, w, h, tipo, t, viva) {
 /* ═══ 5 · LA FORGIA — la tecnologia, locale contro cloud ═════════ */
 const forgia = {
   id: 'forgia', nome: 'LA FORGIA', num: '04',
+  /* sinistra la fornace, destra la nuvola, in mezzo l'ibrido */
+  colpetto(p, S, aggiorna) {
+    this.stato.modo = p.x < 110 ? 0 : p.x > 210 ? 1 : 2;
+    aggiorna();
+  },
   stato: { modo: 2 },                       /* 0 locale · 1 cloud · 2 ibrido */
   fondo(sc) { if (!versa(sc, 'forgia')) { muro(sc, 44); assi(sc, sc.h - 34); } },
   disegna(sc, S, t) {
@@ -353,6 +390,12 @@ function nuvola(sc, x, y, t, forza) {
 /* ═══ 6 · LA MATERIA — dodicimila punti, tre disposizioni ════════ */
 const materia = {
   id: 'materia', nome: 'LA MATERIA', num: '05',
+  /* il colpetto cambia disposizione e sparpaglia i punti dal dito */
+  colpetto(p, S, aggiorna) {
+    this.stato.forma = (this.stato.forma + 1) % 3;
+    this.stato.spinta = { x: p.x, y: p.y, t: 0 };
+    aggiorna();
+  },
   stato: { forma: 0, mescola: 0 },
   fondo(sc) { sc.rettPieno(0, 0, sc.w, sc.h, C.FONDO); muroScuro(sc); },
   disegna(sc, S, t) {
@@ -391,6 +434,8 @@ function muroScuro(sc) {
 /* ═══ 7 · LA SCHEDA — il profilo, come in un gioco di ruolo ══════ */
 const scheda = {
   id: 'scheda', nome: 'LA SCHEDA', num: '06',
+  /* il colpetto timbra la scheda, come un sigillo di ceralacca */
+  colpetto(p, S) { this.timbro = { x: p.x, y: p.y, t: 0 }; },
   fondo(sc) { muro(sc, 55); assi(sc, sc.h - 22); },
   disegna(sc, S, t) {
     const x = 12, y = 22, w = sc.w - 24, h = sc.h - 40;
@@ -434,6 +479,16 @@ const scheda = {
       sc.testo(ix + 6, iy, n, C.OMBRA);
     });
     cartiglio(sc, 'PROFILO · CHI STA NELLA TORRE', C.ORPIMENTO);
+    /* il sigillo di ceralacca, dove hai toccato */
+    if (this.timbro) {
+      this.timbro.t += 0.016;
+      const q = Math.min(1, this.timbro.t / 0.35);
+      const r = 11 * (0.4 + q * 0.6);
+      sc.cerchio(this.timbro.x, this.timbro.y, r, C.DRAGO, true);
+      sc.cerchio(this.timbro.x, this.timbro.y, r - 3, C.CINABRO, true);
+      sc.cerchio(this.timbro.x, this.timbro.y, r * 0.45, C.ORO);
+      if (this.timbro.t > 2.4) this.timbro = null;
+    }
   },
 };
 
@@ -471,6 +526,14 @@ const DOMANDE = [
 
 const alchimista = {
   id: 'alchimista', nome: "L'ALCHIMISTA", num: '07',
+  /* il colpetto risponde alla domanda: alto la prima, giu' l'ultima */
+  colpetto(p, S, aggiorna) {
+    if (this.stato.fatto) return;
+    const [, risp] = DOMANDE[this.stato.passo];
+    const i = Math.max(0, Math.min(risp.length - 1,
+      Math.floor((p.y - 30) / (120 / risp.length))));
+    if (this.rispondi(i)) aggiorna();
+  },
   stato: { passo: 0, scelte: [], fatto: false },
   fondo(sc) {
     if (versa(sc, 'alchimista')) return;
