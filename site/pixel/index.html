@@ -6,7 +6,7 @@
 <title>F/AI — la torre</title>
 <meta name="description" content="Il portfolio di Fabrizio Mana in pixel art: otto stanze da sfogliare, disegnate a codice con quindici pigmenti alchemici. Grafica pubblicitaria, video, social e sistemi AI.">
 <link rel="icon" href="../favicon.svg">
-<link rel="stylesheet" href="pixel.css?v=20260907-181840">
+<link rel="stylesheet" href="pixel.css?v=20260907-183858">
 </head>
 <body>
 <a class="salta" href="#s-bilancia">Vai al contenuto</a>
@@ -31,9 +31,12 @@
       <h1>Creo immagini.<br>Dirigo il movimento.<br><em>Progetto sistemi AI.</em></h1>
       <p class="guida">Grafico pubblicitario, video editor e AI builder. Trasformo campagne,
         video e contenuti social in sistemi creativi coerenti.</p>
-      <p>Questo portfolio è un gioco in otto stanze. <strong>Nessuna immagine è
-        caricata:</strong> la torre, la luna e le pagine miniate le disegna questo
-        browser, adesso, un pixel alla volta.</p>
+      <p>Questo portfolio è un gioco in otto stanze. I fondali nascono generati e
+        poi rimappati su <strong>sessantaquattro pigmenti</strong>: tutto quello che
+        si muove — fiamme, nuvole, pagine, scintille — lo disegna questo browser,
+        adesso, un pixel alla volta.</p>
+      <p><strong>Tocca le cose.</strong> La nuvola copre la luna, la finestra della
+        torre si oscura, e in ogni stanza c&rsquo;è qualcosa che risponde al dito.</p>
       <p class="giu">Scorri col dito ↓</p>
     </div>
   </section>
@@ -60,6 +63,8 @@
       <p>Tre pagine miniate, ognuna nata da un <strong>seme</strong>: un numero da cui
         discendono cornice, capolettera, pigmenti e miniatura. Rigenerane una e nasce
         una variante che resta nello stesso linguaggio.</p>
+      <p class="piccolo"><strong>Tocca una pagina</strong> e si volta: sotto la falda
+        di pergamena ne trovi un&rsquo;altra. Le candele nei varchi si spengono.</p>
       <div class="tasti">
         <button type="button" class="tasto" data-mina="0">Riminia la grafica</button>
         <button type="button" class="tasto" data-mina="1">Il movimento</button>
@@ -81,7 +86,8 @@
       <p id="descBanco"><b>Pennelli</b> — grafica pubblicitaria: dal key visual alle
         declinazioni statiche e animate, mantenendo le stesse regole.</p>
       <p class="piccolo">Uno strumento vero per mestiere. Non spiegano cosa faccio:
-        lo fanno mentre li usi.</p>
+        lo fanno mentre li usi. <strong>Tocca la bobina</strong> e gira, tocca uno
+        scudo e squilla, tocca l&rsquo;automa e si sveglia.</p>
     </div>
   </section>
 
@@ -96,7 +102,9 @@
       </div>
       <p id="descForgia"><b>Ibrido</b> — prototipo in locale, produco in cloud quando serve
         potenza. È così che tengo insieme costo, riservatezza e resa.</p>
-      <p class="piccolo">Ho una workstation su cui installo, confronto e integro modelli.</p>
+      <p class="piccolo">Ho una workstation su cui installo, confronto e integro modelli.
+        <strong>Tocca la fornace</strong> e divampa, tocca gli utensili e il martello
+        batte, tocca la finestra e scoppia il temporale.</p>
     </div>
   </section>
 
@@ -139,6 +147,8 @@
         <a class="tasto tasto--pieno" id="mandaBrief" href="#" hidden>Manda il brief ↗</a>
         <button class="tasto" id="azzeraBrief" type="button">Ricomincia</button>
       </p>
+      <p class="piccolo"><strong>Tocca la fiamma</strong> e si spegne: l&rsquo;alchimista
+        la riaccende. Tocca l&rsquo;ampolla e ribolle, tocca i libri e cadono.</p>
       <p class="piccolo">Preferisci scrivere e basta?
         <a href="mailto:hello@f-ai.studio">hello@f-ai.studio</a></p>
     </div>
@@ -151,6 +161,11 @@
         L&rsquo;orpimento è solfuro d&rsquo;arsenico. Il cinabro è solfuro di mercurio.
         L&rsquo;oltremare si ricavava dal lapislazzuli e costava più dell&rsquo;oro.
         Il fondo non è nero: è inchiostro ferro-gallico.</p>
+      <p>Poi ne sono arrivati altri quarantanove: nove mezze tinte e
+        <strong>quaranta gradazioni</strong>, quattro per famiglia, due verso l&rsquo;ombra
+        e due verso la luce. È lì la differenza fra un otto e un sedici bit — non più
+        tinte, ma più gradini dentro ogni tinta, così una parete di pietra ha il suo
+        volume invece di una campitura sola.</p>
       <ul class="tavolozza" id="listaPigmenti"></ul>
       <p class="tasti">
         <button type="button" class="tasto" id="rigenera">Rigenera il mondo</button>
@@ -161,9 +176,9 @@
 
 </main>
 
-<script type="module" src="gioco.js?v=20260907-181840"></script>
+<script type="module" src="gioco.js?v=20260907-183858"></script>
 <script type="module">
-  import { TAVOLOZZA } from './tavolozza.js?v=20260907-181840';
+  import { TAVOLOZZA } from './tavolozza.js?v=20260907-183858';
   document.querySelector('#listaPigmenti').innerHTML = TAVOLOZZA
     .map(([hex, nome, ruolo]) =>
       `<li><i style="--p:${hex}"></i><b>${nome}</b><span>${ruolo}</span></li>`)

@@ -12,10 +12,10 @@
  * il dito ci scivola sopra.
  * ═══════════════════════════════════════════════════════════════════ */
 
-import { Schermo } from './motore.js?v=20260907-181840';
-import { C, VERSO_ORO } from './tavolozza.js?v=20260907-181840';
-import { Scintille } from './scena.js?v=20260907-181840';
-import { STANZE, perId } from './stanze.js?v=20260907-181840';
+import { Schermo } from './motore.js?v=20260907-183858';
+import { C, VERSO_ORO } from './tavolozza.js?v=20260907-183858';
+import { Scintille } from './scena.js?v=20260907-183858';
+import { STANZE, perId } from './stanze.js?v=20260907-183858';
 
 export const LARGO = 320, ALTO = 180;
 /* La scala del fotogramma. Si disegna sempre a 320×180 — le stanze
@@ -141,7 +141,10 @@ function fotogramma(ora) {
   sc.buf.set(fondale(Math.max(0, S.stanza)).buf);
   avanzaOnde(dt);
   applicaTrasmutazione(st.id, S.t);
-  st.disegna(sc, S, S.t);
+  st.disegna(sc, S, S.t, dt);
+  /* gli oggetti che si toccano vivono sopra il disegno della stanza,
+     come la fiamma che si spegne o la nuvola che copre la luna */
+  if (st.animaOggetti) st.animaOggetti(sc, S, S.t, dt);
   scintille.passo(dt);
   scintille.disegna(sc);
   hud(sc);
@@ -323,7 +326,10 @@ for (const ev of ['pointerup', 'pointercancel'])
     const st = STANZE[Math.max(0, S.stanza)];
     trasmuta(p.x, p.y);
     scintille.soffia(p.x, p.y, 16, (p.x * 977 + p.y * 31 + Date.now()) | 0);
-    if (st.colpetto) st.colpetto(p, S, aggiorna);
+    /* prima gli oggetti. Se uno se lo prende il tocco finisce li';
+       altrimenti prosegue e la stanza fa la sua scelta di sempre. */
+    const suOggetto = st.toccaOggetto ? st.toccaOggetto(p, S) : false;
+    if (!suOggetto && st.colpetto) st.colpetto(p, S, aggiorna);
   });
 
 /* quando una stanza cambia stato da sé, la carta deve seguirla */
