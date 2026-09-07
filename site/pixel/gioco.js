@@ -12,10 +12,10 @@
  * il dito ci scivola sopra.
  * ═══════════════════════════════════════════════════════════════════ */
 
-import { Schermo } from './motore.js?v=20260907-183858';
-import { C, VERSO_ORO } from './tavolozza.js?v=20260907-183858';
-import { Scintille } from './scena.js?v=20260907-183858';
-import { STANZE, perId } from './stanze.js?v=20260907-183858';
+import { Schermo } from './motore.js?v=20260907-185106';
+import { C, VERSO_ORO } from './tavolozza.js?v=20260907-185106';
+import { Scintille } from './scena.js?v=20260907-185106';
+import { STANZE, perId } from './stanze.js?v=20260907-185106';
 
 export const LARGO = 320, ALTO = 180;
 /* La scala del fotogramma. Si disegna sempre a 320×180 — le stanze
@@ -290,10 +290,38 @@ function disegnaBrief() {
     : '<li class="vuoto">Nessuna risposta ancora.</li>';
   const cta = $('#mandaBrief');
   cta.hidden = !fatto;
-  if (fatto) cta.href = 'mailto:hello@f-ai.studio?subject='
-    + encodeURIComponent('Brief F/AI — la torre')
-    + '&body=' + scelte.map((s, i) => `${i + 1}. ${s}`).join('%0D%0A');
+  testoBrief = fatto
+    ? 'Brief F/AI — la torre\n\n' + scelte.map((s, i) => `${i + 1}. ${s}`).join('\n')
+    : '';
 }
+
+/* Il brief si copia, non si spedisce: un indirizzo non c'e' ancora, e
+   un pulsante che apre la posta su una casella inventata e' peggio di
+   nessun pulsante. Il testo va negli appunti e il visitatore lo porta
+   dove vuole. */
+let testoBrief = '';
+$('#mandaBrief').addEventListener('click', async () => {
+  const dove = $('#statoBrief');
+  let fatta = false;
+  if (navigator.clipboard?.writeText && window.isSecureContext) {
+    try { await navigator.clipboard.writeText(testoBrief); fatta = true; } catch { /* si ripiega */ }
+  }
+  if (!fatta) {
+    /* il ripiego di sempre, per quando gli appunti non si lasciano
+       toccare: una casella fuori campo, seleziona, copia */
+    const t = document.createElement('textarea');
+    t.value = testoBrief;
+    t.setAttribute('readonly', '');
+    t.style.cssText = 'position:fixed;top:-100px;opacity:0';
+    document.body.appendChild(t);
+    t.select();
+    try { fatta = document.execCommand('copy'); } catch { fatta = false; }
+    t.remove();
+  }
+  if (dove) dove.textContent = fatta
+    ? 'Brief copiato. Incollalo dove preferisci.'
+    : 'Copia non riuscita: seleziona il riepilogo qui sopra e copialo a mano.';
+});
 $('#azzeraBrief').addEventListener('click', () => { alch.azzera(); disegnaBrief(); });
 disegnaBrief();
 

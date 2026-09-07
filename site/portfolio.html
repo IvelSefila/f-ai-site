@@ -433,10 +433,10 @@
               <label><span>Azienda <small>facoltativa</small></span><input type="text" name="company" autocomplete="organization" /></label>
               <label><span>Fascia di investimento <small>facoltativa</small></span><select name="budget"><option value="">Preferisco non indicarla</option><option value="da-definire">Da definire insieme</option><option value="piccolo">Progetto circoscritto</option><option value="medio">Produzione articolata</option><option value="continuativo">Collaborazione continuativa</option></select></label>
               <label class="brief-fields__wide"><span>Nota <small>facoltativa</small></span><textarea name="note" rows="4" placeholder="Per esempio: materiali disponibili, vincoli o domande…"></textarea></label>
-              <p class="brief-data-note" id="brief-data-note">I dati restano in questo browser. Il sito non li salva e non li invia: entrano in una nuova email solo se scegli di aprirla.</p>
+              <p class="brief-data-note" id="brief-data-note">I dati restano in questo browser. Il sito non li salva e non li invia: il riepilogo lo copi tu, e decidi tu dove mandarlo.</p>
               <label class="brief-consent brief-fields__wide"><input type="checkbox" name="privacy" aria-describedby="brief-data-note" required /><span>HO CAPITO COME VENGONO GESTITI I DATI. *</span></label>
             </div>
-            <p class="brief-step__hint">Il riepilogo viene preparato nel browser. Potrai copiarlo o aprirlo nel tuo programma email.</p>
+            <p class="brief-step__hint">Il riepilogo viene preparato nel browser: potrai copiarlo e incollarlo dove preferisci.</p>
           </fieldset>
 
           <p class="brief__error" id="brief-error" role="alert" hidden></p>
@@ -449,11 +449,10 @@
         <section class="brief-summary" id="brief-summary" aria-labelledby="brief-summary-title" tabindex="-1" hidden>
           <span>F/AI / RIEPILOGO</span>
           <h3 id="brief-summary-title">IL BRIEF È PRONTO.</h3>
-          <p>Controlla il riepilogo, poi copialo o aprilo nel tuo programma email.</p>
+          <p>Controlla il riepilogo, poi copialo: lo incolli dove preferisci.</p>
           <pre id="brief-copy"></pre>
           <div class="brief-summary__actions">
             <button class="tap" id="brief-copy-button" type="button"><span>COPIA IL RIEPILOGO</span><i aria-hidden="true">□</i></button>
-            <a class="tap" id="brief-mail" href="mailto:"><span>APRI NELL’EMAIL</span><i aria-hidden="true">↗</i></a>
             <button class="tap" id="brief-edit" type="button"><span>MODIFICA LE RISPOSTE</span><i aria-hidden="true">←</i></button>
           </div>
           <p class="brief-summary__status" id="brief-status" role="status" aria-live="polite"></p>

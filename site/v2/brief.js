@@ -275,10 +275,10 @@ function createBriefController() {
       const built = buildSummary();
       preparedSummary = built.text;
       if (summaryCopy) summaryCopy.textContent = preparedSummary;
-      if (mailLink) {
-        const subject = `Nuovo brief F/AI — ${built.projectLabel} — ${built.name}`;
-        mailLink.href = `mailto:hello@f-ai.studio?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(preparedSummary)}`;
-      }
+      /* Il tasto della posta non c'e' piu': un indirizzo non c'e'
+         ancora, e aprire il programma di posta su una casella
+         inventata mandava il brief da nessuna parte. Resta la copia,
+         che qui esisteva gia'. */
       form.hidden = true;
       setInert(form, true);
       if (summary) {

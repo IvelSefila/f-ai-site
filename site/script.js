@@ -682,7 +682,7 @@
       if (summaryCopy) summaryCopy.textContent = preparedSummary;
       if (mailLink) {
         const subject = `Nuovo brief F/AI — ${built.projectLabel} — ${built.name}`;
-        mailLink.href = `mailto:hello@f-ai.studio?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(preparedSummary)}`;
+        mailLink.href = "#brief";   /* nessun indirizzo, per ora: resta la copia */
       }
       form.hidden = true;
       setInert(form, true);

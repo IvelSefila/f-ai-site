@@ -6,7 +6,7 @@
 <title>F/AI — la torre</title>
 <meta name="description" content="Il portfolio di Fabrizio Mana in pixel art: otto stanze da sfogliare, disegnate a codice con quindici pigmenti alchemici. Grafica pubblicitaria, video, social e sistemi AI.">
 <link rel="icon" href="../favicon.svg">
-<link rel="stylesheet" href="pixel.css?v=20260907-183858">
+<link rel="stylesheet" href="pixel.css?v=20260907-185106">
 </head>
 <body>
 <a class="salta" href="#s-bilancia">Vai al contenuto</a>
@@ -144,13 +144,13 @@
       <div class="tasti" id="risposteBrief" role="group" aria-label="Risposte"></div>
       <ul class="riepilogo" id="riepilogo"></ul>
       <p class="tasti">
-        <a class="tasto tasto--pieno" id="mandaBrief" href="#" hidden>Manda il brief ↗</a>
+        <button class="tasto tasto--pieno" id="mandaBrief" type="button" hidden>Copia il brief ▢</button>
         <button class="tasto" id="azzeraBrief" type="button">Ricomincia</button>
       </p>
       <p class="piccolo"><strong>Tocca la fiamma</strong> e si spegne: l&rsquo;alchimista
         la riaccende. Tocca l&rsquo;ampolla e ribolle, tocca i libri e cadono.</p>
-      <p class="piccolo">Preferisci scrivere e basta?
-        <a href="mailto:hello@f-ai.studio">hello@f-ai.studio</a></p>
+      <p class="piccolo" id="statoBrief" role="status" aria-live="polite">Alla sesta
+        risposta il brief si copia negli appunti: lo incolli dove preferisci.</p>
     </div>
   </section>
 
@@ -176,9 +176,9 @@
 
 </main>
 
-<script type="module" src="gioco.js?v=20260907-183858"></script>
+<script type="module" src="gioco.js?v=20260907-185106"></script>
 <script type="module">
-  import { TAVOLOZZA } from './tavolozza.js?v=20260907-183858';
+  import { TAVOLOZZA } from './tavolozza.js?v=20260907-185106';
   document.querySelector('#listaPigmenti').innerHTML = TAVOLOZZA
     .map(([hex, nome, ruolo]) =>
       `<li><i style="--p:${hex}"></i><b>${nome}</b><span>${ruolo}</span></li>`)

@@ -32,7 +32,10 @@ await p.waitForTimeout(900);
 const fine = await p.evaluate(()=>({
   riepilogoVisibile: !document.getElementById('brief-summary').hidden,
   righeRiepilogo: (document.getElementById('brief-copy')?.textContent||'').split('\n').filter(Boolean).length,
-  mailto: (document.getElementById('brief-mail')?.getAttribute('href')||'').slice(0,60),
+  /* il tasto della posta non c'e' piu': si controlla che resti quello
+     della copia, che e' l'unica via d'uscita del brief */
+  tastoPosta: !!document.getElementById('brief-mail'),
+  tastoCopia: (document.getElementById('brief-copy-button')?.textContent||'').trim(),
   errore: document.getElementById('brief-error')?.hidden ? 'nessuno' : document.getElementById('brief-error')?.textContent,
 }));
 console.log(JSON.stringify(fine,null,1));
