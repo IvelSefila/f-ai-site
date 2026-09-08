@@ -96,7 +96,17 @@ const CMD = (() => {
 })();
 const hf = (args) => esegui(CMD, args, { maxBuffer: 64 << 20, shell: CMD.endsWith('.cmd') });
 
-const [azione, nome, modello = 'nano_banana_pro'] = process.argv.slice(2);
+/* Questo file serve a due cose: da riga di comando genera, e come
+   modulo presta STILE a chi ne ha bisogno. Senza questa guardia la
+   parte da riga di comando partiva anche quando lo importavo, e
+   leggeva gli argomenti dell'altro programma: "stanza sconosciuta:
+   Tilt the beam...". */
+const CHIAMATO_A_MANO = process.argv[1] && process.argv[1].endsWith('stanze-prompt.mjs');
+const [azione, nome, modello = 'nano_banana_pro'] =
+  CHIAMATO_A_MANO ? process.argv.slice(2) : [];
+if (!CHIAMATO_A_MANO) {
+  /* importato: niente da fare */
+} else {
 
 if (azione === 'elenco' || !azione) {
   for (const [k, v] of Object.entries(STANZE)) console.log(`${k.padEnd(10)} ${v.titolo}`);
@@ -135,3 +145,4 @@ const risp = await fetch(url);
 if (!risp.ok) { console.error('scarico fallito:', risp.status); process.exit(1); }
 fs.writeFileSync(uscita, Buffer.from(await risp.arrayBuffer()));
 console.log('  scritto:', uscita, `· ${(fs.statSync(uscita).size / 1024).toFixed(0)} KB`);
+}

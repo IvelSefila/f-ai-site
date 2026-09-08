@@ -12,10 +12,10 @@
  * del brief.
  * ═══════════════════════════════════════════════════════════════════ */
 
-import { C, RAMPE, CICLI } from './tavolozza.js?v=20260908-144138';
-import { caso, rumore1 } from './motore.js?v=20260908-144138';
-import { torre, rune, bagliore } from './scena.js?v=20260908-144138';
-import { sfondo } from './sfondi.js?v=20260908-144138';
+import { C, RAMPE, CICLI } from './tavolozza.js?v=20260908-180615';
+import { caso, rumore1 } from './motore.js?v=20260908-180615';
+import { torre, rune, bagliore } from './scena.js?v=20260908-180615';
+import { sfondo } from './sfondi.js?v=20260908-180615';
 
 /* ── i fondali generati ───────────────────────────────────────────
    Higgsfield dipinge la scenografia, il codice l'accende. Le immagini
@@ -207,13 +207,15 @@ const soglia = {
     sc.sfuma(0, 0, sc.w, Math.round(sc.h * 0.62), RAMPE.notte);
     torre(sc, Math.round(sc.w * 0.62), Math.round(sc.h * 0.78), S.seme);
   },
-  disegna(sc, S, t) {
+  disegna(sc, S, t, dt) {
     /* le stelle le ha gia' dipinte l'immagine: qui restano le rune,
        che sono l'unica cosa viva della soglia */
     /* le due lune e la torre restano libere: le rune girano nel buio */
     rune(sc, t, 5, [[79, 50, 40], [248, 40, 40], [200, 60, 52]]);
     if (this.stella) {
-      this.stella.t += 0.016;
+      /* col tempo vero, non con un sessantesimo fisso: su uno schermo
+         a 240 hertz la stella cadeva quattro volte piu' in fretta */
+      this.stella.t += dt;
       const q = this.stella.t / 1.1;
       if (q >= 1) { this.stella = null; }
       else {
@@ -260,9 +262,57 @@ const bilancia = {
     aggiorna();
   },
   stato: { mix: 0.3 },
-  fondo(sc) { if (!versa(sc, 'bilancia')) { muro(sc, 12); assi(sc, sc.h - 24); } },
+  /* ── la stadera pende ──────────────────────────────────────────
+     La bilancia e' dipinta nel fondale con la stanga in piano. Per
+     farla pendere non servono altri fotogrammi: si prendono i pezzi
+     che ci sono gia' e si spostano.
+
+     Avevo provato a generarne di nuovi con la stadera inclinata.
+     Vengono belli, ma il generatore non muove un pezzo dentro una
+     stanza ferma: ridisegna tutta la stanza. Fuori dalla scatola della
+     stadera cambiava l'8,2% del quadro in modo forte — muovendo la
+     leva si sarebbe visto ballare il muro. E ogni fotogramma pesava
+     138 KB compressi.
+
+     Sta nel fondale e non nel disegno perche' la pendenza cambia solo
+     quando si muove la leva: calcolata a ogni fotogramma costava, e su
+     un telefono rallentato questa stanza girava a 168 contro i 240
+     delle altre. Chi muove la leva butta via il fondale in cache, e al
+     fotogramma dopo si rifa' con la nuova pendenza.
+
+     Le misure vengono dal ritaglio ingrandito del fondale vero
+     (audit/ritaglio.mjs), non dall'occhio. */
+  PERNO: 157,
+  pendenza() { return (this.stato.mix - 0.5) * 0.19; },   /* la macchina pesa: destra giu' */
+  braccio(x) { return (x - this.PERNO) * this.pendenza(); },
+  fondo(sc) {
+    if (!versa(sc, 'bilancia')) { muro(sc, 12); assi(sc, sc.h - 24); return; }
+    const P = this.PERNO, pend = this.pendenza();
+
+    /* I due bracci della stanga. La striscia parte da 24 e non da 32:
+       il riempimento pesca subito sopra, e partendo dal bordo della
+       stanga si portava dietro un pezzo di stanga, che restava
+       appiccicato al muro come un'ombra doppia. Da 24 sopra c'e'
+       mattone. L'ornamento del perno resta fermo, in mezzo. */
+    sc.piega(100, 24, 46, 28, P, pend);
+    sc.piega(169, 24, 50, 28, P, pend);
+
+    /* Le catene: la fessura si riempie DI FIANCO. Sopra una catena c'e'
+       altra catena, e riempiendo dall'alto restavano tronconi appesi al
+       muro — si vedevano tre trefoli invece di due. Di fianco c'e' il
+       muro nudo fra i due piatti. */
+    sc.sposta(101, 48, 20, 34, this.braccio(110), 34);
+    sc.sposta(198, 48, 20, 34, this.braccio(208), -34);
+
+    /* I piatti col loro contenuto. Qui il riempimento dall'alto e'
+       giusto: sopra il piatto c'e' la catena, che scende dello stesso
+       tanto, quindi copiandola si continua da sola. */
+    sc.sposta(82, 78, 54, 58, this.braccio(110));
+    sc.sposta(182, 80, 56, 58, this.braccio(208));
+  },
   disegna(sc, S, t, dt) {
     const q = this.stato.mix;                    /* 0 = tutto umano */
+
 
     /* La bilancia adesso e' dipinta nel fondale, con i due piatti al
        loro posto: il codice non la ridisegna piu' sopra: la accende.
@@ -295,7 +345,9 @@ const bilancia = {
        dove sta la bilancia, senza ridisegnare la stanga. Il filo che
        gli avevo messo sotto per guidarlo si vedeva come una riga scura
        in mezzo all'ottone: tolto, il grano basta da solo. */
-    const gx = 108 + q * 100, gy = 41 + (q - 0.5) * 3;
+    /* il grano sta SULLA stanga, quindi segue la sua pendenza invece
+       di avere una formula sua che ci somigliava e basta */
+    const gx = 108 + q * 100, gy = 40 + this.braccio(gx);
     sc.alone(gx, gy, 9, C.ORPIMENTO, 0.55);
     sc.cerchio(gx, gy, 3, C.ORO, true);
     sc.punto(gx, gy, C.CALCE);
@@ -348,7 +400,7 @@ const scriptorium = {
   /* le quattro candele del muro, una scatola stretta per ognuna:
      una fascia larga quanto la stanza ciclava soprattutto muro */
   cicli: [
-    [23, 30, 11, 14, CICLI.fiamma, 5],
+    [24, 46, 12, 14, CICLI.fiamma, 5],     /* stava 14 unita' piu' su, sul muro vuoto */
     [95, 24, 11, 14, CICLI.fiamma, 4.3],
     [125, 38, 11, 14, CICLI.fiamma, 5.7],
     [287, 20, 11, 14, CICLI.fiamma, 4.7],
@@ -1140,7 +1192,7 @@ const scheda = {
     cartiglio(sc, 'PROFILO · CHI STA NELLA TORRE', C.ORPIMENTO);
     /* il sigillo di ceralacca, dove hai toccato */
     if (this.timbro) {
-      this.timbro.t += 0.016;
+      this.timbro.t += dt;      /* il tempo vero, come tutto il resto */
       const q = Math.min(1, this.timbro.t / 0.35);
       const r = 11 * (0.4 + q * 0.6);
       sc.cerchio(this.timbro.x, this.timbro.y, r, C.DRAGO, true);

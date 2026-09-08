@@ -8,6 +8,22 @@
  * ═══════════════════════════════════════════════════════════════════ */
 import { chromium } from 'playwright';
 
+/* ── arrivare davvero nella stanza ────────────────────────────────
+   Scorrere e poi aspettare un tot di millisecondi non basta: fra
+   l'aggancio della pagina e l'osservatore che decide quale stanza
+   mostrare passa un tempo che non e' sempre lo stesso, e certe letture
+   finivano su un'altra stanza — ferma, quindi "questa luce non si
+   muove". Aspetto che la stanza dichiari di esserci. */
+const NUMERO = { soglia: '00', bilancia: '01', scriptorium: '02', banchi: '03',
+                 forgia: '04', materia: '05', scheda: '06', alchimista: '07' };
+async function vaiA(p, id) {
+  await p.evaluate(i => document.querySelector('#s-' + i).scrollIntoView(), id);
+  await p.waitForFunction(
+    n => (document.querySelector('#statoStanza').textContent || '').includes('Stanza ' + n),
+    NUMERO[id], { timeout: 8000 });
+  await p.waitForTimeout(350);      /* un respiro perche' il quadro si assesti */
+}
+
 const PROVE = [
   ['soglia', 'finestra della torre', 213, 69, [200, 55, 30, 30], 900],
   ['soglia', 'luna a sinistra',       79, 50, [50, 22, 60, 56], 1700],
@@ -48,8 +64,7 @@ const luce = (r) => p.evaluate(([x, y, w, h]) => {
 
 let ok = 0;
 for (const [stanza, cosa, tx, ty, rett, attesa] of PROVE) {
-  await p.evaluate(id => document.querySelector('#s-' + id).scrollIntoView(), stanza);
-  await p.waitForTimeout(800);
+  await vaiA(p, stanza);
   const tel = await p.locator('.telaio').boundingBox();
 
   /* due letture a riposo, per sapere quanto respira la scena da sola */

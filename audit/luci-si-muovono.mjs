@@ -19,6 +19,22 @@
  * ═══════════════════════════════════════════════════════════════════ */
 import { chromium } from 'playwright';
 
+/* ── arrivare davvero nella stanza ────────────────────────────────
+   Scorrere e poi aspettare un tot di millisecondi non basta: fra
+   l'aggancio della pagina e l'osservatore che decide quale stanza
+   mostrare passa un tempo che non e' sempre lo stesso, e certe letture
+   finivano su un'altra stanza — ferma, quindi "questa luce non si
+   muove". Aspetto che la stanza dichiari di esserci. */
+const NUMERO = { soglia: '00', bilancia: '01', scriptorium: '02', banchi: '03',
+                 forgia: '04', materia: '05', scheda: '06', alchimista: '07' };
+async function vaiA(p, id) {
+  await p.evaluate(i => document.querySelector('#s-' + i).scrollIntoView(), id);
+  await p.waitForFunction(
+    n => (document.querySelector('#statoStanza').textContent || '').includes('Stanza ' + n),
+    NUMERO[id], { timeout: 8000 });
+  await p.waitForTimeout(350);      /* un respiro perche' il quadro si assesti */
+}
+
 /* stanza, cosa, la zona che deve muoversi, una zona vicina che deve
    stare ferma (muro, pietra, legno) */
 const PROVE = [
@@ -54,8 +70,7 @@ const diversi = (a, c) => {
 
 let male = 0;
 for (const [id, cosa, viva, ferma] of PROVE) {
-  await p.evaluate(i => document.querySelector('#s-' + i).scrollIntoView(), id);
-  await p.waitForTimeout(800);
+  await vaiA(p, id);
   /* Con le coppie la fase e' binaria, e due sole letture possono
      coglierla uguale: la prima versione di questa prova dava la stessa
      luce ferma o viva a seconda del momento, e una prova ballerina e'
@@ -63,15 +78,40 @@ for (const [id, cosa, viva, ferma] of PROVE) {
      se il browser rallenta. */
   const v0 = await zona(viva), f0 = await zona(ferma);
   let siMuove = 0, staFerma = 0;
+  /* Gli intervalli sono tutti diversi apposta. Con dodici attese
+     uguali la prova falliva una volta su cinque, sempre sulla stessa
+     luce, e non era la luce: fra un'attesa e la lettura del quadro
+     passa altro tempo, e la somma si incastrava col periodo del ciclo.
+     Campionavo dodici volte sempre nella stessa fase. Con intervalli
+     irregolari non si puo' incastrare. */
   for (let k = 0; k < 12; k++) {
-    await p.waitForTimeout(110);
+    await p.waitForTimeout(45 + (k * 37) % 130);
     siMuove = Math.max(siMuove, diversi(v0, await zona(viva)));
     staFerma = Math.max(staFerma, diversi(f0, await zona(ferma)));
   }
   /* passa se la zona viva si muove almeno l'1,5% dei pixel e se
      quella che deve stare ferma si muove molto meno */
   const bene = siMuove > 0.015 && staFerma < 0.05;
-  if (!bene) male++;
+  if (!bene) {
+    male++;
+    /* Quando fallisce voglio sapere cosa stava guardando, non
+       immaginarlo: quale stanza, se il ciclo gira, e se il quadro
+       intero si muove o e' tutto fermo. */
+    const perche = await p.evaluate(() => new Promise(r => {
+      const cv = document.querySelector('#schermo');
+      const g = cv.getContext('2d');
+      const foto = () => { const d = g.getImageData(0, 0, cv.width, cv.height).data;
+        let s = 0; for (let i = 0; i < d.length; i += 997) s = (s * 31 + d[i]) >>> 0; return s; };
+      const viste = new Set([foto()]);
+      let n = 0; const t0 = performance.now();
+      const giro = () => { n++; viste.add(foto());
+        performance.now() - t0 < 700 ? requestAnimationFrame(giro)
+          : r({ stanza: document.querySelector('#statoStanza').textContent,
+                giriRaf: n, quadriDiversi: viste.size }); };
+      requestAnimationFrame(giro);
+    }));
+    console.log('        ↳', JSON.stringify(perche));
+  }
   console.log(`  ${bene ? 'ok ' : 'NO '} ${(id + ' · ' + cosa).padEnd(30)} ` +
               `si muove ${(siMuove * 100).toFixed(1)}% · accanto ${(staFerma * 100).toFixed(1)}%`);
 }

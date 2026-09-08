@@ -1,5 +1,5 @@
 import { PRESET, applicaGriglia, contenitoreDi, nomeContenitore,
-         mostraGriglia, grigliaVisibile, initGriglia } from './griglia.js?v=20260908-144138';
+         mostraGriglia, grigliaVisibile, initGriglia } from './griglia.js?v=20260908-180615';
 
 /* ═══════════════════════════════════════════════════════════════════
  * PALETTE — tieni premuto su un riquadro e scegli il colore del sito

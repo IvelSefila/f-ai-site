@@ -11,8 +11,8 @@
  * quadrato netto sullo schermo.
  * ═══════════════════════════════════════════════════════════════════ */
 
-import { RGB } from './tavolozza.js?v=20260908-144138';
-import { glifo, LARGHEZZA, ALTEZZA } from './alfabeto.js?v=20260908-144138';
+import { RGB } from './tavolozza.js?v=20260908-180615';
+import { glifo, LARGHEZZA, ALTEZZA } from './alfabeto.js?v=20260908-180615';
 
 /* i retini di Bayer: la scala di grigi dei poveri. Con due pigmenti e
    una di queste matrici si ottengono le vie di mezzo che la tavolozza
@@ -155,6 +155,119 @@ export class Schermo {
     for (let j = y0; j < y1; j++) {
       const riga = j * this.rw;
       for (let i = x0; i < x1; i++) b[riga + i] = t[b[riga + i]];
+    }
+  }
+
+  /* ── spostare un pezzo di quadro ──────────────────────────────────
+     Alza o abbassa un rettangolo del fotogramma di `dy` unita', e
+     riempie la fessura che si apre dietro copiandoci il quadro che sta
+     appena oltre il bordo: in verticale, non di fianco.
+
+     La verticale conta. Dietro i piatti della bilancia c'e' un
+     bagliore che sfuma dal centro, e clonando di fianco il pezzo
+     arrivava da una zona con un'altra luce: si vedeva la toppa. Il
+     muro appena sopra invece ha quasi lo stesso bagliore e lo stesso
+     corso di mattoni, e la fessura sparisce.
+
+     Con `dxFonte` la fessura si riempie invece copiando di fianco, da
+     quella distanza. Serve quando sopra il pezzo c'e' il pezzo stesso:
+     sopra una catena c'e' altra catena, e riempiendo dall'alto ne
+     restavano dei tronconi appesi al muro. Di fianco a una catena c'e'
+     mattone, ed e' quello che ci vuole.
+
+     Serve a far pendere la stadera senza un solo fotogramma in piu':
+     i piatti e la stanga sono gia' dipinti nel fondale, e si spostano. */
+  sposta(x, y, w, h, dy, dxFonte = 0) {
+    const d = Math.round(dy * this.k);
+    if (!d) return;
+    const k = this.k;
+    const X = Math.max(0, Math.round(x * k)), Y = Math.max(0, Math.round(y * k));
+    const W = Math.min(this.rw - X, Math.round(w * k));
+    const H = Math.min(this.rh - Y, Math.round(h * k));
+    if (W <= 0 || H <= 0) return;
+    const b = this.buf, rw = this.rw;
+
+    /* Il pezzo, messo da parte. Il ripiano se lo tiene la classe invece
+       di farne uno nuovo ogni volta: piega() chiama sposta() una volta
+       per colonna, e con novantasei colonne erano novantasei
+       allocazioni a fotogramma. Su un telefono col processore
+       rallentato la bilancia era scesa a 149 fotogrammi contro i 230
+       delle altre stanze. */
+    const serve = W * H;
+    if (!this._ripiano || this._ripiano.length < serve)
+      this._ripiano = new Uint8Array(serve);
+    const pezzo = this._ripiano;
+    for (let j = 0; j < H; j++) pezzo.set(b.subarray((Y + j) * rw + X, (Y + j) * rw + X + W), j * W);
+
+    /* la fessura: sopra se scende, sotto se sale */
+    const F = Math.round(dxFonte * k);
+    const riempi = (yy) => {
+      if (yy < 0 || yy >= this.rh) return;
+      const dst = yy * rw + X;
+      if (F) {                       /* di fianco, alla stessa altezza */
+        const sx = X + F;
+        if (sx < 0 || sx + W > this.rw) return;
+        b.copyWithin(dst, yy * rw + sx, yy * rw + sx + W);
+      } else {                       /* dall'alto o dal basso */
+        const sy = yy - d;
+        if (sy < 0 || sy >= this.rh) return;
+        b.copyWithin(dst, sy * rw + X, sy * rw + X + W);
+      }
+    };
+    if (d > 0) for (let j = 0; j < d; j++) riempi(Y + j);
+    else for (let j = 0; j < -d; j++) riempi(Y + H + d + j);
+
+    /* e il pezzo torna giu' spostato */
+    for (let j = 0; j < H; j++) {
+      const yy = Y + j + d;
+      if (yy < 0 || yy >= this.rh) continue;
+      b.set(pezzo.subarray(j * W, j * W + W), yy * rw + X);
+    }
+  }
+
+  /* Piega una striscia: ogni colonna si sposta di quanto e' lontana dal
+     perno, come una stanga che si inclina. Colonna per colonna e' lo
+     stesso lavoro di sposta(), e infatti lo chiama. */
+  /* Piega una striscia: ogni colonna scivola di quanto e' lontana dal
+     perno, come una stanga che si inclina.
+
+     La prima versione chiamava sposta() una colonna per volta. Era
+     bello da leggere e lento da eseguire: novantasei chiamate, e ogni
+     copia larga un pixel: su un telefono rallentato la bilancia
+     scendeva a 149 fotogrammi contro i 230 delle altre stanze.
+     Riusare il ripiano non e' bastato — non era l'allocazione, erano
+     le copie da tre byte. Qui la striscia si rifa' in un passaggio
+     solo, pixel per pixel, e i fotogrammi tornano quelli di prima. */
+  piega(x, y, w, h, perno, pendenza) {
+    const k = this.k, rw = this.rw, b = this.buf;
+    const X = Math.max(0, Math.round(x * k)), Y = Math.max(0, Math.round(y * k));
+    const W = Math.min(rw - X, Math.round(w * k));
+    const H = Math.min(this.rh - Y, Math.round(h * k));
+    if (W <= 0 || H <= 0) return;
+
+    const serve = W * H;
+    if (!this._ripiano || this._ripiano.length < serve)
+      this._ripiano = new Uint8Array(serve);
+    const vecchia = this._ripiano;
+    for (let j = 0; j < H; j++)
+      vecchia.set(b.subarray((Y + j) * rw + X, (Y + j) * rw + X + W), j * W);
+
+    for (let i = 0; i < W; i++) {
+      /* di quanto scivola questa colonna, in pixel veri */
+      const d = Math.round((x + i / k - perno) * pendenza * k);
+      if (!d) continue;
+      for (let j = 0; j < H; j++) {
+        const sj = j - d;
+        let v;
+        if (sj >= 0 && sj < H) v = vecchia[sj * W + i];
+        else {
+          /* fuori dalla striscia: il quadro che c'e' appena oltre */
+          const sy = Y + sj;
+          v = (sy >= 0 && sy < this.rh) ? b[sy * rw + X + i]
+                                        : vecchia[(sj < 0 ? 0 : H - 1) * W + i];
+        }
+        b[(Y + j) * rw + X + i] = v;
+      }
     }
   }
 

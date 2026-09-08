@@ -141,7 +141,13 @@ export const CICLI = {
      dal rosso cupo al giallo chiaro e sembrava uno stroboscopio: ogni
      pixel cambiava famiglia. Con le coppie oscilla fra due gradini
      vicini della stessa tinta, e la fiamma respira. */
-  fuoco:   [[37, 9], [41, 10], [11, 46]],       /* la fornace */
+  /* Quattro coppie invece di tre, e scelte per coprire due fuochi
+     diversi: la fornace della forgia e il camino della bilancia hanno
+     pigmenti in parte diversi. Con le tre di prima nel camino si
+     muoveva solo il 7,6% dei pixel, abbastanza da vedersi ma poco per
+     essere sicuri; con queste sale al 12 e nella fornace restano
+     coperti tutti i gradini. */
+  fuoco:   [[36, 37], [9, 41], [10, 11], [46, 47]],
   fiamma:  [[10, 11], [46, 47]],                /* candele e lucerne */
   /* il verderame scuro dei bracieri e il verde chiaro dell'ampolla:
      due posti diversi, due gradini diversi, una rampa sola */

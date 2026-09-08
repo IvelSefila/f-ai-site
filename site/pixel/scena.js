@@ -9,8 +9,8 @@
  * la disegna questa pagina adesso" — portato dove si vede di più.
  * ═══════════════════════════════════════════════════════════════════ */
 
-import { C, RAMPE } from './tavolozza.js?v=20260908-144138';
-import { caso, rumore1 } from './motore.js?v=20260908-144138';
+import { C, RAMPE } from './tavolozza.js?v=20260908-180615';
+import { caso, rumore1 } from './motore.js?v=20260908-180615';
 
 /* i sigilli: sette glifi alchemici, 7×7, disegnati a mano.
    Sole, luna, mercurio, sale, zolfo, acqua, fuoco. */

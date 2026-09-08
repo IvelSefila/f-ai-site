@@ -42,6 +42,7 @@ await p.goto('about:blank');
 
 const risultati = {};
 const pesi = {};
+const crudi = {};      /* gli indici veri, che servono a ricavare le varianti */
 for (const f of file) {
   const nome = path.basename(f, '.png');
   const dati = fs.readFileSync(path.join(DENTRO, f)).toString('base64');
@@ -137,6 +138,7 @@ for (const f of file) {
 
      Poi il lavoro a parte l'ho fatto, ed e' questo. */
   const grezzo = Buffer.from(Uint8Array.from(r.indici));
+  crudi[nome] = grezzo;
   const stretto = zlib.deflateRawSync(grezzo, { level: 9 });
   risultati[nome] = stretto.toString('base64');
   pesi[nome] = [grezzo.length, stretto.length];
@@ -165,8 +167,14 @@ const testa = `/* ════════════════════�
 
 const B64 = {
 `;
+/* Le chiavi vanno virgolettate. Senza, il primo file con un trattino
+   nel nome — bilancia-giu-sinistra.png — ha scritto una chiave che
+   JavaScript non sa leggere, e il sito e' morto con "Unexpected token
+   '-'". Un generatore che puo' produrre un file non valido a seconda
+   di come si chiama un png e' un generatore da sistemare. */
 const corpo = Object.entries(risultati)
-  .map(([k, v]) => `  ${k}: '${v}',`).join('\n');
+  .filter(([k]) => !k.includes('-'))
+  .map(([k, v]) => `  '${k}': '${v}',`).join('\n');
 const coda = `
 };
 
@@ -220,3 +228,15 @@ export const NOMI = Object.keys(B64);
 `;
 fs.writeFileSync(FUORI, testa + corpo + coda);
 console.log(`\nscritto ${path.relative('.', FUORI)} · ${(fs.statSync(FUORI).size / 1024).toFixed(0)} KB · ${Object.keys(risultati).length} fondali`);
+
+/* ── perche' non ci sono varianti ─────────────────────────────────
+   Avevo provato a tenere piu' fotogrammi della stessa stanza — la
+   bilancia con la stadera inclinata — per poi innestare sul fondale
+   solo i pixel diversi. Non funziona, e la misura e' netta: il
+   generatore non muove un pezzo dentro una stanza ferma, ridisegna
+   tutta la stanza. Fuori dalla scatola della stadera cambiava l'8,2%
+   del quadro in modo forte, con uno scarto medio di colore di 51 su
+   255: muovendo la leva si sarebbe visto ballare il muro.
+
+   La stadera si muove per un'altra via, presa dall'immagine che c'e'
+   gia' — vedi piegaStadera in stanze.js. Costo: zero byte. */

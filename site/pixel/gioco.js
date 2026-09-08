@@ -12,11 +12,11 @@
  * il dito ci scivola sopra.
  * ═══════════════════════════════════════════════════════════════════ */
 
-import { Schermo } from './motore.js?v=20260908-144138';
-import { C, VERSO_ORO } from './tavolozza.js?v=20260908-144138';
-import { Scintille } from './scena.js?v=20260908-144138';
-import { STANZE, perId } from './stanze.js?v=20260908-144138';
-import { scongela } from './sfondi.js?v=20260908-144138';
+import { Schermo } from './motore.js?v=20260908-180615';
+import { C } from './tavolozza.js?v=20260908-180615';
+import { Scintille } from './scena.js?v=20260908-180615';
+import { STANZE, perId } from './stanze.js?v=20260908-180615';
+import { scongela } from './sfondi.js?v=20260908-180615';
 
 export const LARGO = 320, ALTO = 180;
 /* La scala del fotogramma. Si disegna sempre a 320×180 — le stanze
@@ -57,73 +57,21 @@ function fondale(i) {
   return fondali.get(st.id);
 }
 
-/* ── LA TRASMUTAZIONE ─────────────────────────────────────────────
-   Il clic non fa solo cambiare stato: cambia l'immagine. Un'onda parte
-   dal dito e, mentre si allarga, trasmuta i pigmenti che incontra verso
-   la famiglia dell'oro — conservando le luci e le ombre, perche' la
-   tabella accoppia i colori per luminosita'.
+/* ── IL TOCCO ─────────────────────────────────────────────────────
+   Qui c'era la trasmutazione: un'onda d'oro partiva dal dito e
+   trasmutava i pigmenti che incontrava. Era nata quando le stanze
+   erano disegnate a codice, e li' funzionava — il quadro portava i
+   segni di chi ci aveva giocato.
 
-   Prima il cambiamento restava: ogni stanza teneva una mappa di quello
-   che era stato trasmutato, e il quadro portava i segni di chi ci
-   aveva giocato. Con le stanze disegnate a codice era una bella idea.
-   Sui fondali dipinti e' una chiazza sulla foto, ed e' esattamente
-   cosi' che me l'hanno segnalata. Avevo gia' provato a salvarla
-   facendola a vene invece che a macchia piena: non bastava, perche' il
-   problema non era la forma ma il fatto che restasse.
+   Sui fondali dipinti no: era una chiazza sulla foto. L'ho prima resa
+   passeggera, poi tolta del tutto, perche' anche di passaggio sporcava
+   l'immagine mentre l'occhio la guardava. Del tocco restano le
+   scintille, che stanno sopra e non toccano i pixel sotto, e le cose
+   che rispondono davvero: gli oggetti.
 
-   Ora l'onda ha una vita: si allarga, brilla, e sbiadisce fino a
-   sparire. Resta il gesto, sparisce la cicatrice. E sparisce anche la
-   mappa da mezzo mega per stanza che teneva il conto — con otto stanze
-   erano quattro megabyte di memoria per ricordare delle macchie. */
-const onde = [];        /* { id, x, y, t } in pixel veri, t in secondi */
-const CRESCITA = 0.42;  /* quanto ci mette il fronte ad arrivare in fondo */
-const SVANIRE  = 1.15;  /* e quanto ci mette poi a sbiadire */
-const RAGGIO   = 46;    /* in coordinate logiche */
-
-export function trasmuta(xLog, yLog) {
-  onde.push({ id: STANZE[Math.max(0, S.stanza)].id,
-              x: xLog * SCALA, y: yLog * SCALA, t: 0 });
-}
-
-/* le onde invecchiano, e quando hanno finito se ne vanno */
-function avanzaOnde(dt) {
-  for (let k = onde.length - 1; k >= 0; k--)
-    if ((onde[k].t += dt) > CRESCITA + SVANIRE) onde.splice(k, 1);
-}
-
-/* e ogni fotogramma la mappa si applica sopra il fondale */
-function applicaTrasmutazione(id, t) {
-  if (!onde.length) return;
-  const b = sc.buf, R = RAGGIO * SCALA;
-  for (const o of onde) {
-    if (o.id !== id) continue;
-    const cresciuta = Math.min(1, o.t / CRESCITA);
-    const viva = 1 - Math.max(0, o.t - CRESCITA) / SVANIRE;
-    if (viva <= 0) continue;
-    const fronte = R * cresciuta;
-    const y0 = Math.max(0, Math.floor(o.y - fronte)), y1 = Math.min(sc.rh, Math.ceil(o.y + fronte));
-    const x0 = Math.max(0, Math.floor(o.x - fronte)), x1 = Math.min(sc.rw, Math.ceil(o.x + fronte));
-    const F2 = fronte * fronte;
-    for (let y = y0; y < y1; y++)
-      for (let x = x0; x < x1; x++) {
-        const d2 = (x - o.x) * (x - o.x) + (y - o.y) * (y - o.y);
-        if (d2 > F2) continue;
-        /* La densita' cala dal centro al bordo e passa da un retino
-           irregolare: l'oro si insinua per vene, come farebbe un
-           metallo dentro la pietra, e sotto continua a vedersi il
-           disegno. Poi `viva` lo riassorbe. */
-        const q = (1 - Math.sqrt(d2) / R) * viva;
-        const grana = ((x * 7 + y * 13 + ((x >> 2) * (y >> 2))) & 15) / 16;
-        const i = y * sc.rw + x;
-        if (grana < q * 0.92) b[i] = VERSO_ORO[b[i]];
-      }
-    /* il fronte brilla mentre corre */
-    if (cresciuta < 1)
-      sc.alone(o.x / SCALA, o.y / SCALA, fronte / SCALA + 3, C.CALCE, 0.30 * (1 - cresciuta));
-  }
-}
-
-export function azzeraTrasmutazioni() { onde.length = 0; }
+   Se ne sono andati anche mezzo megabyte di mappa per stanza e un
+   passaggio su mezzo milione di pixel a fotogramma. */
+export function azzeraTrasmutazioni() { /* non c'e' piu' niente da azzerare */ }
 
 /* ── la barra di stato, in basso nel disegno ─────────────────────── */
 function hud(s) {
@@ -150,8 +98,6 @@ function fotogramma(ora) {
      disegna sopra restano loro e non finiscono nel ciclo. */
   if (st.cicli) for (const [x, y, w, h, rampa, vel] of st.cicli)
     sc.ciclaTavolozza(x, y, w, h, rampa, S.t * vel);
-  avanzaOnde(dt);
-  applicaTrasmutazione(st.id, S.t);
   st.disegna(sc, S, S.t, dt);
   /* gli oggetti che si toccano vivono sopra il disegno della stanza,
      come la fiamma che si spegne o la nuvola che copre la luna */
@@ -228,6 +174,11 @@ function aggiornaLeva() {
   perId.bilancia.stato.mix = v / 100;
   leva.style.setProperty('--v', v + '%');
   levaVal.textContent = `${v}% macchina · ${100 - v}% mano`;
+  /* La stadera si inclina dentro il fondale, che e' calcolato una
+     volta sola: buttarlo via e' il modo di dire "rifallo con la nuova
+     pendenza". Farlo a ogni fotogramma costava, e questa stanza girava
+     a 168 fotogrammi contro i 240 delle altre. */
+  fondali.delete('bilancia');
 }
 leva.addEventListener('input', aggiornaLeva);
 aggiornaLeva();
@@ -384,7 +335,6 @@ for (const ev of ['pointerup', 'pointercancel'])
     if (!giu || giu.mosso) { giu = null; return; }
     const p = giu; giu = null;
     const st = STANZE[Math.max(0, S.stanza)];
-    trasmuta(p.x, p.y);
     scintille.soffia(p.x, p.y, 16, (p.x * 977 + p.y * 31 + Date.now()) | 0);
     /* Prima gli oggetti. Se uno se lo prende il tocco finisce li';
        altrimenti prosegue e la stanza fa la sua scelta di sempre.

@@ -7,7 +7,7 @@ import fs from 'fs';
 import zlib from 'zlib';
 const [nome, X, Y, W, H] = process.argv.slice(2);
 const src = fs.readFileSync('site/pixel/sfondi.js', 'utf8');
-const m = new RegExp(`^  ${nome}: '([^']+)',`, 'm').exec(src);
+const m = new RegExp(`^  '?${nome}'?: '([^']+)',`, 'm').exec(src);
 if (!m) { console.error('fondale sconosciuto:', nome); process.exit(1); }
 const a = zlib.inflateRawSync(Buffer.from(m[1], 'base64'));
 
