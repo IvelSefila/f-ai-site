@@ -12,10 +12,11 @@
  * il dito ci scivola sopra.
  * ═══════════════════════════════════════════════════════════════════ */
 
-import { Schermo } from './motore.js?v=20260908-120831';
-import { C, VERSO_ORO } from './tavolozza.js?v=20260908-120831';
-import { Scintille } from './scena.js?v=20260908-120831';
-import { STANZE, perId } from './stanze.js?v=20260908-120831';
+import { Schermo } from './motore.js?v=20260908-133427';
+import { C, VERSO_ORO } from './tavolozza.js?v=20260908-133427';
+import { Scintille } from './scena.js?v=20260908-133427';
+import { STANZE, perId } from './stanze.js?v=20260908-133427';
+import { scongela } from './sfondi.js?v=20260908-133427';
 
 export const LARGO = 320, ALTO = 180;
 /* La scala del fotogramma. Si disegna sempre a 320×180 — le stanze
@@ -390,5 +391,17 @@ document.addEventListener('visibilitychange',
 
 segnaStanza(0);
 avvia();
+
+/* ── i fondali si aprono per strada ───────────────────────────────
+   Gli indici dei fondali stanno compressi: crudi erano 5,3 MB e su un
+   telefono in giro si sentivano. Srotolarli si puo' fare solo in modo
+   asincrono, quindi non aspetto: la pagina parte con le stanze
+   disegnate a codice — il ripiego che ogni stanza aveva gia' — e ogni
+   fondale entra appena e' pronto. Quello che stai guardando per primo.
+
+   Quando ne arriva uno, butto via il suo fondale in cache: al
+   fotogramma dopo fondale() lo rifa', e questa volta con l'immagine. */
+scongela(nome => fondali.delete(nome),
+         [STANZE[Math.max(0, S.stanza)].id, STANZE[0].id]);
 
 export { S, sc, STANZE };

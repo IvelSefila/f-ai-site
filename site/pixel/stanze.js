@@ -12,10 +12,10 @@
  * del brief.
  * ═══════════════════════════════════════════════════════════════════ */
 
-import { C, RAMPE } from './tavolozza.js?v=20260908-120831';
-import { caso, rumore1 } from './motore.js?v=20260908-120831';
-import { torre, rune, bagliore } from './scena.js?v=20260908-120831';
-import { sfondo } from './sfondi.js?v=20260908-120831';
+import { C, RAMPE } from './tavolozza.js?v=20260908-133427';
+import { caso, rumore1 } from './motore.js?v=20260908-133427';
+import { torre, rune, bagliore } from './scena.js?v=20260908-133427';
+import { sfondo } from './sfondi.js?v=20260908-133427';
 
 /* ── i fondali generati ───────────────────────────────────────────
    Higgsfield dipinge la scenografia, il codice l'accende. Le immagini
