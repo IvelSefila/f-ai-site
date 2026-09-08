@@ -12,11 +12,11 @@
  * il dito ci scivola sopra.
  * ═══════════════════════════════════════════════════════════════════ */
 
-import { Schermo } from './motore.js?v=20260908-133427';
-import { C, VERSO_ORO } from './tavolozza.js?v=20260908-133427';
-import { Scintille } from './scena.js?v=20260908-133427';
-import { STANZE, perId } from './stanze.js?v=20260908-133427';
-import { scongela } from './sfondi.js?v=20260908-133427';
+import { Schermo } from './motore.js?v=20260908-141406';
+import { C, VERSO_ORO } from './tavolozza.js?v=20260908-141406';
+import { Scintille } from './scena.js?v=20260908-141406';
+import { STANZE, perId } from './stanze.js?v=20260908-141406';
+import { scongela } from './sfondi.js?v=20260908-141406';
 
 export const LARGO = 320, ALTO = 180;
 /* La scala del fotogramma. Si disegna sempre a 320×180 — le stanze
@@ -166,14 +166,35 @@ function segnaStanza(i) {
   $('#statoStanza').textContent = `Stanza ${STANZE[i].num}: ${STANZE[i].nome}`;
 }
 
-/* la stanza segue la pagina che stai sfogliando */
-const io = new IntersectionObserver(es => {
-  for (const e of es) if (e.isIntersecting) {
-    const i = STANZE.findIndex(x => x.id === e.target.dataset.stanza);
-    if (i >= 0) segnaStanza(i);
+/* ── la stanza segue la pagina che stai sfogliando ────────────────
+   Prima scorreva le voci arrivate e teneva l'ultima che risultava in
+   vista. Sembra la stessa cosa, e per uno scorrimento lento lo e'; ma
+   quando il dito va veloce, o quando si salta di colpo in un punto,
+   in una sola chiamata arrivano piu' sezioni insieme, e l'ordine in
+   cui arrivano e' quello in cui le osservo, non quello in cui stanno
+   sullo schermo. Vinceva una a caso: in cima alla pagina il quadro
+   diceva LA BILANCIA mentre la carta diceva LA SOGLIA.
+
+   Ora non mi fido dell'ordine: guardo tutte le sezioni e prendo quella
+   il cui centro e' piu' vicino al centro della finestra. E' anche la
+   definizione giusta di "quella che stai guardando". */
+const sezioni = [...$$('[data-stanza]')];
+function quale() {
+  const mezzo = innerHeight / 2;
+  let vicina = -1, minima = Infinity;
+  for (const s of sezioni) {
+    const r = s.getBoundingClientRect();
+    if (r.bottom <= 0 || r.top >= innerHeight) continue;
+    const d = Math.abs((r.top + r.bottom) / 2 - mezzo);
+    if (d < minima) { minima = d; vicina = STANZE.findIndex(x => x.id === s.dataset.stanza); }
   }
-}, { rootMargin: '-40% 0px -40% 0px' });
-$$('[data-stanza]').forEach(s => io.observe(s));
+  if (vicina >= 0) segnaStanza(vicina);
+}
+const io = new IntersectionObserver(quale, { rootMargin: '-40% 0px -40% 0px' });
+sezioni.forEach(s => io.observe(s));
+/* lo scorrimento puo' finire senza che nessuna soglia venga varcata --
+   per esempio quando l'aggancio riporta la pagina dove era gia' */
+addEventListener('scrollend', quale);
 
 /* frecce e pagina su/giù per chi ha la tastiera */
 const vaiA = i => {
