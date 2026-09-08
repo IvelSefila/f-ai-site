@@ -18,3 +18,9 @@ Thumbs.db
 # i PNG grezzi di Higgsfield: 7,4 MB. Quello che serve al sito e'
 # sfondi.js, che li contiene gia' ridotti e quantizzati.
 site/pixel/immagini/*.png
+
+# i fotogrammi estratti dal video della bilancia (57 MB) e il video
+# stesso (21 MB). Materiale di partenza, come i PNG: quello che serve
+# al sito viene fuori dalla quantizzazione.
+site/pixel/fotogrammi/*.png
+audit/*.mp4

@@ -11,8 +11,8 @@
  * quadrato netto sullo schermo.
  * ═══════════════════════════════════════════════════════════════════ */
 
-import { RGB } from './tavolozza.js?v=20260908-180615';
-import { glifo, LARGHEZZA, ALTEZZA } from './alfabeto.js?v=20260908-180615';
+import { RGB } from './tavolozza.js?v=20260908-191509';
+import { glifo, LARGHEZZA, ALTEZZA } from './alfabeto.js?v=20260908-191509';
 
 /* i retini di Bayer: la scala di grigi dei poveri. Con due pigmenti e
    una di queste matrici si ottengono le vie di mezzo che la tavolozza

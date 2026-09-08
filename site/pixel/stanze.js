@@ -12,10 +12,10 @@
  * del brief.
  * ═══════════════════════════════════════════════════════════════════ */
 
-import { C, RAMPE, CICLI } from './tavolozza.js?v=20260908-180615';
-import { caso, rumore1 } from './motore.js?v=20260908-180615';
-import { torre, rune, bagliore } from './scena.js?v=20260908-180615';
-import { sfondo } from './sfondi.js?v=20260908-180615';
+import { C, RAMPE, CICLI } from './tavolozza.js?v=20260908-191509';
+import { caso, rumore1 } from './motore.js?v=20260908-191509';
+import { torre, rune, bagliore } from './scena.js?v=20260908-191509';
+import { sfondo } from './sfondi.js?v=20260908-191509';
 
 /* ── i fondali generati ───────────────────────────────────────────
    Higgsfield dipinge la scenografia, il codice l'accende. Le immagini
@@ -402,8 +402,11 @@ const scriptorium = {
   cicli: [
     [24, 46, 12, 14, CICLI.fiamma, 5],     /* stava 14 unita' piu' su, sul muro vuoto */
     [95, 24, 11, 14, CICLI.fiamma, 4.3],
-    [125, 38, 11, 14, CICLI.fiamma, 5.7],
-    [287, 20, 11, 14, CICLI.fiamma, 4.7],
+    /* Queste due erano dieci unita' troppo in alto e ciclavano muro.
+       Non se n'era accorto nessuno finche' la prova sulla copertura
+       non ha smesso di tenersi una copia a mano delle zone. */
+    [128, 48, 12, 14, CICLI.fiamma, 5.7],
+    [284, 32, 14, 18, CICLI.fiamma, 4.7],
   ],
   /* tocchi una pagina e la riminia */
   colpetto(p, S, aggiorna) {
