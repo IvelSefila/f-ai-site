@@ -6,7 +6,7 @@
 <title>F/AI — la torre</title>
 <meta name="description" content="Il portfolio di Fabrizio Mana in pixel art: otto stanze da sfogliare, disegnate a codice con quindici pigmenti alchemici. Grafica pubblicitaria, video, social e sistemi AI.">
 <link rel="icon" href="../favicon.svg">
-<link rel="stylesheet" href="pixel.css?v=20260908-141406">
+<link rel="stylesheet" href="pixel.css?v=20260908-142729">
 </head>
 <body>
 <a class="salta" href="#s-bilancia">Vai al contenuto</a>
@@ -181,9 +181,9 @@
 
 </main>
 
-<script type="module" src="gioco.js?v=20260908-141406"></script>
+<script type="module" src="gioco.js?v=20260908-142729"></script>
 <script type="module">
-  import { TAVOLOZZA } from './tavolozza.js?v=20260908-141406';
+  import { TAVOLOZZA } from './tavolozza.js?v=20260908-142729';
   document.querySelector('#listaPigmenti').innerHTML = TAVOLOZZA
     .map(([hex, nome, ruolo]) =>
       `<li><i style="--p:${hex}"></i><b>${nome}</b><span>${ruolo}</span></li>`)
