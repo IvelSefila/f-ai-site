@@ -12,10 +12,10 @@
  * del brief.
  * ═══════════════════════════════════════════════════════════════════ */
 
-import { C, RAMPE } from './tavolozza.js?v=20260908-142729';
-import { caso, rumore1 } from './motore.js?v=20260908-142729';
-import { torre, rune, bagliore } from './scena.js?v=20260908-142729';
-import { sfondo } from './sfondi.js?v=20260908-142729';
+import { C, RAMPE, CICLI } from './tavolozza.js?v=20260908-144138';
+import { caso, rumore1 } from './motore.js?v=20260908-144138';
+import { torre, rune, bagliore } from './scena.js?v=20260908-144138';
+import { sfondo } from './sfondi.js?v=20260908-144138';
 
 /* ── i fondali generati ───────────────────────────────────────────
    Higgsfield dipinge la scenografia, il codice l'accende. Le immagini
@@ -137,6 +137,13 @@ function corsa(vivi, nome, durata, dt) {
 /* ═══ 1 · LA SOGLIA — il titolo ═══════════════════════════════════ */
 const soglia = {
   id: 'soglia', nome: 'LA SOGLIA', num: '00',
+  /* l'alone delle due lune respira, e la finestra della torre
+     tremola come una candela vista da lontano */
+  cicli: [
+    [50, 24, 58, 52, CICLI.alone, 1.1],
+    [220, 14, 58, 52, CICLI.alone, 0.9],
+    [203, 56, 16, 26, CICLI.fiamma, 5],
+  ],
   /* la finestra accesa in cima alla torre, e le due lune */
   oggetti: [
     { nome: 'finestra', x: 199, y: 50, w: 28, h: 36 },
@@ -224,6 +231,11 @@ const soglia = {
 /* ═══ 2 · LA BILANCIA — la regia, umano contro macchina ══════════ */
 const bilancia = {
   id: 'bilancia', nome: 'LA BILANCIA', num: '01',
+  /* il braciere nel camino a sinistra e le candele sul banco */
+  cicli: [
+    [0, 104, 22, 56, CICLI.fuoco, 6],
+    [44, 116, 34, 22, CICLI.fiamma, 4],
+  ],
   /* I due piatti della bilancia dipinta: quello caldo con i pennelli
      e la penna d'oca, quello freddo con gli ingranaggi e la lente. */
   oggetti: [
@@ -333,6 +345,14 @@ const bilancia = {
 /* ═══ 3 · LO SCRIPTORIUM — i lavori, tre pagine miniate ══════════ */
 const scriptorium = {
   id: 'scriptorium', nome: 'LO SCRIPTORIUM', num: '02',
+  /* le quattro candele del muro, una scatola stretta per ognuna:
+     una fascia larga quanto la stanza ciclava soprattutto muro */
+  cicli: [
+    [23, 30, 11, 14, CICLI.fiamma, 5],
+    [95, 24, 11, 14, CICLI.fiamma, 4.3],
+    [125, 38, 11, 14, CICLI.fiamma, 5.7],
+    [287, 20, 11, 14, CICLI.fiamma, 4.7],
+  ],
   /* tocchi una pagina e la riminia */
   colpetto(p, S, aggiorna) {
     const i = Math.max(0, Math.min(2, Math.floor((p.x - 14) / 100)));
@@ -514,6 +534,12 @@ function pagina(sc, x, y, w, h, seme, viva, t) {
 /* ═══ 4 · I QUATTRO BANCHI — i servizi ═══════════════════════════ */
 const banchi = {
   id: 'banchi', nome: 'I QUATTRO BANCHI', num: '03',
+  /* le tre lanterne appese */
+  cicli: [
+    [0, 36, 14, 20, CICLI.fiamma, 4],
+    [150, 30, 14, 20, CICLI.fiamma, 4.6],
+    [290, 36, 14, 20, CICLI.fiamma, 3.7],
+  ],
   /* tocchi un banco e diventa quello scelto */
   colpetto(p, S, aggiorna) {
     this.stato.scelto = Math.max(0, Math.min(3, Math.floor(p.x / 80)));
@@ -672,6 +698,9 @@ function banco(sc, x, y, w, h, tipo, t, viva) {
 /* ═══ 5 · LA FORGIA — la tecnologia, locale contro cloud ═════════ */
 const forgia = {
   id: 'forgia', nome: 'LA FORGIA', num: '04',
+  /* la fornace: la scatola sta stretta sulle fiamme, perche' presa
+     larga ciclava anche l'arco di pietra e lampeggiava tutto */
+  cicli: [[30, 62, 34, 48, CICLI.fuoco, 7]],
   /* sinistra la fornace, destra la nuvola, in mezzo l'ibrido */
   colpetto(p, S, aggiorna) {
     this.stato.modo = p.x < 110 ? 0 : p.x > 210 ? 1 : 2;
@@ -833,6 +862,12 @@ function nuvola(sc, x, y, t, forza) {
 /* ═══ 6 · LA MATERIA — dodicimila punti, tre disposizioni ════════ */
 const materia = {
   id: 'materia', nome: 'LA MATERIA', num: '05',
+  /* le scintille sospese e i due bracieri verdi */
+  cicli: [
+    [68, 26, 168, 76, CICLI.polvere, 2.4],
+    [56, 100, 26, 24, CICLI.verde, 3.4],
+    [238, 100, 26, 24, CICLI.verde, 3.1],
+  ],
   /* l'astrolabio, il libro e i due bracieri verdi della stanza */
   oggetti: [
     { nome: 'astrolabio', x: 126, y: 98,  w: 34, h: 34 },
@@ -984,6 +1019,11 @@ function muroScuro(sc) {
 /* ═══ 7 · LA SCHEDA — il profilo, come in un gioco di ruolo ══════ */
 const scheda = {
   id: 'scheda', nome: 'LA SCHEDA', num: '06',
+  /* la candela nella nicchia e la lucerna appesa */
+  cicli: [
+    [34, 76, 24, 26, CICLI.fiamma, 4.4],
+    [256, 82, 26, 26, CICLI.fiamma, 3.8],
+  ],
   /* la candela nella nicchia a sinistra e la lucerna appesa a destra:
      stanno fuori dalla scheda, quindi il dito ci arriva */
   oggetti: [
@@ -1145,6 +1185,11 @@ const DOMANDE = [
 
 const alchimista = {
   id: 'alchimista', nome: "L'ALCHIMISTA", num: '07',
+  /* la candela sul tavolo e il verde dell'ampolla */
+  cicli: [
+    [118, 54, 18, 28, CICLI.fiamma, 5],
+    [144, 86, 34, 32, CICLI.verde, 2.6],
+  ],
   /* ── gli oggetti che si possono toccare ───────────────────────
      Coordinate prese dalla griglia sul fondale vero, non a occhio. */
   oggetti: [

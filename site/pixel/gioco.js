@@ -12,11 +12,11 @@
  * il dito ci scivola sopra.
  * ═══════════════════════════════════════════════════════════════════ */
 
-import { Schermo } from './motore.js?v=20260908-142729';
-import { C, VERSO_ORO } from './tavolozza.js?v=20260908-142729';
-import { Scintille } from './scena.js?v=20260908-142729';
-import { STANZE, perId } from './stanze.js?v=20260908-142729';
-import { scongela } from './sfondi.js?v=20260908-142729';
+import { Schermo } from './motore.js?v=20260908-144138';
+import { C, VERSO_ORO } from './tavolozza.js?v=20260908-144138';
+import { Scintille } from './scena.js?v=20260908-144138';
+import { STANZE, perId } from './stanze.js?v=20260908-144138';
+import { scongela } from './sfondi.js?v=20260908-144138';
 
 export const LARGO = 320, ALTO = 180;
 /* La scala del fotogramma. Si disegna sempre a 320×180 — le stanze
@@ -145,6 +145,11 @@ function fotogramma(ora) {
 
   const st = STANZE[Math.max(0, S.stanza)];
   sc.buf.set(fondale(Math.max(0, S.stanza)).buf);
+  /* Le luci dipinte si muovono qui, subito dopo il fondale e prima
+     di tutto il resto: cosi' gli aloni e le fiamme che il codice
+     disegna sopra restano loro e non finiscono nel ciclo. */
+  if (st.cicli) for (const [x, y, w, h, rampa, vel] of st.cicli)
+    sc.ciclaTavolozza(x, y, w, h, rampa, S.t * vel);
   avanzaOnde(dt);
   applicaTrasmutazione(st.id, S.t);
   st.disegna(sc, S, S.t, dt);

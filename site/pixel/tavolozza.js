@@ -125,6 +125,35 @@ export const RAMPE = {
 };
 
 /* ═══════════════════════════════════════════════════════════════════
+ * I CICLI
+ *
+ * Rampe pensate per il ciclo di tavolozza: i pigmenti in fila
+ * dall'ombra alla luce, presi fra quelli che stanno DAVVERO nella
+ * zona che devono animare — contati con audit/quali-pigmenti.mjs, non
+ * scelti a occhio. Ciclare un pigmento che li' non c'e' non fa
+ * niente; ciclarne uno che appartiene al muro fa lampeggiare il muro.
+ *
+ * E' il modo in cui le macchine a 16 bit muovevano fuoco e acqua senza
+ * un fotogramma in piu': l'immagine sta ferma e i colori scorrono.
+ * ═══════════════════════════════════════════════════════════════════ */
+export const CICLI = {
+  /* Coppie, non rampe lunghe. Con una rampa di sette il fuoco saltava
+     dal rosso cupo al giallo chiaro e sembrava uno stroboscopio: ogni
+     pixel cambiava famiglia. Con le coppie oscilla fra due gradini
+     vicini della stessa tinta, e la fiamma respira. */
+  fuoco:   [[37, 9], [41, 10], [11, 46]],       /* la fornace */
+  fiamma:  [[10, 11], [46, 47]],                /* candele e lucerne */
+  /* il verderame scuro dei bracieri e il verde chiaro dell'ampolla:
+     due posti diversi, due gradini diversi, una rampa sola */
+  verde:   [[32, 33], [6, 34], [7, 35]],
+  polvere: [[45, 12], [46, 47], [34, 7]],       /* le scintille sospese */
+  /* L'alone della luna e' indaco, non lapislazzuli come avevo
+     creduto. Ciclare il lapis non faceva niente, e non l'avrebbe
+     detto nessuno: nessun errore, solo una luna ferma. */
+  alone:   [[56, 57], [24, 25]],
+};
+
+/* ═══════════════════════════════════════════════════════════════════
  * LA TRASMUTAZIONE
  *
  * Il sogno degli alchimisti: il piombo in oro. Qui è una tabella —

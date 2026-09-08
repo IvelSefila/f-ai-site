@@ -11,8 +11,8 @@
  * quadrato netto sullo schermo.
  * ═══════════════════════════════════════════════════════════════════ */
 
-import { RGB } from './tavolozza.js?v=20260908-142729';
-import { glifo, LARGHEZZA, ALTEZZA } from './alfabeto.js?v=20260908-142729';
+import { RGB } from './tavolozza.js?v=20260908-144138';
+import { glifo, LARGHEZZA, ALTEZZA } from './alfabeto.js?v=20260908-144138';
 
 /* i retini di Bayer: la scala di grigi dei poveri. Con due pigmenti e
    una di queste matrici si ottengono le vie di mezzo che la tavolozza
@@ -102,6 +102,59 @@ export class Schermo {
       y++;
       if (err < 0) err += 2 * y + 1;
       else { x--; err += 2 * (y - x + 1); }
+    }
+  }
+
+  /* ── il ciclo di tavolozza ────────────────────────────────────────
+     Il modo in cui le macchine a 16 bit facevano muovere l'acqua, il
+     fuoco e le cascate senza avere un solo fotogramma in piu': non si
+     ridisegna niente, si fanno scorrere i pigmenti lungo una rampa.
+     Un pixel che era sangue di drago diventa cinabro, il cinabro
+     diventa minio, il minio orpimento, e l'orpimento torna sangue di
+     drago. L'immagine sta ferma e la fiamma si muove.
+
+     Qui serve perche' i fondali sono dipinti: il fuoco della forgia e'
+     dentro l'immagine, e senza questo resta una fotografia di un
+     fuoco. Un fotogramma vero in piu' per stanza costa 138 KB
+     compressi, misurati; questo ne costa zero, e il lavoro e' una
+     tabella da 64 voci piu' una lettura per pixel della sola zona
+     interessata.
+
+     `rampe` sono gli indici in fila dall'ombra alla luce; si puo'
+     passare una rampa sola o una lista di rampe, e in quel caso ognuna
+     scorre per conto suo in un passaggio solo.
+
+     Le liste di coppie servono piu' delle rampe lunghe. Con una rampa
+     di sette il fuoco saltava dal rosso cupo al giallo chiaro e
+     sembrava uno stroboscopio; con tre coppie — cinabro con la sua
+     ombra, minio con la sua, oro chiaro con l'orpimento — ogni pixel
+     oscilla fra due gradini vicini della stessa famiglia, e il fuoco
+     respira invece di lampeggiare.
+
+     `passo` e' di quanto scorrere, intero: i pigmenti non si mescolano. */
+  ciclaTavolozza(x, y, w, h, rampe, passo) {
+    const lista = Array.isArray(rampe[0]) ? rampe : [rampe];
+    const t = this._ciclo || (this._ciclo = new Uint8Array(256));
+    for (let i = 0; i < 256; i++) t[i] = i;
+    let mosso = false;
+    for (const r of lista) {
+      const n = r.length;
+      if (n < 2) continue;
+      const p = ((Math.round(passo) % n) + n) % n;
+      if (!p) continue;
+      for (let i = 0; i < n; i++) t[r[i]] = r[(i + p) % n];
+      mosso = true;
+    }
+    if (!mosso) return;
+
+    const k = this.k;
+    const x0 = Math.max(0, Math.round(x * k)), y0 = Math.max(0, Math.round(y * k));
+    const x1 = Math.min(this.rw, Math.round((x + w) * k));
+    const y1 = Math.min(this.rh, Math.round((y + h) * k));
+    const b = this.buf;
+    for (let j = y0; j < y1; j++) {
+      const riga = j * this.rw;
+      for (let i = x0; i < x1; i++) b[riga + i] = t[b[riga + i]];
     }
   }
 
