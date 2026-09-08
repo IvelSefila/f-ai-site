@@ -1,4 +1,4 @@
-import { accentoGL } from './palette.js?v=20260908-191509';
+import { accentoGL } from './palette.js?v=20260908-202839';
 /* ═══════════════════════════════════════════════════════════════════
  * hero.js — il confine fra mano e macchina, calcolato a ogni frame.
  * WebGL2, nessuna libreria. Se manca, la pagina resta intera.

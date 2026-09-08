@@ -12,10 +12,11 @@
  * del brief.
  * ═══════════════════════════════════════════════════════════════════ */
 
-import { C, RAMPE, CICLI } from './tavolozza.js?v=20260908-191509';
-import { caso, rumore1 } from './motore.js?v=20260908-191509';
-import { torre, rune, bagliore } from './scena.js?v=20260908-191509';
-import { sfondo } from './sfondi.js?v=20260908-191509';
+import { C, RAMPE, CICLI } from './tavolozza.js?v=20260908-202839';
+import { caso, rumore1 } from './motore.js?v=20260908-202839';
+import { torre, rune, bagliore } from './scena.js?v=20260908-202839';
+import { sfondo } from './sfondi.js?v=20260908-202839';
+import { stanzaBilancia, posaPronta, RIQUADRO, QUANTI } from './fotogrammi.js?v=20260908-202839';
 
 /* ── i fondali generati ───────────────────────────────────────────
    Higgsfield dipinge la scenografia, il codice l'accende. Le immagini
@@ -282,33 +283,42 @@ const bilancia = {
 
      Le misure vengono dal ritaglio ingrandito del fondale vero
      (audit/ritaglio.mjs), non dall'occhio. */
-  PERNO: 157,
-  pendenza() { return (this.stato.mix - 0.5) * 0.19; },   /* la macchina pesa: destra giu' */
-  braccio(x) { return (x - this.PERNO) * this.pendenza(); },
+  /* ── la stadera pende, per davvero ──────────────────────────────
+     Diciassette pose prese da un video generato con Higgsfield, non
+     pezzi di immagine spostati a mano. Lo spostamento funzionava, ma si
+     vedeva che era un trucco: i bordi delle toppe scattavano e le
+     catene si allungavano di un pixel per volta.
+
+     Le pose vengono da un VIDEO e non da immagini generate una per
+     una, perche' quelle ridisegnano tutta la stanza: fuori dalla
+     bilancia cambiava l'8,2% del quadro in modo forte, e muovendo la
+     leva si sarebbe visto ballare il muro. Un video invece e' coerente
+     per costruzione — scarto medio 3,5 su 255 — ed e' esattamente la
+     ragione per cui esiste.
+
+     La stanza e' la posa in piano, salvata intera; le altre sedici
+     salvano solo il rettangolo della bilancia, e li' dentro solo i
+     pixel diversi. Stanno nel fondale e non nel disegno perche'
+     cambiano solo quando si muove la leva: chi la muove butta via il
+     fondale in cache, e al fotogramma dopo si rifa'. */
+  posa() { return Math.round(this.stato.mix * (QUANTI - 1)); },
   fondo(sc) {
-    if (!versa(sc, 'bilancia')) { muro(sc, 12); assi(sc, sc.h - 24); return; }
-    const P = this.PERNO, pend = this.pendenza();
-
-    /* I due bracci della stanga. La striscia parte da 24 e non da 32:
-       il riempimento pesca subito sopra, e partendo dal bordo della
-       stanga si portava dietro un pezzo di stanga, che restava
-       appiccicato al muro come un'ombra doppia. Da 24 sopra c'e'
-       mattone. L'ornamento del perno resta fermo, in mezzo. */
-    sc.piega(100, 24, 46, 28, P, pend);
-    sc.piega(169, 24, 50, 28, P, pend);
-
-    /* Le catene: la fessura si riempie DI FIANCO. Sopra una catena c'e'
-       altra catena, e riempiendo dall'alto restavano tronconi appesi al
-       muro — si vedevano tre trefoli invece di due. Di fianco c'e' il
-       muro nudo fra i due piatti. */
-    sc.sposta(101, 48, 20, 34, this.braccio(110), 34);
-    sc.sposta(198, 48, 20, 34, this.braccio(208), -34);
-
-    /* I piatti col loro contenuto. Qui il riempimento dall'alto e'
-       giusto: sopra il piatto c'e' la catena, che scende dello stesso
-       tanto, quindi copiandola si continua da sola. */
-    sc.sposta(82, 78, 54, 58, this.braccio(110));
-    sc.sposta(182, 80, 56, 58, this.braccio(208));
+    const stanza = stanzaBilancia();
+    if (!stanza || stanza.length !== sc.buf.length) {
+      muro(sc, 12); assi(sc, sc.h - 24); return;
+    }
+    sc.buf.set(stanza);
+    const t = posaPronta(this.posa());
+    if (!t) return;
+    const { x, y, w, h } = RIQUADRO, k = sc.k;
+    const X = x * k, Y = y * k, W = w * k;
+    for (let j = 0; j < h * k; j++) {
+      const riga = (Y + j) * sc.rw + X, r2 = j * W;
+      for (let i = 0; i < W; i++) {
+        const c = t[r2 + i];
+        if (c !== 255) sc.buf[riga + i] = c;
+      }
+    }
   },
   disegna(sc, S, t, dt) {
     const q = this.stato.mix;                    /* 0 = tutto umano */
@@ -347,7 +357,9 @@ const bilancia = {
        in mezzo all'ottone: tolto, il grano basta da solo. */
     /* il grano sta SULLA stanga, quindi segue la sua pendenza invece
        di avere una formula sua che ci somigliava e basta */
-    const gx = 108 + q * 100, gy = 40 + this.braccio(gx);
+    /* il grano scorre sulla stanga; l'inclinazione ora e' quella
+       dipinta nella posa, quindi la seguo con la stessa formula */
+    const gx = 108 + q * 100, gy = 40 + (gx - 157) * (q - 0.5) * 0.19;
     sc.alone(gx, gy, 9, C.ORPIMENTO, 0.55);
     sc.cerchio(gx, gy, 3, C.ORO, true);
     sc.punto(gx, gy, C.CALCE);
@@ -359,11 +371,14 @@ const bilancia = {
        cornice d'oro, e cambia materia col peso — pergamena e forme
        grandi quando comanda la mano, lastra scura e forme piccole e
        fitte quando comanda la macchina. */
-    const ax = 134, ay = 58, aw = 54, ah = 44;
+    /* Sceso di trenta: l'inquadratura del video e' piu' stretta e a
+       58 il quadro copriva la stanga. Qui sta nel muro libero fra i
+       due piatti, e ci resta a leva zero come a leva cento. */
+    const ax = 133, ay = 86, aw = 54, ah = 42;
     sc.rettPieno(ax - 3, ay - 3, aw + 6, ah + 6, C.OMBRA_TERRA);
     sc.rett(ax - 3, ay - 3, aw + 6, ah + 6, C.ORO);
     sc.rett(ax - 1, ay - 1, aw + 2, ah + 2, C.ORO);
-    sc.linea(ax + aw / 2, ay - 4, ax + aw / 2, ay - 12, C.OMBRA_TERRA);
+    sc.linea(ax + aw / 2, ay - 4, ax + aw / 2, ay - 10, C.OMBRA_TERRA);
 
     const carta = q < 0.5 ? C.PERGAMENA : C.INDACO;
     /* Il fondo con la sua grana. Il velo lo metto QUI e non alla fine:

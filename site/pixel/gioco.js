@@ -12,11 +12,12 @@
  * il dito ci scivola sopra.
  * ═══════════════════════════════════════════════════════════════════ */
 
-import { Schermo } from './motore.js?v=20260908-191509';
-import { C } from './tavolozza.js?v=20260908-191509';
-import { Scintille } from './scena.js?v=20260908-191509';
-import { STANZE, perId } from './stanze.js?v=20260908-191509';
-import { scongela } from './sfondi.js?v=20260908-191509';
+import { Schermo } from './motore.js?v=20260908-202839';
+import { C } from './tavolozza.js?v=20260908-202839';
+import { Scintille } from './scena.js?v=20260908-202839';
+import { STANZE, perId } from './stanze.js?v=20260908-202839';
+import { scongela } from './sfondi.js?v=20260908-202839';
+import { scongelaBilancia } from './fotogrammi.js?v=20260908-202839';
 
 export const LARGO = 320, ALTO = 180;
 /* La scala del fotogramma. Si disegna sempre a 320×180 — le stanze
@@ -382,6 +383,9 @@ avvia();
 
    Quando ne arriva uno, butto via il suo fondale in cache: al
    fotogramma dopo fondale() lo rifa', e questa volta con l'immagine. */
+/* le pose della bilancia si aprono per prime: e' l'unica stanza che
+   senza di loro resta col disegno di ripiego invece del suo fondale */
+scongelaBilancia(() => fondali.delete('bilancia'));
 scongela(nome => fondali.delete(nome),
          [STANZE[Math.max(0, S.stanza)].id, STANZE[0].id]);
 

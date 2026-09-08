@@ -29,6 +29,15 @@ const fondali = {};
 for (const m of src.matchAll(/^ +'?([a-z-]+)'?: '([^']+)',/gm))
   fondali[m[1]] = zlib.inflateRawSync(Buffer.from(m[2], 'base64'));
 
+/* La bilancia non sta piu' fra i fondali: la sua stanza e' la posa in
+   piano del video, e vive in fotogrammi.js. Senza questo lo script
+   diceva "fondale mancante" e sembrava che due luci fossero rotte. */
+try {
+  const f = fs.readFileSync('site/pixel/fotogrammi.js', 'utf8');
+  const m = /const STANZA = '([^']+)'/.exec(f);
+  if (m) fondali.bilancia = zlib.inflateRawSync(Buffer.from(m[1], 'base64'));
+} catch { /* se non c'e', la bilancia risultera' mancante e si vedra' */ }
+
 /* le rampe */
 const tav = fs.readFileSync('site/pixel/tavolozza.js', 'utf8');
 const CICLI = {};
