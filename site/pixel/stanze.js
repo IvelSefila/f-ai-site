@@ -12,10 +12,10 @@
  * del brief.
  * ═══════════════════════════════════════════════════════════════════ */
 
-import { C, RAMPE } from './tavolozza.js?v=20260907-185106';
-import { caso, rumore1 } from './motore.js?v=20260907-185106';
-import { torre, rune, bagliore } from './scena.js?v=20260907-185106';
-import { sfondo } from './sfondi.js?v=20260907-185106';
+import { C, RAMPE } from './tavolozza.js?v=20260908-120831';
+import { caso, rumore1 } from './motore.js?v=20260908-120831';
+import { torre, rune, bagliore } from './scena.js?v=20260908-120831';
+import { sfondo } from './sfondi.js?v=20260908-120831';
 
 /* ── i fondali generati ───────────────────────────────────────────
    Higgsfield dipinge la scenografia, il codice l'accende. Le immagini
@@ -203,7 +203,8 @@ const soglia = {
   disegna(sc, S, t) {
     /* le stelle le ha gia' dipinte l'immagine: qui restano le rune,
        che sono l'unica cosa viva della soglia */
-    rune(sc, t, 5);
+    /* le due lune e la torre restano libere: le rune girano nel buio */
+    rune(sc, t, 5, [[79, 50, 40], [248, 40, 40], [200, 60, 52]]);
     if (this.stella) {
       this.stella.t += 0.016;
       const q = this.stella.t / 1.1;
@@ -223,47 +224,105 @@ const soglia = {
 /* ═══ 2 · LA BILANCIA — la regia, umano contro macchina ══════════ */
 const bilancia = {
   id: 'bilancia', nome: 'LA BILANCIA', num: '01',
-  /* il colpetto sposta la bilancia dove hai toccato, come una mano
-     che appoggia un peso sul piatto */
+  /* I due piatti della bilancia dipinta: quello caldo con i pennelli
+     e la penna d'oca, quello freddo con gli ingranaggi e la lente. */
+  oggetti: [
+    { nome: 'mano',     x: 70,  y: 76, w: 66, h: 52 },
+    { nome: 'macchina', x: 174, y: 78, w: 64, h: 50 },
+  ],
+  vivi: {},
+  toccaOggetto(p, S) {
+    const o = preso(this.oggetti, p);
+    if (!o) return false;
+    /* toccare un piatto ci appoggia un peso: la bilancia va di la' */
+    const passo = 0.18;
+    this.stato.mix = Math.max(0, Math.min(1,
+      this.stato.mix + (o === 'mano' ? -passo : passo)));
+    this.vivi[o] = { t: 0 };
+    return 'aggiorna';        /* il tocco e' servito, ma la carta va avvisata */
+  },
+  /* il colpetto altrove sposta la bilancia dove hai toccato, come una
+     mano che appoggia un peso a mezz'aria */
   colpetto(p, S, aggiorna) {
     this.stato.mix = Math.max(0, Math.min(1, (p.x - 20) / (320 - 40)));
     aggiorna();
   },
   stato: { mix: 0.3 },
-  fondo(sc) { muro(sc, 12); assi(sc, sc.h - 24); },
-  disegna(sc, S, t) {
+  fondo(sc) { if (!versa(sc, 'bilancia')) { muro(sc, 12); assi(sc, sc.h - 24); } },
+  disegna(sc, S, t, dt) {
     const q = this.stato.mix;                    /* 0 = tutto umano */
-    const cx = sc.w / 2, cy = 54;
-    const inc = (q - 0.5) * 20;
-    sc.linea(cx, 24, cx, cy, C.PORPORA);
-    sc.linea(cx - 58, cy - inc, cx + 58, cy + inc, C.ORO);
-    sc.cerchio(cx, cy, 3, C.ORPIMENTO, true);
 
-    /* i due piatti: l'etichetta sta SOTTO il piatto, non addosso */
-    for (const [sx, lab, col, val] of [[-58, 'MANO', C.MINIO, 1 - q],
-                                       [ 58, 'MACCHINA', C.LAPIS, q]]) {
-      const py = cy + (sx < 0 ? -inc : inc) + 14;
-      sc.linea(cx + sx, cy + (sx < 0 ? -inc : inc), cx + sx, py, C.PORPORA_CUPA);
-      sc.linea(cx + sx - 15, py, cx + sx + 15, py, C.ORO);
-      sc.alone(cx + sx, py - 5, 14 + val * 14, col, 0.22 + val * 0.42);
-      const nq = Math.round(val * 7);
-      for (let i = 0; i < nq; i++)
-        sc.cerchio(cx + sx - 11 + (i % 4) * 7, py - 4 - Math.floor(i / 4) * 5, 2, col, true);
-      sc.testo(cx + sx - sc.misura(lab) / 2, py + 5, lab, C.PERGAMENA);
+    /* La bilancia adesso e' dipinta nel fondale, con i due piatti al
+       loro posto: il codice non la ridisegna piu' sopra: la accende.
+       Il piatto che pesa di piu' brilla, l'altro si spegne. */
+    const V = this.vivi;
+    const botta = (nome) => {
+      const c = corsa(V, nome, 0.9, dt);
+      return c === null ? 0 : Math.sin(c * Math.PI);
+    };
+    const bM = botta('mano'), bA = botta('macchina');
+    const respiro = 0.86 + Math.sin(t * 2.4) * 0.14;
+
+    for (const [px, py, col, val, extra] of [[102, 108, C.MINIO, 1 - q, bM],
+                                             [206, 110, C.AZZURRITE, q, bA]]) {
+      sc.alone(px, py, 26 + val * 20 + extra * 12, col,
+               (0.10 + val * 0.34) * respiro + extra * 0.3);
+      sc.alone(px, py, 11 + extra * 8, C.CALCE, val * 0.16 + extra * 0.28);
+      /* le faville quando ci appoggi un peso */
+      if (extra > 0.02) {
+        const r = caso(px);
+        for (let i = 0; i < 16; i++) {
+          const a = -Math.PI * r(), d = (1 - extra) * 34 * (0.4 + r());
+          sc.punto(px + Math.cos(a) * d, py + Math.sin(a) * d * 0.7,
+                   i % 3 ? col : C.CALCE);
+        }
+      }
     }
 
-    /* l'artefatto, a sinistra, con l'etichetta sopra */
-    const ax = 10, ay = 96, aw = 96, ah = 44;
-    sc.rettPieno(ax, ay, aw, ah, C.FONDO);
-    sc.rett(ax - 1, ay - 1, aw + 2, ah + 2, C.PORPORA);
+    /* Il grano d'oro che scorre sulla stanga dipinta: e' lui a dire
+       dove sta la bilancia, senza ridisegnare la stanga. Il filo che
+       gli avevo messo sotto per guidarlo si vedeva come una riga scura
+       in mezzo all'ottone: tolto, il grano basta da solo. */
+    const gx = 108 + q * 100, gy = 41 + (q - 0.5) * 3;
+    sc.alone(gx, gy, 9, C.ORPIMENTO, 0.55);
+    sc.cerchio(gx, gy, 3, C.ORO, true);
+    sc.punto(gx, gy, C.CALCE);
+
+    /* ── l'artefatto ─────────────────────────────────────────────
+       Un quadro appeso al muro nudo fra i due piatti. Prima era un
+       rettangolo nero con dentro dei rettangoli a caso: pareva un
+       errore di disegno appeso in mezzo alla stanza. Ora ha la sua
+       cornice d'oro, e cambia materia col peso — pergamena e forme
+       grandi quando comanda la mano, lastra scura e forme piccole e
+       fitte quando comanda la macchina. */
+    const ax = 134, ay = 58, aw = 54, ah = 44;
+    sc.rettPieno(ax - 3, ay - 3, aw + 6, ah + 6, C.OMBRA_TERRA);
+    sc.rett(ax - 3, ay - 3, aw + 6, ah + 6, C.ORO);
+    sc.rett(ax - 1, ay - 1, aw + 2, ah + 2, C.ORO);
+    sc.linea(ax + aw / 2, ay - 4, ax + aw / 2, ay - 12, C.OMBRA_TERRA);
+
+    const carta = q < 0.5 ? C.PERGAMENA : C.INDACO;
+    /* Il fondo con la sua grana. Il velo lo metto QUI e non alla fine:
+       retino riscrive ogni pixel del rettangolo, sotto e sopra, quindi
+       messo in coda cancellava tutte le forme e lasciava il quadro
+       vuoto con dei puntini. E' lo stesso inciampo del cielo diventato
+       arancione: la statistica diceva bene, l'occhio no. */
+    sc.retino(ax, ay, aw, ah, carta, q > 0.5 ? C.LAPIS : C.OCRA, 0.1);
     const ra = caso(1000 + Math.round(q * 20));
-    const forme = 3 + Math.round(q * 9);
+    const forme = 3 + Math.round(q * 11);
+    const CALDE = [C.CINABRO, C.MINIO, C.SIENA, C.ORPIMENTO];
+    const FREDDE = [C.AZZURRITE, C.MALACHITE, C.LAPIS, C.CALCE];
     for (let i = 0; i < forme; i++) {
-      const w = 6 + ra() * 30 * (1 - q * 0.5), h = 4 + ra() * 15;
-      const x = ax + 3 + ra() * (aw - w - 6), y = ay + 3 + ra() * (ah - h - 6);
-      const c = i % 3 === 0 ? C.MINIO : q > 0.5 ? C.LAPIS : C.VERDERAME;
-      if (ra() > 0.5) sc.rett(x, y, w, h, c); else sc.rettPieno(x, y, w, h, c);
+      const scala = 1 - q * 0.62;
+      const w = Math.max(3, (4 + ra() * 26) * scala);
+      const h = Math.max(3, (4 + ra() * 18) * scala);
+      const x = ax + 2 + ra() * (aw - w - 4), y = ay + 2 + ra() * (ah - h - 4);
+      const tav = q > 0.5 ? FREDDE : CALDE;
+      const c = tav[Math.floor(ra() * tav.length)];
+      sc.rettPieno(x, y, w, h, c);
+      sc.rett(x, y, w, h, q > 0.5 ? C.FONDO : C.OMBRA_TERRA);
     }
+    sc.rett(ax, ay, aw, ah, C.OMBRA_TERRA);
 
     /* La leva vera sta nella carta del testo, non qui: disegnarla
        due volte era un doppione, e sul largo finiva pure tagliata.
@@ -291,14 +350,19 @@ const scriptorium = {
        dipinte se ne vedono due, nei varchi fra una pagina e l'altra.
        Sono quelle, e solo quelle, che si possono spegnere: animare le
        altre avrebbe mandato il fumo sopra la pergamena. */
-    { nome: 'candele', x: 98,  y: 22, w: 16, h: 58 },
-    { nome: 'candele', x: 198, y: 38, w: 16, h: 62 },
-    { nome: 'libro0',     x: 14,  y: 30, w: 84, h: 104 },
-    { nome: 'libro1',     x: 114, y: 30, w: 84, h: 104 },
-    { nome: 'libro2',     x: 214, y: 30, w: 84, h: 104 },
+    /* Con le pagine rimpicciolite le quattro candele dipinte sul muro
+       tornano tutte scoperte: il riquadro e' la fascia alta della
+       parete, larga quanto la stanza, e il dito ci arriva ovunque. */
+    { nome: 'candele', x: 0, y: 10, w: 320, h: 42 },
+    { nome: 'libro0',     x: 16,  y: 54, w: 88, h: 76 },
+    { nome: 'libro1',     x: 116, y: 54, w: 88, h: 76 },
+    { nome: 'libro2',     x: 216, y: 54, w: 88, h: 76 },
   ],
   vivi: {},
-  PAGINE: [[14, 30, 84, 104], [114, 30, 84, 104], [214, 30, 84, 104]],
+  /* Le pagine coprivano il muro, le candele e i leggii: della stanza
+     non restava niente. Ora stanno sui leggii dipinti e lasciano
+     vedere la parete sopra e i banchi sotto. */
+  PAGINE: [[16, 54, 88, 76], [116, 54, 88, 76], [216, 54, 88, 76]],
   toccaOggetto(p) {
     const o = preso(this.oggetti, p);
     if (!o) return false;
@@ -353,7 +417,7 @@ const scriptorium = {
        tornano tutte e due */
     const c = corsa(V, 'candele', 2.8, dt);
     if (c !== null) {
-      const FIAMME = [[103, 35], [205, 62]];
+      const FIAMME = [[28, 36], [100, 30], [130, 44], [292, 26]];
       FIAMME.forEach(([x, y], i) => {
         const spegne = 0.10 + i * 0.16, riaccende = 0.70 + i * 0.09;
         if (c > spegne && c < riaccende) {
@@ -379,14 +443,21 @@ const scriptorium = {
   disegna(sc, S, t) {
     const titoli = ['GRAFICA', 'MOVIMENTO', 'SISTEMI'];
     this.stato.semi.forEach((seme, i) => {
-      const x = 14 + i * 100, y = 30, w = 84, h = 104;
+      const [x, y, w, h] = this.PAGINE[i];
       const sel = i === this.stato.scelta;
       if (sel) sc.alone(x + w / 2, y + h / 2, 70, C.ORO, 0.22);
       pagina(sc, x, y, w, h, seme, sel, t);
+      /* Una targa scura dietro le didascalie. Da quando le pagine sono
+         rimpicciolite le scritte cadono sui leggii dipinti, e viola su
+         legno non si legge: prima sotto c'era il muro finto e nero. */
+      const seme2 = 'SEME ' + seme;
+      const lw = Math.max(sc.misura(titoli[i]), sc.misura(seme2)) + 10;
+      sc.rettPieno(x + (w - lw) / 2, y + h + 2, lw, 21, C.FONDO);
+      sc.rett(x + (w - lw) / 2, y + h + 2, lw, 21, sel ? C.ORO : C.PORPORA_CUPA);
       sc.testo(x + (w - sc.misura(titoli[i])) / 2, y + h + 5, titoli[i],
-               sel ? C.ORO : C.PORPORA);
-      sc.testo(x + (w - sc.misura('SEME ' + seme)) / 2, y + h + 15, 'SEME ' + seme,
-               sel ? C.ORPIMENTO : C.PORPORA_CUPA);
+               sel ? C.ORO : C.PERGAMENA);
+      sc.testo(x + (w - sc.misura(seme2)) / 2, y + h + 14, seme2,
+               sel ? C.ORPIMENTO : C.PORPORA);
     });
     sc.testo(4, sc.h - 11, 'TOCCA UNA PAGINA PER RIMINIARLA', C.PERGAMENA);
   },
@@ -762,37 +833,144 @@ function nuvola(sc, x, y, t, forza) {
 /* ═══ 6 · LA MATERIA — dodicimila punti, tre disposizioni ════════ */
 const materia = {
   id: 'materia', nome: 'LA MATERIA', num: '05',
-  /* il colpetto cambia disposizione e sparpaglia i punti dal dito */
+  /* l'astrolabio, il libro e i due bracieri verdi della stanza */
+  oggetti: [
+    { nome: 'astrolabio', x: 126, y: 98,  w: 34, h: 34 },
+    { nome: 'libro',      x: 160, y: 106, w: 34, h: 26 },
+    { nome: 'braciere',   x: 52,  y: 98,  w: 34, h: 30 },
+    { nome: 'braciere',   x: 234, y: 98,  w: 34, h: 30 },
+  ],
+  vivi: {},
+  toccaOggetto(p) {
+    const o = preso(this.oggetti, p);
+    if (!o) return false;
+    this.vivi[o] = { t: 0 };
+    return true;
+  },
+  /* il colpetto altrove cambia disposizione e sparpaglia i punti */
   colpetto(p, S, aggiorna) {
     this.stato.forma = (this.stato.forma + 1) % 3;
     this.stato.spinta = { x: p.x, y: p.y, t: 0 };
     aggiorna();
   },
   stato: { forma: 0, mescola: 0 },
-  fondo(sc) { sc.rettPieno(0, 0, sc.w, sc.h, C.FONDO); muroScuro(sc); },
-  disegna(sc, S, t) {
-    const NOMI = ['GRIGLIA', 'NASTRO', 'RETE'];
+  fondo(sc) { if (!versa(sc, 'materia')) { sc.rettPieno(0, 0, sc.w, sc.h, C.FONDO); muroScuro(sc); } },
+  disegna(sc, S, t, dt) {
+    /* La nuvola di punti sta dove il fondale la dipinge, sopra il
+       ripiano di pietra: prima era piu' in basso, su un muro finto, e
+       si vedeva che era un'altra cosa attaccata sopra. */
     const N = 1400;
     const r = caso(77);
     const f = this.stato.forma;
-    const cx = sc.w / 2, cy = 92;
-    for (let i = 0; i < N; i++) {
-      const u = r(), v = r(), w = r();
-      let x, y;
-      if (f === 0) {                              /* griglia */
-        x = cx - 84 + (i % 48) * 3.5; y = cy - 40 + Math.floor(i / 48) * 2.7;
-      } else if (f === 1) {                       /* nastro */
+    const cx = 152, cy = 64;
+    const V = this.vivi;
+    const gira = corsa(V, 'astrolabio', 1.8, dt);
+    const sfoglia = corsa(V, 'libro', 1.2, dt);
+    const fuoco = corsa(V, 'braciere', 1.6, dt);
+    /* toccare l'astrolabio fa respirare tutta la nuvola */
+    const soffio = gira === null ? 1 : 1 + Math.sin(gira * Math.PI) * 0.34;
+
+    /* La nuvola dipinta e' un'ellisse: le tre disposizioni ci stanno
+       dentro. Prima la griglia era un rettangolo pieno di puntini
+       regolari steso sopra la nebulosa, e sembrava una zanzariera. */
+    const RX = 84, RY = 38;
+    const dentro = (x, y) => {
+      const u = (x - cx) / RX, v = (y - cy) / RY;
+      return u * u + v * v;
+    };
+    const tinta = (w) => w > 0.86 ? C.ORO : w > 0.66 ? C.MALACHITE
+                       : w > 0.42 ? C.LAPIS : w > 0.2 ? C.PORPORA : C.MINIO;
+
+    if (f === 0) {
+      /* La griglia: un reticolo con i suoi fili, che si dirada verso
+         il bordo. Con i fili si legge come ordine; senza, come rumore. */
+      /* Il respiro dell'astrolabio vale anche qui. Era collegato solo
+         al nastro e alla rete, e siccome la griglia e' la disposizione
+         di partenza, toccare l'astrolabio non faceva niente proprio
+         nel caso che si vede per primo. */
+      const PX = 6 * soffio, PY = 5 * soffio;
+      for (let gy = -7; gy <= 7; gy++)
+        for (let gx = -15; gx <= 15; gx++) {
+          const x = cx + gx * PX, y = cy + gy * PY;
+          const d = dentro(x, y);
+          if (d > 1) continue;
+          const forza = 1 - d;
+          if (r() > 0.25 + forza * 0.8) continue;
+          if (gx < 15 && dentro(x + PX, y) <= 1 && forza > 0.35)
+            sc.linea(x, y, x + PX, y, C.PORPORA_CUPA);
+          if (gy < 7 && dentro(x, y + PY) <= 1 && forza > 0.55)
+            sc.linea(x, y, x, y + PY, C.PORPORA_CUPA);
+          sc.punto(x, y, forza > 0.72 ? C.ORO : forza > 0.4 ? tinta(r()) : C.PORPORA);
+        }
+    } else if (f === 1) {
+      /* Il nastro: un fiume di punti che si attorciglia su se stesso */
+      for (let i = 0; i < N; i++) {
+        const u = r(), v = r(), w = r();
         const a = u * 6.28 * 2;
-        x = cx + Math.cos(a) * (88 - v * 10);
-        y = cy + Math.sin(a * 0.5 + t * 0.3) * 34 * (0.4 + v * 0.6);
-      } else {                                    /* rete */
-        const a = u * 6.28, d = Math.sqrt(v) * 82;
-        x = cx + Math.cos(a) * d; y = cy + Math.sin(a) * d * 0.46;
+        const x = cx + Math.cos(a) * (RX - 6 - v * 9) * soffio;
+        const y = cy + Math.sin(a * 0.5 + t * 0.3) * (RY - 8) * (0.4 + v * 0.6) * soffio;
+        if (dentro(x, y) > 1) continue;
+        sc.punto(x, y, tinta(w));
       }
-      if (y < 18 || y > 148) continue;
-      const c = w > 0.86 ? C.ORO : w > 0.66 ? C.MALACHITE
-              : w > 0.42 ? C.LAPIS : w > 0.2 ? C.PORPORA : C.MINIO;
-      sc.punto(x, y, c);
+    } else {
+      /* La rete: nodi che si legano fra loro */
+      const nodi = [];
+      for (let i = 0; i < 26; i++) {
+        const a = r() * 6.28, d = Math.sqrt(r());
+        nodi.push([cx + Math.cos(a) * d * (RX - 8) * soffio,
+                   cy + Math.sin(a) * d * (RY - 6) * soffio]);
+      }
+      for (let i = 0; i < nodi.length; i++)
+        for (let j = i + 1; j < nodi.length; j++) {
+          const dx = nodi[i][0] - nodi[j][0], dy = (nodi[i][1] - nodi[j][1]) * 2.2;
+          if (dx * dx + dy * dy < 900)
+            sc.linea(nodi[i][0], nodi[i][1], nodi[j][0], nodi[j][1], C.PORPORA_CUPA);
+        }
+      for (let i = 0; i < N; i++) {
+        const u = r(), v = r(), w = r();
+        const a = u * 6.28, d = Math.sqrt(v);
+        const x = cx + Math.cos(a) * d * RX * soffio;
+        const y = cy + Math.sin(a) * d * RY * soffio;
+        if (dentro(x, y) > 1) continue;
+        sc.punto(x, y, tinta(w));
+      }
+      for (const [nx, ny] of nodi) {
+        sc.cerchio(nx, ny, 2, C.CALCE, true);
+        sc.alone(nx, ny, 6, C.ORO, 0.4);
+      }
+    }
+
+    /* l'astrolabio gira: l'anello d'ottone si accende e ruota */
+    if (gira !== null) {
+      const g = gira * 13, vv = Math.sin(gira * Math.PI);
+      for (let i = 0; i < 10; i++) {
+        const a = g + i * 0.628;
+        sc.punto(143 + Math.cos(a) * 12, 114 + Math.sin(a) * 12 * 0.5,
+                 i % 2 ? C.ORO : C.ORPIMENTO);
+      }
+      sc.alone(143, 114, 20 * vv, C.ORO, 0.34 * vv);
+    }
+
+    /* il libro si sfoglia: una falda chiara passa sulle pagine */
+    if (sfoglia !== null) {
+      const larga = (1 - Math.cos(sfoglia * Math.PI)) / 2 * 26;
+      sc.rettPieno(176 - larga / 2 + 13 - 13, 112, larga, 13, C.PERGAMENA);
+      sc.rettPieno(176 - 13, 112, 1, 13, C.OMBRA_TERRA);
+      sc.alone(176, 118, 16, C.CALCE, 0.2 * Math.sin(sfoglia * Math.PI));
+    }
+
+    /* i bracieri divampano di verde, tutti e due insieme */
+    if (fuoco !== null) {
+      const vv = Math.sin(fuoco * Math.PI);
+      for (const bx of [68, 250]) {
+        sc.alone(bx, 112, 14 + vv * 16, C.MALACHITE, 0.28 + vv * 0.4);
+        sc.alone(bx, 110, 5 + vv * 6, C.CALCE, 0.3 + vv * 0.4);
+        for (let i = 0; i < 10; i++) {
+          const su = ((t * 1.4 + i / 10) % 1);
+          sc.punto(bx + Math.sin(su * 7 + i) * (2 + su * 6), 110 - su * 34 * vv,
+                   su < 0.4 ? C.CALCE : C.MALACHITE);
+        }
+      }
     }
   },
 };
@@ -806,50 +984,119 @@ function muroScuro(sc) {
 /* ═══ 7 · LA SCHEDA — il profilo, come in un gioco di ruolo ══════ */
 const scheda = {
   id: 'scheda', nome: 'LA SCHEDA', num: '06',
-  /* il colpetto timbra la scheda, come un sigillo di ceralacca */
+  /* la candela nella nicchia a sinistra e la lucerna appesa a destra:
+     stanno fuori dalla scheda, quindi il dito ci arriva */
+  oggetti: [
+    { nome: 'candela',  x: 20,  y: 60, w: 34, h: 64 },
+    { nome: 'lucerna',  x: 258, y: 58, w: 40, h: 62 },
+  ],
+  vivi: {},
+  toccaOggetto(p) {
+    const o = preso(this.oggetti, p);
+    if (!o) return false;
+    this.vivi[o] = { t: 0 };
+    return true;
+  },
+  /* il colpetto altrove timbra la scheda, come un sigillo di ceralacca */
   colpetto(p, S) { this.timbro = { x: p.x, y: p.y, t: 0 }; },
-  fondo(sc) { muro(sc, 55); assi(sc, sc.h - 22); },
-  disegna(sc, S, t) {
-    const x = 12, y = 22, w = sc.w - 24, h = sc.h - 40;
+  fondo(sc) { if (!versa(sc, 'scheda')) { muro(sc, 55); assi(sc, sc.h - 22); } },
+  disegna(sc, S, t, dt) {
+    /* ── la pergamena ────────────────────────────────────────────
+       Sta sopra la nicchia scolpita del fondale e lascia fuori la
+       candela a sinistra, la lucerna a destra, la mensola dei rotoli
+       sopra e lo scrittoio sotto.
+
+       Il conto e' uno solo, dall'alto in basso, e in fondo c'e' una
+       verifica che grida in console se sfora. E' servita subito: la
+       prima disposizione, col ritratto sopra le barre, sforava di
+       nove pixel e l'inventario finiva mozzato — lo stesso difetto
+       che avevo gia' sistemato male una volta. Il ritratto e' alto 62
+       fissi: e' lui che non ci sta, e quindi le barre gli vanno a
+       fianco invece che sotto. */
+    const x = 56, y = 20, w = 200, h = 148;      /* 56..256 · 20..168 */
+    const M = 6;
+    const sx = x + M, dx = x + w - M;
     sc.rettPieno(x, y, w, h, C.PERGAMENA);
     sc.rett(x, y, w, h, C.OMBRA);
     sc.rett(x + 2, y + 2, w - 4, h - 4, C.DRAGO);
 
-    /* il ritratto: una figura di tre quarti, generata */
-    ritratto(sc, x + 12, y + 12, t);
+    /* il nome, in cima e per tutta la larghezza */
+    sc.testo(sx, y + 6, 'FABRIZIO MANA', C.DRAGO, { scala: 2 });
+    sc.testo(sx, y + 23, 'GRAFICO · VIDEO · SISTEMI AI', C.OMBRA);
+    sc.linea(sx, y + 34, dx, y + 34, C.DRAGO);
 
-    sc.testo(x + 70, y + 12, 'FABRIZIO MANA', C.DRAGO, { scala: 2 });
-    sc.testo(x + 70, y + 30, 'GRAFICO · VIDEO EDITOR · AI BUILDER', C.OMBRA);
-    sc.linea(x + 70, y + 40, x + w - 12, y + 40, C.DRAGO);
-
+    /* il ritratto a sinistra, le quattro abilita' a destra */
+    ritratto(sc, sx, y + 38, t);
     const ABIL = [
       ['IMMAGINE',   0.92, C.CINABRO],
       ['MONTAGGIO',  0.86, C.LAPIS],
       ['SISTEMI AI', 0.78, C.VERDERAME],
       ['CODICE',     0.71, C.PORPORA],
     ];
-    ABIL.forEach(([n, v, c], i) => {
-      const by = y + 48 + i * 14;
-      sc.testo(x + 70, by, n, C.OMBRA);
-      barra(sc, x + 138, by, 82, v, c, C.PERGAMENA);
-      sc.testo(x + 226, by, String(Math.round(v * 100)), C.DRAGO);
+    ABIL.forEach(([nome, v, c], i) => {
+      const by = y + 40 + i * 12;
+      sc.testo(sx + 62, by, nome, C.OMBRA);
+      barra(sc, sx + 126, by, 40, v, c, C.PERGAMENA);
+      sc.testo(sx + 172, by, String(Math.round(v * 100)), C.DRAGO);
     });
 
-    /* l'inventario: gli strumenti veri */
-    sc.testo(x + 12, y + 104, 'INVENTARIO', C.DRAGO);
+    let cy = y + 104;
+    sc.linea(sx, cy, dx, cy, C.DRAGO);
+    cy += 4;
+    sc.testo(sx, cy, 'INVENTARIO', C.DRAGO);
+    cy += 11;
+
+    /* L'inventario va a capo da solo invece di stare in colonne fisse.
+       In tre colonne uguali "AFTER EFFECTS" non ci stava — tredici
+       lettere sono 78 pixel e la colonna ne aveva 65 — e allargare la
+       scheda avrebbe coperto la candela e la lucerna. Cosi' quella
+       riga ne tiene due e le altre tre, e vengono tre righe invece di
+       quattro. */
     const INV = ['PHOTOSHOP', 'AFTER EFFECTS', 'PREMIERE', 'BLENDER',
                  'COMFYUI', 'OLLAMA', 'N8N', 'FIGMA'];
-    /* tre colonne e non quattro: a quattro "AFTER EFFECTS" finiva
-       addosso a "PREMIERE" — tredici lettere sono 78px, la colonna 68 */
-    INV.forEach((n, i) => {
-      /* tre righe da 10px a partire da y+114: cosi' l'ultima riga
-         finisce a y+134, dentro la scheda alta 140 — prima l'ultima
-         coppia di strumenti restava tagliata dal bordo */
-      const ix = x + 12 + (i % 3) * 88, iy = y + 114 + Math.floor(i / 3) * 10;
+    const LARGO = w - M * 2, PASSO = 8, VUOTO = 8;
+    let ix = sx, iy = cy;
+    for (const nome of INV) {
+      const largo = 6 + sc.misura(nome);
+      if (ix > sx && ix + largo > sx + LARGO) { ix = sx; iy += PASSO; }
       sc.punto(ix, iy + 3, C.ORO); sc.punto(ix + 1, iy + 2, C.ORO);
       sc.punto(ix + 1, iy + 4, C.ORO); sc.punto(ix + 2, iy + 3, C.ORO);
-      sc.testo(ix + 6, iy, n, C.OMBRA);
-    });
+      sc.testo(ix + 6, iy, nome, C.OMBRA);
+      ix += largo + VUOTO;
+    }
+    /* 7 e' l'altezza di una riga di testo; M il margine di sotto */
+    const sfora = (iy + 7) - (y + h - M);
+    if (sfora > 0) console.warn("scheda: l'inventario sfora di", sfora, 'pixel');
+
+    /* ── la stanza intorno ───────────────────────────────────────── */
+    const V = this.vivi;
+    /* la candela nella nicchia si spegne e torna */
+    const cq = corsa(V, 'candela', 2.4, dt);
+    if (cq !== null) {
+      if (cq < 0.72) {
+        smorza(sc, 45, 88, 7);
+        for (let k = 0; k < 10; k++) {
+          const f = k / 10, yy = 82 - f * 22 - cq * 10;
+          if (yy < 4) break;
+          if ((k + ((t * 15) | 0)) % 3)
+            sc.punto(45 + Math.sin(f * 5 + t * 2) * (1 + f * 3), yy,
+                     f < 0.4 ? C.PIETRA : C.OMBRA);
+        }
+      } else {
+        const s0 = (cq - 0.72) / 0.28;
+        sc.alone(45, 88, 12 * s0, C.ORPIMENTO, 0.55 * s0);
+        sc.alone(45, 88, 5 * s0, C.CALCE, 0.7 * s0);
+      }
+    }
+    /* la lucerna appesa dondola: la luce va avanti e indietro */
+    const lq = corsa(V, 'lucerna', 2.2, dt);
+    if (lq !== null) {
+      const d = Math.sin(lq * 17) * (1 - lq) * 7;
+      sc.alone(268 + d, 92, 24, C.ORPIMENTO, 0.34);
+      sc.alone(268 + d, 92, 9, C.CALCE, 0.5);
+      sc.linea(268, 40, 268 + d, 86, C.OMBRA_TERRA);
+    }
+
     cartiglio(sc, 'PROFILO · CHI STA NELLA TORRE', C.ORPIMENTO);
     /* il sigillo di ceralacca, dove hai toccato */
     if (this.timbro) {

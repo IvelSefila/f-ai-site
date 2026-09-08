@@ -22,6 +22,13 @@ const PROVE = [
   ['forgia', 'la fornace',            48,  92, [22, 62, 54, 56], 700],
   ['forgia', 'gli utensili',         135,  60, [96, 44, 78, 52], 500],
   ['forgia', 'la finestra',          258,  60, [218, 8, 82, 60], 200],
+  ['bilancia', 'il piatto della mano',    100, 100, [74, 82, 58, 46], 300],
+  ['bilancia', 'il piatto della macchina', 206, 102, [178, 84, 56, 42], 300],
+  ['materia', "l'astrolabio",        142, 114, [126, 100, 36, 30], 500],
+  ['materia', 'il libro',            176, 118, [160, 108, 34, 20], 300],
+  ['materia', 'i bracieri',           68, 112, [54, 84, 30, 32], 500],
+  ['scheda', 'la candela',            45,  90, [26, 62, 30, 44], 700],
+  ['scheda', 'la lucerna',           270,  90, [252, 70, 36, 40], 400],
 ];
 
 const b = await chromium.launch({ executablePath: 'C:/Users/fabri/AppData/Local/ms-playwright/chromium-1228/chrome-win64/chrome.exe' });

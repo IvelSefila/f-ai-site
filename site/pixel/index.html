@@ -6,7 +6,7 @@
 <title>F/AI — la torre</title>
 <meta name="description" content="Il portfolio di Fabrizio Mana in pixel art: otto stanze da sfogliare, disegnate a codice con quindici pigmenti alchemici. Grafica pubblicitaria, video, social e sistemi AI.">
 <link rel="icon" href="../favicon.svg">
-<link rel="stylesheet" href="pixel.css?v=20260907-185106">
+<link rel="stylesheet" href="pixel.css?v=20260908-120831">
 </head>
 <body>
 <a class="salta" href="#s-bilancia">Vai al contenuto</a>
@@ -31,10 +31,10 @@
       <h1>Creo immagini.<br>Dirigo il movimento.<br><em>Progetto sistemi AI.</em></h1>
       <p class="guida">Grafico pubblicitario, video editor e AI builder. Trasformo campagne,
         video e contenuti social in sistemi creativi coerenti.</p>
-      <p>Questo portfolio è un gioco in otto stanze. I fondali nascono generati e
-        poi rimappati su <strong>sessantaquattro pigmenti</strong>: tutto quello che
-        si muove — fiamme, nuvole, pagine, scintille — lo disegna questo browser,
-        adesso, un pixel alla volta.</p>
+      <p>Questo portfolio è un gioco in otto stanze. <strong>Tutte e otto</strong>
+        nascono da un fondale generato e poi rimappato su <strong>sessantaquattro
+        pigmenti</strong>: tutto quello che si muove — fiamme, nuvole, pagine,
+        scintille — lo disegna questo browser, adesso, un pixel alla volta.</p>
       <p><strong>Tocca le cose.</strong> La nuvola copre la luna, la finestra della
         torre si oscura, e in ogni stanza c&rsquo;è qualcosa che risponde al dito.</p>
       <p class="giu">Scorri col dito ↓</p>
@@ -53,6 +53,8 @@
                aria-describedby="levaVal">
         <output class="leva__val" id="levaVal">30% macchina</output>
       </label>
+      <p class="piccolo"><strong>Tocca un piatto</strong> della bilancia e ci appoggi
+        un peso: il quadro appeso in mezzo si rifà con un&rsquo;altra materia.</p>
     </div>
   </section>
 
@@ -120,7 +122,8 @@
       <p id="descMateria">La <b>griglia</b> è come si legge una pagina: tutto su un asse,
         niente profondità.</p>
       <p class="piccolo">Millequattrocento punti. Non è una dissolvenza fra tre immagini:
-        è una sola materia che cambia ordine.</p>
+        è una sola materia che cambia ordine. <strong>Tocca l&rsquo;astrolabio</strong> e
+        la nuvola respira, tocca il libro e si sfoglia, tocca un braciere e divampa.</p>
     </div>
   </section>
 
@@ -133,6 +136,8 @@
         attività ripetitive in flussi controllabili.</p>
       <p><strong>Il valore non è «usare l&rsquo;AI», ma sapere quale usare, quando evitarla
         e come dirigere il risultato.</strong></p>
+      <p class="piccolo"><strong>Tocca la candela</strong> nella nicchia e si spegne,
+        tocca la lucerna appesa e dondola. Sulla scheda, un sigillo di ceralacca.</p>
     </div>
   </section>
 
@@ -176,9 +181,9 @@
 
 </main>
 
-<script type="module" src="gioco.js?v=20260907-185106"></script>
+<script type="module" src="gioco.js?v=20260908-120831"></script>
 <script type="module">
-  import { TAVOLOZZA } from './tavolozza.js?v=20260907-185106';
+  import { TAVOLOZZA } from './tavolozza.js?v=20260908-120831';
   document.querySelector('#listaPigmenti').innerHTML = TAVOLOZZA
     .map(([hex, nome, ruolo]) =>
       `<li><i style="--p:${hex}"></i><b>${nome}</b><span>${ruolo}</span></li>`)

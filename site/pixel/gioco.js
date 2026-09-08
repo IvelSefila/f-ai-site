@@ -12,10 +12,10 @@
  * il dito ci scivola sopra.
  * ═══════════════════════════════════════════════════════════════════ */
 
-import { Schermo } from './motore.js?v=20260907-185106';
-import { C, VERSO_ORO } from './tavolozza.js?v=20260907-185106';
-import { Scintille } from './scena.js?v=20260907-185106';
-import { STANZE, perId } from './stanze.js?v=20260907-185106';
+import { Schermo } from './motore.js?v=20260908-120831';
+import { C, VERSO_ORO } from './tavolozza.js?v=20260908-120831';
+import { Scintille } from './scena.js?v=20260908-120831';
+import { STANZE, perId } from './stanze.js?v=20260908-120831';
 
 export const LARGO = 320, ALTO = 180;
 /* La scala del fotogramma. Si disegna sempre a 320×180 — le stanze
@@ -354,10 +354,14 @@ for (const ev of ['pointerup', 'pointercancel'])
     const st = STANZE[Math.max(0, S.stanza)];
     trasmuta(p.x, p.y);
     scintille.soffia(p.x, p.y, 16, (p.x * 977 + p.y * 31 + Date.now()) | 0);
-    /* prima gli oggetti. Se uno se lo prende il tocco finisce li';
-       altrimenti prosegue e la stanza fa la sua scelta di sempre. */
+    /* Prima gli oggetti. Se uno se lo prende il tocco finisce li';
+       altrimenti prosegue e la stanza fa la sua scelta di sempre.
+       Chi risponde 'aggiorna' se lo prende ma ha cambiato uno stato che
+       la carta accanto deve seguire — i piatti della bilancia muovono
+       la leva. */
     const suOggetto = st.toccaOggetto ? st.toccaOggetto(p, S) : false;
-    if (!suOggetto && st.colpetto) st.colpetto(p, S, aggiorna);
+    if (suOggetto === 'aggiorna') aggiorna();
+    else if (!suOggetto && st.colpetto) st.colpetto(p, S, aggiorna);
   });
 
 /* quando una stanza cambia stato da sé, la carta deve seguirla */

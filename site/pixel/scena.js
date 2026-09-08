@@ -9,8 +9,8 @@
  * la disegna questa pagina adesso" — portato dove si vede di più.
  * ═══════════════════════════════════════════════════════════════════ */
 
-import { C, RAMPE } from './tavolozza.js?v=20260907-185106';
-import { caso, rumore1 } from './motore.js?v=20260907-185106';
+import { C, RAMPE } from './tavolozza.js?v=20260908-120831';
+import { caso, rumore1 } from './motore.js?v=20260908-120831';
 
 /* i sigilli: sette glifi alchemici, 7×7, disegnati a mano.
    Sole, luna, mercurio, sale, zolfo, acqua, fuoco. */
@@ -155,11 +155,24 @@ export function torre(sc, x, base, seme) {
 }
 
 /* ── le rune che galleggiano ──────────────────────────────────────── */
-export function rune(sc, t, quante = 7) {
+/* `evita` sono cerchi in cui le rune non devono cadere, in coordinate
+   logiche: [cx, cy, raggio]. Da quando la soglia ha il suo fondale
+   dipinto, le posizioni tirate a caso finivano due volte su tre sopra
+   una delle due lune, e li' una runa non e' un sigillo che fluttua nel
+   buio: e' una macchiolina su un disco bianco. */
+export function rune(sc, t, quante = 7, evita = []) {
   const r = caso(4821);
+  const libero = (x, y) => evita.every(([cx, cy, rr]) =>
+    (x - cx) ** 2 + (y - cy) ** 2 > rr * rr);
   for (let i = 0; i < quante; i++) {
-    const bx = 20 + r() * (sc.w - 46);
-    const by = 26 + r() * (sc.h * 0.5);
+    let bx = 0, by = 0;
+    /* al massimo trenta tentativi, poi tengo l'ultimo: meglio una runa
+       fuori posto che un ciclo che non finisce */
+    for (let prova = 0; prova < 30; prova++) {
+      bx = 20 + r() * (sc.w - 46);
+      by = 26 + r() * (sc.h * 0.5);
+      if (libero(bx, by)) break;
+    }
     const vel = 0.25 + r() * 0.5, amp = 5 + r() * 9;
     const x = Math.round(bx + Math.sin(t * vel + i) * amp);
     const y = Math.round(by + Math.cos(t * vel * 0.7 + i * 2) * amp * 0.6);

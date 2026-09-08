@@ -123,7 +123,15 @@ for (const f of file) {
   }, { dati, PIGMENTI, LARGO, ALTO });
 
   /* impacchetto in base64: 57.600 byte diventano 76.800 caratteri,
-     leggibili dal browser senza una richiesta in più */
+     leggibili dal browser senza una richiesta in più.
+
+     Con otto fondali il file arriva a 5,3 MB, e su un telefono si
+     sente. Comprimerlo con deflate lo porterebbe a 1,45 MB — misurato,
+     non stimato — ma srotolarlo nel browser si puo' fare solo in modo
+     asincrono, e i fondali servono dentro il ciclo di disegno. Vuol
+     dire cambiare sfondo() e la cache dei fondali in gioco.js, cioe'
+     toccare il cuore del gioco: e' un lavoro a parte, non da infilare
+     in coda a un altro. */
   risultati[nome] = Buffer.from(Uint8Array.from(r.indici)).toString('base64');
   const usati = r.conta.filter(c => c > 0).length;
   const top = r.conta.map((c, i) => [c, i]).sort((a, b) => b[0] - a[0]).slice(0, 3)
