@@ -1,7 +1,7 @@
 import { PRESET, applicaGriglia, contenitoreDi, nomeContenitore,
-         mostraGriglia, grigliaVisibile, initGriglia } from './griglia.js?v=20260909-105737';
-import { initOrdine, pezzoDi, spostaDi, rimetti, ordineCambiato,
-         iniziaTrascino, traTrascinando } from './sposta.js?v=20260909-105737';
+         mostraGriglia, grigliaVisibile, initGriglia } from './griglia.js?v=20260909-120130';
+import { initOrdine, bersaglioDi, spostaDi, puoAndare, rimetti, ordineCambiato,
+         iniziaTrascino, traTrascinando } from './sposta.js?v=20260909-120130';
 
 /* ═══════════════════════════════════════════════════════════════════
  * PALETTE — tieni premuto su un riquadro e scegli il colore del sito
@@ -103,12 +103,11 @@ function costruisciPannello() {
         </button>`).join('')}
     </div>
     <div class="pal__sez pal__sez--pos">
-      <p class="pal__tit mono">Posizione nel gruppo</p>
-      <p class="pal__sub" style="margin-inline:0">Tieni premuto e <b>trascina</b> per spostarlo.
-        Oppure di qui, un posto per volta.</p>
+      <p class="pal__tit mono" data-pos-tit>Posizione</p>
+      <p class="pal__sub" style="margin-inline:0" data-pos-nota></p>
       <div class="pal__pos">
-        <button type="button" class="btn btn--sm" data-pos="-1">← Indietro</button>
-        <button type="button" class="btn btn--sm" data-pos="1">Avanti →</button>
+        <button type="button" class="btn btn--sm" data-pos="-1"></button>
+        <button type="button" class="btn btn--sm" data-pos="1"></button>
         <button type="button" class="btn btn--sm" data-pos-reset>Rimetti come prima</button>
       </div>
     </div>
@@ -167,21 +166,34 @@ function costruisciPannello() {
   /* le frecce fanno la stessa cosa del trascinamento, per chi il
      trascinamento non lo puo' fare: stesse funzioni, stessa memoria */
   const segnaPos = () => {
-    const p = d.pezzo;
-    d.querySelector('.pal__sez--pos').hidden = !p;
-    if (!p) return;
-    const pezzi = [...p.gruppo.children].filter(e => e.nodeType === 1);
-    const i = pezzi.indexOf(p.pezzo);
-    d.querySelector('[data-pos="-1"]').disabled = i <= 0;
-    d.querySelector('[data-pos="1"]').disabled = i >= pezzi.length - 1;
-    d.querySelector('[data-pos-reset]').disabled = !ordineCambiato(p.gruppo);
+    const b = d.bersaglio;
+    d.querySelector('.pal__sez--pos').hidden = !b;
+    if (!b) return;
+    const sez = b.tipo === 'sezione';
+    d.querySelector('[data-pos-tit]').textContent =
+      sez ? 'Posizione nella pagina' : 'Posizione nel gruppo';
+    /* Fra sezioni non si infila, si SCAMBIA con una dello stesso tono:
+       e' quello che tiene in piedi l'alternanza chiaro/scuro, e va
+       detto qui perche' altrimenti "Su" sembra spostare di un posto e
+       invece salta la vicina di tono sbagliato. */
+    d.querySelector('[data-pos-nota]').innerHTML = sez
+      ? 'Tieni premuto e <b>trascina</b>: la pagina si richiude in una mappa. '
+        + 'Una sezione si scambia con un’altra dello stesso tono — '
+        + 'chiaro e scuro devono restare alternati.'
+      : 'Tieni premuto e <b>trascina</b> per spostarlo. Oppure di qui, un posto per volta.';
+    const giu = d.querySelector('[data-pos="1"]'), su = d.querySelector('[data-pos="-1"]');
+    su.textContent  = sez ? '↑ Su'  : '← Indietro';
+    giu.textContent = sez ? '↓ Giù' : 'Avanti →';
+    su.disabled  = !puoAndare(b, -1);
+    giu.disabled = !puoAndare(b, 1);
+    d.querySelector('[data-pos-reset]').disabled = !ordineCambiato(b.gruppo);
   };
   d.querySelectorAll('[data-pos]').forEach(b => b.addEventListener('click', () => {
-    if (d.pezzo) spostaDi(d.pezzo.pezzo, +b.dataset.pos);
+    if (d.bersaglio) spostaDi(d.bersaglio, +b.dataset.pos);
     segnaPos();
   }));
   d.querySelector('[data-pos-reset]').addEventListener('click', () => {
-    if (d.pezzo) rimetti(d.pezzo.gruppo);
+    if (d.bersaglio) rimetti(d.bersaglio.gruppo);
     segnaPos();
   });
   d.segnaPos = segnaPos;
@@ -196,7 +208,7 @@ let pannello = null;
 export function apriPannello(box = null) {
   pannello ||= costruisciPannello();
   pannello.contenitore = contenitoreDi(box);
-  pannello.pezzo = pezzoDi(box);
+  pannello.bersaglio = bersaglioDi(box);
   pannello.segna();
   pannello.segnaGr();
   pannello.segnaPos();
@@ -206,7 +218,17 @@ export function apriPannello(box = null) {
 }
 
 /* ── la pressione lunga ──────────────────────────────────────────── */
-const RIQUADRI = '.work, .offerta__card, .lab__card, .bench__panel, .dossier, .metrics, .formats figure';
+/* Tutto quello che si puo' prendere in mano. L'ordine non conta:
+   closest() restituisce comunque il piu' vicino, quindi il dito su una
+   carta prende la carta e non la sezione che la contiene.
+
+   `main > section` in fondo alla lista vuol dire che ogni punto della
+   pagina e' preso da qualcosa: dove non c'e' una carta si muove la
+   sezione intera. Le due fisse — apertura e contatto — passano di qui
+   ma sposta.js le rifiuta, quindi aprono solo il pannello. */
+const RIQUADRI = '.work, .offerta__card, .lab__card, .bench__panel, .bench__stage,'
+               + ' .dossier, .metrics, .formats figure, .pipe li, .stack__group,'
+               + ' main > section';
 const ATTESA = 550;       /* ms: sotto i 400 scatta per sbaglio scorrendo */
 const TOLLERANZA = 10;    /* px di scorrimento oltre i quali non è più una pressione */
 
@@ -244,7 +266,7 @@ function armaPressioneLunga() {
       if (navigator.vibrate) navigator.vibrate(12);
       timer = null;
       staccato = box;
-      mobile = pezzoDi(box);          /* null se non sta in un gruppo: solo pannello */
+      mobile = bersaglioDi(box);      /* null se e' una delle due fisse: solo pannello */
       box.classList.add('pal-staccato');
     }, ATTESA);
   }, { passive: true });
@@ -256,10 +278,9 @@ function armaPressioneLunga() {
     const via = Math.hypot(e.clientX - x0, e.clientY - y0);
     if (timer) { if (via > TOLLERANZA) annulla(); return; }
     if (traTrascinando() || !mobile || via <= STACCO) return;
-    const { pezzo, gruppo } = mobile;
     staccato.classList.remove('pal-staccato');
     staccato = null;
-    iniziaTrascino(pezzo, gruppo, e);
+    iniziaTrascino(mobile, e);
   }, { passive: true });
 
   addEventListener('pointerup', () => {
@@ -292,8 +313,9 @@ function accenno() {
     ob.disconnect();
     const p = document.createElement('div');
     p.className = 'pal-accenno mono';
-    p.innerHTML = `Tieni premuto su un riquadro: trascina per spostarlo,
-      lascia per il colore e l’impaginazione.
+    /* corto: sul telefono questa bolla sta sopra il contenuto, e tre
+       righe di spiegazione coprono mezza pagina */
+    p.innerHTML = `Tieni premuto: <b>trascina</b> per spostare, lascia per il colore.
       <button type="button" aria-label="Ho capito">✕</button>`;
     document.body.appendChild(p);
     requestAnimationFrame(() => p.classList.add('in'));
@@ -325,6 +347,13 @@ export function initPalette() {
   else document.documentElement.dataset.palette = 'smeraldo';
   initGriglia();
   initOrdine();
+  /* Con ?probe=1 le funzioni di spostamento si possono chiamare da
+     fuori. Serve alle prove per fare cento mosse a caso e poi guardare
+     se la pagina regge: passando dai bottoni del pannello ci vorrebbe
+     un'apertura per mossa, e il fuzz non si farebbe. Stessa
+     convenzione di hero.js. */
+  if (new URLSearchParams(location.search).has('probe'))
+    window.__sposta = { bersaglioDi, spostaDi, puoAndare, rimetti, ordineCambiato };
   armaTestata();
   armaPressioneLunga();
   accenno();

@@ -12,12 +12,12 @@
  * il dito ci scivola sopra.
  * ═══════════════════════════════════════════════════════════════════ */
 
-import { Schermo } from './motore.js?v=20260909-105737';
-import { C } from './tavolozza.js?v=20260909-105737';
-import { Scintille } from './scena.js?v=20260909-105737';
-import { STANZE, perId } from './stanze.js?v=20260909-105737';
-import { scongela } from './sfondi.js?v=20260909-105737';
-import { scongelaBilancia } from './fotogrammi.js?v=20260909-105737';
+import { Schermo } from './motore.js?v=20260909-120130';
+import { C } from './tavolozza.js?v=20260909-120130';
+import { Scintille } from './scena.js?v=20260909-120130';
+import { STANZE, perId } from './stanze.js?v=20260909-120130';
+import { scongela } from './sfondi.js?v=20260909-120130';
+import { scongelaBilancia } from './fotogrammi.js?v=20260909-120130';
 
 export const LARGO = 320, ALTO = 180;
 /* La scala del fotogramma. Si disegna sempre a 320×180 — le stanze

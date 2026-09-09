@@ -2,10 +2,10 @@
 * app.js — la sessione. Tiene il filo fra le prove, parla, misura,
 * e alla fine scrive il dossier. Nessuna libreria.
 * ═══════════════════════════════════════════════════════════════════ */
-import { initHero } from './hero.js?v=20260909-105737';
-import { initPalette } from './palette.js?v=20260909-105737';
-import { keyVisual, timeline, radar, MODES, rng, leggiColori} from './engine.js?v=20260909-105737';
-import { initBrief } from './brief.js?v=20260909-105737';
+import { initHero } from './hero.js?v=20260909-120130';
+import { initPalette } from './palette.js?v=20260909-120130';
+import { keyVisual, timeline, radar, MODES, rng, leggiColori} from './engine.js?v=20260909-120130';
+import { initBrief } from './brief.js?v=20260909-120130';
 
 const $ = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => [...r.querySelectorAll(s)];

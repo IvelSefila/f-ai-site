@@ -157,7 +157,10 @@ console.log('── il pannello ──');
   await p.keyboard.press('Escape');
   await dorme(p, 200);
 
-  /* un riquadro che non sta in nessun gruppo */
+  /* Un riquadro che non sta in nessun gruppo: il dossier. Da quando si
+     muove tutto, sotto di lui c'e' comunque qualcosa da spostare — la
+     sezione che lo contiene — e il pannello lo dice. Prima questa prova
+     chiedeva l'opposto, ed era giusta finche' le sezioni stavano ferme. */
   await inquadra(p, '.dossier', 0);
   const d = await presa(p, '.dossier', 0);
   await p.mouse.move(d.x, d.y);
@@ -165,8 +168,36 @@ console.log('── il pannello ──');
   await dorme(p, 300);
   dice(await p.evaluate(() => !!document.getElementById('palPanel')?.open),
        'anche fuori dai gruppi il pannello si apre');
+  dice(await p.evaluate(() => document.querySelector('[data-pos-tit]').textContent)
+         === 'Posizione nella pagina',
+       'e offre di spostare la sezione che lo contiene');
+  await p.keyboard.press('Escape');
+  await dorme(p, 200);
+
+  /* Le due fisse. L'apertura la provo dal codice e non col dito: quasi
+     tutta la sua superficie e' il canvas del confine, e sul canvas il
+     gesto lascia la precedenza al canvas — giustamente, ma cosi' la
+     prova misurerebbe quello invece della regola. Il contatto invece
+     e' testo, e li' il dito ci arriva. */
+  dice(await p.evaluate(() => !window.__sposta.bersaglioDi(document.getElementById('top'))
+                           && !window.__sposta.bersaglioDi(document.getElementById('contatto'))),
+       'apertura e contatto non sono bersagli: nessuno le sposta');
+
+  await inquadra(p, '#contatto', 0);
+  const k = await p.evaluate(() => {
+    const r = document.getElementById('contatto').getBoundingClientRect();
+    return { x: Math.round(r.left + 24), y: Math.round(Math.max(90, r.top + 24)) };
+  });
+  await p.mouse.move(k.x, k.y);
+  await p.mouse.down(); await dorme(p, 750); await p.mouse.up();
+  await dorme(p, 350);
+  dice(await p.evaluate(() => !!document.getElementById('palPanel')?.open),
+       'sul contatto il pannello si apre');
   dice(await p.evaluate(() => document.querySelector('.pal__sez--pos').hidden),
-       'ma senza i comandi di posizione, che non avrebbero dove mandarlo');
+       'ma senza i comandi di posizione: e’ fisso');
+  await p.keyboard.press('Escape');
+  await dorme(p, 200);
+
   dice(p.errs.length === 0, `nessun errore${p.errs.length ? ': ' + p.errs[0] : ''}`);
   await ctx.close();
 }

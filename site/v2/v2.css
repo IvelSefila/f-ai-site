@@ -1355,6 +1355,59 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border:0;border-radiu
 }
 /* il buco dove tornerebbe se lo lasciassi qui */
 .ord-gruppo{outline:1px dashed var(--em-dim);outline-offset:10px;border-radius:4px}
+body.ord-mappa .ord-gruppo{outline:none}
+
+/* ── LA MAPPA DELLE SEZIONI ───────────────────────────────────────
+   Una sezione e' alta fra 500 e 4800 px: trascinarla mentre e' aperta
+   non si puo' fare ne' su un telefono ne' su un monitor. Appena una
+   sezione si stacca, la pagina si richiude in una banda per sezione —
+   numero, nome, tono — e tutte insieme stanno in uno schermo di
+   telefono. Da 12 bande a 44 px con i vuoti fanno circa 620 px.
+
+   La specificita' qui va guardata: la cucitura fra i blocchi e'
+   scritta `.sec--chiara + .sec` (0,2,0) e vince su `main > section`
+   (0,1,2). Con l'id — che ce l'hanno tutte — si arriva a (0,2,3) e la
+   mappa vince senza un solo !important. */
+body.ord-mappa{overflow-x:hidden}
+body.ord-mappa main{
+  display:grid;gap:7px;
+  max-width:min(1000px,100%);margin-inline:auto;
+  padding:calc(var(--bar) + 14px) 12px 18px}
+body.ord-mappa main > section[id]{
+  display:flex;align-items:center;
+  height:clamp(38px,5.4vh,52px);min-height:0;
+  margin:0;padding:0 14px;
+  border:1px solid var(--rule);border-radius:12px;box-shadow:none;
+  transition:opacity .18s var(--ease),outline-color .18s var(--ease)}
+body.ord-mappa main > section[id] > *{display:none}
+body.ord-mappa main > section[id] > .ord-banda{display:flex}
+
+.ord-banda{display:none;width:100%;align-items:center;gap:12px;
+  font-size:12px;letter-spacing:.08em;overflow:hidden}
+.ord-banda b{color:var(--em);min-width:20px;font-variant-numeric:tabular-nums}
+.ord-banda span{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+  color:var(--ink);font-weight:600;text-transform:uppercase}
+.ord-banda i{font-style:normal;color:var(--muted);font-size:10px;text-transform:uppercase}
+
+/* dove si puo' atterrare, e dove no. Il rifiuto si vede PRIMA di
+   sbagliare: le sezioni dell'altro tono, e le due fisse, si spengono. */
+body.ord-mappa main > section[id].ord-si{outline:1px solid var(--em);outline-offset:-1px}
+body.ord-mappa main > section[id].ord-no{opacity:.32}
+/* la banda in mano deve staccarsi dalle altre buone, che hanno gia'
+   il filo verde: un anello pieno invece di un filo, e un'ombra che si
+   vede anche sotto una banda chiara */
+body.ord-mappa main > section[id].ord-preso{
+  outline:none;
+  box-shadow:0 0 0 2px var(--em), 0 18px 40px rgba(0,0,0,.6)}
+
+/* ── IL BANCO SPECCHIATO ──────────────────────────────────────────
+   Le due colonne di un banco sono 1,42fr e 0,58fr. Scambiando la scena
+   col pannello senza scambiare le colonne, il canvas finirebbe in
+   300 px e il testo largo il doppio: non e' una variante, e' un
+   errore. Con le colonne che seguono, il banco e' specchiato. */
+@media(min-width:1000px){
+  .bench[data-ord-specchio]{grid-template-columns:minmax(300px,.58fr) minmax(0,1.42fr)}
+}
 body.ord-in-corso{cursor:grabbing;-webkit-user-select:none;user-select:none}
 body.ord-in-corso *{cursor:grabbing !important}
 
