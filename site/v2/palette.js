@@ -1,5 +1,7 @@
 import { PRESET, applicaGriglia, contenitoreDi, nomeContenitore,
-         mostraGriglia, grigliaVisibile, initGriglia } from './griglia.js?v=20260908-202839';
+         mostraGriglia, grigliaVisibile, initGriglia } from './griglia.js?v=20260909-105737';
+import { initOrdine, pezzoDi, spostaDi, rimetti, ordineCambiato,
+         iniziaTrascino, traTrascinando } from './sposta.js?v=20260909-105737';
 
 /* ═══════════════════════════════════════════════════════════════════
  * PALETTE — tieni premuto su un riquadro e scegli il colore del sito
@@ -100,6 +102,16 @@ function costruisciPannello() {
           <span>${p.nota}</span>
         </button>`).join('')}
     </div>
+    <div class="pal__sez pal__sez--pos">
+      <p class="pal__tit mono">Posizione nel gruppo</p>
+      <p class="pal__sub" style="margin-inline:0">Tieni premuto e <b>trascina</b> per spostarlo.
+        Oppure di qui, un posto per volta.</p>
+      <div class="pal__pos">
+        <button type="button" class="btn btn--sm" data-pos="-1">← Indietro</button>
+        <button type="button" class="btn btn--sm" data-pos="1">Avanti →</button>
+        <button type="button" class="btn btn--sm" data-pos-reset>Rimetti come prima</button>
+      </div>
+    </div>
     <div class="pal__sez">
       <p class="pal__tit mono">Griglia · <span data-gr-nome>questo gruppo</span></p>
       <p class="pal__sub" style="margin-inline:0">Dodici colonne invisibili sotto tutto il
@@ -115,7 +127,7 @@ function costruisciPannello() {
       </label>
     </div>
     <div class="pal__piede">
-      <span class="mono">Tieni premuto su un riquadro per riaprire</span>
+      <span class="mono">Tieni premuto su un riquadro: trascina, o lascia per riaprire</span>
       <button type="button" class="btn btn--sm" data-pal-chiudi>Chiudi</button>
     </div>`;
   document.body.appendChild(d);
@@ -152,6 +164,28 @@ function costruisciPannello() {
   vedi.addEventListener('change', () => mostraGriglia(vedi.checked));
   d.segnaGr = segnaGr; d.vedi = vedi;
 
+  /* le frecce fanno la stessa cosa del trascinamento, per chi il
+     trascinamento non lo puo' fare: stesse funzioni, stessa memoria */
+  const segnaPos = () => {
+    const p = d.pezzo;
+    d.querySelector('.pal__sez--pos').hidden = !p;
+    if (!p) return;
+    const pezzi = [...p.gruppo.children].filter(e => e.nodeType === 1);
+    const i = pezzi.indexOf(p.pezzo);
+    d.querySelector('[data-pos="-1"]').disabled = i <= 0;
+    d.querySelector('[data-pos="1"]').disabled = i >= pezzi.length - 1;
+    d.querySelector('[data-pos-reset]').disabled = !ordineCambiato(p.gruppo);
+  };
+  d.querySelectorAll('[data-pos]').forEach(b => b.addEventListener('click', () => {
+    if (d.pezzo) spostaDi(d.pezzo.pezzo, +b.dataset.pos);
+    segnaPos();
+  }));
+  d.querySelector('[data-pos-reset]').addEventListener('click', () => {
+    if (d.pezzo) rimetti(d.pezzo.gruppo);
+    segnaPos();
+  });
+  d.segnaPos = segnaPos;
+
   d.querySelector('[data-pal-chiudi]').addEventListener('click', () => d.close());
   d.addEventListener('click', e => { if (e.target === d) d.close(); });
   d.segna = segna;
@@ -162,8 +196,10 @@ let pannello = null;
 export function apriPannello(box = null) {
   pannello ||= costruisciPannello();
   pannello.contenitore = contenitoreDi(box);
+  pannello.pezzo = pezzoDi(box);
   pannello.segna();
   pannello.segnaGr();
+  pannello.segnaPos();
   pannello.vedi.checked = grigliaVisibile();
   if (!pannello.open) pannello.showModal();
   pannello.querySelector(`[data-pal="${attiva}"]`)?.focus();
@@ -174,13 +210,25 @@ const RIQUADRI = '.work, .offerta__card, .lab__card, .bench__panel, .dossier, .m
 const ATTESA = 550;       /* ms: sotto i 400 scatta per sbaglio scorrendo */
 const TOLLERANZA = 10;    /* px di scorrimento oltre i quali non è più una pressione */
 
+/* Il gesto ha tre tempi, non due, ed è quello delle icone del
+   telefono: si preme, dopo mezzo secondo il riquadro SI STACCA — una
+   vibrazione, si solleva — e da lì in poi decide il dito. Se muovi,
+   stai trascinando. Se lasci fermo, si apre il pannello.
+
+   Prima il pannello si apriva da solo allo scadere del mezzo secondo.
+   Aprirlo al rilascio costa niente a chi voleva il colore (il dito lo
+   alza comunque) e libera il movimento, che altrimenti non avrebbe
+   avuto un gesto suo senza toglierne uno. */
+const STACCO = 8;         /* px oltre i quali il riquadro staccato sta viaggiando */
+
 function armaPressioneLunga() {
-  let timer = null, x0 = 0, y0 = 0, bersaglio = null;
+  let timer = null, x0 = 0, y0 = 0, bersaglio = null, staccato = null, mobile = null;
 
   const annulla = () => {
     clearTimeout(timer); timer = null;
     bersaglio?.classList.remove('pal-attesa');
-    bersaglio = null;
+    staccato?.classList.remove('pal-staccato');
+    bersaglio = staccato = mobile = null;
   };
 
   addEventListener('pointerdown', e => {
@@ -194,18 +242,35 @@ function armaPressioneLunga() {
     timer = setTimeout(() => {
       box.classList.remove('pal-attesa');
       if (navigator.vibrate) navigator.vibrate(12);
-      apriPannello(box);
-      timer = null; bersaglio = null;
+      timer = null;
+      staccato = box;
+      mobile = pezzoDi(box);          /* null se non sta in un gruppo: solo pannello */
+      box.classList.add('pal-staccato');
     }, ATTESA);
   }, { passive: true });
 
   addEventListener('pointermove', e => {
-    if (!timer) return;
-    if (Math.hypot(e.clientX - x0, e.clientY - y0) > TOLLERANZA) annulla();
+    /* questo scatta a ogni spostamento del puntatore: prima le
+       domande che costano zero, poi la radice quadrata */
+    if (!timer && !staccato) return;
+    const via = Math.hypot(e.clientX - x0, e.clientY - y0);
+    if (timer) { if (via > TOLLERANZA) annulla(); return; }
+    if (traTrascinando() || !mobile || via <= STACCO) return;
+    const { pezzo, gruppo } = mobile;
+    staccato.classList.remove('pal-staccato');
+    staccato = null;
+    iniziaTrascino(pezzo, gruppo, e);
   }, { passive: true });
 
-  for (const ev of ['pointerup', 'pointercancel', 'scroll', 'wheel'])
-    addEventListener(ev, annulla, { passive: true });
+  addEventListener('pointerup', () => {
+    /* staccato e mai partito: era una richiesta di pannello */
+    const box = staccato;
+    annulla();
+    if (box) apriPannello(box);
+  }, { passive: true });
+
+  for (const ev of ['pointercancel', 'scroll', 'wheel'])
+    addEventListener(ev, () => { if (!traTrascinando()) annulla(); }, { passive: true });
 
   /* col mouse il gesto naturale è il tasto destro */
   addEventListener('contextmenu', e => {
@@ -227,7 +292,8 @@ function accenno() {
     ob.disconnect();
     const p = document.createElement('div');
     p.className = 'pal-accenno mono';
-    p.innerHTML = `Tieni premuto su un riquadro: colore del sito e impaginazione.
+    p.innerHTML = `Tieni premuto su un riquadro: trascina per spostarlo,
+      lascia per il colore e l’impaginazione.
       <button type="button" aria-label="Ho capito">✕</button>`;
     document.body.appendChild(p);
     requestAnimationFrame(() => p.classList.add('in'));
@@ -258,6 +324,7 @@ export function initPalette() {
   if (salvata && PALETTE[salvata]) applica(salvata, false);
   else document.documentElement.dataset.palette = 'smeraldo';
   initGriglia();
+  initOrdine();
   armaTestata();
   armaPressioneLunga();
   accenno();

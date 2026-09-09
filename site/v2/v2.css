@@ -1161,8 +1161,17 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border:0;border-radiu
 .pal__griglia button[aria-checked="true"]{
   border-color:var(--campione);background:color-mix(in srgb,var(--campione) 12%,transparent)}
 .pal__griglia button:focus-visible{outline:2px solid var(--campione);outline-offset:2px}
+/* Il piede resta attaccato in basso invece di scorrere via.
+
+   Con i comandi di posizione il pannello e' cresciuto e su un
+   portatile arriva al bordo dello schermo. Scorrere scorreva gia' —
+   un dialog lo fa da solo — ma tagliato di netto sul bordo sembra
+   rotto, e "Chiudi" finiva fuori vista. Cosi' il fondo del pannello si
+   vede sempre, e si capisce che sopra c'e' altro. */
 .pal__piede{display:flex;align-items:center;justify-content:space-between;gap:14px;
-  padding:14px 20px 18px;border-top:1px solid rgba(221,231,242,.08)}
+  padding:14px 20px 18px;border-top:1px solid rgba(221,231,242,.08);
+  position:sticky;bottom:0;background:#0b0f16;z-index:2}
+.pal{overscroll-behavior:contain}
 .pal__piede .mono{color:#7f8b98;font-size:11px;letter-spacing:.08em}
 
 /* l'accenno: senza, la pressione lunga non la scopre nessuno */
@@ -1311,3 +1320,54 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border:0;border-radiu
   letter-spacing:.14em;text-transform:uppercase;white-space:nowrap}
 .bar__pal__eti + .bar__pal{margin-left:8px}
 @media (max-width:1120px){.bar__pal__eti{display:none}}
+
+
+/* ═══════════════════════════════════════════════════════════════════
+ * SPOSTARE UN RIQUADRO — 09.09.2026
+ *
+ * Tre stati, e si vedono tutti e tre perche' senza il gesto sembra
+ * rotto: l'attesa (il bordo si accende), lo stacco (il riquadro si
+ * solleva e aspetta di sapere cosa vuoi), il viaggio (segue il dito e
+ * i vicini scivolano a fargli posto).
+ * ═══════════════════════════════════════════════════════════════════ */
+
+/* staccato: mezzo secondo e' passato, il dito decide */
+.pal-staccato{
+  outline:1px solid var(--em);outline-offset:2px;
+  transform:scale(1.012);
+  box-shadow:0 10px 30px rgba(0,0,0,.45);
+  transition:transform .16s var(--ease),box-shadow .16s var(--ease);
+  cursor:grab;
+}
+@media (hover:none){
+  .pal-staccato{-webkit-touch-callout:none;-webkit-user-select:none;user-select:none}
+}
+
+/* in viaggio: fuori dall'ombra degli altri, e sordo al puntatore
+   perche' e' sotto il dito e coprirebbe chi deve fargli posto */
+.ord-preso{
+  position:relative;z-index:40;
+  pointer-events:none;
+  cursor:grabbing;
+  outline:1px solid var(--em);outline-offset:2px;
+  box-shadow:0 18px 44px rgba(0,0,0,.55);
+  opacity:.96;
+}
+/* il buco dove tornerebbe se lo lasciassi qui */
+.ord-gruppo{outline:1px dashed var(--em-dim);outline-offset:10px;border-radius:4px}
+body.ord-in-corso{cursor:grabbing;-webkit-user-select:none;user-select:none}
+body.ord-in-corso *{cursor:grabbing !important}
+
+@media (prefers-reduced-motion:reduce){
+  .pal-staccato{transform:none;transition:none}
+}
+
+/* i tre comandi nel pannello, per chi non trascina */
+.pal__pos{display:flex;flex-wrap:wrap;gap:8px;padding:12px 0 0}
+.pal__pos .btn{flex:1 1 auto;justify-content:center;min-width:112px}
+.pal__pos [data-pos-reset]{flex-basis:100%;background:transparent;
+  border-color:rgba(221,231,242,.16);color:#c3ccd6}
+.pal__pos .btn:disabled{opacity:.38;pointer-events:none}
+@media (max-width:640px){
+  .pal__pos .btn{min-height:46px}
+}
