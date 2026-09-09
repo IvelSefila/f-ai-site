@@ -7,6 +7,9 @@ const b = await chromium.launch({
   args: ['--use-gl=swiftshader', '--enable-unsafe-swiftshader', '--ignore-gpu-blocklist'] });
 
 const CASI = [
+  ['desktop', { width: 1440, height: 900 }, '.istruzioni', '2'],
+  ['telefono', { width: 390, height: 844 }, '.istruzioni', '2'],
+  ['desktop', { width: 1440, height: 900 }, '.offerta__grid', '4'],
   ['desktop', { width: 1440, height: 900 }, '.deck',  '8-4'],
   ['desktop', { width: 1440, height: 900 }, '.deck',  '6-3-3'],
   ['desktop', { width: 1440, height: 900 }, '.offerta__grid', '8-4'],

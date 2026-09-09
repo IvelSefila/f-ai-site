@@ -31,7 +31,7 @@ import { chromium } from 'playwright';
 const CROMO = 'C:/Users/fabri/AppData/Local/ms-playwright/chromium-1228/chrome-win64/chrome.exe';
 const SITO = 'http://localhost:8899/v2/index.html?probe=1';
 const PRESET = ['1', '2', '3', '4', '8-4', '4-8', '6-3-3'];
-const GRUPPI = ['.deck', '.offerta__grid', '.lab', '#formats', '#socials', '.bench'];
+const GRUPPI = ['.deck', '.offerta__grid', '.lab', '.istruzioni', '#formats', '#socials', '.bench'];
 const LARGHEZZE = [[390, 844], [1024, 900], [1440, 900]];
 const SFALSO = 4;        /* px di tolleranza sull'allineamento dei testi */
 
@@ -82,8 +82,14 @@ const MISURA = (sel) => {
   let sfalso = 0, dove = '';
   for (const [, riga] of righe) {
     if (riga.length < 2) continue;
-    const pari = riga.filter(f =>
-      Math.abs(f.getBoundingClientRect().width - riga[0].getBoundingClientRect().width) < 2);
+    /* ...e solo fra blocchi DELLO STESSO TIPO. In un banco, sotto certe
+       impaginazioni, la fila dei formati e il pannello di testo
+       diventano larghi uguale: la misura li confrontava e trovava 500px
+       di sfalsamento fra tre canvas e un paragrafo, che non e' un
+       difetto ma un paragone che non ha senso fare. */
+    const tipo = (f) => String(f.className).split(' ')[0];
+    const pari = riga.filter(f => tipo(f) === tipo(riga[0])
+      && Math.abs(f.getBoundingClientRect().width - riga[0].getBoundingClientRect().width) < 2);
     if (pari.length < 2) continue;
     const y = pari.map(f => {
       const t = f.querySelector('h3, h2, figcaption, p');

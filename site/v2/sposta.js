@@ -62,6 +62,7 @@ export const GRUPPI = [
   ['.lab',           { numeri: 'span.mono' }],
   ['.formats',       {}],
   ['.pipe',          { numeri: 'b.mono' }],
+  ['.istruzioni',    { numeri: 'b.mono' }],
   ['.stack__grid',   {}],
   ['.bench',         { specchio: true }],
 ];
@@ -69,7 +70,7 @@ export const GRUPPI = [
 /* i nomi con cui le sezioni compaiono nella mappa */
 const NOMI = {
   top: 'Apertura', regia: 'Control room', lavori: 'Lavori', banchi: 'Servizi',
-  metodo: 'Metodo', tecnologia: 'Tecnologia', laboratorio: 'Playlab',
+  come: 'Istruzioni', metodo: 'Metodo', tecnologia: 'Tecnologia', laboratorio: 'Playlab',
   materia: 'Materia', profilo: 'Profilo', verdetto: 'Verdetto',
   brief: 'Brief', contatto: 'Contatto',
 };

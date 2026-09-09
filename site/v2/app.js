@@ -2,10 +2,10 @@
 * app.js — la sessione. Tiene il filo fra le prove, parla, misura,
 * e alla fine scrive il dossier. Nessuna libreria.
 * ═══════════════════════════════════════════════════════════════════ */
-import { initHero } from './hero.js?v=20260909-122556';
-import { initPalette } from './palette.js?v=20260909-122556';
-import { keyVisual, timeline, radar, MODES, rng, leggiColori} from './engine.js?v=20260909-122556';
-import { initBrief } from './brief.js?v=20260909-122556';
+import { initHero } from './hero.js?v=20260909-124941';
+import { initPalette } from './palette.js?v=20260909-124941';
+import { keyVisual, timeline, radar, MODES, rng, leggiColori} from './engine.js?v=20260909-124941';
+import { initBrief } from './brief.js?v=20260909-124941';
 
 const $ = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => [...r.querySelectorAll(s)];
@@ -13,10 +13,12 @@ const pad = n => String(n).padStart(2, '0');
 const mmss = ms => `${pad(Math.floor(ms / 60000))}:${pad(Math.floor(ms / 1000) % 60)}`;
 
 /* ── stato di sessione ─────────────────────────────────────────── */
+/* nell'ordine in cui si incontrano scendendo, che da oggi comincia dai
+   servizi: e' la prima cosa che un cliente deve trovare */
 const PROOFS = [
-  ['regia', 'Control room — hai deciso dove entra la macchina'],
+  ['banchi', 'Servizi — hai manovrato uno degli strumenti'],
   ['lavori', 'Lavori — hai rigenerato un sistema visivo'],
-  ['banchi', 'Banchi — hai manovrato uno strumento'],
+  ['regia', 'Control room — hai deciso dove entra la macchina'],
   ['metodo', 'Metodo — hai percorso la pipeline'],
   ['tecnologia', 'Tecnologia — hai confrontato le modalità'],
   ['laboratorio', 'Playlab — hai visto i motori di gioco'],

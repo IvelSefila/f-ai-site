@@ -1,7 +1,7 @@
 import { PRESET, applicaGriglia, contenitoreDi, nomeContenitore,
-         mostraGriglia, grigliaVisibile, initGriglia } from './griglia.js?v=20260909-122556';
+         mostraGriglia, grigliaVisibile, initGriglia } from './griglia.js?v=20260909-124941';
 import { initOrdine, bersaglioDi, spostaDi, puoAndare, rimetti, ordineCambiato,
-         iniziaTrascino, traTrascinando } from './sposta.js?v=20260909-122556';
+         iniziaTrascino, traTrascinando } from './sposta.js?v=20260909-124941';
 
 /* ═══════════════════════════════════════════════════════════════════
  * PALETTE — tieni premuto su un riquadro e scegli il colore del sito

@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
 <meta name="theme-color" content="#05070b" />
 <meta name="description" content="F/AI — grafica pubblicitaria, video, social e sistemi AI. Un portfolio che non elenca le competenze: le esegue." />
-<title>F/AI — Sistema di verifica</title>
+<title>F/AI — Grafica pubblicitaria, video, social e sistemi AI</title>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%2305070b'/%3E%3Cpath d='M13 15h36v8H22v7h21v8H22v11h-9V15Zm31 33h8v-8h-8v8Z' fill='%2314c08a'/%3E%3C/svg%3E" />
 <link rel="preload" href="../assets/fonts/barlow-condensed-600-latin.woff2" as="font" type="font/woff2" crossorigin />
 <link rel="preload" href="../assets/fonts/manrope-latin.woff2" as="font" type="font/woff2" crossorigin />
@@ -24,7 +24,7 @@
 <meta name="twitter:title" content="F/AI — Un portfolio che esegue le competenze" />
 <meta name="twitter:description" content="Sette prove manovrabili, non una lista di competenze." />
 <meta name="twitter:image" content="../assets/og-fai.jpg" />
-<link rel="stylesheet" href="v2.css?v=20260909-122556" />
+<link rel="stylesheet" href="v2.css?v=20260909-124941" />
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -91,7 +91,7 @@
   <a class="brand" href="#top" aria-label="F/AI, torna all'inizio">F<span>/</span>AI</a>
   <span class="bar__sess mono" aria-hidden="true">Sessione <b id="barTime">00:00</b></span>
   <nav class="bar__nav mono" aria-label="Prove">
-    <a href="#regia">01</a><a href="#lavori">02</a><a href="#banchi">03</a>
+    <a href="#banchi">01</a><a href="#lavori">02</a><a href="#regia">03</a>
     <a href="#metodo">04</a><a href="#tecnologia">05</a><a href="#laboratorio">06</a><a href="#materia">07</a><a href="#profilo" aria-label="Profilo">P</a>
   </nav>
   <span class="bar__pal__eti mono" aria-hidden="true">Colore del sito</span>
@@ -123,10 +123,10 @@
       <span>Dirigo il movimento.</span>
       <span>Progetto sistemi AI.</span>
     </h1>
-    <p class="hero__copy">Grafico pubblicitario, video editor e AI builder. Trasformo campagne, video e contenuti social in sistemi creativi coerenti. Lavoro con strumenti tradizionali, modelli locali e piattaforme cloud: scelgo ogni tecnologia per qualità, controllo e risultato.</p>
+    <p class="hero__copy">Grafico pubblicitario, video editor e AI builder. Campagne che si declinano su ogni formato, video montati sul ritmo, contenuti social che si producono con continuità, flussi automatici che tolgono di mezzo il lavoro ripetitivo. Strumenti tradizionali e modelli AI, in locale o in cloud: scelgo di volta in volta quello che dà il risultato migliore.</p>
     <p class="hero__nota">Questo confine non è un’immagine: è calcolato fotogramma per fotogramma. Trascinalo e decidi quanta macchina entra nel lavoro.</p>
     <div class="hero__actions">
-      <a class="btn btn--solid" href="#regia">Comincia la verifica <i aria-hidden="true">↓</i></a>
+      <a class="btn btn--solid" href="#banchi">Guarda cosa faccio <i aria-hidden="true">↓</i></a>
       <a class="btn" href="#contatto">Raccontami cosa ti serve <i aria-hidden="true">↗</i></a>
     </div>
   </div>
@@ -156,68 +156,90 @@
   <div class="rail" aria-hidden="true"><i id="railFill"></i><b id="railKnob"></b></div>
 </section>
 
-<!-- ══ 01 · control room ══ -->
-<section class="sec sp-l" id="regia" data-proof="regia" aria-labelledby="regiaT">
+<!-- ══ questa pagina ══ -->
+<section class="sec sec--alt sp-m ap-larga sec--chiara" id="come" aria-labelledby="comeT">
   <header class="sec__head">
-    <p class="eyebrow mono"><span class="n">Prova 01</span> Control room</p>
-    <h2 id="regiaT">Non è “con AI” o “senza AI”.<br><em>È una scelta di regia.</em></h2>
-    <p class="sec__lede">Trascina la testina e osserva quando entra l’AI, cosa produce e dove intervengo io. Guarda cambiare <strong>l’artefatto vero</strong>, non una barra. A sinistra quello che decido io, a destra quello che genera il sistema. Le decisioni prese si leggono sotto.</p>
+    <p class="eyebrow mono"><span class="n">Questa pagina</span> Istruzioni</p>
+    <h2 id="comeT">Questo sito non racconta il mio lavoro.<br><em>Lo fa mentre lo guardi.</em></h2>
+    <p class="sec__lede">L'ho progettato e scritto io, riga per riga: grafica, animazioni,
+      interazioni, codice. Le immagini che vedi non sono file caricati — le disegna il tuo
+      browser adesso, e infatti puoi cambiarle. Sotto c'è l'elenco di cosa puoi toccare.
+      Tutto quello che cambi resta nel tuo browser: il sito non salva e non manda niente a nessuno.</p>
   </header>
 
-  <div class="bench bench--regia bench--ampio">
-    <figure class="bench__stage">
-      <canvas id="kvCanvas" width="1200" height="750" aria-label="Key visual generato dal vivo: cambia con la posizione della testina."></canvas>
-      <figcaption class="mono"><span id="kvLabel">Regia umana</span><span id="kvSeed">seed —</span></figcaption>
-    </figure>
+  <ol class="istruzioni">
+    <li><b class="mono">01</b><h3>Il colore di tutto il sito</h3>
+      <p>Sette palette, dai pallini in alto a destra. Ogni colore è calcolato perché il testo
+        resti leggibile sia sul fondo scuro sia sulle pagine bianche.</p></li>
+    <li><b class="mono">02</b><h3>Sposta qualsiasi riquadro</h3>
+      <p>Tieni premuto mezzo secondo su una scheda e trascinala dove vuoi: i lavori, i servizi,
+        i passi del metodo, gli strumenti. I numeri si riscrivono da soli.</p></li>
+    <li><b class="mono">03</b><h3>Sposta le sezioni intere</h3>
+      <p>Tieni premuto sul titolo di una sezione: la pagina si richiude in una mappa e la sposti
+        come una carta. Chiaro e scuro devono restare alternati, quindi le caselle dove non si
+        può atterrare si spengono da sole.</p></li>
+    <li><b class="mono">04</b><h3>Cambia l'impaginazione</h3>
+      <p>Sotto tutto il sito ci sono dodici colonne invisibili. Lascia il dito senza trascinare
+        e scegli come si dispone quel gruppo: una colonna, due, tre, quattro, o larghezze
+        diverse.</p></li>
+    <li><b class="mono">05</b><h3>Rigenera le immagini</h3>
+      <p>Ogni lavoro ha un <em>seed</em>, il numero da cui nasce. Cambialo e viene fuori
+        un'immagine diversa che parla ancora la stessa lingua: è questo che vuol dire avere un
+        sistema visivo invece di un pezzo fortunato.</p></li>
+    <li><b class="mono">06</b><h3>Prova i quattro strumenti</h3>
+      <p>Grafica, video, social e flussi AI: uno strumento funzionante per servizio, con le leve
+        che muovono davvero il risultato. E nel laboratorio ci sono quattro giochi completi.</p></li>
+  </ol>
 
-    <div class="bench__panel">
-      <label class="ctl" for="mix">
-        <span class="mono">Quanta macchina entra</span>
-        <input id="mix" type="range" min="0" max="100" value="30" step="1" aria-describedby="mixOut" />
-        <output id="mixOut" class="mono">30% sistema</output>
-      </label>
-
-      <p class="phases__come mono">Trascina con un dito oppure scegli una fase.</p>
-      <div class="phases mono" role="group" aria-label="Fasi del processo">
-        <button type="button" aria-pressed="true" data-phase="0"><b>01</b> Brief</button>
-        <button type="button" aria-pressed="false" data-phase="1"><b>02</b> Direzione</button>
-        <button type="button" aria-pressed="false" data-phase="2"><b>03</b> Produzione</button>
-        <button type="button" aria-pressed="false" data-phase="3"><b>04</b> Controllo</button>
-        <button type="button" aria-pressed="false" data-phase="4"><b>05</b> Consegna</button>
-      </div>
-      <p class="phases__note" id="phaseNote">Definisco obiettivo, pubblico, canali e vincoli. L’AI non parte ancora.</p>
-
-      <div class="decis">
-        <span class="mono">Decisioni prese in questo frame</span>
-        <ul id="kvDecisions"></ul>
-      </div>
-
-      <div class="bench__acts">
-        <button class="btn btn--sm" id="kvNew" type="button">Rigenera <i aria-hidden="true">↻</i></button>
-        <button class="btn btn--sm" id="kvPng" type="button">Esporta PNG <i aria-hidden="true">↓</i></button>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ══ 02 · lavori generativi ══ -->
-<section class="sec sec--alt sp-s ap-numero sec--chiara" id="lavori" data-proof="lavori" aria-labelledby="lavoriT">
-  <header class="sec__head" data-num="02">
-    <p class="eyebrow mono"><span class="n">Prova 02</span> Lavori</p>
-    <h2 id="lavoriT">Il risultato davanti.<br><em>Il processo subito dopo.</em></h2>
-    <p class="sec__lede">Queste tre non sono immagini caricate: <strong>le disegna questa pagina, adesso</strong>. Ogni pezzo ha un seed. Cambialo e nasce una variante diversa che resta nello stesso linguaggio — è quello che vuol dire avere un sistema visivo invece di un pezzo fortunato.</p>
-  </header>
-
-  <div class="deck" id="deck"></div>
+  <p class="istruzioni__nota">Serve a due cose. La prima: capire cosa so fare senza dover credere
+    a un elenco di competenze. La seconda: se una pagina così la costruisco per me, posso
+    costruirla per te.</p>
 </section>
 
 <!-- ══ 03 · banchi di prova ══ -->
 <section class="sec sp-m ap-larga" id="banchi" data-proof="banchi" aria-labelledby="banchiT">
   <header class="sec__head">
-    <p class="eyebrow mono"><span class="n">Prova 03</span> Servizi</p>
-    <h2 id="banchiT">Quattro modi per trasformare un'idea<br><em>in qualcosa che funziona.</em></h2>
-    <p class="sec__lede">Uno strumento vero per servizio. Non spiegano cosa faccio: lo fanno mentre li usi.</p>
+    <p class="eyebrow mono"><span class="n">Prova 01</span> Servizi</p>
+    <h2 id="banchiT">Quattro cose che faccio.<br><em>E qui le puoi provare.</em></h2>
+    <p class="sec__lede">Grafica pubblicitaria, video, contenuti social e flussi automatici con
+      l'AI. Qui sotto c'è cosa consegno per ognuno. Più giù, per ognuno, c'è uno strumento che
+      funziona davvero: muovi le leve e cambia il lavoro, non la descrizione del lavoro.</p>
   </header>
+
+  <div class="offerta">
+    <p class="offerta__intro mono">Cosa faccio, in concreto</p>
+    <div class="offerta__grid">
+      <article class="offerta__card">
+        <span class="mono">01 / Campagne</span>
+        <h3>Grafica pubblicitaria</h3>
+        <p>Creo la direzione visiva e la porto nei formati che servono alla campagna.</p>
+        <p class="offerta__tag mono">Key visual · Declinazioni · Motion graphic · Digitale e stampa</p>
+        <a class="btn btn--sm" href="#brief">Parliamo della campagna <i aria-hidden="true">↗</i></a>
+      </article>
+      <article class="offerta__card">
+        <span class="mono">02 / Movimento</span>
+        <h3>Video e post-produzione</h3>
+        <p>Costruisco ritmo, racconto e finitura con riprese esistenti, materiali creati o generazione assistita.</p>
+        <p class="offerta__tag mono">Montaggio · Motion · Compositing · Formati brevi e lunghi</p>
+        <a class="btn btn--sm" href="#brief">Parliamo del video <i aria-hidden="true">↗</i></a>
+      </article>
+      <article class="offerta__card">
+        <span class="mono">03 / Continuità</span>
+        <h3>Sistemi per social media</h3>
+        <p>Trasformo una direzione creativa in format riconoscibili e facili da produrre con continuità.</p>
+        <p class="offerta__tag mono">Format · Template · Adattamenti · Flusso di revisione</p>
+        <a class="btn btn--sm" href="#brief">Organizziamo i contenuti <i aria-hidden="true">↗</i></a>
+      </article>
+      <article class="offerta__card">
+        <span class="mono">04 / Sistemi</span>
+        <h3>Flussi e prototipi AI</h3>
+        <p>Collego strumenti, passaggi e controlli umani per ridurre il lavoro ripetitivo e verificare rapidamente nuove idee.</p>
+        <p class="offerta__tag mono">Automazioni · Agenti · Prototipi · Locale o cloud</p>
+        <a class="btn btn--sm" href="#brief">Valutiamo il flusso <i aria-hidden="true">↗</i></a>
+      </article>
+    </div>
+    <p class="offerta__nota">Web design e prototipazione sono capacità trasversali: le uso quando il progetto richiede un’esperienza o un’applicazione.</p>
+  </div>
 
   <div class="tabs mono" role="tablist" aria-label="Banchi di prova">
     <button role="tab" aria-selected="true"  aria-controls="b-grafica" tabindex="0" id="t-grafica"><b>01</b> Grafica</button>
@@ -288,39 +310,66 @@
     </div>
   </div>
 
-  <div class="offerta">
-    <p class="offerta__intro mono">Cosa faccio, in concreto</p>
-    <div class="offerta__grid">
-      <article class="offerta__card">
-        <span class="mono">01 / Campagne</span>
-        <h3>Grafica pubblicitaria</h3>
-        <p>Creo la direzione visiva e la porto nei formati che servono alla campagna.</p>
-        <p class="offerta__tag mono">Key visual · Declinazioni · Motion graphic · Digitale e stampa</p>
-        <a class="btn btn--sm" href="#brief">Parliamo della campagna <i aria-hidden="true">↗</i></a>
-      </article>
-      <article class="offerta__card">
-        <span class="mono">02 / Movimento</span>
-        <h3>Video e post-produzione</h3>
-        <p>Costruisco ritmo, racconto e finitura con riprese esistenti, materiali creati o generazione assistita.</p>
-        <p class="offerta__tag mono">Montaggio · Motion · Compositing · Formati brevi e lunghi</p>
-        <a class="btn btn--sm" href="#brief">Parliamo del video <i aria-hidden="true">↗</i></a>
-      </article>
-      <article class="offerta__card">
-        <span class="mono">03 / Continuità</span>
-        <h3>Sistemi per social media</h3>
-        <p>Trasformo una direzione creativa in format riconoscibili e facili da produrre con continuità.</p>
-        <p class="offerta__tag mono">Format · Template · Adattamenti · Flusso di revisione</p>
-        <a class="btn btn--sm" href="#brief">Organizziamo i contenuti <i aria-hidden="true">↗</i></a>
-      </article>
-      <article class="offerta__card">
-        <span class="mono">04 / Sistemi</span>
-        <h3>Flussi e prototipi AI</h3>
-        <p>Collego strumenti, passaggi e controlli umani per ridurre il lavoro ripetitivo e verificare rapidamente nuove idee.</p>
-        <p class="offerta__tag mono">Automazioni · Agenti · Prototipi · Locale o cloud</p>
-        <a class="btn btn--sm" href="#brief">Valutiamo il flusso <i aria-hidden="true">↗</i></a>
-      </article>
+</section>
+
+<!-- ══ 02 · lavori generativi ══ -->
+<section class="sec sec--alt sp-s ap-numero sec--chiara" id="lavori" data-proof="lavori" aria-labelledby="lavoriT">
+  <header class="sec__head" data-num="02">
+    <p class="eyebrow mono"><span class="n">Prova 02</span> Lavori</p>
+    <h2 id="lavoriT">Il risultato davanti.<br><em>Il processo subito dopo.</em></h2>
+    <p class="sec__lede">Queste tre non sono immagini caricate: <strong>le disegna questa pagina,
+      adesso</strong>. Ognuna nasce da un numero, il seed. Cambialo e ne esce un’altra, diversa ma
+      della stessa famiglia. È la differenza fra avere un sistema visivo — che fra sei mesi
+      continua a produrre pezzi coerenti — e avere un pezzo venuto bene per caso.</p>
+  </header>
+
+  <div class="deck" id="deck"></div>
+</section>
+
+<!-- ══ 01 · control room ══ -->
+<section class="sec sp-l" id="regia" data-proof="regia" aria-labelledby="regiaT">
+  <header class="sec__head">
+    <p class="eyebrow mono"><span class="n">Prova 03</span> Control room</p>
+    <h2 id="regiaT">Non è “con AI” o “senza AI”.<br><em>È una scelta di regia.</em></h2>
+    <p class="sec__lede">La domanda che mi fanno tutti è quanta AI c’è dentro un lavoro. Qui la
+      risposta si vede: trascina la testina, a sinistra c’è quello che decido io, a destra quello
+      che genera il sistema. Cambia <strong>l’immagine vera</strong>, non una barra di
+      avanzamento — e sotto resta scritta ogni decisione presa.</p>
+  </header>
+
+  <div class="bench bench--regia bench--ampio">
+    <figure class="bench__stage">
+      <canvas id="kvCanvas" width="1200" height="750" aria-label="Key visual generato dal vivo: cambia con la posizione della testina."></canvas>
+      <figcaption class="mono"><span id="kvLabel">Regia umana</span><span id="kvSeed">seed —</span></figcaption>
+    </figure>
+
+    <div class="bench__panel">
+      <label class="ctl" for="mix">
+        <span class="mono">Quanta macchina entra</span>
+        <input id="mix" type="range" min="0" max="100" value="30" step="1" aria-describedby="mixOut" />
+        <output id="mixOut" class="mono">30% sistema</output>
+      </label>
+
+      <p class="phases__come mono">Trascina con un dito oppure scegli una fase.</p>
+      <div class="phases mono" role="group" aria-label="Fasi del processo">
+        <button type="button" aria-pressed="true" data-phase="0"><b>01</b> Brief</button>
+        <button type="button" aria-pressed="false" data-phase="1"><b>02</b> Direzione</button>
+        <button type="button" aria-pressed="false" data-phase="2"><b>03</b> Produzione</button>
+        <button type="button" aria-pressed="false" data-phase="3"><b>04</b> Controllo</button>
+        <button type="button" aria-pressed="false" data-phase="4"><b>05</b> Consegna</button>
+      </div>
+      <p class="phases__note" id="phaseNote">Definisco obiettivo, pubblico, canali e vincoli. L’AI non parte ancora.</p>
+
+      <div class="decis">
+        <span class="mono">Decisioni prese in questo frame</span>
+        <ul id="kvDecisions"></ul>
+      </div>
+
+      <div class="bench__acts">
+        <button class="btn btn--sm" id="kvNew" type="button">Rigenera <i aria-hidden="true">↻</i></button>
+        <button class="btn btn--sm" id="kvPng" type="button">Esporta PNG <i aria-hidden="true">↓</i></button>
+      </div>
     </div>
-    <p class="offerta__nota">Web design e prototipazione sono capacità trasversali: le uso quando il progetto richiede un’esperienza o un’applicazione.</p>
   </div>
 </section>
 
@@ -398,8 +447,11 @@
 <section class="sec sec--alt sp-s ap-numero sec--chiara" id="laboratorio" data-proof="laboratorio" aria-labelledby="labT">
   <header class="sec__head" data-num="06">
     <p class="eyebrow mono"><span class="n">Prova 06</span> Playlab</p>
-    <h2 id="labT">Quando posso giocare<br><em>con le regole.</em></h2>
-    <p class="sec__lede">Nel Laboratorio trovi prototipi interattivi e giochi originali. È la parte più sperimentale del mio lavoro — e la prova che non mi fermo alle interfacce.</p>
+    <h2 id="labT">Quattro giochi,<br><em>scritti da zero.</em></h2>
+    <p class="sec__lede">Quattro giochi originali che girano dentro questa pagina, più un
+      costruttore che te ne fa uno rispondendo a sedici domande. Non è un passatempo: se so
+      scrivere un motore che risponde al dito in sedici millesimi di secondo, so costruire anche
+      l’applicazione o il configuratore che ti serve.</p>
   </header>
   <div class="lab">
     <article class="lab__card"><span class="mono">01 · Campo di tensione</span><i aria-hidden="true">⌁</i><h3>Trama</h3><p class="mono">Tendi / allinea / stabilizza</p></article>
@@ -419,13 +471,16 @@
   </div>
 </section>
 
-
 <!-- ══ 07 · materia ══ -->
 <section class="sec sp-m ap-larga" id="materia" data-proof="materia" aria-labelledby="matT">
   <header class="sec__head">
     <p class="eyebrow mono"><span class="n">Prova 07</span> Materia</p>
     <h2 id="matT">Grafica, video e sistemi<br><em>sono la stessa materia.</em></h2>
-    <p class="sec__lede">Dodicimila punti presi da un'immagine vera: ognuno tiene il colore del pixel da cui viene. Cambia disposizione e li vedi riorganizzarsi — <strong>non è una dissolvenza fra tre immagini, è una sola materia che cambia ordine</strong>. Che è poi il mestiere.</p>
+    <p class="sec__lede">Dodicimila punti presi da un’immagine vera, ognuno col colore del pixel
+      da cui viene. Cambia disposizione e li vedi riorganizzarsi: è la stessa sostanza in un altro
+      ordine, non tre immagini in dissolvenza. Detta in pratica — lo stesso materiale lo porto da
+      un formato all’altro senza rifarlo da capo, ed è per questo che la seconda declinazione di
+      una campagna costa meno della prima.</p>
   </header>
 
   <div class="bench bench--medio">
@@ -447,7 +502,6 @@
     </div>
   </div>
 </section>
-
 
 <!-- ══ profilo ══ -->
 <section class="sec sp-l ap-stretta sec--chiara" id="profilo" aria-labelledby="profT">
@@ -604,14 +658,15 @@
           <p class="brief-summary__status" id="brief-status" role="status" aria-live="polite"></p>
         </section>
       </div><!-- /.brief__shell -->
-</section><!-- /#brief: mancavano queste due chiusure e "contatto" finiva
-     annidato dentro il brief. Da quando il brief e' un blocco chiaro,
-     il contatto ne ereditava la palette. -->
+</section>
 
 <!-- ══ contatto ══ -->
 <section class="sec sec--contact" id="contatto" aria-labelledby="contT">
   <p class="eyebrow mono"><i aria-hidden="true"></i>Disponibile per nuovi progetti</p>
   <h2 id="contT">Hai un'idea da far vedere, muovere o scalare?<br><em>Diamole una direzione.</em></h2>
+  <p class="contatto__come">Si comincia dalle sei domande qui sopra: due minuti, si
+    compilano nel tuo browser e alla fine ti ritrovi un testo pronto da copiare e mandarmi. Se una
+    risposta non ce l'hai ancora, saltala: serve a capirsi, non a impegnarti.</p>
   <a class="btn btn--solid btn--lg" href="#brief">Raccontami il progetto <i aria-hidden="true">↓</i></a>
   <footer class="foot mono"><span>F/AI</span><span>Grafica / Video / Social / AI</span><span>© 2026</span></footer>
 </section>
@@ -677,6 +732,6 @@
   <span class="voice__prog mono"><b id="voiceCount">0</b>/7</span>
 </div>
 
-<script type="module" src="app.js?v=20260909-122556"></script>
+<script type="module" src="app.js?v=20260909-124941"></script>
 </body>
 </html>

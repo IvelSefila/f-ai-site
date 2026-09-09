@@ -30,6 +30,7 @@ export const CONTENITORI = [
   ['.offerta__grid', '4', 'I servizi'],
   ['.lab',           '4', 'Le carte del laboratorio'],
   ['.formats',       '3', 'I formati'],
+  ['.istruzioni',     '2', 'Le istruzioni'],
   ['.bench',         '',  'Banco: visuale e pannello'],   /* '' = proporzioni originali */
 ];
 

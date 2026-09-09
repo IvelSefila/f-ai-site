@@ -301,6 +301,27 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border:0;border-radiu
 
 .lab__note{margin-top:20px;color:var(--muted);font-size:14px;max-width:62ch}
 
+/* ── LE ISTRUZIONI ────────────────────────────────────────────────
+   Sei voci che dicono cosa si puo' toccare in questa pagina. Stanno
+   sulle dodici colonne come tutti gli altri gruppi — due per riga di
+   partenza — quindi si spostano e si reimpaginano anche loro: la
+   sezione che spiega che si puo' spostare tutto sarebbe la sola cosa
+   ferma della pagina, e sarebbe una figura magra. */
+.istruzioni{list-style:none;margin:26px 0 0;padding:0}
+.istruzioni li{display:grid;grid-template-columns:auto 1fr;gap:4px 14px;
+  align-content:start;padding:17px 19px;
+  border:1px solid var(--rule);border-radius:var(--r);background:var(--panel)}
+.istruzioni b{grid-row:1/4;padding-top:5px;color:var(--em);
+  font-size:11px;letter-spacing:.12em;font-variant-numeric:tabular-nums}
+.istruzioni h3{margin:0;font-size:19px;letter-spacing:-.01em;line-height:1.15}
+.istruzioni p{margin:0;color:var(--text);font-size:14.5px;line-height:1.55}
+.istruzioni em{font-style:normal;color:var(--em);font-family:var(--mono);font-size:.92em}
+.istruzioni__nota{margin:24px 0 0;color:var(--muted);font-size:15px;line-height:1.6;max-width:66ch}
+@media (max-width:760px){
+  .istruzioni li{padding:15px 16px}
+  .istruzioni h3{font-size:18px}
+}
+
 /* verdetto */
 .sec--verdict{background:linear-gradient(180deg,var(--alt),var(--stage))}
 .dossier{border:1px solid var(--em-deep);border-radius:var(--r);background:var(--panel);overflow:hidden}
@@ -1205,8 +1226,14 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border:0;border-radiu
 .pal__piede .mono{color:#7f8b98;font-size:11px;letter-spacing:.08em}
 
 /* l'accenno: senza, la pressione lunga non la scopre nessuno */
+/* width:max-content e' l'unica riga che tiene in piedi questa bolla.
+   Senza, il contenitore flex si stringe fino alla parola piu' lunga e
+   la frase esce incolonnata, cinque righe in un blocco nero in mezzo
+   alla pagina — con lo span che puo' rimpicciolirsi (min-width:0) il
+   difetto peggiora invece di sparire. */
 .pal-accenno{position:fixed;z-index:320;left:50%;bottom:78px;translate:-50% 12px;
-  display:flex;align-items:center;gap:12px;max-width:calc(100vw - 28px);
+  display:flex;align-items:center;gap:12px;
+  width:max-content;max-width:min(560px,calc(100vw - 28px));
   padding:11px 12px 11px 16px;border:1px solid var(--em-dim);border-radius:999px;
   background:rgba(11,15,22,.95);backdrop-filter:blur(10px);
   color:#c3ccd6;font-size:12px;letter-spacing:.03em;
@@ -1480,3 +1507,6 @@ body.ord-in-corso *{cursor:grabbing !important}
 @media (max-width:640px){
   .pal__pos .btn{min-height:46px}
 }
+
+/* come si comincia, scritto sotto il titolo del contatto */
+.contatto__come{margin:0 0 22px;max-width:62ch;color:var(--text);font-size:16px;line-height:1.6}
