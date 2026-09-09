@@ -333,7 +333,11 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border:0;border-radiu
   text-transform:uppercase;margin-bottom:5px}
 .dossier__grid dd{margin:0;font-family:var(--display);font-size:34px;line-height:1;color:var(--em);
   font-variant-numeric:tabular-nums}
-.dossier__verdict{margin:0;padding:18px;color:var(--text);font-size:17px;line-height:1.6;
+/* max-width in ch e non in px: il tetto e' in BATTUTE, che e' l'unita'
+   in cui si legge. A tutta larghezza questo verdetto arrivava a 149
+   battute per riga — oltre le ~85 l'occhio perde il capo riga e
+   rilegge la stessa. Misurato da audit/amichevole.mjs. */
+.dossier__verdict{margin:0;padding:18px;max-width:64ch;color:var(--text);font-size:17px;line-height:1.6;
   border-bottom:1px solid var(--rule-2)}
 .dossier__list{margin:0;padding:14px 18px;list-style:none;display:grid;gap:7px}
 .dossier__list li{display:flex;gap:10px;color:var(--muted);font-family:var(--mono);font-size:11px;letter-spacing:.05em}
@@ -633,7 +637,7 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border:0;border-radiu
 .hero__studio{margin:0 0 clamp(14px,2vh,24px);color:var(--muted);font-family:var(--mono);
   font-size:11px;letter-spacing:.13em;text-transform:uppercase;line-height:1.6;
   opacity:0;animation:rise .85s .18s var(--ease) forwards}
-.hero__nota{margin:12px 0 0;color:var(--muted);font-size:14px;line-height:1.6;
+.hero__nota{margin:12px 0 0;max-width:66ch;color:var(--muted);font-size:14px;line-height:1.6;
   opacity:0;animation:rise .85s .56s var(--ease) forwards}
 .phases__come{margin:18px 0 0;color:var(--muted)}
 /* introduzione del laboratorio */
@@ -641,7 +645,7 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border:0;border-radiu
 .lab__intro > .mono{color:var(--em)}
 .lab__intro h3{font-size:clamp(24px,2.6vw,38px)}
 .lab__intro h3 em{font-style:normal;color:var(--em)}
-.lab__intro p{margin:0;color:var(--text);font-size:15px;line-height:1.65}
+.lab__intro p{margin:0;max-width:68ch;color:var(--text);font-size:15px;line-height:1.65}
 
 /* ═══════════════════════════════════════════════════════════════════
  * VARIAZIONE — 03.09.2026
@@ -744,12 +748,24 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border:0;border-radiu
   .stack__group > div span{min-height:40px}
   .lab__card{min-height:44px}
 
-  /* 4 · Il corpo del testo non scende sotto i 15px, le meta sotto i 12. */
+  /* 4 · Il corpo del testo non scende sotto i 15px, le meta sotto i 12.
+     Questa lista si tiene a mano e a mano ci si dimentica: le voci
+     delle istruzioni sono nate a 14,5px senza che me ne accorgessi.
+     Adesso a ricordarselo c'e' audit/amichevole.mjs. */
   .sec__lede,.bench__panel p,.work__body p,.offerta__card p,
   .profilo__testo p,.lab__intro p,.metrics__note,.offerta__nota,
-  .dossier__verdict,.brief-step__hint,.lab__note{font-size:15px}
-  .work__break dd,.decis li,.brief-options label,.brief-data-note{font-size:14.5px}
-  .hero__nota,.phases__note{font-size:14px}
+  .dossier__verdict,.brief-step__hint,.lab__note,
+  .istruzioni p,.contatto__come,.brief-data-note{font-size:15px}
+  /* .brief-data-note stava qui e vinceva sulla riga dei 15px, che sta
+     sopra: due elenchi fatti a mano che si contraddicono, e vince
+     l'ultimo. E' la riga che dice che i dati non escono dal browser:
+     e' proprio quella che deve leggersi. */
+  .work__break dd,.decis li,.brief-options label{font-size:14.5px}
+  /* la nota dell'apertura sta a 15 come il resto: e' la prima
+     istruzione che uno legge, e a 14px su un telefono si strizza
+     gli occhi proprio dove serve capire cosa si puo' toccare */
+  .hero__nota{font-size:15px}
+  .phases__note{font-size:14px}
   .hud dd{font-size:12px}
   .hud dt,.formats figcaption,.dossier__grid dt,.metrics dt{font-size:11px}
 }
