@@ -82,6 +82,9 @@ const sezioni = () => (pagina() ? pezziDi(pagina()).filter(s => s.tagName === 'S
 const tonoDi = (s) => s.classList.contains('sec--chiara') ? 'chiara' : 'scura';
 const fissa = (s) => FISSE.includes(s.id);
 const due = (n) => String(n).padStart(2, '0');
+/* translate3d e non translate: chiede al browser un piano di
+   composizione suo, cosi' muovere il pezzo non ridisegna la pagina */
+const TRAS = (x, y) => 'translate3d(' + x + 'px,' + y + 'px,0)';
 
 /* ── nomi stabili ─────────────────────────────────────────────────
    L'ordine salvato deve ritrovare i suoi pezzi al carico dopo, quando
@@ -207,9 +210,14 @@ function rinumeraSezioni() {
    calcolato a mano. */
 const quieti = () => matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-function conVolo(gruppo, cambia) {
+function conVolo(gruppo, cambia, gia = null) {
   const pezzi = pezziDi(gruppo);
-  const prima = quieti() ? null : new Map(pezzi.map(p => [p, p.getBoundingClientRect()]));
+  /* `gia` sono i rettangoli che il trascinamento ha appena misurato:
+     rileggerli qui vorrebbe dire ricalcolare il layout una seconda
+     volta nello stesso fotogramma, per sapere una cosa che si sa. */
+  const prima = quieti() ? null
+    : gia ? new Map(gia.map(({ v, r }) => [v, r]))
+          : new Map(pezzi.map(p => [p, p.getBoundingClientRect()]));
   cambia();
   if (!prima) return;
   for (const p of pezziDi(gruppo)) {
@@ -218,7 +226,7 @@ function conVolo(gruppo, cambia) {
     const dx = a.left - b.left, dy = a.top - b.top;
     if (!dx && !dy) continue;
     p.style.transition = 'none';
-    p.style.transform = `translate(${dx}px,${dy}px)`;
+    p.style.transform = TRAS(dx, dy);
     requestAnimationFrame(() => {
       p.style.transition = 'transform .22s cubic-bezier(.2,.7,.3,1)';
       p.style.transform = '';
@@ -303,10 +311,42 @@ function chiudiMappa() {
   }
 }
 
-/* ── il trascinamento ─────────────────────────────────────────────── */
+/* ── il trascinamento ────────────────────────────────
+   La prima versione faceva, a ogni fotogramma: spegneva la
+   trasformazione del pezzo, ne rileggeva la posizione, la riaccendeva,
+   e per capire dove stava andando rileggeva la posizione di tutti i
+   vicini. Ogni lettura di geometria obbliga il browser a ricalcolare il
+   layout di quattordicimila pixel di pagina con sedici canvas dentro, e
+   non si puo' rimandare: la risposta serve subito.
+
+   A schermo pieno non si vedeva — sessanta fotogrammi pieni anche con
+   la CPU rallentata quattro volte — ma rallentandola otto volte, che e'
+   un telefono vero di qualche anno fa, il conto arrivava: 121
+   fotogrammi saltati su 122, e due secondi e mezzo di lavoro lungo.
+
+   Adesso la geometria si legge UNA VOLTA quando parte, e poi solo
+   quando il DOM cambia davvero. Nei fotogrammi in mezzo si scrive una
+   trasformazione e basta, che il browser compone senza ricalcolare
+   niente. E il ciclo gira per conto suo invece di aspettare il
+   puntatore, cosi' il pezzo si muove liscio anche quando gli eventi
+   arrivano a singhiozzo. */
 let inCorso = null;
 
 export function traTrascinando() { return !!inCorso; }
+
+const RIPOSO = 90;      /* ms fra un riordino e il successivo */
+
+/* La posizione che il layout darebbe al pezzo, senza la trasformazione
+   che gli stiamo applicando: si ricava sottraendo, senza spegnerla. */
+function rimisura() {
+  const c = inCorso;
+  if (!c) return;
+  const r = c.pezzo.getBoundingClientRect();
+  c.orx = r.left - c.tx; c.ory = r.top - c.ty;
+  c.vicini = pezziDi(c.gruppo)
+    .filter(v => v !== c.pezzo && c.ok(v))
+    .map(v => ({ v, r: v.getBoundingClientRect() }));
+}
 
 export function iniziaTrascino(b, e) {
   if (inCorso) return;
@@ -337,12 +377,16 @@ export function iniziaTrascino(b, e) {
        prendo per il centro, senno' scappa via */
     presaX: mappa ? r.width / 2 : e.clientX - r.left,
     presaY: mappa ? r.height / 2 : e.clientY - r.top,
-    x: e.clientX, y: e.clientY, chiesto: false,
+    x: e.clientX, y: e.clientY,
+    tx: 0, ty: 0, orx: r.left, ory: r.top,
+    vicini: [], ultimo: 0, vivo: true,
   };
   pezzo.classList.add('ord-preso');
+  pezzo.style.willChange = 'transform';    /* un piano suo: niente ridisegno */
   gruppo.classList.add('ord-gruppo');
   document.body.classList.add('ord-in-corso');
   try { pezzo.setPointerCapture(e.pointerId); } catch {}
+  rimisura();
 
   /* Su un telefono il dito che trascina farebbe anche scorrere la
      pagina. touch-action messo adesso non serve — il browser decide a
@@ -353,78 +397,90 @@ export function iniziaTrascino(b, e) {
   addEventListener('pointermove', muovi);
   addEventListener('pointerup', posa);
   addEventListener('pointercancel', posa);
-  segui();
+  addEventListener('scroll', rimisura, { passive: true });
+  requestAnimationFrame(giro);
 }
 
 const ferma = (e) => e.preventDefault();
 
+/* l'evento segna solo dov'e' il dito: disegnare e' compito del ciclo,
+   che gira comunque */
 function muovi(e) {
   if (!inCorso || e.pointerId !== inCorso.id) return;
   inCorso.x = e.clientX; inCorso.y = e.clientY;
-  if (inCorso.chiesto) return;
-  inCorso.chiesto = true;
-  requestAnimationFrame(segui);
 }
 
-function segui() {
-  if (!inCorso) return;
-  inCorso.chiesto = false;
-  const { pezzo, gruppo, x, y, presaX, presaY, inRiga, mappa, ok } = inCorso;
+function giro(t) {
+  const c = inCorso;
+  if (!c || !c.vivo) return;
+  requestAnimationFrame(giro);
+  const { pezzo, gruppo, x, y, presaX, presaY, inRiga, mappa } = c;
 
-  /* dove finirebbe il pezzo se lo lasciassi qui */
-  for (const v of pezziDi(gruppo)) {
-    if (v === pezzo || !ok(v)) continue;
-    const r = v.getBoundingClientRect();
-    if (x < r.left || x > r.right || y < r.top || y > r.bottom) continue;
-    if (mappa) {              /* fra sezioni si scambia, non si infila:
-                                 e' l'unico modo di tenere l'alternanza */
-      conVolo(gruppo, () => scambia(pezzo, v));
-      aggiornaBande();
-    } else {
-      /* in riga si guarda la meta' sinistra/destra, in colonna sopra/sotto */
-      const dopo = inRiga ? x > r.left + r.width / 2 : y > r.top + r.height / 2;
-      const dove = dopo ? v.nextSibling : v;
-      if (dove !== pezzo && dove !== pezzo.nextSibling)
-        conVolo(gruppo, () => gruppo.insertBefore(pezzo, dove));
+  /* Dove finirebbe il pezzo se lo lasciassi qui. I rettangoli sono
+     quelli misurati all'ultimo cambiamento: fra un riordino e l'altro
+     non si muove niente, quindi rileggerli sarebbe lavoro buttato. */
+  if (t - c.ultimo > RIPOSO) {
+    for (const { v, r } of c.vicini) {
+      if (x < r.left || x > r.right || y < r.top || y > r.bottom) continue;
+      let cambiato = false;
+      if (mappa) {             /* fra sezioni si scambia, non si infila:
+                                  e' l'unico modo di tenere l'alternanza */
+        conVolo(gruppo, () => scambia(pezzo, v), c.vicini);
+        aggiornaBande();
+        cambiato = true;
+      } else {
+        /* in riga si guarda la meta' sinistra/destra, in colonna sopra/sotto */
+        const dopo = inRiga ? x > r.left + r.width / 2 : y > r.top + r.height / 2;
+        const dove = dopo ? v.nextSibling : v;
+        if (dove !== pezzo && dove !== pezzo.nextSibling) {
+          conVolo(gruppo, () => gruppo.insertBefore(pezzo, dove), c.vicini);
+          cambiato = true;
+        }
+      }
+      if (cambiato) { c.ultimo = t; rimisura(); }
+      break;
     }
-    break;
   }
 
-  /* Il pezzo segue il dito senza uscire dal flusso: leggo dove lo mette
-     il layout in questo istante — a trasformazione spenta — e lo sposto
-     della differenza. Cosi' quando il DOM cambia sotto, lui resta sotto
-     il dito invece di saltare. */
-  pezzo.style.transform = '';
-  const r = pezzo.getBoundingClientRect();
-  pezzo.style.transform = `translate(${x - presaX - r.left}px,${y - presaY - r.top}px)`;
+  /* e qui non si legge niente: solo una trasformazione da comporre */
+  const tx = x - presaX - c.orx, ty = y - presaY - c.ory;
+  if (tx !== c.tx || ty !== c.ty) {
+    c.tx = tx; c.ty = ty;
+    pezzo.style.transform = TRAS(tx, ty);
+  }
 }
 
 function posa(e) {
   if (!inCorso || (e && e.pointerId !== inCorso.id)) return;
   const { pezzo, gruppo, mappa } = inCorso;
+  inCorso.vivo = false;
   removeEventListener('touchmove', ferma, { passive: false });
   removeEventListener('pointermove', muovi);
   removeEventListener('pointerup', posa);
   removeEventListener('pointercancel', posa);
+  removeEventListener('scroll', rimisura);
   inCorso = null;
 
   delete pezzo.dataset.ordPreso;
   pezzo.classList.remove('ord-preso');
   gruppo.classList.remove('ord-gruppo');
   document.body.classList.remove('ord-in-corso');
-  pezzo.style.transform = '';
 
   if (mappa) {
+    pezzo.style.transform = '';
+    pezzo.style.willChange = '';
     chiudiMappa();
     ricorda(gruppo);
     /* la pagina si riapre dove il pezzo e' finito, non dov'era la mappa */
     pezzo.scrollIntoView({ block: 'start', behavior: quieti() ? 'instant' : 'smooth' });
+  } else if (quieti()) {
+    pezzo.style.transform = ''; pezzo.style.willChange = '';
+    ricorda(gruppo);
   } else {
     /* l'ultimo scivolamento: dal posto dove sta il dito a quello vero */
-    if (!quieti()) {
-      pezzo.style.transition = 'transform .2s cubic-bezier(.2,.7,.3,1)';
-      setTimeout(() => { pezzo.style.transition = ''; }, 240);
-    }
+    pezzo.style.transition = 'transform .2s cubic-bezier(.2,.7,.3,1)';
+    pezzo.style.transform = '';
+    setTimeout(() => { pezzo.style.transition = ''; pezzo.style.willChange = ''; }, 240);
     ricorda(gruppo);
   }
   document.dispatchEvent(new CustomEvent('ordine', { detail: { gruppo, pezzo } }));

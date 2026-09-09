@@ -161,7 +161,12 @@ strong{color:var(--ink);font-weight:700}
 .ctl{display:block;margin:20px 0 0}
 .ctl>.mono{color:var(--muted);display:block;margin-bottom:10px}
 .ctl output{display:block;margin-top:8px;color:var(--em);font-variant-numeric:tabular-nums}
-input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:22px;background:transparent;cursor:ew-resize}
+/* margin:0 e non il 2px del browser: con width:100% la leva finiva
+   2px oltre il bordo destro della sua etichetta e 2px dentro a
+   sinistra, quindi non era in squadro ne' con la scritta sopra ne'
+   col valore sotto. Misurato su ogni banco, a ogni larghezza. */
+input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:22px;
+  margin:0;background:transparent;cursor:ew-resize}
 input[type=range]::-webkit-slider-runnable-track{height:3px;border-radius:2px;
   background:linear-gradient(90deg,var(--em) 0 var(--v,50%),rgba(221,231,242,.16) var(--v,50%) 100%)}
 input[type=range]::-moz-range-track{height:3px;border-radius:2px;background:rgba(221,231,242,.16)}
@@ -204,9 +209,12 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border:0;border-radiu
 .formats{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));align-items:end}
 .formats figure{margin:0;border:1px solid var(--rule);border-radius:12px;overflow:hidden;background:#06090e}
 .formats canvas{width:100%;height:auto}
+/* flex-wrap perche' sotto i ~110px di colonna "Instagram" e "Post" non
+   ci stanno sulla stessa riga: misurato, sbordavano di 3px. Andando a
+   capo la didascalia diventa di due righe invece che tagliata. */
 .formats figcaption{padding:8px 10px;border-top:1px solid var(--rule);color:var(--muted);
   font-family:var(--mono);font-size:11px;letter-spacing:.13em;text-transform:uppercase;
-  display:flex;justify-content:space-between;gap:8px}
+  display:flex;flex-wrap:wrap;justify-content:space-between;gap:2px 8px}
 .formats figcaption b{color:var(--em)}
 
 /* deck lavori */
@@ -217,7 +225,13 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border:0;border-radiu
 .work__meta{display:flex;justify-content:space-between;gap:10px;padding:10px 14px;border-bottom:1px solid var(--rule);
   color:var(--muted);font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase}
 .work__meta b{color:var(--em)}
-.work__body{padding:16px;display:grid;gap:10px;flex:1}
+/* flex e non grid: la carta si allunga per pareggiare la riga, e una
+   griglia distribuisce l'altezza in piu' fra le righe — nella carta
+   stretta di un'impaginazione 8+4 si apriva un vuoto fra il titolo e
+   il testo. In colonna flessibile le righe restano alte quanto
+   servono e l'avanzo va tutto nel margine automatico del seed, che
+   e' dove lo volevo. */
+.work__body{padding:16px;display:flex;flex-direction:column;gap:10px;flex:1}
 .work__body h3{font-size:26px}
 .work__body p{color:var(--text);font-size:14.5px;line-height:1.55;margin:0}
 .work__seed{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:auto;
@@ -269,6 +283,22 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border:0;border-radiu
 .lab__card i{font-style:normal;font-size:28px;color:var(--em);line-height:1}
 .lab__card h3{font-size:28px}
 .lab__card p{color:var(--muted);margin:0;font-size:11px}
+/* I quattro titoli del laboratorio devono partire alla stessa altezza.
+   L'etichetta sopra ("03 · Danza delle correnti") e' piu' lunga in una
+   carta che nelle altre e sotto i ~230px di colonna va a capo: misurato
+   a 1024px, i titoli si sfalsavano di 18px — e succedeva gia' con
+   l'impaginazione di partenza, non solo cambiandola.
+
+   Con subgrid le quattro carte prendono le righe dalla griglia che le
+   contiene invece di averne una propria: la riga dell'etichetta e' alta
+   quanto la piu' alta di tutte, e i titoli tornano in linea. Il row-gap
+   va riscritto perche' altrimenti una sottogriglia eredita la gronda
+   del genitore, che qui e' il doppio. Dove subgrid non c'e', resta
+   com'era: nessuna regola da riscrivere. */
+@supports (grid-template-rows: subgrid){
+  .lab[data-gr] > .lab__card{grid-template-rows:subgrid;grid-row:span 4;row-gap:8px}
+}
+
 .lab__note{margin-top:20px;color:var(--muted);font-size:14px;max-width:62ch}
 
 /* verdetto */
@@ -1182,6 +1212,7 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border:0;border-radiu
   color:#c3ccd6;font-size:12px;letter-spacing:.03em;
   opacity:0;transition:opacity .35s var(--ease),translate .35s var(--ease)}
 .pal-accenno.in{opacity:1;translate:-50% 0}
+.pal-accenno span{min-width:0}
 .pal-accenno button{width:44px;height:44px;flex:none;border-radius:50%;
   border:1px solid rgba(221,231,242,.14);background:transparent;color:#7f8b98;
   cursor:pointer;font-size:13px;line-height:1}
@@ -1273,7 +1304,18 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border:0;border-radiu
    che restano affiancati perché è così che si confrontano — e quella
    misura l'abbiamo già verificata. */
 @media (max-width:900px){
-  [data-gr] > *{grid-column:span 12}
+  /* Qui c'era un buco di specificita' che si vedeva eccome. Questa
+     regola e' (0,1,0), ma [data-gr="8-4"] > *:nth-child(2n+1) e'
+     (0,2,0) e vinceva: su un telefono da 390px le impaginazioni miste
+     restavano miste, cioe' colonne da 109 e 79 px con dentro le carte
+     dei lavori. Il testo usciva di 58px dallo schermo. Ora il ripiego
+     ha la stessa forma di quelle che deve battere, e i formati — che
+     restano affiancati apposta — vengono dopo, quindi vincono a pari
+     specificita'. */
+  [data-gr] > *,
+  [data-gr="8-4"] > *:nth-child(n),
+  [data-gr="4-8"] > *:nth-child(n),
+  [data-gr="6-3-3"] > *:nth-child(n){grid-column:span 12}
   .formats[data-gr] > *{grid-column:span 4}
   :root{--gronda:12px}
 }
@@ -1355,6 +1397,15 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border:0;border-radiu
 }
 /* il buco dove tornerebbe se lo lasciassi qui */
 .ord-gruppo{outline:1px dashed var(--em-dim);outline-offset:10px;border-radius:4px}
+
+/* Mentre si trascina, i vicini del gruppo salgono su un piano di
+   composizione loro. Spostare una carta nel DOM obbliga comunque il
+   browser a rifare il layout, ma senza questo gli tocca anche
+   RIDIPINGERE tre canvas da 820×640 a ogni riordino: misurato con la
+   CPU rallentata otto volte erano 110 fotogrammi saltati su 122 e 1,2
+   secondi di lavoro lungo. Vale solo durante il gesto — tenere dei
+   piani in piu' costa memoria, e a riposo non servono a niente. */
+.ord-gruppo > *{will-change:transform;contain:layout paint}
 body.ord-mappa .ord-gruppo{outline:none}
 
 /* ── LA MAPPA DELLE SEZIONI ───────────────────────────────────────
@@ -1406,7 +1457,12 @@ body.ord-mappa main > section[id].ord-preso{
    300 px e il testo largo il doppio: non e' una variante, e' un
    errore. Con le colonne che seguono, il banco e' specchiato. */
 @media(min-width:1000px){
-  .bench[data-ord-specchio]{grid-template-columns:minmax(300px,.58fr) minmax(0,1.42fr)}
+  /* :not([data-gr]) perche' se al banco e' stata scelta un'impaginazione
+     dal pannello comanda quella: due regole che riscrivono le stesse
+     colonne si annullerebbero a vicenda, e vincerebbe la piu' specifica
+     invece della piu' recente. */
+  .bench[data-ord-specchio]:not([data-gr]){
+    grid-template-columns:minmax(300px,.58fr) minmax(0,1.42fr)}
 }
 body.ord-in-corso{cursor:grabbing;-webkit-user-select:none;user-select:none}
 body.ord-in-corso *{cursor:grabbing !important}

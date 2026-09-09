@@ -1,7 +1,7 @@
 import { PRESET, applicaGriglia, contenitoreDi, nomeContenitore,
-         mostraGriglia, grigliaVisibile, initGriglia } from './griglia.js?v=20260909-120130';
+         mostraGriglia, grigliaVisibile, initGriglia } from './griglia.js?v=20260909-122556';
 import { initOrdine, bersaglioDi, spostaDi, puoAndare, rimetti, ordineCambiato,
-         iniziaTrascino, traTrascinando } from './sposta.js?v=20260909-120130';
+         iniziaTrascino, traTrascinando } from './sposta.js?v=20260909-122556';
 
 /* ═══════════════════════════════════════════════════════════════════
  * PALETTE — tieni premuto su un riquadro e scegli il colore del sito
@@ -315,7 +315,12 @@ function accenno() {
     p.className = 'pal-accenno mono';
     /* corto: sul telefono questa bolla sta sopra il contenuto, e tre
        righe di spiegazione coprono mezza pagina */
-    p.innerHTML = `Tieni premuto: <b>trascina</b> per spostare, lascia per il colore.
+    /* La frase sta dentro uno span suo. Senza, il <b> in mezzo diventa
+       un elemento flex per conto proprio e la bolla si spezza in tre
+       colonne: sul telefono veniva fuori un blocco nero con le parole
+       incolonnate a caso. */
+    p.innerHTML = `<span>Tieni premuto: <b>trascina</b> per spostare,
+      lascia per il colore.</span>
       <button type="button" aria-label="Ho capito">✕</button>`;
     document.body.appendChild(p);
     requestAnimationFrame(() => p.classList.add('in'));
