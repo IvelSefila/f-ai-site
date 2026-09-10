@@ -24,7 +24,7 @@
 <meta name="twitter:title" content="F/AI — Un portfolio che esegue le competenze" />
 <meta name="twitter:description" content="Sette prove manovrabili, non una lista di competenze." />
 <meta name="twitter:image" content="../assets/og-fai.jpg" />
-<link rel="stylesheet" href="v2.css?v=20260910-145842" />
+<link rel="stylesheet" href="v2.css?v=20260910-152103" />
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -298,8 +298,9 @@
             <b class="mono">Raccoglie</b>
             <ul>
               <li>Legge cinque fonti diverse, in ordine di priorità</li>
-              <li>Sceglie per data e scarta quello che ha già visto</li>
-              <li>Riprende da dove si era fermato senza ripubblicare niente</li>
+              <li>Tiene una piccola memoria di tutto quello che ha già pubblicato: ricontrolla
+                le fonti a ogni giro e <em>la stessa cosa non esce mai due volte</em></li>
+              <li>Sceglie per data, e riprende da dove si era fermato anche dopo uno stop</li>
               <li>Usa le API ufficiali dove esistono, e legge la pagina dove non esistono</li>
             </ul>
           </section>
@@ -320,11 +321,11 @@
           <section>
             <b class="mono">Pubblica</b>
             <ul>
-              <li>Facebook (pagine e gruppi), Instagram, TikTok, YouTube, LinkedIn, Threads,
+              <li>Facebook (pagine e gruppi), Instagram, YouTube, LinkedIn, Threads,
                 Telegram</li>
               <li>Solo con le API ufficiali e solo sugli account che ho collegato</li>
-              <li>Quattro uscite per pagina, fino a sette nello stesso giorno, a orari decisi
-                prima</li>
+              <li>Quattro uscite per pagina, a orari decisi prima: mettendo insieme tutte le
+                destinazioni si arriva a <em>decine e decine di pubblicazioni al giorno</em></li>
               <li>Ogni uscita tiene uno stato separato per canale: se una fallisce, le altre
                 vanno avanti</li>
             </ul>
@@ -342,17 +343,31 @@
           <section>
             <b class="mono">E dietro</b>
             <ul>
-              <li>Più assistenti che lavorano in parallelo — Codex, Gemini, Grok e un modello
-                sul mio computer — si dividono i ruoli da soli e un ultimo passaggio unisce le
-                risposte</li>
+              <li>Si attacca da riga di comando a qualunque intelligenza artificiale: Claude,
+                GPT, Gemini, Grok, oppure un modello che gira sul mio computer</li>
               <li>Modelli e istruzioni si cambiano da pannello, con configurazioni salvate</li>
               <li>Accesso protetto, e un sito pubblico con privacy e termini: senza quello le
                 piattaforme non danno le API</li>
             </ul>
           </section>
         </div>
-        <p class="appmie__tec mono">Python · Playwright · ComfyUI · API ufficiali Meta, TikTok,
-          YouTube, LinkedIn, Threads e Telegram · pannello web</p>
+        <div class="appmie__sotto">
+          <b class="mono">Sotto il cofano</b>
+          <dl>
+            <div><dt>Impianto</dt><dd>Python con FastAPI e Uvicorn per l’API e il pannello,
+              APScheduler per gli orari, PostgreSQL per i dati, Docker per farlo girare uguale
+              ovunque</dd></div>
+            <div><dt>Browser</dt><dd>Playwright con anti-rilevamento, e Selenium dove
+              serve</dd></div>
+            <div><dt>Modelli</dt><dd>Qualunque AI da riga di comando — Claude, GPT, Gemini,
+              Grok — oppure un modello in locale; ComfyUI con un flusso immagine-a-video per i
+              Reel; un server MCP per far parlare gli assistenti direttamente con Alfred</dd></div>
+            <div><dt>Sicurezza</dt><dd>Accesso con JWT, password e segreti cifrati, un lucchetto
+              sui file perché due lavori non si pestino i piedi</dd></div>
+            <div><dt>Fuori</dt><dd>API ufficiali di Meta, YouTube, LinkedIn, Threads e
+              Telegram</dd></div>
+          </dl>
+        </div>
       </article>
 
       <article class="appmie__card">
@@ -375,7 +390,9 @@
             <ul>
               <li>Voxtral per il parlato, con Whisper che subentra da solo se serve</li>
               <li>Una rilettura prudente del testo prima di considerarlo finito</li>
-              <li>Sottotitoli generati e sincronizzati sul parlato</li>
+              <li>Sottotitoli generati e sincronizzati sul parlato, e correggibili
+                <em>parola per parola</em>, compreso il secondo esatto in cui ognuna
+                compare</li>
             </ul>
           </section>
           <section>
@@ -387,7 +404,18 @@
             </ul>
           </section>
         </div>
-        <p class="appmie__tec mono">Python · Voxtral · Whisper · CUDA · versione portatile</p>
+        <div class="appmie__sotto">
+          <b class="mono">Sotto il cofano</b>
+          <dl>
+            <div><dt>Interfaccia</dt><dd>Tauri 2 con React e TypeScript: un’applicazione desktop
+              vera, non una pagina web travestita da programma</dd></div>
+            <div><dt>Motore</dt><dd>Python, e la scheda video del PC via CUDA</dd></div>
+            <div><dt>Modelli</dt><dd>Voxtral per la trascrizione, Whisper che subentra da solo,
+              e un’AI da riga di comando per la rilettura prudente del testo</dd></div>
+            <div><dt>Consegna</dt><dd>Build portatile con runtime, binari e modelli dentro: si
+              copia e parte</dd></div>
+          </dl>
+        </div>
       </article>
 
     </div>
@@ -857,6 +885,6 @@
   <span class="voice__prog mono"><b id="voiceCount">0</b>/7</span>
 </div>
 
-<script type="module" src="app.js?v=20260910-145842"></script>
+<script type="module" src="app.js?v=20260910-152103"></script>
 </body>
 </html>

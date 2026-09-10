@@ -1577,7 +1577,7 @@ body.ord-in-corso *{cursor:grabbing !important}
 .appmie__card{display:grid;gap:10px;align-content:start;
   padding:clamp(18px,2vw,26px);border:1px solid var(--rule);border-radius:var(--r);
   background:var(--panel);box-shadow:0 1px 2px rgba(5,7,11,.05)}
-.appmie__card > span.mono{color:var(--em);font-size:11px;letter-spacing:.12em}
+.appmie__card > span.mono{color:var(--em);font-size:11px;letter-spacing:.12em;overflow-wrap:anywhere}
 .appmie__card h4{margin:0;font-family:var(--display);font-size:clamp(26px,3vw,34px);
   font-weight:600;letter-spacing:-.02em;line-height:1.05;text-transform:uppercase}
 .appmie__cos{margin:0;max-width:66ch;color:var(--text);font-size:16px;line-height:1.6}
@@ -1592,7 +1592,10 @@ body.ord-in-corso *{cursor:grabbing !important}
    e' quello che evita l'overflow quando la carta e' piu' stretta del
    minimo. */
 .appmie__capacita{margin-top:6px;display:grid;gap:clamp(16px,2vw,26px);
-  grid-template-columns:repeat(auto-fit,minmax(min(100%,215px),1fr))}
+  /* 250 e non 215: a 215 su un monitor largo entravano cinque colonne
+     e ogni voce andava a capo tre volte. A 250 ne entrano quattro e la
+     quinta va sotto, che si legge molto meglio. */
+  grid-template-columns:repeat(auto-fit,minmax(min(100%,250px),1fr))}
 .appmie__capacita section{display:grid;gap:8px;align-content:start}
 .appmie__capacita b{color:var(--em);font-size:11px;letter-spacing:.13em;text-transform:uppercase}
 .appmie__capacita ul{margin:0;padding:0;list-style:none;display:grid;gap:7px}
@@ -1610,8 +1613,29 @@ body.ord-in-corso *{cursor:grabbing !important}
   .appmie__grid[data-gr] > .appmie__card{grid-template-rows:subgrid;grid-row:span 5;row-gap:10px}
 }
 
-.appmie__tec{margin:8px 0 0;padding-top:12px;border-top:1px solid var(--rule-2);
-  color:var(--muted);font-size:11px;letter-spacing:.06em;line-height:1.7}
+/* La riga tecnica era una sfilza di nomi separati da puntini: diceva
+   "so usare queste cose" e basta. Quattro voci con la loro etichetta
+   dicono a cosa serve ognuna, che e' l'unica cosa che interessa a chi
+   deve decidere se affidarti un lavoro. */
+/* container-type e non una media query: e' la larghezza della CARTA che
+   decide se etichetta e testo stanno affiancati, non quella dello
+   schermo. Con la media query, scegliendo l'impaginazione a quattro
+   colonne restavano affiancati dentro 207px e sbordavano di 21. Stesso
+   errore delle sotto-colonne, due regole piu' su: la larghezza dello
+   schermo non dice niente su quanto e' larga una scatola dentro. */
+.appmie__sotto{margin:10px 0 0;padding-top:14px;border-top:1px solid var(--rule-2);
+  container-type:inline-size}
+.appmie__sotto > b{display:block;margin-bottom:10px;color:var(--muted);
+  font-size:11px;letter-spacing:.13em;text-transform:uppercase}
+.appmie__sotto dl{margin:0;display:grid;gap:8px}
+.appmie__sotto dl > div{display:grid;gap:2px 14px;
+  grid-template-columns:minmax(0,1fr)}
+@container (min-width:420px){
+  .appmie__sotto dl > div{grid-template-columns:minmax(84px,auto) minmax(0,1fr)}
+}
+.appmie__sotto dt{color:var(--em);font-family:var(--mono);font-size:11px;
+  letter-spacing:.1em;text-transform:uppercase;padding-top:.25em}
+.appmie__sotto dd{margin:0;color:var(--text);font-size:14.5px;line-height:1.55}
 .appmie__nota{margin:clamp(18px,2vw,26px) 0 0;max-width:70ch;
   color:var(--text);font-size:16px;line-height:1.6}
 
