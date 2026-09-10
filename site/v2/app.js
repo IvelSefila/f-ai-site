@@ -2,10 +2,11 @@
 * app.js — la sessione. Tiene il filo fra le prove, parla, misura,
 * e alla fine scrive il dossier. Nessuna libreria.
 * ═══════════════════════════════════════════════════════════════════ */
-import { initHero } from './hero.js?v=20260909-142835';
-import { initPalette } from './palette.js?v=20260909-142835';
-import { keyVisual, timeline, radar, MODES, rng, leggiColori} from './engine.js?v=20260909-142835';
-import { initBrief } from './brief.js?v=20260909-142835';
+import { initHero } from './hero.js?v=20260910-133547';
+import { initStrumenti } from './strumenti.js?v=20260910-133547';
+import { initPalette } from './palette.js?v=20260910-133547';
+import { keyVisual, timeline, radar, MODES, rng, leggiColori} from './engine.js?v=20260910-133547';
+import { initBrief } from './brief.js?v=20260910-133547';
 
 const $ = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => [...r.querySelectorAll(s)];
@@ -580,10 +581,28 @@ $('#brief-mail')?.addEventListener('click', () => {
 /* ══════════ METRICHE VERE ══════════ */
 function metrics() {
   try {
+    /* LCP vuol dire "quanto ci ha messo a comparire la prima schermata".
+       Lasciando correre l'osservatore, questo numero risponde a un'altra
+       domanda — "qual e' la cosa piu' grande che ho incontrato finora" —
+       e cresce a ogni schermata nuova: misurato, oscillava fra 236 e
+       3388 ms per la stessa identica pagina. E chi legge il dossier lo
+       trova in fondo, cioe' dopo aver scorso tutto, cioe' sempre al
+       valore peggiore.
+
+       Si ferma dove si ferma la misura vera: al primo gesto. Lo
+       scorrimento conta come gesto solo dopo un secondo e mezzo, il
+       tempo di lasciar dipingere la prima schermata a chi scorre
+       subito. */
+    let fermo = false;
     new PerformanceObserver(l => {
+        if (fermo) return;
         const e = l.getEntries().at(-1);
         if (e) $('#mLcp').textContent = `${Math.round(e.startTime)} ms`;
       }).observe({ type: 'largest-contentful-paint', buffered: true });
+    const fermaLcp = () => { fermo = true; };
+    addEventListener('pointerdown', fermaLcp, { once: true, passive: true });
+    addEventListener('keydown', fermaLcp, { once: true });
+    setTimeout(() => addEventListener('scroll', fermaLcp, { once: true, passive: true }), 1500);
 
     let cls = 0;
     new PerformanceObserver(l => {
@@ -659,3 +678,4 @@ document.addEventListener('palette', () => {
   RIDISEGNI.forEach(f => { try { f(); } catch {} });
 });
 initPalette();
+initStrumenti();

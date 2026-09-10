@@ -2,10 +2,25 @@ import { chromium } from 'playwright';
 const b=await chromium.launch({executablePath:'C:/Users/fabri/AppData/Local/ms-playwright/chromium-1228/chrome-win64/chrome.exe',
   args:['--use-gl=swiftshader','--enable-unsafe-swiftshader','--ignore-gpu-blocklist']});
 const p=await b.newPage({viewport:{width:1440,height:900}});
+/* L'LCP lo misuro da fuori, con un osservatore registrato prima che la
+   pagina parta, e lo leggo PRIMA di toccare qualsiasi cosa: e' il
+   numero che vede chi apre la pagina e basta. Leggerlo dalla casella
+   del dossier a fine giro rispondeva a un'altra domanda — "la cosa piu'
+   grande incontrata in quattordici manovre" — e infatti oscillava fra
+   236 e 3388 ms per la stessa pagina, sullo stesso commit. */
+await p.addInitScript(() => {
+  window.__lcp = 0;
+  try {
+    new PerformanceObserver(l => { for (const e of l.getEntries()) window.__lcp = Math.round(e.startTime); })
+      .observe({ type: 'largest-contentful-paint', buffered: true });
+  } catch {}
+});
 const errs=[]; p.on('console',m=>{if(m.type()==='error')errs.push(m.text())}); p.on('pageerror',e=>errs.push(String(e)));
 await p.goto('http://localhost:8899/v2/index.html?probe=1',{waitUntil:'networkidle'});
 await p.addStyleTag({content:'html{scroll-behavior:auto!important}'});
 await p.waitForTimeout(2500);
+
+const lcpApertura = await p.evaluate(() => window.__lcp || 0);
 
 const go=async id=>{await p.evaluate(i=>{const s=document.getElementById(i);scrollTo(0,s.getBoundingClientRect().top+scrollY-70)},id);await p.waitForTimeout(500);};
 
@@ -48,6 +63,7 @@ const d=await p.evaluate(()=>({
   lcp:mLcp.textContent, cls:mCls.textContent, inp:mInp.textContent, kb:mKb.textContent, req:mReq.textContent,
 }));
 console.log(JSON.stringify(d,null,1));
+console.log(`LCP all'apertura: ${lcpApertura} ms`);
 console.log('ERRORI:', errs.length? errs.slice(0,5):'nessuno');
 await p.screenshot({path:'audit/v2shots/verdetto-pieno.jpg',type:'jpeg',quality:82});
 await b.close();

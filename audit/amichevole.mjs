@@ -33,6 +33,7 @@
  * uso: node audit/amichevole.mjs
  * ═══════════════════════════════════════════════════════════════════ */
 import { chromium } from 'playwright';
+import fs from 'node:fs';
 
 const CROMO = 'C:/Users/fabri/AppData/Local/ms-playwright/chromium-1228/chrome-win64/chrome.exe';
 const SITO = 'http://localhost:8899/v2/index.html?probe=1';
@@ -44,6 +45,45 @@ const b = await chromium.launch({ executablePath: CROMO,
 
 let rotte = 0;
 const dice = (ok, t) => { if (!ok) rotte++; console.log(`  ${ok ? '✓' : '✗'} ${t}`); };
+
+/* ── IL FOGLIO DI STILE E' TUTTO LI'? ──────────────────────────────
+   Una graffa in meno non da' nessun errore in console: il browser
+   ricuce come puo' e butta via il resto della regola, a volte un blocco
+   intero. Mi e' successo scrivendo le pastiglie degli strumenti — e a
+   morire non sono state le pastiglie, ma TUTTO il blocco che porta i
+   bersagli a 44px sul telefono, bottoni del brief compresi.
+
+   Due controlli, uno statico e uno vivo. Il primo conta le graffe nel
+   file. Il secondo conta le regole che il browser ha davvero
+   costruito: se non sono quante ne apre il file, qualcuna e' stata
+   ingoiata per strada. */
+function graffe() {
+  const crudo = fs.readFileSync('site/v2/v2.css', 'utf8');
+  const senzaCommenti = crudo.replace(/\/\*[\s\S]*?\*\//g, '');
+  const senzaStringhe = senzaCommenti.replace(/"[^"]*"|'[^']*'/g, '""');
+  /* Le regole scritte per Firefox — ::-moz-range-track e compagnia —
+     Chrome le butta via per definizione, e una regola buttata via e'
+     una regola in meno nel conto. Sono sei, ed erano esattamente il
+     divario che questa misura segnalava la prima volta che l'ho
+     accesa: sei "regole ingoiate" su un foglio sano. Le tolgo dal
+     conto invece di abbassare la soglia, che sarebbe stato il modo di
+     far tacere la misura senza capirla. */
+  const soloChrome = senzaStringhe.replace(/[^{}]*::-moz-[^{}]*\{[^{}]*\}/g, '');
+  return {
+    apre: (soloChrome.match(/\{/g) || []).length,
+    chiude: (soloChrome.match(/\}/g) || []).length,
+    tutte: (senzaStringhe.match(/\{/g) || []).length,
+  };
+}
+const CONTA = () => {
+  let n = 0;
+  const scendi = (rs) => { for (const r of rs) { n++; if (r.cssRules) scendi(r.cssRules); } };
+  for (const s of document.styleSheets) {
+    if (!/v2\.css/.test(s.href || '')) continue;
+    try { scendi(s.cssRules); } catch { return -1; }
+  }
+  return n;
+};
 
 /* ── la misura, dentro la pagina ──────────────────────────────────── */
 const GUARDA = ({ battute, pollice, dito }) => {
@@ -90,6 +130,21 @@ const GUARDA = ({ battute, pollice, dito }) => {
   }
   return { fuori, altezzaBar };
 };
+
+/* `node audit/amichevole.mjs rompi` toglie una graffa al foglio, per
+   vedere se il controllo se ne accorge. E' l'errore che mi e' costato
+   tutto il blocco dei bersagli a 44px senza una riga in console: una
+   misura che non lo vede non serve a niente. Il file viene rimesso
+   com'era appena finito. */
+const ROMPI = process.argv[2] === 'rompi';
+const CSS = 'site/v2/v2.css';
+const originale = fs.readFileSync(CSS, 'utf8');
+if (ROMPI) {
+  const i = originale.indexOf('.stack__group b{');
+  fs.writeFileSync(CSS, originale.slice(0, originale.indexOf('}', i))
+                      + originale.slice(originale.indexOf('}', i) + 1));
+  process.on('exit', () => fs.writeFileSync(CSS, originale));
+}
 
 for (const [nome, vp, dito] of [['telefono', { width: 390, height: 844 }, true],
                                 ['desktop', { width: 1440, height: 900 }, false]]) {
@@ -163,6 +218,13 @@ for (const [nome, vp, dito] of [['telefono', { width: 390, height: 844 }, true],
     }
     return male;
   });
+
+  /* il foglio di stile e' arrivato intero? */
+  const g = graffe();
+  const costruite = await p.evaluate(CONTA);
+  dice(g.apre === g.chiude, `le graffe di v2.css sono pari (${g.tutte} in tutto)`);
+  dice(costruite === g.apre,
+       `il browser ha costruito tutte le ${g.apre} regole${costruite === g.apre ? '' : ` — ne ha ${costruite}, qualcuna e' stata ingoiata`}`);
 
   const { fuori } = await p.evaluate(GUARDA, { battute: BATTUTE, pollice: POLLICE, dito });
   fuori.spente = spente; fuori.coperti = coperti;

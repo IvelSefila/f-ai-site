@@ -450,13 +450,19 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border:0;border-radiu
 .stack__group b{display:flex;align-items:center;gap:9px;color:var(--tool);letter-spacing:.13em}
 .stack__group b span{color:var(--muted);font-variant-numeric:tabular-nums}
 .stack__group > div{display:flex;flex-wrap:wrap;gap:8px}
-.stack__group > div span{display:inline-flex;align-items:center;gap:9px;
+/* :is(span,button) perche' la pastiglia nasce span nell'HTML e diventa
+   un bottone vero quando il JavaScript arriva. Senza JavaScript la
+   lista si legge lo stesso, semplicemente non si apre. */
+.stack__group > div :is(span,button){display:inline-flex;align-items:center;gap:9px;
   padding:9px 15px 10px;border:1px solid color-mix(in srgb,var(--tool) 34%,transparent);
   border-radius:var(--r-pill,999px);background:color-mix(in srgb,var(--tool) 7%,var(--panel-2));
   color:var(--ink);font-size:15px;line-height:1.2;transition:border-color .2s,background .2s}
-.stack__group > div span::before{content:"";width:7px;height:7px;border-radius:50%;
+.stack__group > div button{font:inherit;font-size:15px;cursor:pointer;text-align:left}
+.stack__group > div button:focus-visible{outline:2px solid var(--tool);outline-offset:2px}
+.stack__group > div button:active{transform:translateY(1px)}
+.stack__group > div :is(span,button)::before{content:"";width:7px;height:7px;border-radius:50%;
   background:var(--tool);flex:none}
-.stack__group > div span:hover{border-color:color-mix(in srgb,var(--tool) 62%,transparent);
+.stack__group > div :is(span,button):hover{border-color:color-mix(in srgb,var(--tool) 62%,transparent);
   background:color-mix(in srgb,var(--tool) 13%,var(--panel-2))}
 
 .stack__group--creative{--tool:#ff8b62}
@@ -745,7 +751,9 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border:0;border-radiu
   .brief-fields input,.brief-fields textarea,.brief-fields select{min-height:48px}
   input[type=range]{height:44px}
   .work__break summary{min-height:44px;align-items:center}
-  .stack__group > div span{min-height:40px}
+  /* 44 e non 40, e :is perche' da oggi sono bottoni: si aprono, quindi
+     vanno presi col pollice al primo colpo. Misurato: erano 37px. */
+  .stack__group > div :is(span,button){min-height:44px}
   .lab__card{min-height:44px}
 
   /* 4 · Il corpo del testo non scende sotto i 15px, le meta sotto i 12.
@@ -1526,3 +1534,33 @@ body.ord-in-corso *{cursor:grabbing !important}
 
 /* come si comincia, scritto sotto il titolo del contatto */
 .contatto__come{margin:0 0 22px;max-width:62ch;color:var(--text);font-size:16px;line-height:1.6}
+
+
+/* ═══════════════════════════════════════════════════════════════════
+ * LA SCHEDA DI UNO STRUMENTO
+ *
+ * Un nome non e' una competenza: "Photoshop" lo scrivono tutti. La
+ * scheda dice cosa ci faccio io, e prende il colore del suo gruppo —
+ * arancio la grafica, ciano gli assistenti, viola il locale — cosi' si
+ * capisce da dove si e' arrivati senza doverlo scrivere.
+ * ═══════════════════════════════════════════════════════════════════ */
+.scheda{
+  color-scheme:dark;
+  width:min(460px,calc(100vw - 32px));max-height:calc(100dvh - 32px);
+  padding:0;border:1px solid color-mix(in srgb,var(--tool) 40%,transparent);
+  border-radius:18px;background:#0b0f16;color:#f2f4f7;
+  font:400 15px/1.6 var(--body);overscroll-behavior:contain}
+.scheda::backdrop{background:rgba(5,7,11,.72);backdrop-filter:blur(6px)}
+.scheda__cat{margin:0;padding:18px 22px 0;color:var(--tool);
+  font-size:11px;letter-spacing:.14em;text-transform:uppercase}
+.scheda h3{margin:6px 0 0;padding:0 22px;font-size:26px;letter-spacing:-.01em;line-height:1.15}
+.scheda__testo{margin:12px 0 20px;padding:0 22px;color:#c3ccd6;font-size:16px;line-height:1.62}
+.scheda__piede{position:sticky;bottom:0;display:flex;align-items:center;justify-content:space-between;
+  gap:14px;padding:14px 22px 18px;background:#0b0f16;
+  border-top:1px solid rgba(221,231,242,.08)}
+.scheda__piede .mono{color:#7f8b98;font-size:11px;letter-spacing:.08em}
+@media (max-width:560px){
+  .scheda h3{font-size:23px}
+  .scheda__piede{flex-wrap:wrap}
+  .scheda__piede .btn{min-height:46px;flex:1}
+}
