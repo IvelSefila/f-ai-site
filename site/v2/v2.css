@@ -1549,12 +1549,23 @@ body.ord-in-corso *{cursor:grabbing !important}
   width:min(460px,calc(100vw - 32px));max-height:calc(100dvh - 32px);
   padding:0;border:1px solid color-mix(in srgb,var(--tool) 40%,transparent);
   border-radius:18px;background:#0b0f16;color:#f2f4f7;
-  font:400 15px/1.6 var(--body);overscroll-behavior:contain}
+  font:400 15px/1.6 var(--body);overflow:auto;overscroll-behavior:contain}
 .scheda::backdrop{background:rgba(5,7,11,.72);backdrop-filter:blur(6px)}
 .scheda__cat{margin:0;padding:18px 22px 0;color:var(--tool);
   font-size:11px;letter-spacing:.14em;text-transform:uppercase}
 .scheda h3{margin:6px 0 0;padding:0 22px;font-size:26px;letter-spacing:-.01em;line-height:1.15}
-.scheda__testo{margin:12px 0 20px;padding:0 22px;color:#c3ccd6;font-size:16px;line-height:1.62}
+/* Due blocchi separati, e si devono vedere separati: la definizione e'
+   per chi non sa cosa sia lo strumento, l'elenco e' per chi vuole
+   sapere cosa ci faccio. Un paragrafo solo li avrebbe impastati, ed era
+   il difetto della prima versione — scritta bene e poco utile. */
+.scheda__cos{margin:12px 0 0;padding:0 22px;color:#c3ccd6;font-size:15.5px;line-height:1.6}
+.scheda__eti{margin:20px 0 0;padding:0 22px;color:var(--tool);
+  font-size:11px;letter-spacing:.14em;text-transform:uppercase}
+.scheda__lista{margin:10px 0 20px;padding:0 22px;list-style:none;display:grid;gap:7px}
+.scheda__lista li{position:relative;padding-left:17px;color:#f2f4f7;
+  font-size:15.5px;line-height:1.5}
+.scheda__lista li::before{content:"";position:absolute;left:2px;top:.62em;
+  width:6px;height:6px;border-radius:50%;background:var(--tool)}
 .scheda__piede{position:sticky;bottom:0;display:flex;align-items:center;justify-content:space-between;
   gap:14px;padding:14px 22px 18px;background:#0b0f16;
   border-top:1px solid rgba(221,231,242,.08)}

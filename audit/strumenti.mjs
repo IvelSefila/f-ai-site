@@ -98,13 +98,20 @@ for (const [nome, vp, dito] of [['telefono', { width: 390, height: 844 }, true],
     return {
       titolo: d.querySelector('h3').textContent.trim(),
       categoria: d.querySelector('.scheda__cat').textContent.trim(),
-      testo: d.querySelector('.scheda__testo').textContent.trim(),
+      cos: d.querySelector('.scheda__cos').textContent.trim(),
+      voci: [...d.querySelectorAll('.scheda__lista li')].map(li => li.textContent.trim()),
       dentroSchermo: d.getBoundingClientRect().height <= innerHeight + 1,
     };
   });
   dice(!!dentro, 'la scheda si apre');
   dice(dentro && dentro.titolo === primo, `dice il nome giusto: "${dentro?.titolo}"`);
-  dice(dentro && dentro.testo.length > 60, `e una descrizione vera (${dentro?.testo.length} battute)`);
+  dice(dentro && dentro.cos.length > 40, `dice che cos'e' (${dentro?.cos.length} battute)`);
+  dice(dentro && dentro.voci.length >= 2,
+       `e ${dentro?.voci.length} cose che ci faccio: "${dentro?.voci[0]}"`);
+  /* Schematico vuol dire voci corte. Un elenco puntato in cui ogni voce
+     e' un paragrafo e' un paragrafo travestito. */
+  const lunghe = (dentro?.voci || []).filter(v => v.length > 90);
+  dice(lunghe.length === 0, `le voci restano corte${lunghe.length ? ' — ' + lunghe[0].slice(0, 50) : ''}`);
   dice(dentro && !/^\d/.test(dentro.categoria) && dentro.categoria.length > 3,
        `col nome del gruppo senza il numero: "${dentro?.categoria}"`);
   dice(dentro && dentro.dentroSchermo, 'e sta dentro lo schermo');
