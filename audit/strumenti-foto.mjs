@@ -25,6 +25,14 @@ for (const [nome, vp] of [['telefono', { width: 390, height: 844 }],
   await p.waitForTimeout(400);
   await p.screenshot({ path: `audit/v2shots/strum-${nome}-elenco.jpg`, type: 'jpeg', quality: 84 });
 
+  /* il blocco delle app che mi sono costruito, subito sotto l'elenco */
+  await p.evaluate(() => {
+    document.querySelector('.appmie').scrollIntoView({ block: 'start', behavior: 'instant' });
+    scrollBy(0, -80);
+  });
+  await p.waitForTimeout(400);
+  await p.screenshot({ path: `audit/v2shots/appmie-${nome}.jpg`, type: 'jpeg', quality: 84 });
+
   /* ComfyUI: la scheda piu' lunga di tutte, definizione compresa. */
   await p.click('.stack__group--local button:nth-child(2)');
   await p.waitForTimeout(500);

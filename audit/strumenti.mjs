@@ -143,7 +143,7 @@ for (const [nome, vp, dito] of [['telefono', { width: 390, height: 844 }, true],
     return male;
   });
   dice(tutte.length === 0,
-       `tutte e 35 le schede ci stanno e si chiudono${tutte.length ? ' — ' + tutte.slice(0, 3).join(' · ') : ''}`);
+       `tutte e ${conto.totale} le schede ci stanno e si chiudono${tutte.length ? ' — ' + tutte.slice(0, 3).join(' · ') : ''}`);
 
   /* ── la tastiera: si arriva e si torna ──────────────────────────── */
   const tornato = await p.evaluate(async () => {

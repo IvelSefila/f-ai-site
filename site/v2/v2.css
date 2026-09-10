@@ -437,9 +437,16 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border:0;border-radiu
    diventato ciano per non confondersi con l'accento del sito. */
 .stack{margin-top:clamp(22px,2.6vw,38px);border:1px solid var(--rule);border-radius:var(--r);
   background:var(--panel);overflow:hidden}
-.stack__head{display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap;
-  padding:14px 18px;border-bottom:1px solid var(--rule);color:var(--muted)}
-.stack__head strong{color:var(--ink);font-weight:700}
+/* L'intestazione era in maiuscoletto da undici pixel, come una didascalia
+   qualsiasi. E' il titolo di trentotto voci — la parte del sito che dice
+   cosa so usare — e in mezzo alla pagina non la vedeva nessuno. */
+.stack__head{display:flex;align-items:baseline;justify-content:space-between;
+  gap:6px 16px;flex-wrap:wrap;padding:17px 18px 15px;
+  border-bottom:1px solid var(--rule);color:var(--muted)}
+.stack__head strong{color:var(--ink);font-weight:700;font-family:var(--display);
+  font-size:clamp(21px,2.4vw,27px);letter-spacing:.01em;text-transform:uppercase;
+  line-height:1.05}
+.stack__head span{font-size:12px;letter-spacing:.1em}
 /* Due colonne come nell'originale: le categorie 03 e 06 attraversano tutto,
    le altre stanno a coppie. Con auto-fit venivano quattro colonne e due
    restavano vuote. */
@@ -1531,6 +1538,35 @@ body.ord-in-corso *{cursor:grabbing !important}
 @media (max-width:640px){
   .pal__pos .btn{min-height:46px}
 }
+
+/* ═══════════════════════════════════════════════════════════════════
+ * LE APP CHE MI SONO COSTRUITO
+ *
+ * Stanno subito dopo l'elenco degli strumenti, e non e' un caso: dire
+ * "so costruire applicazioni" dopo aver elencato trentotto strumenti e'
+ * un'affermazione; mostrarne due che uso tutti i giorni e' una prova.
+ * Sulle dodici colonne come gli altri gruppi, quindi si spostano e si
+ * reimpaginano anche loro.
+ * ═══════════════════════════════════════════════════════════════════ */
+/* il margine sotto serve quanto quello sopra: senza, la nota finiva
+   appiccicata alle linguette dei banchi che vengono dopo */
+.appmie{margin:clamp(22px,2.6vw,38px) 0 clamp(26px,3vw,44px)}
+.appmie__intro{margin:0 0 14px;color:var(--muted);font-size:11px;
+  letter-spacing:.14em;text-transform:uppercase}
+.appmie__card{display:grid;gap:9px;align-content:start;
+  padding:clamp(18px,2vw,24px);border:1px solid var(--rule);border-radius:var(--r);
+  background:var(--panel)}
+.appmie__card > span.mono{color:var(--em);font-size:11px;letter-spacing:.12em}
+.appmie__card h3{margin:0;font-size:25px;letter-spacing:-.01em;line-height:1.1}
+.appmie__cos{margin:0;color:var(--text);font-size:15.5px;line-height:1.6}
+.appmie__card ul{margin:4px 0 0;padding:0;list-style:none;display:grid;gap:6px}
+.appmie__card li{position:relative;padding-left:16px;color:var(--text);
+  font-size:15px;line-height:1.5}
+.appmie__card li::before{content:"";position:absolute;left:1px;top:.6em;
+  width:5px;height:5px;border-radius:50%;background:var(--em)}
+.appmie__tec{margin:6px 0 0;padding-top:11px;border-top:1px solid var(--rule-2);
+  color:var(--muted);font-size:11px;letter-spacing:.06em}
+.appmie__nota{margin:18px 0 0;max-width:70ch;color:var(--muted);font-size:15px;line-height:1.6}
 
 /* come si comincia, scritto sotto il titolo del contatto */
 .contatto__come{margin:0 0 22px;max-width:62ch;color:var(--text);font-size:16px;line-height:1.6}

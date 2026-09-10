@@ -148,6 +148,20 @@ export const SCHEDE = {
          'Carrellate e zoom decisi in anticipo',
          'I fotogrammi della versione in pixel art di questo sito'],
   },
+  'ACE 1.5': {
+    cos: 'Modello aperto per generare musica: dalla descrizione di un genere e di ' +
+         'un’atmosfera tira fuori una traccia intera, strumenti e struttura compresi.',
+    io: ['Basi musicali originali per video e Reel',
+         'Musica senza problemi di diritti, perché nasce per quel pezzo',
+         'Varianti della stessa base per durate diverse'],
+  },
+  'Lyria': {
+    cos: 'Modello musicale di Google. Genera brani strumentali su descrizione, con un ' +
+         'controllo fine su strumenti, ritmo e andamento.',
+    io: ['Musica di sottofondo su misura per un montaggio',
+         'Lo stesso tema in versione lunga e in versione da quindici secondi',
+         'Alternativa quando serve un timbro diverso da quello di ACE'],
+  },
   'ElevenLabs': {
     cos: 'Sintesi vocale e clonazione della voce: trasforma un testo in parlato.',
     io: ['Voce narrante per video e caroselli',
@@ -179,12 +193,16 @@ export const SCHEDE = {
      e' giusto che lo sia — e' lo strumento che ha piu' bisogno di
      essere spiegato. */
   'ComfyUI': {
-    cos: 'Programma gratuito e aperto per generare immagini con l’AI sul proprio computer. ' +
-         'Invece di un riquadro dove scrivere cosa vuoi, la richiesta si costruisce ' +
+    cos: 'Sistema a nodi, gratuito e aperto, per far generare all’AI immagini, video, ' +
+         'testi e musica sul proprio computer. Si costruisce un FLUSSO DI LAVORO ' +
          'collegando scatole una dopo l’altra — quale modello usare, il testo, quante ' +
-         'passate fare, l’ingrandimento, il salvataggio — e ogni scatola è un passaggio ' +
-         'che si può cambiare da solo senza rifare il resto.',
-    io: ['Generare in locale, senza abbonamento e senza code',
+         'passate fare, l’ingrandimento, il salvataggio — invece di scrivere in un ' +
+         'riquadro e sperare. Ogni scatola è un passaggio che si cambia da solo senza ' +
+         'rifare il resto, e il flusso finito si salva e si riusa.',
+    io: ['Usare flussi già pronti e adattarli a quello che mi serve',
+         'Modificare un flusso: aggiungere, togliere o sostituire un passaggio',
+         'Costruirne di nuovi quando quelli in giro non fanno la cosa giusta',
+         'Generare in locale, senza abbonamento e senza code',
          'Rigenerare solo una parte dell’immagine, lasciando intatto il resto',
          'Ingrandire recuperando dettaglio invece di sgranare',
          'Ripetere la stessa lavorazione su cento immagini di fila',
@@ -245,6 +263,17 @@ export const SCHEDE = {
     io: ['Compiti in più passi portati a termine da soli',
          'Controlli umani messi nei punti che contano',
          'Rapporti su cosa hanno fatto e perché'],
+  },
+  'Webapp su misura': {
+    cos: 'Vibecoding: descrivere a un assistente cosa deve fare un’applicazione, ' +
+         'guardarla funzionare, correggerla e rifarla finché fa quella cosa. Non si parte ' +
+         'da un modello già pronto — si parte dal problema, e quello che esce serve solo ' +
+         'a chi l’ha chiesto.',
+    io: ['Strumenti interni per lavori che nessun programma in commercio copre',
+         'Pannelli per seguire un flusso mentre gira',
+         'Configuratori e calcolatori da mettere dentro un sito',
+         'Prototipi funzionanti da provare prima di decidere se vale la pena',
+         'Due me li sono costruiti: Alfred e Max Video Downloader, qui sotto'],
   },
   'Automazioni AI': {
     cos: 'L’insieme dei flussi che tolgono di mezzo i passaggi manuali ripetitivi.',
