@@ -173,11 +173,22 @@ export const SCHEDE = {
          'Punti di controllo umano dove sbagliare costa',
          'Notifiche quando qualcosa si inceppa'],
   },
+  /* La definizione di prima diceva "interfaccia a nodi per costruire
+     pipeline": tre parole di gergo in fila, cioe' niente per chi non lo
+     conosce gia'. Questa e' la scheda piu' lunga delle trentacinque, ed
+     e' giusto che lo sia — e' lo strumento che ha piu' bisogno di
+     essere spiegato. */
   'ComfyUI': {
-    cos: 'Interfaccia a nodi per costruire pipeline di generazione immagine che girano sul proprio computer.',
-    io: ['Catene di passaggi ripetibili',
-         'Controllo su ogni fase invece di un solo bottone',
-         'Lavorazioni in serie su molte immagini'],
+    cos: 'Programma gratuito e aperto per generare immagini con l’AI sul proprio computer. ' +
+         'Invece di un riquadro dove scrivere cosa vuoi, la richiesta si costruisce ' +
+         'collegando scatole una dopo l’altra — quale modello usare, il testo, quante ' +
+         'passate fare, l’ingrandimento, il salvataggio — e ogni scatola è un passaggio ' +
+         'che si può cambiare da solo senza rifare il resto.',
+    io: ['Generare in locale, senza abbonamento e senza code',
+         'Rigenerare solo una parte dell’immagine, lasciando intatto il resto',
+         'Ingrandire recuperando dettaglio invece di sgranare',
+         'Ripetere la stessa lavorazione su cento immagini di fila',
+         'Riaprire un flusso di mesi fa trascinandoci dentro un’immagine che ne è uscita'],
   },
   'Stable Diffusion': {
     cos: 'Modello di generazione immagini installabile in locale: gira sul computer, non su un server altrui.',

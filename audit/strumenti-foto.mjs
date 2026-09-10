@@ -25,9 +25,8 @@ for (const [nome, vp] of [['telefono', { width: 390, height: 844 }],
   await p.waitForTimeout(400);
   await p.screenshot({ path: `audit/v2shots/strum-${nome}-elenco.jpg`, type: 'jpeg', quality: 84 });
 
-  /* Photoshop: la scheda piu' lunga, cinque voci. Se ci sta questa
-     ci stanno tutte. */
-  await p.click('.stack__group--creative button:nth-child(1)');
+  /* ComfyUI: la scheda piu' lunga di tutte, definizione compresa. */
+  await p.click('.stack__group--local button:nth-child(2)');
   await p.waitForTimeout(500);
   await p.screenshot({ path: `audit/v2shots/strum-${nome}-scheda.jpg`, type: 'jpeg', quality: 84 });
   await ctx.close();

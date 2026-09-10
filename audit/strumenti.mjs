@@ -121,6 +121,30 @@ for (const [nome, vp, dito] of [['telefono', { width: 390, height: 844 }, true],
   dice(await p.evaluate(() => !document.getElementById('schedaStrumento').open),
        'Esc la chiude');
 
+  /* ── tutte e trentacinque, non solo quella che ho guardato ───────
+     Da quando le schede hanno un elenco, la piu' lunga e' quattro volte
+     la piu' corta. Una che non ci sta e non scorre e' una scheda con la
+     coda tagliata, e provandone una sola non si vede mai. */
+  const tutte = await p.evaluate(async () => {
+    const d = document.getElementById('schedaStrumento');
+    const male = [];
+    for (const b of document.querySelectorAll('.stack__group > div > button')) {
+      b.click();
+      await new Promise(r => requestAnimationFrame(r));
+      const r = d.getBoundingClientRect();
+      const chiudi = d.querySelector('[data-scheda-chiudi]').getBoundingClientRect();
+      const nome = b.textContent.trim();
+      if (r.height > innerHeight + 1) male.push(`${nome}: alta ${Math.round(r.height)} su ${innerHeight}`);
+      else if (d.scrollHeight > d.clientHeight + 1 && chiudi.bottom > innerHeight + 1)
+        male.push(`${nome}: scorre ma "Chiudi" resta fuori`);
+      else if (chiudi.bottom > r.bottom + 1) male.push(`${nome}: "Chiudi" esce dalla scheda`);
+      d.close();
+    }
+    return male;
+  });
+  dice(tutte.length === 0,
+       `tutte e 35 le schede ci stanno e si chiudono${tutte.length ? ' — ' + tutte.slice(0, 3).join(' · ') : ''}`);
+
   /* ── la tastiera: si arriva e si torna ──────────────────────────── */
   const tornato = await p.evaluate(async () => {
     const b = document.querySelectorAll('.stack__group--local button')[0];
