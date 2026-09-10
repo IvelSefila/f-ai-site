@@ -31,7 +31,7 @@ export const CONTENITORI = [
   ['.lab',           '4', 'Le carte del laboratorio'],
   ['.formats',       '3', 'I formati'],
   ['.istruzioni',     '2', 'Le istruzioni'],
-  ['.appmie__grid',   '2', 'Le mie app'],
+  ['.appmie__grid',   '1', 'Le mie app'],
   ['.bench',         '',  'Banco: visuale e pannello'],   /* '' = proporzioni originali */
 ];
 

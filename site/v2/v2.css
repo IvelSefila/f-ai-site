@@ -1540,33 +1540,80 @@ body.ord-in-corso *{cursor:grabbing !important}
 }
 
 /* ═══════════════════════════════════════════════════════════════════
- * LE APP CHE MI SONO COSTRUITO
+ * LA VETRINA — le due applicazioni che ha scritto lui
  *
- * Stanno subito dopo l'elenco degli strumenti, e non e' un caso: dire
- * "so costruire applicazioni" dopo aver elencato trentotto strumenti e'
- * un'affermazione; mostrarne due che uso tutti i giorni e' una prova.
- * Sulle dodici colonne come gli altri gruppi, quindi si spostano e si
- * reimpaginano anche loro.
+ * Erano due schede scure in mezzo ad altre schede scure, e si leggevano
+ * come una nota a margine. Sono la prova piu' forte di tutta la pagina —
+ * software funzionante, in uso ogni giorno — quindi diventano una lastra
+ * di carta bianca dentro un blocco nero: il contrasto piu' alto che il
+ * sito ha gia', senza inventare un colore nuovo.
+ *
+ * I token sono gli stessi di .sec--chiara, ribaltati qui dentro: cosi'
+ * ogni regola scritta in termini di --ink, --text, --panel funziona da
+ * sola, e l'accento passa alla sua versione da carta, che sul bianco si
+ * legge (il verde da fondo scuro su bianco fa 2,21:1).
  * ═══════════════════════════════════════════════════════════════════ */
-/* il margine sotto serve quanto quello sopra: senza, la nota finiva
-   appiccicata alle linguette dei banchi che vengono dopo */
-.appmie{margin:clamp(22px,2.6vw,38px) 0 clamp(26px,3vw,44px)}
-.appmie__intro{margin:0 0 14px;color:var(--muted);font-size:11px;
-  letter-spacing:.14em;text-transform:uppercase}
-.appmie__card{display:grid;gap:9px;align-content:start;
-  padding:clamp(18px,2vw,24px);border:1px solid var(--rule);border-radius:var(--r);
-  background:var(--panel)}
+.appmie{
+  color-scheme:light;
+  --stage:#f7f8fa; --panel:#ffffff; --panel-2:#eef1f5; --alt:#eceff3;
+  --rule:rgba(5,7,11,.13); --rule-2:rgba(5,7,11,.07);
+  --ink:#0b0f16; --text:#3c4653; --muted:#5f6a76;
+  --em:var(--em-c); --em-bright:var(--em-c-bright); --em-light:var(--em-c-light);
+  --em-deep:var(--em-c-deep); --em-dim:var(--em-c-dim);
+  margin:clamp(26px,3vw,44px) 0;
+  padding:clamp(22px,3vw,42px) clamp(18px,2.6vw,38px);
+  border-radius:clamp(18px,2vw,28px);
+  background:var(--stage);color:var(--ink);
+  box-shadow:0 26px 70px -30px rgba(0,0,0,.75)}
+
+.appmie__testa{max-width:66ch;margin-bottom:clamp(20px,2.4vw,30px)}
+.appmie__testa .eyebrow{color:var(--muted)}
+.appmie__testa .eyebrow .n{color:var(--em);border-right-color:var(--rule)}
+.appmie__testa h3{margin:10px 0 0;font-size:clamp(27px,3.4vw,40px);
+  letter-spacing:-.02em;line-height:1.06}
+.appmie__testa h3 em{font-style:normal;color:var(--em)}
+.appmie__lede{margin:14px 0 0;color:var(--text);font-size:16px;line-height:1.6}
+
+.appmie__card{display:grid;gap:10px;align-content:start;
+  padding:clamp(18px,2vw,26px);border:1px solid var(--rule);border-radius:var(--r);
+  background:var(--panel);box-shadow:0 1px 2px rgba(5,7,11,.05)}
 .appmie__card > span.mono{color:var(--em);font-size:11px;letter-spacing:.12em}
-.appmie__card h3{margin:0;font-size:25px;letter-spacing:-.01em;line-height:1.1}
-.appmie__cos{margin:0;color:var(--text);font-size:15.5px;line-height:1.6}
-.appmie__card ul{margin:4px 0 0;padding:0;list-style:none;display:grid;gap:6px}
-.appmie__card li{position:relative;padding-left:16px;color:var(--text);
+.appmie__card h4{margin:0;font-family:var(--display);font-size:clamp(26px,3vw,34px);
+  font-weight:600;letter-spacing:-.02em;line-height:1.05;text-transform:uppercase}
+.appmie__cos{margin:0;max-width:66ch;color:var(--text);font-size:16px;line-height:1.6}
+
+/* Le capacita' a colonne: sono tante, e in colonna unica diventavano un
+   muro che nessuno legge fino in fondo. */
+/* auto-fit e non due media query sulla larghezza dello SCHERMO: la
+   carta puo' essere stretta anche su un monitor largo — basta scegliere
+   l'impaginazione a tre o quattro colonne dal pannello — e con le media
+   query restava a tre colonne dentro 207px, con le voci che uscivano di
+   ventisette pixel. Misurato su tutte le impaginazioni. Il min(100%,...)
+   e' quello che evita l'overflow quando la carta e' piu' stretta del
+   minimo. */
+.appmie__capacita{margin-top:6px;display:grid;gap:clamp(16px,2vw,26px);
+  grid-template-columns:repeat(auto-fit,minmax(min(100%,215px),1fr))}
+.appmie__capacita section{display:grid;gap:8px;align-content:start}
+.appmie__capacita b{color:var(--em);font-size:11px;letter-spacing:.13em;text-transform:uppercase}
+.appmie__capacita ul{margin:0;padding:0;list-style:none;display:grid;gap:7px}
+.appmie__capacita li{position:relative;padding-left:16px;color:var(--text);
   font-size:15px;line-height:1.5}
-.appmie__card li::before{content:"";position:absolute;left:1px;top:.6em;
-  width:5px;height:5px;border-radius:50%;background:var(--em)}
-.appmie__tec{margin:6px 0 0;padding-top:11px;border-top:1px solid var(--rule-2);
-  color:var(--muted);font-size:11px;letter-spacing:.06em}
-.appmie__nota{margin:18px 0 0;max-width:70ch;color:var(--muted);font-size:15px;line-height:1.6}
+.appmie__capacita li::before{content:"";position:absolute;left:1px;top:.58em;
+  width:5px;height:5px;border-radius:50%;background:var(--em-light)}
+.appmie__capacita em{font-style:normal;font-weight:600;color:var(--ink)}
+
+/* Le due carte affiancate devono cominciare a scrivere alla stessa
+   altezza: "01 / Assistente editoriale" va a capo dove "02 / Produzione
+   video" no, e sotto i ~300px di colonna i due titoli si sfalsavano di
+   36px. Con subgrid le righe sono quelle del gruppo, quindi condivise. */
+@supports (grid-template-rows: subgrid){
+  .appmie__grid[data-gr] > .appmie__card{grid-template-rows:subgrid;grid-row:span 5;row-gap:10px}
+}
+
+.appmie__tec{margin:8px 0 0;padding-top:12px;border-top:1px solid var(--rule-2);
+  color:var(--muted);font-size:11px;letter-spacing:.06em;line-height:1.7}
+.appmie__nota{margin:clamp(18px,2vw,26px) 0 0;max-width:70ch;
+  color:var(--text);font-size:16px;line-height:1.6}
 
 /* come si comincia, scritto sotto il titolo del contatto */
 .contatto__come{margin:0 0 22px;max-width:62ch;color:var(--text);font-size:16px;line-height:1.6}

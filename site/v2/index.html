@@ -24,7 +24,7 @@
 <meta name="twitter:title" content="F/AI — Un portfolio che esegue le competenze" />
 <meta name="twitter:description" content="Sette prove manovrabili, non una lista di competenze." />
 <meta name="twitter:image" content="../assets/og-fai.jpg" />
-<link rel="stylesheet" href="v2.css?v=20260910-144416" />
+<link rel="stylesheet" href="v2.css?v=20260910-145842" />
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -274,46 +274,125 @@
 
 
   <div class="appmie">
-    <p class="appmie__intro mono">Due che mi sono costruito, per me</p>
+    <header class="appmie__testa">
+      <p class="eyebrow mono"><span class="n">Software mio</span> Fiori all’occhiello</p>
+      <h3>Due applicazioni che ho scritto io.<br><em>E che uso tutti i giorni.</em></h3>
+      <p class="appmie__lede">Non sono dimostrazioni fatte per il portfolio: sono programmi nati
+        perché quello che mi serviva non esisteva, o costava un abbonamento al mese per una
+        funzione sola. Sono anche la risposta più diretta alla domanda «ma tu cosa sai
+        costruire».</p>
+    </header>
+
     <div class="appmie__grid">
 
       <article class="appmie__card">
-        <span class="mono">01 / Editoriale</span>
-        <h3>Alfred</h3>
-        <p class="appmie__cos">Un’applicazione web che uso per i miei canali social: raccoglie i
-          contenuti dalle fonti che gli indico, li prepara, li mette in calendario e li pubblica
-          solo dove decido io. Ogni passaggio resta visibile — non è una scatola nera che posta
+        <span class="mono">01 / Assistente editoriale</span>
+        <h4>Alfred</h4>
+        <p class="appmie__cos">Un’applicazione web che porta i miei canali social dall’inizio alla
+          fine: legge le fonti, sceglie cosa vale, produce i video, mette tutto in calendario e
+          pubblica. Ogni passaggio resta visibile e fermabile — non è una scatola nera che posta
           da sola.</p>
-        <ul>
-          <li>Raccoglie e ordina i contenuti dalle fonti indicate</li>
-          <li>Trasforma le immagini statiche in brevi video, con una base musicale originale</li>
-          <li>Mette tutto in calendario: testo, media, destinazioni e orario visibili prima di uscire</li>
-          <li>Pubblica solo sugli account collegati e scelti volta per volta</li>
-          <li>Elabora con modelli in locale oppure con Gemini, secondo cosa serve</li>
-        </ul>
-        <p class="appmie__tec mono">Python · Playwright · ComfyUI · API ufficiali Meta e TikTok</p>
+
+        <div class="appmie__capacita">
+          <section>
+            <b class="mono">Raccoglie</b>
+            <ul>
+              <li>Legge cinque fonti diverse, in ordine di priorità</li>
+              <li>Sceglie per data e scarta quello che ha già visto</li>
+              <li>Riprende da dove si era fermato senza ripubblicare niente</li>
+              <li>Usa le API ufficiali dove esistono, e legge la pagina dove non esistono</li>
+            </ul>
+          </section>
+          <section>
+            <b class="mono">Produce</b>
+            <ul>
+              <li>Trasforma un’immagine ferma in un Reel: un modello scrive il movimento,
+                ComfyUI lo esegue con un flusso immagine-a-video</li>
+              <li>Tiene le proporzioni dell’originale e ricontrolla le dimensioni vere del file
+                che è uscito</li>
+              <li>Verifica che il primo, l’ultimo e il fotogramma di mezzo reggano la
+                composizione</li>
+              <li>Genera una base musicale originale <em>diversa per ogni Reel</em>, e la
+                ricontrolla</li>
+              <li>I contenuti già video passano diretti, senza essere rifatti</li>
+            </ul>
+          </section>
+          <section>
+            <b class="mono">Pubblica</b>
+            <ul>
+              <li>Facebook (pagine e gruppi), Instagram, TikTok, YouTube, LinkedIn, Threads,
+                Telegram</li>
+              <li>Solo con le API ufficiali e solo sugli account che ho collegato</li>
+              <li>Quattro uscite per pagina, fino a sette nello stesso giorno, a orari decisi
+                prima</li>
+              <li>Ogni uscita tiene uno stato separato per canale: se una fallisce, le altre
+                vanno avanti</li>
+            </ul>
+          </section>
+          <section>
+            <b class="mono">Mi lascia il comando</b>
+            <ul>
+              <li>Calendario con testo, media, destinazione e orario visibili prima di uscire</li>
+              <li>Stop immediato, e ripartenza senza doppioni</li>
+              <li>Statistiche per canale e lettura del tono dei commenti</li>
+              <li>Token che si rinnovano da soli e si revocano quando voglio</li>
+              <li>Registro di cosa è successo e backup in locale</li>
+            </ul>
+          </section>
+          <section>
+            <b class="mono">E dietro</b>
+            <ul>
+              <li>Più assistenti che lavorano in parallelo — Codex, Gemini, Grok e un modello
+                sul mio computer — si dividono i ruoli da soli e un ultimo passaggio unisce le
+                risposte</li>
+              <li>Modelli e istruzioni si cambiano da pannello, con configurazioni salvate</li>
+              <li>Accesso protetto, e un sito pubblico con privacy e termini: senza quello le
+                piattaforme non danno le API</li>
+            </ul>
+          </section>
+        </div>
+        <p class="appmie__tec mono">Python · Playwright · ComfyUI · API ufficiali Meta, TikTok,
+          YouTube, LinkedIn, Threads e Telegram · pannello web</p>
       </article>
 
       <article class="appmie__card">
-        <span class="mono">02 / Produzione</span>
-        <h3>Max Video Downloader</h3>
+        <span class="mono">02 / Produzione video</span>
+        <h4>Max Video Downloader</h4>
         <p class="appmie__cos">Un’applicazione per Windows che scarica video autorizzati e ne
           ricava trascrizione e sottotitoli. Gira tutta sul computer: i materiali non vengono
-          caricati da nessuna parte.</p>
-        <ul>
-          <li>Scarica da fonti autorizzate, nei formati e nelle qualità che servono</li>
-          <li>Trascrive il parlato con Voxtral, e ripiega su Whisper quando serve</li>
-          <li>Genera i sottotitoli e li sincronizza</li>
-          <li>Lavora sulla scheda video del PC, senza costi per minuto</li>
-          <li>Versione portatile: si copia su una chiavetta e parte</li>
-        </ul>
-        <p class="appmie__tec mono">Python · Voxtral · Whisper · CUDA · build portatile</p>
+          caricati da nessuna parte, e non c’è un costo al minuto.</p>
+
+        <div class="appmie__capacita">
+          <section>
+            <b class="mono">Scarica</b>
+            <ul>
+              <li>Da fonti autorizzate, nei formati e nelle qualità che servono</li>
+              <li>Più scaricamenti in coda, che riprendono se cade la rete</li>
+            </ul>
+          </section>
+          <section>
+            <b class="mono">Trascrive</b>
+            <ul>
+              <li>Voxtral per il parlato, con Whisper che subentra da solo se serve</li>
+              <li>Una rilettura prudente del testo prima di considerarlo finito</li>
+              <li>Sottotitoli generati e sincronizzati sul parlato</li>
+            </ul>
+          </section>
+          <section>
+            <b class="mono">Sta sul tuo computer</b>
+            <ul>
+              <li>Lavora sulla scheda video: nessun caricamento, nessun costo al minuto</li>
+              <li>Controllo dello stato del sistema prima dei lavori lunghi</li>
+              <li>Versione portatile con tutto dentro: si copia su una chiavetta e parte</li>
+            </ul>
+          </section>
+        </div>
+        <p class="appmie__tec mono">Python · Voxtral · Whisper · CUDA · versione portatile</p>
       </article>
 
     </div>
-    <p class="appmie__nota">Non sono dimostrazioni: sono strumenti che uso tutti i giorni, nati
-      perché quello che serviva non esisteva oppure costava un abbonamento al mese per una
-      funzione sola. È lo stesso modo in cui posso costruire uno strumento per te.</p>
+    <p class="appmie__nota">Se ti serve uno strumento che non esiste — un pannello, un
+      configuratore, un flusso che lavora da solo la notte — è esattamente questo il lavoro.</p>
   </div>
 
   <div class="tabs mono" role="tablist" aria-label="Banchi di prova">
@@ -778,6 +857,6 @@
   <span class="voice__prog mono"><b id="voiceCount">0</b>/7</span>
 </div>
 
-<script type="module" src="app.js?v=20260910-144416"></script>
+<script type="module" src="app.js?v=20260910-145842"></script>
 </body>
 </html>
