@@ -1,29 +1,40 @@
 /* ═══════════════════════════════════════════════════════════════════
- * LA RADICE
+ * LA RADICE PORTA DRITTA AL SITO
  *
- * E' lo schermo che un cliente incontra per primo, e finora nessuna
- * prova lo guardava: le prove partivano tutte da /v2/. Qui si controlla
- * che dica cosa faccio PRIMA di chiedere di scegliere fra due versioni,
- * che le due porte funzionino, e che i numeri che promette siano quelli
- * veri — "undici sezioni" e "quindici pigmenti" erano rimasti indietro
- * di parecchio.
+ * Prima qui c'era un bivio fra il sito e la torre in pixel art, e
+ * questa prova controllava che dicesse cosa faccio prima di far
+ * scegliere. La torre e' in standby: adesso la radice rimanda, e le
+ * domande sono altre.
+ *
+ * Un rimando ha due modi tipici di essere sbagliato, e nessuno dei due
+ * si vede aprendo la pagina una volta:
+ *
+ *  · LA TRAPPOLA DELLA CRONOLOGIA — se il rimando usa un assign invece
+ *    di un replace, il tasto "indietro" dal sito torna alla radice, che
+ *    rimanda avanti: si resta incastrati e non si esce piu' dal sito.
+ *    Qui si prova proprio cosi': si entra, si torna indietro, e si
+ *    guarda dove si finisce.
+ *
+ *  · SENZA JAVASCRIPT non succede niente. Il <meta refresh> serve a
+ *    quello, e si prova spegnendo JavaScript per davvero.
+ *
+ * E poi le due cose che non devono essersi rotte mettendo in standby la
+ * torre: che la torre risponda ancora al suo indirizzo, e che il bivio
+ * sia conservato e funzionante, cosi' rimetterlo e' questione di un
+ * minuto.
  *
  * uso: node audit/radice.mjs
  * ═══════════════════════════════════════════════════════════════════ */
 import { chromium } from 'playwright';
-import fs from 'node:fs';
 
 const CROMO = 'C:/Users/fabri/AppData/Local/ms-playwright/chromium-1228/chrome-win64/chrome.exe';
+const BASE = 'http://localhost:8899';
+
 const b = await chromium.launch({ executablePath: CROMO,
   args: ['--use-gl=swiftshader', '--enable-unsafe-swiftshader'] });
 
 let rotte = 0;
 const dice = (ok, t) => { if (!ok) rotte++; console.log(`  ${ok ? '✓' : '✗'} ${t}`); };
-
-/* i numeri veri, letti dai file e non ricopiati a mano */
-const sezioni = (fs.readFileSync('site/v2/index.html', 'utf8').match(/^<section/gm) || []).length;
-const pigmenti = (fs.readFileSync('site/pixel/tavolozza.js', 'utf8').match(/'#[0-9a-f]{6}'/g) || []).length;
-console.log(`nei file: ${sezioni} sezioni · ${pigmenti} pigmenti`);
 
 for (const [nome, vp] of [['telefono', { width: 390, height: 844 }],
                           ['desktop', { width: 1440, height: 900 }]]) {
@@ -33,47 +44,63 @@ for (const [nome, vp] of [['telefono', { width: 390, height: 844 }],
   const errs = [];
   p.on('pageerror', e => errs.push(String(e)));
   p.on('response', r => { if (r.status() >= 400) errs.push('HTTP ' + r.status() + ' ' + r.url()); });
-  await p.goto('http://localhost:8899/index.html', { waitUntil: 'networkidle' });
-  await p.waitForTimeout(600);
 
-  const m = await p.evaluate(() => {
-    const t = (s) => (document.querySelector(s)?.textContent || '').replace(/\s+/g, ' ').trim();
-    const porte = [...document.querySelectorAll('.porta')];
-    const cosa = document.querySelector('.cosa');
-    const primaPorta = porte[0]?.getBoundingClientRect().top ?? 0;
-    return {
-      cosa: t('.cosa'),
-      cosaPrima: !!cosa && cosa.getBoundingClientRect().bottom <= primaPorta + 1,
-      porte: porte.map(a => ({ href: a.getAttribute('href'),
-                               alto: Math.round(a.getBoundingClientRect().height) })),
-      testo: document.body.innerText.replace(/\s+/g, ' '),
-      orizzontale: document.documentElement.scrollWidth > innerWidth + 1,
-      largo: Math.round(document.querySelector('main').getBoundingClientRect().width),
-      schermo: innerWidth,
-    };
-  });
+  /* ── ci porta, e ci porta in fretta ─────────────────────────────── */
+  const t0 = Date.now();
+  await p.goto(BASE + '/', { waitUntil: 'load' });
+  await p.waitForURL(/\/v2\//, { timeout: 5000 }).catch(() => {});
+  const quanto = Date.now() - t0;
+  dice(/\/v2\//.test(p.url()), `dalla radice si finisce nel sito (${p.url().replace(BASE, '')})`);
+  /* compreso il carico del sito, che e' la parte grossa: qui conta che
+     non ci sia un'attesa messa apposta prima del rimando */
+  dice(quanto < 5000, `e ci si arriva in ${quanto} ms, carico del sito compreso`);
+  await p.waitForTimeout(1800);
+  dice(await p.evaluate(() => !!document.getElementById('main')), 'il sito e\u2019 quello vero, con le sue sezioni');
 
-  dice(m.cosa.length > 80, 'la pagina dice cosa faccio prima di far scegliere');
-  dice(m.cosaPrima, 'e lo dice SOPRA le due porte, non sotto');
-  dice(m.porte.length === 2, `due porte (${m.porte.map(x => x.href).join(', ')})`);
-  dice(m.porte.every(x => x.alto >= 44), 'tutte e due si prendono col pollice');
-  dice(!m.orizzontale, `niente scorrimento orizzontale (main ${m.largo} su ${m.schermo})`);
-  dice(m.testo.includes(`Tredici sezioni`) && sezioni === 13,
-       `dice "Tredici sezioni" e nei file sono ${sezioni}`);
-  dice(m.testo.includes('sessantaquattro') && pigmenti === 64,
-       `dice "sessantaquattro pigmenti" e nei file sono ${pigmenti}`);
-  dice(!/8 bit/.test(m.testo), 'non promette piu\u2019 8 bit: la torre e\u2019 a 16');
-
-  /* le due porte portano davvero da qualche parte */
-  for (const { href } of m.porte) {
-    const r = await p.goto('http://localhost:8899/' + href, { waitUntil: 'domcontentloaded' });
-    dice(r.status() === 200, `${href} risponde ${r.status()}`);
-    await p.goBack({ waitUntil: 'domcontentloaded' });
-  }
-  dice(errs.length === 0, `nessun errore${errs.length ? ': ' + errs[0] : ''}`);
+  /* ── e non si resta incastrati ──────────────────────────────────── */
+  await p.goBack({ waitUntil: 'load' }).catch(() => {});
+  await p.waitForTimeout(900);
+  const dopoIndietro = p.url();
+  /* Con replace() la radice non lascia traccia nella cronologia, quindi
+     tornando indietro si esce dal sito — qui prima non c'era niente, e
+     infatti si finisce sulla pagina vuota di partenza. Se invece si
+     tornasse su /v2/ vorrebbe dire che la radice c'e' ancora e ha
+     rimandato avanti un'altra volta: da li' non si uscirebbe piu'. */
+  dice(!dopoIndietro.includes('/v2/'),
+       `il tasto indietro esce, non rimbalza dentro (${dopoIndietro.replace(BASE, '') || 'pagina vuota'})`);
   await ctx.close();
+
+  /* ── senza JavaScript ───────────────────────────────────────────── */
+  const muto = await b.newContext({ viewport: vp, javaScriptEnabled: false });
+  const pm = await muto.newPage();
+  await pm.goto(BASE + '/', { waitUntil: 'load' });
+  await pm.waitForURL(/\/v2\//, { timeout: 6000 }).catch(() => {});
+  dice(/\/v2\//.test(pm.url()),
+       `senza JavaScript ci porta lo stesso (${pm.url().replace(BASE, '')})`);
+  /* Il ripiego scritto va cercato nella SORGENTE della radice, non
+     nella pagina che si sta guardando: quando arrivo a leggerla sono
+     gia' nel sito, e leggerei il testo del sito credendo che sia il
+     suo. La prima versione faceva esattamente questo, e passava
+     dicendo una cosa che non aveva misurato. */
+  const sorgente = await (await fetch(BASE + '/index.html')).text();
+  dice(sorgente.includes('href="v2/index.html"') && /meta http-equiv="refresh"/i.test(sorgente),
+       'e chi non viene portato da nessuno dei due trova il collegamento scritto');
+  await muto.close();
+
+  /* ── la torre non e' sparita, e il bivio nemmeno ────────────────── */
+  const ctx2 = await b.newContext({ viewport: vp });
+  const p2 = await ctx2.newPage();
+  const torre = await p2.goto(BASE + '/pixel/index.html', { waitUntil: 'domcontentloaded' });
+  dice(torre.status() === 200, `la torre risponde al suo indirizzo (${torre.status()})`);
+  const scelta = await p2.goto(BASE + '/scelta.html', { waitUntil: 'domcontentloaded' });
+  const porte = await p2.evaluate(() => [...document.querySelectorAll('.porta')]
+    .map(a => a.getAttribute('href')));
+  dice(scelta.status() === 200 && porte.length === 2,
+       `il bivio e\u2019 conservato e intero (${porte.join(', ')})`);
+  dice(errs.length === 0, `nessun errore${errs.length ? ': ' + errs[0] : ''}`);
+  await ctx2.close();
 }
 
 await b.close();
-console.log(rotte ? `\n${rotte} controlli con problemi` : '\nla radice regge');
+console.log(rotte ? `\n${rotte} controlli con problemi` : '\nla radice porta dritta al sito');
 process.exitCode = rotte ? 1 : 0;
