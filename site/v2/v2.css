@@ -776,7 +776,7 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border:0;border-radiu
   .istruzioni p,.contatto__come,.brief-data-note,
   .union__lavori .union__pezzo p,.union .union__come dd,
   .locanda__lavori .locanda__pezzo p,.locanda .locanda__come dd,
-  .locanda__brani .locanda__nome em{font-size:15px}
+  .locanda__brani .locanda__nome em,.locanda .locanda__firma{font-size:15px}
   /* .brief-data-note stava qui e vinceva sulla riga dei 15px, che sta
      sopra: due elenchi fatti a mano che si contraddicono, e vince
      l'ultimo. E' la riga che dice che i dati non escono dal browser:
@@ -2045,6 +2045,13 @@ body.ord-in-corso *{cursor:grabbing !important}
 .locanda__pezzo h4{margin:0;color:var(--l-bordeaux);font-size:16px;
   letter-spacing:-.005em;line-height:1.2}
 .locanda__pezzo p{margin:0;color:#5a4a40;font-size:13.5px;line-height:1.5}
+
+/* La riga della firma sta subito sotto le nove copertine: chi guarda
+   una locandina animata la prima cosa che si chiede e' con cosa e'
+   fatta, e la risposta non deve stare in fondo alla tabella. */
+.locanda__firma{margin:clamp(16px,2vw,22px) 0 0;max-width:66ch;
+  color:#4c3d34;font-size:14.5px;line-height:1.55}
+.locanda__firma b{color:var(--l-bordeaux);font-weight:600}
 
 /* i cinque brani */
 .locanda__musica{margin-top:clamp(24px,3vw,40px);padding-top:clamp(18px,2vw,26px);
