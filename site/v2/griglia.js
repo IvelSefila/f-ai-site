@@ -33,6 +33,7 @@ export const CONTENITORI = [
   ['.istruzioni',     '2', 'Le istruzioni'],
   ['.appmie__grid',   '1', 'Le mie app'],
   ['.union__lavori',  '4', 'I pezzi di Union Energia'],
+  ['.locanda__lavori', '4', 'Le locandine della Locanda'],
   ['.bench',         '',  'Banco: visuale e pannello'],   /* '' = proporzioni originali */
 ];
 

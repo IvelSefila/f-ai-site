@@ -836,11 +836,12 @@
           </filter>
           <g id="u-foglia">
             <path d="M0 0C22 6 32 24 26 44 8 42-6 22 0 0Z"/>
-            <path d="M1 3C10 16 18 30 24 42" fill="none" stroke="#0c2405"
+            <path d="M1 3C10 16 18 30 24 42" fill="none" stroke="#ffffff"
                   stroke-opacity=".5" stroke-width="1.6"/>
           </g>
         </defs>
-        <g fill="#0c2405" opacity=".10">
+        <!-- chiare, non scure: vedi audit/contrasto-vero.mjs -->
+        <g fill="#ffffff" opacity=".13">
           <use href="#u-foglia" transform="translate(60 40) rotate(24) scale(2.1)"/>
           <use href="#u-foglia" transform="translate(170 22) rotate(-38) scale(1.5)"/>
           <use href="#u-foglia" transform="translate(1128 452) rotate(148) scale(2.4)"/>
@@ -857,7 +858,7 @@
            scia. Stessi segni, geometria rifatta per una colonna. -->
       <svg class="union__scena union__scena--stretto" viewBox="0 0 420 800"
            preserveAspectRatio="xMidYMax slice" aria-hidden="true" focusable="false">
-        <g fill="#0c2405" opacity=".10">
+        <g fill="#ffffff" opacity=".13">
           <use href="#u-foglia" transform="translate(352 40) rotate(128) scale(1.9)"/>
           <use href="#u-foglia" transform="translate(30 140) rotate(-26) scale(1.4)"/>
           <use href="#u-foglia" transform="translate(46 690) rotate(-8) scale(1.7)"/>
@@ -915,6 +916,106 @@
             ElevenLabs quando serve tenere la stessa voce da un episodio all’altro</dd></div>
           <div><dt>Musica</dt><dd>Una parte generata con Lyria, una parte presa da librerie con
             licenza per uso commerciale</dd></div>
+        </dl>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="locanda">
+    <div class="locanda__slab">
+      <!-- La scena: l'arco del cancello che sta dentro il monogramma, e
+           le stelle a quattro punte del marchio. Come per Union, due
+           geometrie: su una colonna stretta la scena larga verrebbe
+           tagliata proprio dove ha qualcosa da dire. -->
+      <svg class="locanda__scena locanda__scena--largo" viewBox="0 0 1200 700"
+           preserveAspectRatio="xMaxYMax slice" aria-hidden="true" focusable="false">
+        <defs>
+          <path id="l-stella" d="M0-15C2-4 4-2 15 0 4 2 2 4 0 15-2 4-4 2-15 0-4-2-2-4 0-15Z"/>
+          <radialGradient id="l-fuoco" cx=".5" cy=".5" r=".5">
+            <stop offset="0" stop-color="#e0b878" stop-opacity=".30"/>
+            <stop offset="1" stop-color="#e0b878" stop-opacity="0"/>
+          </radialGradient>
+        </defs>
+        <circle cx="930" cy="620" r="360" fill="url(#l-fuoco)"/>
+        <g fill="none" stroke="#c9a15c" stroke-opacity=".16" stroke-width="3">
+          <path d="M884 690V250a148 148 0 0 1 296 0v440"/>
+          <path d="M944 690V268a88 88 0 0 1 176 0v422"/>
+        </g>
+        <g fill="#e6c48a">
+          <use href="#l-stella" transform="translate(690 74) scale(1.5)" opacity=".5"/>
+          <use href="#l-stella" transform="translate(596 176) scale(.8)" opacity=".3"/>
+          <use href="#l-stella" transform="translate(1104 118) scale(1.15)" opacity=".45"/>
+          <use href="#l-stella" transform="translate(1010 250) scale(.7)" opacity=".3"/>
+          <use href="#l-stella" transform="translate(300 560) scale(.9)" opacity=".28"/>
+        </g>
+      </svg>
+
+      <svg class="locanda__scena locanda__scena--stretto" viewBox="0 0 420 800"
+           preserveAspectRatio="xMidYMax slice" aria-hidden="true" focusable="false">
+        <circle cx="300" cy="700" r="260" fill="url(#l-fuoco)"/>
+        <g fill="none" stroke="#c9a15c" stroke-opacity=".16" stroke-width="3">
+          <path d="M28 790V470a92 92 0 0 1 184 0v320"/>
+        </g>
+        <g fill="#e6c48a">
+          <use href="#l-stella" transform="translate(368 70) scale(1.3)" opacity=".5"/>
+          <use href="#l-stella" transform="translate(300 168) scale(.75)" opacity=".32"/>
+          <use href="#l-stella" transform="translate(46 330) scale(.9)" opacity=".3"/>
+        </g>
+      </svg>
+
+      <div class="locanda__testa">
+        <p class="eyebrow mono"><span class="n">Caso</span> Marchio e locandine</p>
+        <h3>Dal marchio<br><em>alla locandina di sabato sera.</em></h3>
+        <p class="locanda__sotto">La Locanda del Castello<span>Rocca de’ Baldi</span></p>
+        <p class="locanda__lede">Un ristorante dentro il parco di un castello, senza un’identità
+          sua. Prima il marchio — monogramma, lettering e le versioni che servono davvero, intera,
+          tonda e solo simbolo — poi tutto quello che ci sta sopra: una <b>locandina animata per
+          ogni serata</b>, dalla degustazione di champagne al fritto misto al karaoke, e cinque
+          brani scritti su misura per il posto.</p>
+        <p class="locanda__seguito">Serate diverse, pubblico diverso, tono diverso — e si deve
+          capire lo stesso, in due secondi su un telefono, che è sempre la stessa casa.</p>
+        <p class="locanda__claim"><span>In Piemonte</span> <b>la tradizione è servita a tavola</b></p>
+      </div>
+
+      <div class="locanda__piede">
+        <ul class="locanda__conti">
+          <li><b>1</b><span>marchio</span></li>
+          <li><b>9</b><span>locandine</span></li>
+          <li><b>5</b><span>brani</span></li>
+        </ul>
+        <p class="locanda__nota">Rocca de’ Baldi, Piazza Pio VII</p>
+      </div>
+
+      <figure class="locanda__marchio">
+        <img src="locanda/marchio.webp" width="760" height="821" decoding="async"
+             alt="Il marchio della Locanda del Castello: monogramma L e C a forma di torre con una stella dorata">
+        <figcaption class="mono">Il marchio</figcaption>
+      </figure>
+    </div>
+
+    <div class="locanda__corpo">
+      <p class="locanda__intro mono">Nove locandine animate · una per ogni serata</p>
+      <div class="locanda__lavori"></div>
+
+      <div class="locanda__musica">
+        <p class="locanda__intro mono">Cinque brani scritti per la casa · trenta secondi ciascuno</p>
+        <ul class="locanda__brani"></ul>
+      </div>
+
+      <div class="locanda__come">
+        <b class="mono">Come sono fatti</b>
+        <dl>
+          <div><dt>Marchio</dt><dd>Disegnato e chiuso in vettoriale: monogramma, lettering e le tre
+            versioni che servono in giro — intera, tonda e solo simbolo</dd></div>
+          <div><dt>Immagini</dt><dd>Le scene nascono con GPT Image: tavole, candele, bottiglie e
+            piatti costruiti sulla serata, non presi da un archivio</dd></div>
+          <div><dt>Movimento</dt><dd>Le inquadrature sono generate una per una e poi scelte: di
+            una cinquantina di spezzoni ne entra in montaggio meno della metà</dd></div>
+          <div><dt>Montaggio</dt><dd>Adobe Premiere Pro: ritmo, testi della serata, prezzo e
+            indirizzo, e il marchio che chiude ogni pezzo</dd></div>
+          <div><dt>Musica</dt><dd>Cinque brani scritti per il posto, non presi da una libreria.
+            Qui ne senti trenta secondi</dd></div>
         </dl>
       </div>
     </div>

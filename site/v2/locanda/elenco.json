@@ -1,0 +1,47 @@
+[
+ {
+  "id": "posto",
+  "da": "generico/generico.mp4",
+  "mb": 6.1
+ },
+ {
+  "id": "dehor",
+  "da": "serata champagne/serata champagne finito.mp4",
+  "mb": 3.1
+ },
+ {
+  "id": "champagne",
+  "da": "serata champagne/ultima locandina.mp4",
+  "mb": 2.4
+ },
+ {
+  "id": "tradition",
+  "da": "serata champagne/primo flute.mp4",
+  "mb": 2.7
+ },
+ {
+  "id": "fritto",
+  "da": "serata fritto misto/serata fritto misto4.mp4",
+  "mb": 3.6
+ },
+ {
+  "id": "fritto-locandina",
+  "da": "serata fritto misto/video2.mp4",
+  "mb": 2.1
+ },
+ {
+  "id": "karaoke",
+  "da": "Serata Karaoke/serata karaoke corretto1.mp4",
+  "mb": 1.2
+ },
+ {
+  "id": "benessere",
+  "da": "video/giornata benessere.mp4",
+  "mb": 3.5
+ },
+ {
+  "id": "eventi",
+  "da": "video/comunioni e cresime etc + musica.mp4",
+  "mb": 2.2
+ }
+]
