@@ -39,8 +39,8 @@ export const PEZZI = [
     n: 'La pagina degli eventi privati: compleanni, cresime, comunioni e matrimoni, ognuno con la sua sala.' },
 ];
 
-/* Cinque brani scritti per il posto, trenta secondi ciascuno.
-   Non sono musica presa da una libreria: sono nati per questa casa. */
+/* Cinque brani generati con Lyria, trenta secondi ciascuno. Non sono
+   musica presa da una libreria: sono nati per questa casa. */
 export const BRANI = [
   { id: 'the-shared-table', t: 'The Shared Table', n: 'La tavola lunga, quella delle sere piene' },
   { id: 'rafters-under-gold', t: 'Rafters Under Gold', n: 'Le travi del soffitto e la luce delle candele' },
