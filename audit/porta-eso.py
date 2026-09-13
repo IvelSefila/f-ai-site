@@ -6,22 +6,23 @@ node_modules, una ventina di spezzoni generati da 10 secondi che sono
 materiale da montaggio, le anteprime di Premiere e i salvataggi
 automatici. I pezzi finiti sono una quindicina.
 
-La scelta (vedi i provini di audit/provini-eso.py) tiene otto cose che
-fanno otto mestieri diversi, non otto volte lo stesso: il trailer, un
+La scelta (vedi i provini di audit/provini-eso.py) tiene sei cose che
+fanno sei mestieri diversi, non sei volte lo stesso: il trailer, un
 verticale outdoor, uno spot da borgo, uno spot che finisce su una
-scheda prodotto, una locandina di un secondo marchio, un product film
-sul dispositivo, la camminata dentro il sito costruito su misura e uno
-degli approfondimenti nati dalla ricerca di mercato.
+scheda prodotto, una locandina di un secondo marchio e un product film
+sul dispositivo.
+
+Fuori anche la camminata dentro il sito (2:32) e un video di
+approfondimento nato dalla ricerca (2:58). Sono lavoro vero e restano
+scritti nella tabella, ma in una fila di spot da dieci secondi due
+registrazioni lunghe non le guarda nessuno, e da sole pesavano 10,4 MB
+dei 24,3 di tutta la sezione.
 
 Scartato l'endcard "HUMAN ROBOTS": nei fotogrammi dopo il primo la
 scritta diventa "HUJMAN ROBOTS". Un difetto di generazione che sul
 primo fotogramma non si vede, e che si vede solo guardando il video
 avanti — che e' il motivo per cui i provini prendono tre fotogrammi e
 non uno.
-
-I due pezzi lunghi (2:32 e 2:58) vanno a CRF 28 invece che 26: sono una
-registrazione di schermo e un cartone animato, materiale che si
-comprime bene, e a 26 pesavano il doppio per niente.
 
 uso: python audit/porta-eso.py
 """
@@ -43,8 +44,6 @@ SCELTI = [
     ('video/video vecchi/hf_20260526_101421_8ca385ac-d7fe-4379-91be-72f89f59fa6d.mp4',
                                                                      'e-legs',   26),
     ('esoscheletri/video/creati/prova 4.mp4',                        'prodotto', 26),
-    ('video/video vecchi/video presentazione sito internet.mp4',     'sito',     28),
-    ('documentazione/Creata da me/Economia_ed_Ergonomia.mp4',        'ricerca',  28),
 ]
 
 AUDIO = ['-c:a', 'aac', '-b:a', '96k', '-ac', '2']

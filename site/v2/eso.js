@@ -1,5 +1,5 @@
 /* ═══════════════════════════════════════════════════════════════════
- * ESOSCHELETRI — gli otto pezzi del lancio
+ * ESOSCHELETRI — i sei pezzi del lancio
  *
  * Stessa regola degli altri due casi: aprendo la pagina non si scarica
  * nemmeno un byte di video. Copertina piu' bottone, il file nasce al
@@ -10,9 +10,13 @@
  * mettere in un reel sono due cose diverse anche a guardarle ferme, e
  * la forma della copertina lo dice prima della didascalia.
  *
- * La scelta degli otto e' spiegata in audit/porta-eso.py. Vale la pena
+ * La scelta dei sei e' spiegata in audit/porta-eso.py. Vale la pena
  * ricordare cosa NON e' entrato: l'endcard del marchio, perche' dopo il
- * primo fotogramma la scritta diventa "HUJMAN ROBOTS".
+ * primo fotogramma la scritta diventa "HUJMAN ROBOTS"; e i due pezzi da
+ * due minuti e mezzo — la camminata dentro il sito e un video di
+ * approfondimento — che qui erano fuori tono. In una fila di spot da
+ * dieci secondi due registrazioni lunghe non si guardano, e pesavano
+ * 10,4 MB dei 24,3 di tutta la sezione.
  * ═══════════════════════════════════════════════════════════════════ */
 
 const CARTELLA = 'eso/';
@@ -30,10 +34,6 @@ export const PEZZI = [
     n: 'La stessa famiglia di prodotti raccontata per chi va in montagna: un marchio diverso, un pubblico diverso.' },
   { id: 'prodotto', t: 'Il dispositivo', d: '0:10', w: 720, h: 1280,
     n: 'Product film: solo l’oggetto, fumo e luce radente. Serve a far vedere com’è fatto quando il resto è narrazione.' },
-  { id: 'sito', t: 'Il sito, dentro', d: '2:32', w: 1280, h: 800,
-    n: 'La camminata dentro il sito costruito su misura: schede tecniche, dati di mercato, configuratore e pre-ordine. Scritto in codice, non montato su un tema.' },
-  { id: 'ricerca', t: 'Economia ed ergonomia', d: '2:58', w: 1280, h: 720,
-    n: 'Uno degli approfondimenti nati dalla ricerca di mercato: dai documenti a un video che si guarda, con grafici e disegni.' },
 ];
 
 export function initEso() {
