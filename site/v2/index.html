@@ -92,7 +92,7 @@
   <span class="bar__sess mono" aria-hidden="true">Sessione <b id="barTime">00:00</b></span>
   <nav class="bar__nav mono" aria-label="Prove">
     <a href="#banchi">01</a><a href="#lavori">02</a><a href="#regia">03</a>
-    <a href="#metodo">04</a><a href="#tecnologia">05</a><a href="#laboratorio">06</a><a href="#materia">07</a><a href="#profilo" aria-label="Profilo">P</a>
+    <a href="#tecnologia">04</a><a href="#laboratorio">05</a><a href="#profilo" aria-label="Profilo">P</a>
   </nav>
   <span class="bar__pal__eti mono" aria-hidden="true">Colore del sito</span>
   <div class="bar__pal" role="radiogroup" aria-label="Colore del sito">
@@ -494,328 +494,16 @@
 
 </section>
 
-<!-- ══ 02 · lavori generativi ══ -->
+<!-- ══ 02 · i lavori veri ══ -->
 <section class="sec sec--alt sp-s ap-numero sec--chiara" id="lavori" data-proof="lavori" aria-labelledby="lavoriT">
   <header class="sec__head" data-num="02">
     <p class="eyebrow mono"><span class="n">Prova 02</span> Lavori</p>
-    <h2 id="lavoriT">Il risultato davanti.<br><em>Il processo subito dopo.</em></h2>
-    <p class="sec__lede">Queste tre non sono immagini caricate: <strong>le disegna questa pagina,
-      adesso</strong>. Ognuna nasce da un numero, il seed. Cambialo e ne esce un’altra, diversa ma
-      della stessa famiglia. È la differenza fra avere un sistema visivo — che fra sei mesi
-      continua a produrre pezzi coerenti — e avere un pezzo venuto bene per caso.</p>
+    <h2 id="lavoriT">Tre marchi.<br><em>Dall’idea alla pubblicazione.</em></h2>
+    <p class="sec__lede">Una campagna con un mondo inventato, il lancio italiano di un prodotto che
+      non si poteva fotografare, e l’identità di una locanda dentro un castello. Per ognuno c’è il
+      marchio o il personaggio, i pezzi finiti che puoi <strong>guardare qui</strong>, e la lista
+      di cosa c’è sotto. Nessun video parte da solo: si scarica solo quello che apri.</p>
   </header>
-
-  <div class="deck" id="deck"></div>
-</section>
-
-<!-- ══ 01 · control room ══ -->
-<section class="sec sp-l" id="regia" data-proof="regia" aria-labelledby="regiaT">
-  <header class="sec__head">
-    <p class="eyebrow mono"><span class="n">Prova 03</span> Control room</p>
-    <h2 id="regiaT">Non è “con AI” o “senza AI”.<br><em>È una scelta di regia.</em></h2>
-    <p class="sec__lede">La domanda che mi fanno tutti è quanta AI c’è dentro un lavoro. Qui la
-      risposta si vede: trascina la testina, a sinistra c’è quello che decido io, a destra quello
-      che genera il sistema. Cambia <strong>l’immagine vera</strong>, non una barra di
-      avanzamento — e sotto resta scritta ogni decisione presa.</p>
-  </header>
-
-  <div class="bench bench--regia bench--ampio">
-    <figure class="bench__stage">
-      <canvas id="kvCanvas" width="1200" height="750" aria-label="Key visual generato dal vivo: cambia con la posizione della testina."></canvas>
-      <figcaption class="mono"><span id="kvLabel">Regia umana</span><span id="kvSeed">seed —</span></figcaption>
-    </figure>
-
-    <div class="bench__panel">
-      <label class="ctl" for="mix">
-        <span class="mono">Quanta macchina entra</span>
-        <input id="mix" type="range" min="0" max="100" value="30" step="1" aria-describedby="mixOut" />
-        <output id="mixOut" class="mono">30% sistema</output>
-      </label>
-
-      <p class="phases__come mono">Trascina con un dito oppure scegli una fase.</p>
-      <div class="phases mono" role="group" aria-label="Fasi del processo">
-        <button type="button" aria-pressed="true" data-phase="0"><b>01</b> Brief</button>
-        <button type="button" aria-pressed="false" data-phase="1"><b>02</b> Direzione</button>
-        <button type="button" aria-pressed="false" data-phase="2"><b>03</b> Produzione</button>
-        <button type="button" aria-pressed="false" data-phase="3"><b>04</b> Controllo</button>
-        <button type="button" aria-pressed="false" data-phase="4"><b>05</b> Consegna</button>
-      </div>
-      <p class="phases__note" id="phaseNote">Definisco obiettivo, pubblico, canali e vincoli. L’AI non parte ancora.</p>
-
-      <div class="decis">
-        <span class="mono">Decisioni prese in questo frame</span>
-        <ul id="kvDecisions"></ul>
-      </div>
-
-      <div class="bench__acts">
-        <button class="btn btn--sm" id="kvNew" type="button">Rigenera <i aria-hidden="true">↻</i></button>
-        <button class="btn btn--sm" id="kvPng" type="button">Esporta PNG <i aria-hidden="true">↓</i></button>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ══ 04 · metodo ══ -->
-<section class="sec sec--alt sp-s ap-stretta sec--chiara" id="metodo" data-proof="metodo" aria-labelledby="metodoT">
-  <header class="sec__head">
-    <p class="eyebrow mono"><span class="n">Prova 04</span> Metodo</p>
-    <h2 id="metodoT">Prima capisco il risultato.<br><em>Poi scelgo gli strumenti.</em></h2>
-    <p class="sec__lede">Scorri: l'input entra in cima e lo vedi attraversare le cinque fasi, con lo stato che cambia a ogni passaggio.</p>
-  </header>
-  <ol class="pipe" id="pipe">
-    <li><b class="mono">01</b><h3>Capisco</h3><p>Obiettivo, pubblico, materiali, canali e vincoli.</p><span class="pipe__st mono">In attesa</span></li>
-    <li><b class="mono">02</b><h3>Dirigo</h3><p>Definisco concept, linguaggio, ritmo e sistema visivo.</p><span class="pipe__st mono">In attesa</span></li>
-    <li><b class="mono">03</b><h3>Produco</h3><p>Creo e monto con tecniche tradizionali e AI dove utile.</p><span class="pipe__st mono">In attesa</span></li>
-    <li><b class="mono">04</b><h3>Controllo</h3><p>Seleziono, correggo e mantengo coerenza tra gli output.</p><span class="pipe__st mono">In attesa</span></li>
-    <li><b class="mono">05</b><h3>Consegno</h3><p>Preparo file, versioni e indicazioni d'uso.</p><span class="pipe__st mono">In attesa</span></li>
-  </ol>
-</section>
-
-<!-- ══ 05 · tecnologia ══ -->
-<section class="sec sp-m" id="tecnologia" data-proof="tecnologia" aria-labelledby="tecT">
-  <header class="sec__head">
-    <p class="eyebrow mono"><span class="n">Prova 05</span> Tecnologia</p>
-    <h2 id="tecT">La tecnologia giusta.<br><em>Non quella di moda.</em></h2>
-    <p class="sec__lede">Ho una workstation su cui installo, confronto e integro modelli. Scelgo fra locale, cloud e ibrido su assi vere — e i numeri qui sotto sono dichiarati per quello che sono: <strong>stime dalla mia esperienza</strong>, non misure di laboratorio.</p>
-  </header>
-  <div class="bench bench--invertito">
-    <figure class="bench__stage">
-      <canvas id="radar" width="900" height="700" aria-label="Confronto fra lavorazione locale, cloud e ibrida su cinque assi."></canvas>
-      <figcaption class="mono"><span id="radarMode">Locale</span><span>stime dichiarate</span></figcaption>
-    </figure>
-    <div class="bench__panel">
-      <div class="modes mono" role="group" aria-label="Modalità di lavorazione">
-        <button type="button" aria-pressed="true" data-mode="0">Locale</button>
-        <button type="button" aria-pressed="false" data-mode="1">Cloud</button>
-        <button type="button" aria-pressed="false" data-mode="2">Ibrido</button>
-      </div>
-      <h3 id="modeTitle">Più controllo sul flusso</h3>
-      <p id="modeCopy">Il lavoro locale offre più controllo su file, configurazioni e iterazioni; richiede capacità hardware e gestione tecnica.</p>
-    </div>
-  </div>
-
-</section>
-
-<!-- ══ 06 · laboratorio ══ -->
-<section class="sec sec--alt sp-s ap-numero sec--chiara" id="laboratorio" data-proof="laboratorio" aria-labelledby="labT">
-  <header class="sec__head" data-num="06">
-    <p class="eyebrow mono"><span class="n">Prova 06</span> Playlab</p>
-    <h2 id="labT">Quattro giochi,<br><em>scritti da zero.</em></h2>
-    <p class="sec__lede">Quattro giochi originali che girano dentro questa pagina, più un
-      costruttore che te ne fa uno rispondendo a sedici domande. Non è un passatempo: se so
-      scrivere un motore che risponde al dito in sedici millesimi di secondo, so costruire anche
-      l’applicazione o il configuratore che ti serve.</p>
-  </header>
-  <div class="lab">
-    <article class="lab__card"><span class="mono">01 · Campo di tensione</span><i aria-hidden="true">⌁</i><h3>Trama</h3><p class="mono">Tendi / allinea / stabilizza</p></article>
-    <article class="lab__card"><span class="mono">02 · Membrana viva</span><i aria-hidden="true">△</i><h3>Piega</h3><p class="mono">Premi / deforma / fai risuonare</p></article>
-    <article class="lab__card"><span class="mono">03 · Danza delle correnti</span><i aria-hidden="true">≈</i><h3>Flusso</h3><p class="mono">Disegna / guida / componi</p></article>
-    <article class="lab__card"><span class="mono">04 · Cerchi armonici</span><i aria-hidden="true">◎</i><h3>Coro</h3><p class="mono">Accorda / pulsa / allinea</p></article>
-  </div>
-  <div class="lab__intro">
-    <p class="mono">Trama / Piega / Flusso / Coro / Tela 2D / Gesti diretti / Sessione locale</p>
-    <h3>Nuovi gesti. Nuove forme.<br><em>Risposte chiare.</em></h3>
-    <p>Trama governa tensioni, Piega deforma membrane, Flusso compone correnti e Coro accorda cerchi. Ogni gioco usa gesti diretti e un linguaggio visivo diverso.</p>
-    <p>Parti da uno stile pronto in pochi secondi oppure rispondi a sedici domande semplici e crea il tuo gioco.</p>
-  </div>
-  <div class="lab__cta">
-    <button class="btn btn--solid btn--lg" id="open-playlab" type="button">Apri il laboratorio <i aria-hidden="true">▶</i></button>
-    <p class="lab__note">Quattro motori, un costruttore in sedici domande e venti regole che puoi cambiare. Si carica al primo clic: <b>niente scarica finché non lo apri</b>.</p>
-  </div>
-</section>
-
-<!-- ══ 07 · materia ══ -->
-<section class="sec sp-m ap-larga" id="materia" data-proof="materia" aria-labelledby="matT">
-  <header class="sec__head">
-    <p class="eyebrow mono"><span class="n">Prova 07</span> Materia</p>
-    <h2 id="matT">Grafica, video e sistemi<br><em>sono la stessa materia.</em></h2>
-    <p class="sec__lede">Dodicimila punti presi da un’immagine vera, ognuno col colore del pixel
-      da cui viene. Cambia disposizione e li vedi riorganizzarsi: è la stessa sostanza in un altro
-      ordine, non tre immagini in dissolvenza. Detta in pratica — lo stesso materiale lo porto da
-      un formato all’altro senza rifarlo da capo, ed è per questo che la seconda declinazione di
-      una campagna costa meno della prima.</p>
-  </header>
-
-  <div class="bench bench--medio">
-    <figure class="bench__stage bench__stage--materia">
-      <div class="mat-holder"><canvas id="matCanvas" aria-label="Nuvola di punti interattiva: scegli una disposizione, muovi il puntatore per ruotare, tieni premuto per disperdere la materia."></canvas></div>
-      <figcaption class="mono"><span id="matName">Griglia · grafica</span><span id="matMeta">— punti</span></figcaption>
-    </figure>
-    <div class="bench__panel">
-      <div class="modes mono" role="group" aria-label="Disposizioni della materia">
-        <button type="button" aria-pressed="true" data-mat="0">Griglia</button>
-        <button type="button" aria-pressed="false" data-mat="1">Nastro</button>
-        <button type="button" aria-pressed="false" data-mat="2">Rete</button>
-      </div>
-      <h3 id="matTitle">Il piano editoriale</h3>
-      <p id="matCopy">Tutto su un asse, niente profondità: è così che si legge una pagina. La griglia è la disposizione che decide dove va l'occhio.</p>
-      <p class="mat__hint mat__hint--puntatore mono">↔ Muovi il puntatore per ruotare · <b>tieni premuto</b> per disperdere</p>
-      <p class="mat__hint mat__hint--dito mono">↔ <b>Trascina</b> per ruotare · <b>tieni premuto</b> per disperdere</p>
-      <div class="decis"><span class="mono">Come è fatta</span><ul id="matDecisions"></ul></div>
-    </div>
-  </div>
-</section>
-
-<!-- ══ profilo ══ -->
-<section class="sec sp-l ap-stretta sec--chiara" id="profilo" aria-labelledby="profT">
-  <header class="sec__head">
-    <p class="eyebrow mono"><span class="n">Profilo</span> Creativo + tecnico</p>
-    <h2 id="profT">Un profilo visivo.<br><em>Un metodo tecnico.</em></h2>
-  </header>
-  <div class="profilo">
-    <div class="profilo__testo">
-      <p class="profilo__lead">Sono un grafico pubblicitario, video editor e web designer. Lavoro tra immagine, montaggio, social media, vibe coding e automazione; creo anche app e agenti per trasformare attività ripetitive in flussi chiari e controllabili.</p>
-      <p>Conosco il panorama AI perché lo provo sul campo: uso piattaforme professionali, installo modelli sul mio PC e confronto qualità, velocità, costi e limiti. Il valore non è “usare l’AI”, ma sapere quale usare, quando evitarla e come dirigere il risultato.</p>
-    </div>
-    <aside class="profilo__mark" aria-hidden="true"><span>ART</span><b>×</b><span>AI</span></aside>
-  </div>
-</section>
-
-<!-- ══ 08 · verdetto ══ -->
-<section class="sec sec--verdict sp-l" id="verdetto" aria-labelledby="verdT">
-  <header class="sec__head">
-    <p class="eyebrow mono"><span class="n">Chiusura</span> Verdetto</p>
-    <h2 id="verdT">La sessione si chiude.<br><em>Il dossier lo hai scritto tu.</em></h2>
-    <p class="sec__lede">Questo non è un CV preparato: è il resoconto di cosa hai manovrato in questa visita. Cambia per ogni persona che passa di qui.</p>
-  </header>
-
-  <div class="dossier" id="dossier">
-    <div class="dossier__head mono"><span>F/AI · dossier di sessione</span><span id="dsDate">—</span></div>
-    <dl class="dossier__grid">
-      <div><dt>Durata</dt><dd id="dsTime">00:00</dd></div>
-      <div><dt>Prove aperte</dt><dd id="dsProofs">0 / 7</dd></div>
-      <div><dt>Manovre</dt><dd id="dsActions">0</dd></div>
-      <div><dt>Equilibrio scelto</dt><dd id="dsMix">—</dd></div>
-      <div><dt>Fluidità media</dt><dd id="dsFps">—</dd></div>
-      <div><dt>Dipendenze del sito</dt><dd id="dsDeps">0</dd></div>
-    </dl>
-    <p class="dossier__verdict" id="dsVerdict">Sessione in corso.</p>
-    <ul class="dossier__list" id="dsList"></ul>
-    <div class="bench__acts">
-      <button class="btn btn--sm btn--solid" id="dsPrint" type="button">Salva il dossier <i aria-hidden="true">↓</i></button>
-      <a class="btn btn--sm" href="#contatto">Passa al brief <i aria-hidden="true">↗</i></a>
-    </div>
-  </div>
-
-  <div class="metrics" id="metrics">
-    <span class="mono">Metriche reali di questa pagina</span>
-    <dl>
-      <div><dt>LCP</dt><dd id="mLcp">—</dd></div>
-      <div><dt>CLS</dt><dd id="mCls">—</dd></div>
-      <div><dt>INP</dt><dd id="mInp">—</dd></div>
-      <div><dt>Trasferito</dt><dd id="mKb">—</dd></div>
-      <div><dt>Richieste</dt><dd id="mReq">—</dd></div>
-      <div><dt>Librerie al 1° carico</dt><dd id="mLib">0</dd></div>
-    </dl>
-    <p class="metrics__note">Lette dal browser mentre guardi, non dichiarate. Un sito che espone le proprie misure è l'unico modo onesto di dimostrare che so farli.</p>
-  </div>
-</section>
-
-<section class="sec sec--alt brief sp-m ap-larga sec--chiara" id="brief" aria-labelledby="brief-title">
-      <header class="sec__head">
-        <p class="eyebrow mono"><span class="n">Chiusura</span> Brief</p>
-        <h2 id="brief-title">SEI DOMANDE.<br /><em>POI COSTRUIAMO IL QUADRO.</em></h2>
-        <p class="sec__lede">Scegli ciò che sai già. Se qualcosa non è definito, puoi saltarlo. Il riepilogo si costruisce <strong>nel tuo browser</strong>: il sito non lo salva e non lo invia.</p>
-      </header>
-      <div class="brief__shell">
-        <form id="brief-form" class="brief__form" autocomplete="on" novalidate>
-          <div class="brief__progress" aria-live="polite"><span id="brief-counter">DOMANDA 1 DI 6</span><i id="brief-progress" style="--progress:16.666%"></i></div>
-
-          <fieldset class="brief-step active" data-step="1">
-            <legend><span>01</span> CHE COSA VUOI OTTENERE?</legend>
-            <div class="brief-options">
-              <label><input type="radio" name="project_type" value="grafica" required /><span>Una campagna o identità</span></label>
-              <label><input type="radio" name="project_type" value="video" /><span>Un video</span></label>
-              <label><input type="radio" name="project_type" value="social" /><span>Un sistema social</span></label>
-              <label><input type="radio" name="project_type" value="ai" /><span>Un flusso o prototipo AI</span></label>
-              <label><input type="radio" name="project_type" value="da-definire" /><span>Non lo so ancora</span></label>
-            </div>
-          </fieldset>
-
-          <fieldset class="brief-step" data-step="2" hidden inert>
-            <legend><span>02</span> DA COSA PARTIAMO?</legend>
-            <p class="brief-step__hint">Puoi scegliere più risposte.</p>
-            <div class="brief-options">
-              <label><input type="checkbox" name="starting_point" value="brief" /><span>Ho un brief</span></label>
-              <label><input type="checkbox" name="starting_point" value="brand" /><span>Ho un’identità o linee guida</span></label>
-              <label><input type="checkbox" name="starting_point" value="materials" /><span>Ho girato o materiali</span></label>
-              <label><input type="checkbox" name="starting_point" value="zero" /><span>Partiamo da zero</span></label>
-              <label><input type="checkbox" name="starting_point" value="other" /><span>Altro</span></label>
-            </div>
-          </fieldset>
-
-          <fieldset class="brief-step" data-step="3" hidden inert>
-            <legend><span>03</span> DOVE DOVRÀ FUNZIONARE?</legend>
-            <p class="brief-step__hint">Puoi scegliere più canali.</p>
-            <div class="brief-options">
-              <label><input type="checkbox" name="channels" value="social" /><span>Social</span></label>
-              <label><input type="checkbox" name="channels" value="web" /><span>Web o landing</span></label>
-              <label><input type="checkbox" name="channels" value="advertising" /><span>Advertising</span></label>
-              <label><input type="checkbox" name="channels" value="event" /><span>Evento o schermo</span></label>
-              <label><input type="checkbox" name="channels" value="internal" /><span>Uso interno</span></label>
-              <label><input type="checkbox" name="channels" value="multiple" /><span>Più canali</span></label>
-            </div>
-          </fieldset>
-
-          <fieldset class="brief-step" data-step="4" hidden inert>
-            <legend><span>04</span> QUANDO TI SERVE?</legend>
-            <div class="brief-options brief-options--deadline">
-              <label><input type="radio" name="timing" value="date" /><span>Ho una data indicativa</span></label>
-              <label class="brief-date" hidden><span>Data indicativa</span><input type="date" name="deadline" disabled /></label>
-              <label><input type="radio" name="timing" value="flexible" /><span>La data è flessibile</span></label>
-              <label><input type="radio" name="timing" value="unknown" /><span>Non è ancora definita</span></label>
-            </div>
-          </fieldset>
-
-          <fieldset class="brief-step" data-step="5" hidden inert>
-            <legend><span>05</span> CHE SUPPORTO CERCHI?</legend>
-            <div class="brief-options">
-              <label><input type="radio" name="support" value="single" /><span>Un singolo progetto</span></label>
-              <label><input type="radio" name="support" value="package" /><span>Un pacchetto di contenuti</span></label>
-              <label><input type="radio" name="support" value="continuous" /><span>Una collaborazione continuativa</span></label>
-              <label><input type="radio" name="support" value="consulting" /><span>Una consulenza o un prototipo</span></label>
-              <label><input type="radio" name="support" value="unknown" /><span>Non lo so ancora</span></label>
-            </div>
-          </fieldset>
-
-          <fieldset class="brief-step" data-step="6" hidden inert>
-            <legend><span>06</span> COME POSSO RICONTATTARTI?</legend>
-            <div class="brief-fields">
-              <label><span>Nome *</span><input type="text" name="name" autocomplete="name" required /></label>
-              <label><span>Email *</span><input type="email" name="email" autocomplete="email" inputmode="email" spellcheck="false" autocapitalize="none" required /></label>
-              <label><span>Azienda <small>facoltativa</small></span><input type="text" name="company" autocomplete="organization" /></label>
-              <label><span>Fascia di investimento <small>facoltativa</small></span><select name="budget"><option value="">Preferisco non indicarla</option><option value="da-definire">Da definire insieme</option><option value="piccolo">Progetto circoscritto</option><option value="medio">Produzione articolata</option><option value="continuativo">Collaborazione continuativa</option></select></label>
-              <label class="brief-fields__wide"><span>Nota <small>facoltativa</small></span><textarea name="note" rows="4" placeholder="Per esempio: materiali disponibili, vincoli o domande…"></textarea></label>
-              <p class="brief-data-note" id="brief-data-note">I dati restano in questo browser. Il sito non li salva e non li invia: il riepilogo lo copi tu, e decidi tu dove mandarlo.</p>
-              <label class="brief-consent brief-fields__wide"><input type="checkbox" name="privacy" aria-describedby="brief-data-note" required /><span>HO CAPITO COME VENGONO GESTITI I DATI. *</span></label>
-            </div>
-            <p class="brief-step__hint">Il riepilogo viene preparato nel browser: potrai copiarlo e incollarlo dove preferisci.</p>
-          </fieldset>
-
-          <p class="brief__error" id="brief-error" role="alert" hidden></p>
-          <nav class="brief__nav" aria-label="Navigazione del brief">
-            <button id="brief-back" type="button" hidden>INDIETRO</button>
-            <button id="brief-next" type="submit"><span>AVANTI: MATERIALI</span><i aria-hidden="true">→</i></button>
-          </nav>
-        </form>
-
-        <section class="brief-summary" id="brief-summary" aria-labelledby="brief-summary-title" tabindex="-1" hidden>
-          <span>F/AI / RIEPILOGO</span>
-          <h3 id="brief-summary-title">IL BRIEF È PRONTO.</h3>
-          <p>Controlla il riepilogo, poi copialo: lo incolli dove preferisci.</p>
-          <pre id="brief-copy"></pre>
-          <div class="brief-summary__actions">
-            <button id="brief-copy-button" type="button"><span>COPIA IL RIEPILOGO</span><i aria-hidden="true">□</i></button>
-            <button id="brief-edit" type="button"><span>MODIFICA LE RISPOSTE</span><i aria-hidden="true">←</i></button>
-          </div>
-          <p class="brief-summary__status" id="brief-status" role="status" aria-live="polite"></p>
-        </section>
-      </div><!-- /.brief__shell -->
-</section>
-
-<!-- ══ contatto ══ -->
-<section class="sec sec--contact" id="contatto" aria-labelledby="contT">
-  <p class="eyebrow mono"><i aria-hidden="true"></i>Disponibile per nuovi progetti</p>
 
   <div class="union">
     <div class="union__slab">
@@ -1180,6 +868,335 @@
       </div>
     </div>
   </div>
+</section>
+
+<!-- ══ 01 · control room ══ -->
+<section class="sec sp-l" id="regia" data-proof="regia" aria-labelledby="regiaT">
+  <header class="sec__head">
+    <p class="eyebrow mono"><span class="n">Prova 03</span> Control room</p>
+    <h2 id="regiaT">Non è “con AI” o “senza AI”.<br><em>È una scelta di regia.</em></h2>
+    <p class="sec__lede">La domanda che mi fanno tutti è quanta AI c’è dentro un lavoro. Qui la
+      risposta si vede: trascina la testina, a sinistra c’è quello che decido io, a destra quello
+      che genera il sistema. Cambia <strong>l’immagine vera</strong>, non una barra di
+      avanzamento — e sotto resta scritta ogni decisione presa.</p>
+  </header>
+
+  <div class="bench bench--regia bench--ampio">
+    <figure class="bench__stage">
+      <canvas id="kvCanvas" width="1200" height="750" aria-label="Key visual generato dal vivo: cambia con la posizione della testina."></canvas>
+      <figcaption class="mono"><span id="kvLabel">Regia umana</span><span id="kvSeed">seed —</span></figcaption>
+    </figure>
+
+    <div class="bench__panel">
+      <label class="ctl" for="mix">
+        <span class="mono">Quanta macchina entra</span>
+        <input id="mix" type="range" min="0" max="100" value="30" step="1" aria-describedby="mixOut" />
+        <output id="mixOut" class="mono">30% sistema</output>
+      </label>
+
+      <p class="phases__come mono">Trascina con un dito oppure scegli una fase.</p>
+      <div class="phases mono" role="group" aria-label="Fasi del processo">
+        <button type="button" aria-pressed="true" data-phase="0"><b>01</b> Brief</button>
+        <button type="button" aria-pressed="false" data-phase="1"><b>02</b> Direzione</button>
+        <button type="button" aria-pressed="false" data-phase="2"><b>03</b> Produzione</button>
+        <button type="button" aria-pressed="false" data-phase="3"><b>04</b> Controllo</button>
+        <button type="button" aria-pressed="false" data-phase="4"><b>05</b> Consegna</button>
+      </div>
+      <p class="phases__note" id="phaseNote">Definisco obiettivo, pubblico, canali e vincoli. L’AI non parte ancora.</p>
+
+      <div class="decis">
+        <span class="mono">Decisioni prese in questo frame</span>
+        <ul id="kvDecisions"></ul>
+      </div>
+
+      <div class="bench__acts">
+        <button class="btn btn--sm" id="kvNew" type="button">Rigenera <i aria-hidden="true">↻</i></button>
+        <button class="btn btn--sm" id="kvPng" type="button">Esporta PNG <i aria-hidden="true">↓</i></button>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- Il metodo era una sezione a se'. Sta qui perche' il pannello qui
+       sopra ha gia' queste cinque fasi: erano la stessa cosa detta due
+       volte a due sezioni di distanza. -->
+  <div class="sec__sub" id="metodo" data-proof="metodo">
+    <p class="eyebrow mono"><span class="n">Dentro la stessa prova</span> Metodo</p>
+    <h3>Prima capisco il risultato, poi scelgo gli strumenti.</h3>
+    <p class="sec__lede">Le stesse cinque fasi del pannello, tutte insieme: l’input entra in
+      cima e lo vedi attraversarle, con lo stato che cambia a ogni passaggio.</p>
+  </div>
+
+  <ol class="pipe" id="pipe">
+    <li><b class="mono">01</b><h3>Capisco</h3><p>Obiettivo, pubblico, materiali, canali e vincoli.</p><span class="pipe__st mono">In attesa</span></li>
+    <li><b class="mono">02</b><h3>Dirigo</h3><p>Definisco concept, linguaggio, ritmo e sistema visivo.</p><span class="pipe__st mono">In attesa</span></li>
+    <li><b class="mono">03</b><h3>Produco</h3><p>Creo e monto con tecniche tradizionali e AI dove utile.</p><span class="pipe__st mono">In attesa</span></li>
+    <li><b class="mono">04</b><h3>Controllo</h3><p>Seleziono, correggo e mantengo coerenza tra gli output.</p><span class="pipe__st mono">In attesa</span></li>
+    <li><b class="mono">05</b><h3>Consegno</h3><p>Preparo file, versioni e indicazioni d'uso.</p><span class="pipe__st mono">In attesa</span></li>
+  </ol>
+
+  <!-- Le tre immagini generative stavano in una sezione loro che si
+       chiamava "Lavori" e non conteneva lavori. Stanno qui perche' qui
+       si parla di quanta macchina entra in un pezzo: sono la stessa
+       domanda vista da un altro lato. -->
+  <div class="sec__sub">
+    <p class="eyebrow mono"><span class="n">Dentro la stessa prova</span> Le immagini di questa pagina</p>
+    <h3>Un sistema, non un pezzo venuto bene.</h3>
+    <p class="sec__lede">Queste tre non sono immagini caricate: <strong>le disegna questa pagina,
+      adesso</strong>. Ognuna nasce da un numero, il seed. Cambialo e ne esce un’altra, diversa ma
+      della stessa famiglia. È la differenza fra avere un sistema visivo — che fra sei mesi
+      continua a produrre pezzi coerenti — e avere un pezzo venuto bene per caso.</p>
+  </div>
+
+  <div class="deck" id="deck"></div>
+</section>
+
+<!-- ══ 05 · tecnologia ══ -->
+<section class="sec sec--alt sp-m sec--chiara" id="tecnologia" data-proof="tecnologia" aria-labelledby="tecT">
+  <header class="sec__head">
+    <p class="eyebrow mono"><span class="n">Prova 04</span> Tecnologia</p>
+    <h2 id="tecT">La tecnologia giusta.<br><em>Non quella di moda.</em></h2>
+    <p class="sec__lede">Ho una workstation su cui installo, confronto e integro modelli. Scelgo fra locale, cloud e ibrido su assi vere — e i numeri qui sotto sono dichiarati per quello che sono: <strong>stime dalla mia esperienza</strong>, non misure di laboratorio.</p>
+  </header>
+  <div class="bench bench--invertito">
+    <figure class="bench__stage">
+      <canvas id="radar" width="900" height="700" aria-label="Confronto fra lavorazione locale, cloud e ibrida su cinque assi."></canvas>
+      <figcaption class="mono"><span id="radarMode">Locale</span><span>stime dichiarate</span></figcaption>
+    </figure>
+    <div class="bench__panel">
+      <div class="modes mono" role="group" aria-label="Modalità di lavorazione">
+        <button type="button" aria-pressed="true" data-mode="0">Locale</button>
+        <button type="button" aria-pressed="false" data-mode="1">Cloud</button>
+        <button type="button" aria-pressed="false" data-mode="2">Ibrido</button>
+      </div>
+      <h3 id="modeTitle">Più controllo sul flusso</h3>
+      <p id="modeCopy">Il lavoro locale offre più controllo su file, configurazioni e iterazioni; richiede capacità hardware e gestione tecnica.</p>
+    </div>
+  </div>
+
+</section>
+
+<!-- ══ 06 · laboratorio ══ -->
+<section class="sec sp-s ap-numero" id="laboratorio" data-proof="laboratorio" aria-labelledby="labT">
+  <header class="sec__head" data-num="05">
+    <p class="eyebrow mono"><span class="n">Prova 05</span> Playlab</p>
+    <h2 id="labT">Quattro giochi,<br><em>scritti da zero.</em></h2>
+    <p class="sec__lede">Quattro giochi originali che girano dentro questa pagina, più un
+      costruttore che te ne fa uno rispondendo a sedici domande. Non è un passatempo: se so
+      scrivere un motore che risponde al dito in sedici millesimi di secondo, so costruire anche
+      l’applicazione o il configuratore che ti serve.</p>
+  </header>
+  <div class="lab">
+    <article class="lab__card"><span class="mono">01 · Campo di tensione</span><i aria-hidden="true">⌁</i><h3>Trama</h3><p class="mono">Tendi / allinea / stabilizza</p></article>
+    <article class="lab__card"><span class="mono">02 · Membrana viva</span><i aria-hidden="true">△</i><h3>Piega</h3><p class="mono">Premi / deforma / fai risuonare</p></article>
+    <article class="lab__card"><span class="mono">03 · Danza delle correnti</span><i aria-hidden="true">≈</i><h3>Flusso</h3><p class="mono">Disegna / guida / componi</p></article>
+    <article class="lab__card"><span class="mono">04 · Cerchi armonici</span><i aria-hidden="true">◎</i><h3>Coro</h3><p class="mono">Accorda / pulsa / allinea</p></article>
+  </div>
+  <div class="lab__intro">
+    <p class="mono">Trama / Piega / Flusso / Coro / Tela 2D / Gesti diretti / Sessione locale</p>
+    <h3>Nuovi gesti. Nuove forme.<br><em>Risposte chiare.</em></h3>
+    <p>Trama governa tensioni, Piega deforma membrane, Flusso compone correnti e Coro accorda cerchi. Ogni gioco usa gesti diretti e un linguaggio visivo diverso.</p>
+    <p>Parti da uno stile pronto in pochi secondi oppure rispondi a sedici domande semplici e crea il tuo gioco.</p>
+  </div>
+  <div class="lab__cta">
+    <button class="btn btn--solid btn--lg" id="open-playlab" type="button">Apri il laboratorio <i aria-hidden="true">▶</i></button>
+    <p class="lab__note">Quattro motori, un costruttore in sedici domande e venti regole che puoi cambiare. Si carica al primo clic: <b>niente scarica finché non lo apri</b>.</p>
+  </div>
+
+  <!-- La materia era una sezione a se'. Sta nel laboratorio perche' e'
+       l'altra prova che si tocca con le mani, e le due si chiamavano a
+       vicenda da due sezioni di distanza. -->
+  <div class="sec__sub" id="materia" data-proof="materia">
+    <p class="eyebrow mono"><span class="n">Dentro la stessa prova</span> Materia</p>
+    <h3>Grafica, video e sistemi sono la stessa materia.</h3>
+    <p class="sec__lede">Dodicimila punti presi da un’immagine vera, ognuno col colore del pixel
+      da cui viene. Cambia disposizione e li vedi riorganizzarsi: è la stessa sostanza in un altro
+      ordine, non tre immagini in dissolvenza. Detta in pratica — lo stesso materiale lo porto da
+      un formato all’altro senza rifarlo da capo, ed è per questo che la seconda declinazione di
+      una campagna costa meno della prima.</p>
+  </div>
+
+  <div class="bench bench--medio">
+    <figure class="bench__stage bench__stage--materia">
+      <div class="mat-holder"><canvas id="matCanvas" aria-label="Nuvola di punti interattiva: scegli una disposizione, muovi il puntatore per ruotare, tieni premuto per disperdere la materia."></canvas></div>
+      <figcaption class="mono"><span id="matName">Griglia · grafica</span><span id="matMeta">— punti</span></figcaption>
+    </figure>
+    <div class="bench__panel">
+      <div class="modes mono" role="group" aria-label="Disposizioni della materia">
+        <button type="button" aria-pressed="true" data-mat="0">Griglia</button>
+        <button type="button" aria-pressed="false" data-mat="1">Nastro</button>
+        <button type="button" aria-pressed="false" data-mat="2">Rete</button>
+      </div>
+      <h3 id="matTitle">Il piano editoriale</h3>
+      <p id="matCopy">Tutto su un asse, niente profondità: è così che si legge una pagina. La griglia è la disposizione che decide dove va l'occhio.</p>
+      <p class="mat__hint mat__hint--puntatore mono">↔ Muovi il puntatore per ruotare · <b>tieni premuto</b> per disperdere</p>
+      <p class="mat__hint mat__hint--dito mono">↔ <b>Trascina</b> per ruotare · <b>tieni premuto</b> per disperdere</p>
+      <div class="decis"><span class="mono">Come è fatta</span><ul id="matDecisions"></ul></div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ profilo ══ -->
+<section class="sec sp-l ap-stretta sec--chiara" id="profilo" aria-labelledby="profT">
+  <header class="sec__head">
+    <p class="eyebrow mono"><span class="n">Profilo</span> Creativo + tecnico</p>
+    <h2 id="profT">Un profilo visivo.<br><em>Un metodo tecnico.</em></h2>
+  </header>
+  <div class="profilo">
+    <div class="profilo__testo">
+      <p class="profilo__lead">Sono un grafico pubblicitario, video editor e web designer. Lavoro tra immagine, montaggio, social media, vibe coding e automazione; creo anche app e agenti per trasformare attività ripetitive in flussi chiari e controllabili.</p>
+      <p>Conosco il panorama AI perché lo provo sul campo: uso piattaforme professionali, installo modelli sul mio PC e confronto qualità, velocità, costi e limiti. Il valore non è “usare l’AI”, ma sapere quale usare, quando evitarla e come dirigere il risultato.</p>
+    </div>
+    <aside class="profilo__mark" aria-hidden="true"><span>ART</span><b>×</b><span>AI</span></aside>
+  </div>
+</section>
+
+<!-- ══ 08 · verdetto ══ -->
+<section class="sec sec--verdict sp-l" id="verdetto" aria-labelledby="verdT">
+  <header class="sec__head">
+    <p class="eyebrow mono"><span class="n">Chiusura</span> Verdetto</p>
+    <h2 id="verdT">La sessione si chiude.<br><em>Il dossier lo hai scritto tu.</em></h2>
+    <p class="sec__lede">Questo non è un CV preparato: è il resoconto di cosa hai manovrato in questa visita. Cambia per ogni persona che passa di qui.</p>
+  </header>
+
+  <div class="dossier" id="dossier">
+    <div class="dossier__head mono"><span>F/AI · dossier di sessione</span><span id="dsDate">—</span></div>
+    <dl class="dossier__grid">
+      <div><dt>Durata</dt><dd id="dsTime">00:00</dd></div>
+      <div><dt>Prove aperte</dt><dd id="dsProofs">0 / 8</dd></div>
+      <div><dt>Manovre</dt><dd id="dsActions">0</dd></div>
+      <div><dt>Equilibrio scelto</dt><dd id="dsMix">—</dd></div>
+      <div><dt>Fluidità media</dt><dd id="dsFps">—</dd></div>
+      <div><dt>Dipendenze del sito</dt><dd id="dsDeps">0</dd></div>
+    </dl>
+    <p class="dossier__verdict" id="dsVerdict">Sessione in corso.</p>
+    <ul class="dossier__list" id="dsList"></ul>
+    <div class="bench__acts">
+      <button class="btn btn--sm btn--solid" id="dsPrint" type="button">Salva il dossier <i aria-hidden="true">↓</i></button>
+      <a class="btn btn--sm" href="#contatto">Passa al brief <i aria-hidden="true">↗</i></a>
+    </div>
+  </div>
+
+  <div class="metrics" id="metrics">
+    <span class="mono">Metriche reali di questa pagina</span>
+    <dl>
+      <div><dt>LCP</dt><dd id="mLcp">—</dd></div>
+      <div><dt>CLS</dt><dd id="mCls">—</dd></div>
+      <div><dt>INP</dt><dd id="mInp">—</dd></div>
+      <div><dt>Trasferito</dt><dd id="mKb">—</dd></div>
+      <div><dt>Richieste</dt><dd id="mReq">—</dd></div>
+      <div><dt>Librerie al 1° carico</dt><dd id="mLib">0</dd></div>
+    </dl>
+    <p class="metrics__note">Lette dal browser mentre guardi, non dichiarate. Un sito che espone le proprie misure è l'unico modo onesto di dimostrare che so farli.</p>
+  </div>
+</section>
+
+<section class="sec sec--alt brief sp-m ap-larga sec--chiara" id="brief" aria-labelledby="brief-title">
+      <header class="sec__head">
+        <p class="eyebrow mono"><span class="n">Chiusura</span> Brief</p>
+        <h2 id="brief-title">SEI DOMANDE.<br /><em>POI COSTRUIAMO IL QUADRO.</em></h2>
+        <p class="sec__lede">Scegli ciò che sai già. Se qualcosa non è definito, puoi saltarlo. Il riepilogo si costruisce <strong>nel tuo browser</strong>: il sito non lo salva e non lo invia.</p>
+      </header>
+      <div class="brief__shell">
+        <form id="brief-form" class="brief__form" autocomplete="on" novalidate>
+          <div class="brief__progress" aria-live="polite"><span id="brief-counter">DOMANDA 1 DI 6</span><i id="brief-progress" style="--progress:16.666%"></i></div>
+
+          <fieldset class="brief-step active" data-step="1">
+            <legend><span>01</span> CHE COSA VUOI OTTENERE?</legend>
+            <div class="brief-options">
+              <label><input type="radio" name="project_type" value="grafica" required /><span>Una campagna o identità</span></label>
+              <label><input type="radio" name="project_type" value="video" /><span>Un video</span></label>
+              <label><input type="radio" name="project_type" value="social" /><span>Un sistema social</span></label>
+              <label><input type="radio" name="project_type" value="ai" /><span>Un flusso o prototipo AI</span></label>
+              <label><input type="radio" name="project_type" value="da-definire" /><span>Non lo so ancora</span></label>
+            </div>
+          </fieldset>
+
+          <fieldset class="brief-step" data-step="2" hidden inert>
+            <legend><span>02</span> DA COSA PARTIAMO?</legend>
+            <p class="brief-step__hint">Puoi scegliere più risposte.</p>
+            <div class="brief-options">
+              <label><input type="checkbox" name="starting_point" value="brief" /><span>Ho un brief</span></label>
+              <label><input type="checkbox" name="starting_point" value="brand" /><span>Ho un’identità o linee guida</span></label>
+              <label><input type="checkbox" name="starting_point" value="materials" /><span>Ho girato o materiali</span></label>
+              <label><input type="checkbox" name="starting_point" value="zero" /><span>Partiamo da zero</span></label>
+              <label><input type="checkbox" name="starting_point" value="other" /><span>Altro</span></label>
+            </div>
+          </fieldset>
+
+          <fieldset class="brief-step" data-step="3" hidden inert>
+            <legend><span>03</span> DOVE DOVRÀ FUNZIONARE?</legend>
+            <p class="brief-step__hint">Puoi scegliere più canali.</p>
+            <div class="brief-options">
+              <label><input type="checkbox" name="channels" value="social" /><span>Social</span></label>
+              <label><input type="checkbox" name="channels" value="web" /><span>Web o landing</span></label>
+              <label><input type="checkbox" name="channels" value="advertising" /><span>Advertising</span></label>
+              <label><input type="checkbox" name="channels" value="event" /><span>Evento o schermo</span></label>
+              <label><input type="checkbox" name="channels" value="internal" /><span>Uso interno</span></label>
+              <label><input type="checkbox" name="channels" value="multiple" /><span>Più canali</span></label>
+            </div>
+          </fieldset>
+
+          <fieldset class="brief-step" data-step="4" hidden inert>
+            <legend><span>04</span> QUANDO TI SERVE?</legend>
+            <div class="brief-options brief-options--deadline">
+              <label><input type="radio" name="timing" value="date" /><span>Ho una data indicativa</span></label>
+              <label class="brief-date" hidden><span>Data indicativa</span><input type="date" name="deadline" disabled /></label>
+              <label><input type="radio" name="timing" value="flexible" /><span>La data è flessibile</span></label>
+              <label><input type="radio" name="timing" value="unknown" /><span>Non è ancora definita</span></label>
+            </div>
+          </fieldset>
+
+          <fieldset class="brief-step" data-step="5" hidden inert>
+            <legend><span>05</span> CHE SUPPORTO CERCHI?</legend>
+            <div class="brief-options">
+              <label><input type="radio" name="support" value="single" /><span>Un singolo progetto</span></label>
+              <label><input type="radio" name="support" value="package" /><span>Un pacchetto di contenuti</span></label>
+              <label><input type="radio" name="support" value="continuous" /><span>Una collaborazione continuativa</span></label>
+              <label><input type="radio" name="support" value="consulting" /><span>Una consulenza o un prototipo</span></label>
+              <label><input type="radio" name="support" value="unknown" /><span>Non lo so ancora</span></label>
+            </div>
+          </fieldset>
+
+          <fieldset class="brief-step" data-step="6" hidden inert>
+            <legend><span>06</span> COME POSSO RICONTATTARTI?</legend>
+            <div class="brief-fields">
+              <label><span>Nome *</span><input type="text" name="name" autocomplete="name" required /></label>
+              <label><span>Email *</span><input type="email" name="email" autocomplete="email" inputmode="email" spellcheck="false" autocapitalize="none" required /></label>
+              <label><span>Azienda <small>facoltativa</small></span><input type="text" name="company" autocomplete="organization" /></label>
+              <label><span>Fascia di investimento <small>facoltativa</small></span><select name="budget"><option value="">Preferisco non indicarla</option><option value="da-definire">Da definire insieme</option><option value="piccolo">Progetto circoscritto</option><option value="medio">Produzione articolata</option><option value="continuativo">Collaborazione continuativa</option></select></label>
+              <label class="brief-fields__wide"><span>Nota <small>facoltativa</small></span><textarea name="note" rows="4" placeholder="Per esempio: materiali disponibili, vincoli o domande…"></textarea></label>
+              <p class="brief-data-note" id="brief-data-note">I dati restano in questo browser. Il sito non li salva e non li invia: il riepilogo lo copi tu, e decidi tu dove mandarlo.</p>
+              <label class="brief-consent brief-fields__wide"><input type="checkbox" name="privacy" aria-describedby="brief-data-note" required /><span>HO CAPITO COME VENGONO GESTITI I DATI. *</span></label>
+            </div>
+            <p class="brief-step__hint">Il riepilogo viene preparato nel browser: potrai copiarlo e incollarlo dove preferisci.</p>
+          </fieldset>
+
+          <p class="brief__error" id="brief-error" role="alert" hidden></p>
+          <nav class="brief__nav" aria-label="Navigazione del brief">
+            <button id="brief-back" type="button" hidden>INDIETRO</button>
+            <button id="brief-next" type="submit"><span>AVANTI: MATERIALI</span><i aria-hidden="true">→</i></button>
+          </nav>
+        </form>
+
+        <section class="brief-summary" id="brief-summary" aria-labelledby="brief-summary-title" tabindex="-1" hidden>
+          <span>F/AI / RIEPILOGO</span>
+          <h3 id="brief-summary-title">IL BRIEF È PRONTO.</h3>
+          <p>Controlla il riepilogo, poi copialo: lo incolli dove preferisci.</p>
+          <pre id="brief-copy"></pre>
+          <div class="brief-summary__actions">
+            <button id="brief-copy-button" type="button"><span>COPIA IL RIEPILOGO</span><i aria-hidden="true">□</i></button>
+            <button id="brief-edit" type="button"><span>MODIFICA LE RISPOSTE</span><i aria-hidden="true">←</i></button>
+          </div>
+          <p class="brief-summary__status" id="brief-status" role="status" aria-live="polite"></p>
+        </section>
+      </div><!-- /.brief__shell -->
+</section>
+
+<!-- ══ contatto ══ -->
+<section class="sec sec--contact" id="contatto" aria-labelledby="contT">
+  <p class="eyebrow mono"><i aria-hidden="true"></i>Disponibile per nuovi progetti</p>
+
 
   <h2 id="contT">Hai un'idea da far vedere, muovere o scalare?<br><em>Diamole una direzione.</em></h2>
   <p class="contatto__come">Si comincia dalle sei domande qui sopra: due minuti, si
@@ -1247,7 +1264,7 @@
 <div class="voice" id="voice" role="status" aria-live="polite">
   <span class="voice__dot" aria-hidden="true"></span>
   <p id="voiceText">Sessione aperta. Ti mostro cosa so fare, non te lo racconto.</p>
-  <span class="voice__prog mono"><b id="voiceCount">0</b>/7</span>
+  <span class="voice__prog mono"><b id="voiceCount">0</b>/<b id="voiceTot">8</b></span>
 </div>
 
 <script type="module" src="app.js?v=20260911-135324"></script>

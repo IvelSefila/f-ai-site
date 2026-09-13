@@ -8,10 +8,12 @@
  * mette una copertina e un bottone, e il video nasce al clic.
  *
  * Poi: che al clic parta davvero, che facendone partire un secondo il
- * primo si fermi (due video che parlano insieme non sono una scelta),
- * che il blocco stia in fondo prima dei contatti, che le copertine
- * abbiano tutte il loro file, e che il lime del cliente non si mescoli
- * col verde del sito quando si cambia palette.
+ * primo torni copertina (due video che parlano insieme non sono una
+ * scelta), che il blocco stia nella sezione dei lavori e cominci nel
+ * primo terzo della pagina — prima era al 65%, dopo il modulo del
+ * brief — che le copertine abbiano tutte il loro file, e che il lime
+ * del cliente non si mescoli col verde del sito quando si cambia
+ * palette.
  *
  * uso: node audit/union.mjs
  * ═══════════════════════════════════════════════════════════════════ */
@@ -63,15 +65,17 @@ for (const [nome, vp, dito] of [['telefono', { width: 390, height: 844 }, true],
     const titolo = document.getElementById('contT');
     return {
       sezione: sez.id,
-      ultima: tutte.indexOf(sez) === tutte.length - 1,
+      /* quanto in basso comincia il primo lavoro vero: era al 65% della
+         pagina, dentro i contatti, dopo il modulo del brief */
+      quota: Math.round((u.getBoundingClientRect().top + scrollY) * 100 / document.body.scrollHeight),
       primaDelTitolo: !!titolo && (u.compareDocumentPosition(titolo) & Node.DOCUMENT_POSITION_FOLLOWING) !== 0,
       pezzi: document.querySelectorAll('.union__pezzo').length,
       claim: (document.querySelector('.union__claim') || {}).textContent || '',
       lama: !!document.querySelector('.union__davide img'),
     };
   });
-  dice(!!dove && dove.sezione === 'contatto' && dove.ultima, 'il blocco sta nell\u2019ultima sezione');
-  dice(dove && dove.primaDelTitolo, 'e prima di come mettersi in contatto');
+  dice(!!dove && dove.sezione === 'lavori', `il blocco sta nella sezione dei lavori (${dove?.sezione})`);
+  dice(dove && dove.quota <= 42, `e comincia nel primo terzo della pagina, prima era al 65% (${dove?.quota}%)`);
   dice(dove && dove.pezzi === 9, `ci sono tutti e nove i pezzi (${dove?.pezzi})`);
   dice(dove && /uniti si vince/i.test(dove.claim), `il payoff c\u2019e\u2019: "${dove?.claim}"`);
   dice(dove && dove.lama, 'e il lama pure');

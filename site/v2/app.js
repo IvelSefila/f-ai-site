@@ -21,8 +21,12 @@ const mmss = ms => `${pad(Math.floor(ms / 60000))}:${pad(Math.floor(ms / 1000) %
    servizi: e' la prima cosa che un cliente deve trovare */
 const PROOFS = [
   ['banchi', 'Servizi — hai manovrato uno degli strumenti'],
-  ['lavori', 'Lavori — hai rigenerato un sistema visivo'],
+  /* "Lavori" adesso vuol dire i lavori veri: prima era il mazzo di
+     immagini generative, che si chiamava cosi' senza esserlo. Quelle
+     hanno la loro riga, sotto la control room, dove sono finite. */
+  ['lavori', 'Lavori — hai aperto un lavoro fatto per un cliente'],
   ['regia', 'Control room — hai deciso dove entra la macchina'],
+  ['immagini', 'Immagini — hai rigenerato un sistema visivo'],
   ['metodo', 'Metodo — hai percorso la pipeline'],
   ['tecnologia', 'Tecnologia — hai confrontato le modalità'],
   ['laboratorio', 'Playlab — hai visto i motori di gioco'],
@@ -53,14 +57,16 @@ function say(text, sticky = false) {
   clearTimeout(voiceTimer);
   if (!sticky) voiceTimer = setTimeout(() => voice.classList.remove('on'), 7000);
 }
+/* Questi numeri erano rimasti a una versione precedente: arrivando sui
+   servizi il messaggio diceva "Prova 03" e l'intestazione della sezione
+   diceva "Prova 01". Adesso sono gli stessi dell'HTML, e sono cinque
+   perche' due sezioni sono diventate blocchi dentro altre due. */
 const VOICE = {
-  regia: 'Prova 01. Sposta la testina: cambia l’artefatto, non una barra.',
-  lavori: 'Prova 02. Queste immagini le disegna la pagina. Cambia il seed.',
-  banchi: 'Prova 03. Quattro strumenti veri, uno per servizio.',
-  metodo: 'Prova 04. L’input entra in cima e attraversa le cinque fasi.',
-  tecnologia: 'Prova 05. Locale, cloud o ibrido: stime dichiarate, non promesse.',
-  laboratorio: 'Prova 06. Quattro motori di gioco scritti da zero.',
-  materia: 'Prova 07. Dodicimila punti, una sola materia, tre disposizioni.',
+  banchi: 'Prova 01. Quattro strumenti veri, uno per servizio.',
+  lavori: 'Prova 02. Tre lavori veri. I video partono solo se li apri.',
+  regia: 'Prova 03. Sposta la testina: cambia l’artefatto, non una barra.',
+  tecnologia: 'Prova 04. Locale, cloud o ibrido: stime dichiarate, non promesse.',
+  laboratorio: 'Prova 05. Quattro motori di gioco scritti da zero.',
   brief: 'Sei domande. Il riepilogo si costruisce qui, nel tuo browser.',
   verdetto: 'Sessione chiusa. Il dossier qui sotto lo hai scritto tu.',
 };
@@ -226,10 +232,10 @@ WORKS.forEach((w, i) => {
       el.querySelector('.sv').textContent = sd;
     };
     el.querySelector('.work__seed button').addEventListener('click', () => {
-        sd = (Math.random() * 9999) | 0; draw(); act(); proof('lavori');
+        sd = (Math.random() * 9999) | 0; draw(); act(); proof('immagini');
         say('Stesso linguaggio, composizione nuova. È questa la differenza fra un sistema e un colpo di fortuna.');
       });
-    el.querySelector('details').addEventListener('toggle', e => { if (e.target.open) { act(); proof('lavori'); } });
+    el.querySelector('details').addEventListener('toggle', e => { if (e.target.open) { act(); proof('immagini'); } });
     RIDISEGNI.push(draw);
     queueMicrotask(draw);
   });
@@ -557,6 +563,10 @@ function renderDossier() {
   $('#dsFps').textContent = avg ? `${avg} fps` : '—';
   $('#dsDate').textContent = new Date().toLocaleDateString('it-IT', { day: '2-digit', month: '2-digit', year: 'numeric' });
   voiceCount.textContent = S.proofs.size;
+  /* Il totale stava scritto a mano in due posti e in uno era rimasto a
+     sette: adesso lo dice l'elenco delle prove, che e' l'unico posto
+     dove esiste davvero. */
+  const tot = $('#voiceTot'); if (tot) tot.textContent = PROOFS.length;
   $$('#dsList li').forEach(li => li.classList.toggle('seen', S.proofs.has(li.dataset.p)));
   const n = S.proofs.size;
   $('#dsVerdict').textContent =
@@ -638,13 +648,30 @@ const rvIO = new IntersectionObserver(es => es.forEach(e => {
     }), { threshold: .12, rootMargin: '0px 0px -8% 0px' });
 $$('.rv').forEach(el => rvIO.observe(el));
 
-const secIO = new IntersectionObserver(es => es.forEach(e => {
-      if (!e.isIntersecting) return;
-      const id = e.target.id;
-      $$('.bar__nav a').forEach(a => a.classList.toggle('on', a.getAttribute('href') === '#' + id));
-      if (VOICE[id] && !S.seen.has(id)) { S.seen.add(id); say(VOICE[id], id === 'verdetto'); }
-      if (id === 'verdetto') renderDossier();
-    }), { threshold: .3 });
+/* Due sezioni possono essere in vista insieme, e prima vinceva quella
+   che arrivava per ultima nella lista: arrivando sul laboratorio la
+   testata accendeva ancora il numero della tecnologia. Adesso vince
+   quella che sta piu' in alto fra quelle visibili — che e' quella che
+   si sta guardando. */
+const inVista = new Set();
+const secIO = new IntersectionObserver(es => {
+      for (const e of es) {
+        const id = e.target.id;
+        e.isIntersecting ? inVista.add(id) : inVista.delete(id);
+        if (!e.isIntersecting) continue;
+        if (VOICE[id] && !S.seen.has(id)) { S.seen.add(id); say(VOICE[id], id === 'verdetto'); }
+        if (id === 'verdetto') renderDossier();
+      }
+      let sopra = null, quota = Infinity;
+      for (const id of inVista) {
+        const el = document.getElementById(id);
+        if (!el) continue;
+        const y = el.getBoundingClientRect().top;
+        if (y < quota) { quota = y; sopra = id; }
+      }
+      $$('.bar__nav a').forEach(a => a.classList.toggle('on', !!sopra &&
+        a.getAttribute('href') === '#' + sopra));
+    }, { threshold: .3 });
 $$('main > section[id]').forEach(s => secIO.observe(s));
 
 /* orologio di sessione */
@@ -682,6 +709,9 @@ document.addEventListener('palette', () => {
 });
 initPalette();
 initStrumenti();
-initUnion();
-initEso();
-initLocanda();
+/* I tre casi avvisano quando qualcuno guarda davvero un pezzo: e' la
+   prova "Lavori" del dossier, e vale piu' di uno scorrimento. */
+const guardato = () => { act(); proof('lavori'); };
+initUnion(guardato);
+initEso(guardato);
+initLocanda(guardato);

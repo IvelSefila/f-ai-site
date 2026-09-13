@@ -1027,7 +1027,21 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border:0;border-radiu
 .sec--chiara .formats figure,
 .sec--chiara .mat-holder{
   border-radius:var(--r);overflow:hidden;
-  box-shadow:0 1px 2px rgba(5,7,11,.06), 0 18px 44px -22px rgba(5,7,11,.34)}
+  box-shadow:0 1px 2px rgba(5,7,11,.06), 0 18px 44px -22px rgba(5,7,11,.34);
+  /* E dentro restano scuri anche i colori del testo. Senza questa riga
+     la didascalia del radar prendeva il grigio da carta (#5f6a76) e
+     finiva su un fondo nero: 3,31:1, cioe' illeggibile. Si e' visto
+     spostando la tecnologia dal fondo scuro alla carta — un pannello
+     che cambia sfondo si porta dietro i suoi colori solo se glielo si
+     dice. */
+  --ink:#f2f4f7; --text:#c3ccd6; --muted:#7f8b98;
+  /* L'accento da carta e' scuro per stare sul bianco: dentro la vetrina
+     nera faceva 3,31:1. Qui torna quello vivo, nato per i fondi scuri —
+     schiarito di un terzo verso l'inchiostro, perche' su indaco,
+     magenta e corallo l'accento vivo da solo si fermava a 4,02:1 e per
+     undici pixel ne servono 4,5. Provato su tutte e sette le palette,
+     non solo su quella di casa. */
+  --em:color-mix(in srgb, var(--em-vivo) 68%, #f2f4f7)}
 
 /* i pannelli su carta: bordo leggero invece del fondo scuro */
 .sec--chiara .bench__panel,
@@ -2295,6 +2309,18 @@ body.ord-in-corso *{cursor:grabbing !important}
    trovava tre griglie vuote. */
 .scaletta{margin:0;padding:0 0 0 18px;display:grid;gap:6px;
   color:inherit;font-size:15px;line-height:1.5}
+
+
+/* Un secondo capo dentro una sezione, per quando una sezione contiene
+   due prove diverse: la control room e le tre immagini generative
+   parlano della stessa cosa e non meritano due sezioni. Piu' piccolo
+   del capo di sezione, e staccato da una riga. */
+.sec__sub{margin:clamp(34px,4vw,58px) 0 clamp(18px,2vw,26px);
+  padding-top:clamp(22px,2.6vw,32px);border-top:1px solid var(--rule-2);
+  max-width:74ch}
+.sec__sub h3{margin:10px 0 0;font-size:clamp(22px,2.6vw,34px);letter-spacing:-.02em;
+  line-height:1.08}
+.sec__sub .sec__lede{margin-top:12px}
 
 /* come si comincia, scritto sotto il titolo del contatto */
 .contatto__come{margin:0 0 22px;max-width:62ch;color:var(--text);font-size:16px;line-height:1.6}

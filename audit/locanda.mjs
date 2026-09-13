@@ -61,6 +61,7 @@ for (const [nome, vp, dito] of [['telefono', { width: 390, height: 844 }, true],
     const titolo = document.getElementById('contT');
     return {
       sezione: sez.id,
+      quota: Math.round((l.getBoundingClientRect().top + scrollY) * 100 / document.body.scrollHeight),
       dopoUnion: !!u && (u.compareDocumentPosition(l) & Node.DOCUMENT_POSITION_FOLLOWING) !== 0,
       primaDelTitolo: !!titolo && (l.compareDocumentPosition(titolo) & Node.DOCUMENT_POSITION_FOLLOWING) !== 0,
       pezzi: document.querySelectorAll('.locanda__pezzo').length,
@@ -69,9 +70,9 @@ for (const [nome, vp, dito] of [['telefono', { width: 390, height: 844 }, true],
       claim: (document.querySelector('.locanda__claim') || {}).textContent || '',
     };
   });
-  dice(!!dove && dove.sezione === 'contatto', 'il blocco sta nella sezione del contatto');
+  dice(!!dove && dove.sezione === 'lavori', `il blocco sta nella sezione dei lavori (${dove?.sezione})`);
   dice(dove && dove.dopoUnion, 'dopo Union Energia');
-  dice(dove && dove.primaDelTitolo, 'e prima di come mettersi in contatto');
+  dice(dove && dove.quota <= 62, `e comincia prima dei due terzi della pagina (${dove?.quota}%)`);
   dice(dove && dove.pezzi === 9, `ci sono tutte e nove le locandine (${dove?.pezzi})`);
   dice(dove && dove.brani === 5, `e i cinque brani (${dove?.brani})`);
   dice(dove && dove.marchio, 'il marchio si vede');

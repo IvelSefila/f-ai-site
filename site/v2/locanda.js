@@ -51,7 +51,12 @@ export const BRANI = [
   { id: 'where-the-shadows-dance', t: 'Where the Shadows Dance', n: 'La sera, quando il parco si spegne' },
 ];
 
-export function initLocanda() {
+/* avvisa() lo passa app.js: serve a segnare nel dossier che
+   qualcuno ha guardato un lavoro vero, non solo scorso la pagina. */
+let avvisa = () => {};
+
+export function initLocanda(quando) {
+  if (quando) avvisa = quando;
   const griglia = document.querySelector('.locanda__lavori');
   if (griglia) {
     griglia.textContent = '';   /* via la scaletta per chi non ha JS */
@@ -117,6 +122,7 @@ function parte(art, p, bottone) {
   v.setAttribute('aria-label', p.t);
   bottone.replaceWith(v);
   art.classList.add('in-onda');
+  avvisa();
   v.play().catch(() => {});
 }
 

@@ -77,8 +77,12 @@ const r = await p.evaluate(() => {
      si legge benissimo. Adesso, quando il colore e' trasparente e c'e'
      una sfumatura ritagliata sul testo, si misura la fermata PIU' SCURA
      della sfumatura — il caso peggiore lungo la riga. */
+  /* Un colore calcolato con color-mix() il browser lo restituisce come
+     "color(srgb 0.357 0.818 0.678)": numeri da zero a uno, non da zero
+     a 255. Letto alla vecchia maniera diventava quasi nero. */
   const rgba = c => { const v=(c||'').match(/[\d.]+/g); if(!v) return null;
-    return [ +v[0], +v[1], +v[2], v.length>3 ? +v[3] : 1 ]; };
+    const s = /^color\(/.test(c||'') ? 255 : 1;
+    return [ +v[0]*s, +v[1]*s, +v[2]*s, v.length>3 ? +v[3] : 1 ]; };
   const sopra = (f, d) => f.slice(0,3).map((x,i)=> x*f[3] + d[i]*(1-f[3]));   /* f sopra d */
   const lumRGB = v => { const l=v.slice(0,3).map(x=>{x/=255;return x<=.03928?x/12.92:((x+.055)/1.055)**2.4});
     return .2126*l[0]+.7152*l[1]+.0722*l[2]; };

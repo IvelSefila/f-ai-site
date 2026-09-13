@@ -157,7 +157,12 @@ for (const [nome, lastra] of [['Union Energia', '.union__slab'],
     const lum = (r, g, b) => 0.2126 * canale(r) + 0.7152 * canale(g) + 0.0722 * canale(b);
     const rapporto = (a, b) => { let [x, y] = [a, b]; if (x < y) [x, y] = [y, x];
                                  return (x + 0.05) / (y + 0.05); };
-    const rgb = (s) => (s.match(/\d+(\.\d+)?/g) || []).slice(0, 3).map(Number);
+    /* Un colore calcolato con color-mix() il browser lo restituisce come
+       "color(srgb 0.357 0.818 0.678)": numeri da zero a uno, non da zero a
+       255. Letto alla vecchia maniera diventava quasi nero e il controllo
+       diceva 1,05:1 su una scritta chiarissima. */
+    const rgb = (s) => { const n = (s.match(/\d+(\.\d+)?/g) || []).slice(0, 3).map(Number);
+      return /^color\(/.test(s) ? n.map(v => v * 255) : n; };
 
     const male = [];
     let peggio = { r: 99 };

@@ -87,7 +87,12 @@ function rimetti(tranne) {
 
 const PER_ID = new Map(PEZZI.map(p => [p.id, p]));
 
-export function initUnion() {
+/* avvisa() lo passa app.js: serve a segnare nel dossier che
+   qualcuno ha guardato un lavoro vero, non solo scorso la pagina. */
+let avvisa = () => {};
+
+export function initUnion(quando) {
+  if (quando) avvisa = quando;
   const griglia = document.querySelector('.union__lavori');
   if (!griglia) return 0;
   griglia.textContent = '';     /* via la scaletta per chi non ha JS */
@@ -117,6 +122,7 @@ function parte(art, p, bottone) {
   v.setAttribute('aria-label', p.t);
   bottone.replaceWith(v);
   art.classList.add('in-onda');
+  avvisa();
   v.play().catch(() => {
     /* se il browser rifiuta di partire da solo, restano i comandi:
        meglio un video fermo con il tasto play che un errore muto */

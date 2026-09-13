@@ -60,6 +60,7 @@ for (const [nome, vp, dito] of [['telefono', { width: 390, height: 844 }, true],
     const dopo = (a, b) => (a.compareDocumentPosition(b) & Node.DOCUMENT_POSITION_FOLLOWING) !== 0;
     return {
       sezione: e.closest('#main > section').id,
+      quota: Math.round((e.getBoundingClientRect().top + scrollY) * 100 / document.body.scrollHeight),
       dopoUnion: !!u && dopo(u, e),
       primaLocanda: !!l && dopo(e, l),
       pezzi: document.querySelectorAll('.eso__pezzo').length,
@@ -68,7 +69,8 @@ for (const [nome, vp, dito] of [['telefono', { width: 390, height: 844 }, true],
       claim: (document.querySelector('.eso__claim') || {}).textContent || '',
     };
   });
-  dice(!!dove && dove.sezione === 'contatto', 'il blocco sta nella sezione del contatto');
+  dice(!!dove && dove.sezione === 'lavori', `il blocco sta nella sezione dei lavori (${dove?.sezione})`);
+  dice(dove && dove.quota <= 55, `nella prima meta' della pagina (${dove?.quota}%)`);
   dice(dove && dove.dopoUnion && dove.primaLocanda, 'fra Union Energia e la Locanda');
   dice(dove && dove.pezzi === 6, `ci sono tutti e sei i pezzi (${dove?.pezzi})`);
   dice(dove && dove.dispositivo, 'il dispositivo si vede');

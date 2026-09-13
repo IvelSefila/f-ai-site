@@ -68,7 +68,12 @@ function rimetti(tranne) {
   }
 }
 
-export function initEso() {
+/* avvisa() lo passa app.js: serve a segnare nel dossier che
+   qualcuno ha guardato un lavoro vero, non solo scorso la pagina. */
+let avvisa = () => {};
+
+export function initEso(quando) {
+  if (quando) avvisa = quando;
   const griglia = document.querySelector('.eso__lavori');
   if (!griglia) return 0;
   griglia.textContent = '';     /* via la scaletta per chi non ha JS */
@@ -98,5 +103,6 @@ function parte(art, p, bottone) {
   v.setAttribute('aria-label', p.t);
   bottone.replaceWith(v);
   art.classList.add('in-onda');
+  avvisa();
   v.play().catch(() => {});
 }
