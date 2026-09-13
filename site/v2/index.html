@@ -922,6 +922,110 @@
   </div>
 
 
+
+  <div class="eso">
+    <div class="eso__slab">
+      <!-- La scena: un reticolo tecnico e la traccia di un passo. Sono i
+           due segni del mondo in cui vive questo prodotto — una scheda
+           tecnica e un laboratorio del cammino — disegnati, non
+           ritagliati. Due geometrie come per gli altri casi. -->
+      <svg class="eso__scena eso__scena--largo" viewBox="0 0 1200 700"
+           preserveAspectRatio="xMaxYMax slice" aria-hidden="true" focusable="false">
+        <defs>
+          <pattern id="e-reticolo" width="46" height="46" patternUnits="userSpaceOnUse">
+            <path d="M46 0H0v46" fill="none" stroke="#7fe9ff" stroke-opacity=".10" stroke-width="1"/>
+          </pattern>
+          <linearGradient id="e-passo" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0" stop-color="#00f0ff" stop-opacity="0"/>
+            <stop offset=".5" stop-color="#00f0ff" stop-opacity=".55"/>
+            <stop offset="1" stop-color="#00f0ff" stop-opacity="0"/>
+          </linearGradient>
+        </defs>
+        <rect width="1200" height="700" fill="url(#e-reticolo)"/>
+        <path d="M0 540c60 0 70-62 110-62s52 62 110 62 70-96 112-96 54 96 112 96 70-48 112-48
+                 54 48 112 48 70-74 112-74 54 74 112 74 70-30 110-30"
+              fill="none" stroke="url(#e-passo)" stroke-width="2.5"/>
+        <g fill="none" stroke="#00f0ff" stroke-opacity=".22" stroke-width="1.5">
+          <path d="M980 92h150M1130 92v54"/>
+          <path d="M60 640H210M60 640v-46"/>
+        </g>
+      </svg>
+
+      <svg class="eso__scena eso__scena--stretto" viewBox="0 0 420 800"
+           preserveAspectRatio="xMidYMax slice" aria-hidden="true" focusable="false">
+        <rect width="420" height="800" fill="url(#e-reticolo)"/>
+        <path d="M0 700c40 0 46-44 74-44s34 44 74 44 46-68 74-68 36 68 74 68 46-34 74-34 36 34 74 34"
+              fill="none" stroke="url(#e-passo)" stroke-width="2.5"/>
+        <g fill="none" stroke="#00f0ff" stroke-opacity=".22" stroke-width="1.5">
+          <path d="M300 60h96M396 60v42"/>
+        </g>
+      </svg>
+
+      <div class="eso__testa">
+        <p class="eyebrow mono"><span class="n">Caso</span> Prodotto e lancio</p>
+        <h3>Un prodotto che si vede<br><em>prima di poterlo fotografare.</em></h3>
+        <p class="eso__sotto">Esoscheletri per la mobilità<span>Human Robots · Strider-X · E-Legs</span></p>
+        <p class="eso__lede">Esoscheletri attivi per chi fatica a camminare e per chi va in montagna.
+          Niente set, niente attori, niente prodotto in mano: <b>il lancio italiano è stato
+          costruito tutto a monte</b> — ricerca di mercato, immagini del dispositivo, spot,
+          documenti e il sito su cui atterrano le persone.</p>
+        <p class="eso__seguito">La parte difficile non è fare un video bello: è che l’oggetto sia
+          lo STESSO in tutte le inquadrature, che i numeri tecnici tornino con quelli del
+          costruttore, e che il tono regga sia in una palestra di riabilitazione sia su un
+          crinale a duemila metri.</p>
+        <p class="eso__claim"><span>Human Robots</span> <b>Tecnologia che cammina con te</b></p>
+      </div>
+
+      <div class="eso__piede">
+        <ul class="eso__conti">
+          <li><b>8</b><span>pezzi</span></li>
+          <li><b>1</b><span>sito</span></li>
+          <li><b>6</b><span>documenti</span></li>
+        </ul>
+        <p class="eso__nota">Dalla ricerca di mercato al pre-ordine</p>
+      </div>
+
+      <figure class="eso__dispositivo">
+        <img src="eso/dispositivo.webp" width="355" height="640" decoding="async"
+             alt="Render del dispositivo: esoscheletro con cintura lombare, bracci in fibra e fasce alle gambe">
+        <figcaption class="mono">Il dispositivo</figcaption>
+      </figure>
+    </div>
+
+    <div class="eso__corpo">
+      <p class="eso__intro mono">Otto pezzi · dal trailer al sito</p>
+      <div class="eso__lavori"></div>
+
+      <figure class="eso__tavola">
+        <img src="eso/tavola.webp" width="1200" height="675" loading="lazy" decoding="async"
+             alt="Tavola di riferimento del prodotto: quattro viste master — fronte, due lati, retro — e i dettagli di ogni inquadratura">
+        <figcaption>Il pezzo di lavoro che tiene in piedi tutto il resto: quattro viste master del
+          dispositivo e i dettagli di ogni parte. Senza una tavola così, ogni inquadratura generata
+          si inventa un oggetto leggermente diverso — e in due tagli di montaggio diventa evidente
+          che il prodotto non esiste.</figcaption>
+      </figure>
+
+      <div class="eso__come">
+        <b class="mono">Come sono fatti</b>
+        <dl>
+          <div><dt>Ricerca</dt><dd>Prima di tutto il resto: sei documenti di analisi del mercato
+            italiano — numeri, concorrenti, canali, prezzi — e da lì i video di approfondimento,
+            fatti con NotebookLM</dd></div>
+          <div><dt>Prodotto</dt><dd>Una tavola di riferimento con quattro viste, perché il
+            dispositivo sia identico in ogni inquadratura</dd></div>
+          <div><dt>Immagini</dt><dd>Le scene nascono con GPT Image e vengono sistemate in
+            Photoshop, come per gli altri lavori</dd></div>
+          <div><dt>Movimento</dt><dd>Le inquadrature sono generate una per una: di una cinquantina
+            di spezzoni ne entra in montaggio meno della metà</dd></div>
+          <div><dt>Montaggio</dt><dd>Adobe Premiere Pro: ritmo, sottotitoli, schede tecniche e
+            l’outro del marchio</dd></div>
+          <div><dt>Sito</dt><dd>Scritto in codice su misura, non montato su un tema: schede
+            tecniche, configuratore, dati di mercato e modulo di pre-ordine</dd></div>
+        </dl>
+      </div>
+    </div>
+  </div>
+
   <div class="locanda">
     <div class="locanda__slab">
       <!-- La scena: l'arco del cancello che sta dentro il monogramma, e

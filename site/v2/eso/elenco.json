@@ -1,0 +1,42 @@
+[
+ {
+  "id": "trailer",
+  "da": "video/video nuovi/trailer completo.mp4",
+  "mb": 4.5
+ },
+ {
+  "id": "trekking",
+  "da": "video/video nuovi/trekking 1.mp4",
+  "mb": 3.8
+ },
+ {
+  "id": "borgo",
+  "da": "video/video vecchi/mp_.mp4",
+  "mb": 1.5
+ },
+ {
+  "id": "spot",
+  "da": "video/video vecchi/spot 2a.mp4",
+  "mb": 1.6
+ },
+ {
+  "id": "e-legs",
+  "da": "video/video vecchi/hf_20260526_101421_8ca385ac-d7fe-4379-91be-72f89f59fa6d.mp4",
+  "mb": 1.8
+ },
+ {
+  "id": "prodotto",
+  "da": "esoscheletri/video/creati/prova 4.mp4",
+  "mb": 0.9
+ },
+ {
+  "id": "sito",
+  "da": "video/video vecchi/video presentazione sito internet.mp4",
+  "mb": 6.7
+ },
+ {
+  "id": "ricerca",
+  "da": "documentazione/Creata da me/Economia_ed_Ergonomia.mp4",
+  "mb": 3.7
+ }
+]

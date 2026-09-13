@@ -16,8 +16,8 @@
  * tela: cosi' il PNG lo decodifica il browser e non serve una libreria
  * in piu' solo per questo.
  *
- * Serve sulle due lastre dei clienti, che sono l'unico posto del sito
- * dove sotto il testo c'e' della grafica invece di una tinta.
+ * Serve sulle tre lastre dei casi, che sono l'unico posto del sito dove
+ * sotto il testo c'e' della grafica invece di una tinta.
  *
  * uso: node audit/contrasto-vero.mjs
  * ═══════════════════════════════════════════════════════════════════ */
@@ -28,9 +28,8 @@ const SITO = 'http://localhost:8899/v2/index.html?probe=1';
 
 const b = await chromium.launch({ executablePath: CROMO,
   args: ['--use-gl=swiftshader', '--enable-unsafe-swiftshader', '--ignore-gpu-blocklist'] });
-/* Le due scene hanno una geometria per la lastra larga e una per la
-   colonna del telefono: sono due disegni diversi, e vanno misurati
-   tutti e due. */
+/* Ogni scena ha una geometria per la lastra larga e una per la colonna
+   del telefono: sono disegni diversi, e vanno misurati tutti e due. */
 let rotte = 0;
 for (const [forma, vp] of [['desktop', { width: 1440, height: 900 }],
                            ['telefono', { width: 390, height: 844 }]]) {
@@ -50,6 +49,7 @@ await p.addStyleTag({ content: '*,*::before,*::after{transition:none!important;'
 await p.waitForTimeout(500);
 
 for (const [nome, lastra] of [['Union Energia', '.union__slab'],
+                              ['Esoscheletri', '.eso__slab'],
                               ['Locanda del Castello', '.locanda__slab']]) {
   console.log(`\n════ ${nome} · ${forma} ${vp.width}px ════`);
   const el = await p.$(lastra);

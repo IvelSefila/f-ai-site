@@ -5,6 +5,7 @@
 import { initHero } from './hero.js?v=20260911-135324';
 import { initStrumenti } from './strumenti.js?v=20260911-135324';
 import { initUnion } from './union.js?v=20260911-135324';
+import { initEso } from './eso.js?v=20260911-135324';
 import { initLocanda } from './locanda.js?v=20260911-135324';
 import { initPalette } from './palette.js?v=20260911-135324';
 import { keyVisual, timeline, radar, MODES, rng, leggiColori} from './engine.js?v=20260911-135324';
@@ -682,4 +683,5 @@ document.addEventListener('palette', () => {
 initPalette();
 initStrumenti();
 initUnion();
+initEso();
 initLocanda();

@@ -65,6 +65,7 @@ export const GRUPPI = [
   ['.istruzioni',    { numeri: 'b.mono' }],
   ['.appmie__grid',  { numeri: 'span.mono' }],
   ['.union__lavori', {}],
+  ['.eso__lavori', {}],
   ['.locanda__lavori', {}],
   ['.stack__grid',   {}],
   ['.bench',         { specchio: true }],
