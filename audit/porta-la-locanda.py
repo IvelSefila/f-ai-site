@@ -116,4 +116,9 @@ for i, (rel, breve) in enumerate(CANZONI, 1):
 print('\n%d video e %d brani · da %.0f MB a %.1f MB (%.0f%% in meno)'
       % (len(schede), len(CANZONI), prima_tot / 1048576, dopo_tot / 1048576,
          100 - dopo_tot * 100 / prima_tot))
-json.dump(schede, open(os.path.join(FUORI, 'elenco.json'), 'w'), indent=1, ensure_ascii=False)
+# L'elenco di cosa e' stato preso da dove e' una nota di lavorazione:
+# sta in audit/, non nella cartella che finisce online. Sul sito era
+# un file che nessuno leggeva e che raccontava i nomi delle cartelle
+# del mio computer.
+json.dump(schede, open(os.path.join('audit', 'presi-' + os.path.basename(FUORI) + '.json'),
+                       'w'), indent=1, ensure_ascii=False)

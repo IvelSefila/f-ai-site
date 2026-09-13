@@ -79,4 +79,9 @@ for i, (file, breve) in enumerate(NOMI.items(), 1):
 tot = sum(s['mb'] for s in schede)
 print('\n%d video · %.1f MB in tutto' % (len(schede), tot))
 print('(gli originali erano 299 MB)')
-json.dump(schede, open(os.path.join(FUORI, 'elenco.json'), 'w'), indent=1, ensure_ascii=False)
+# L'elenco di cosa e' stato preso da dove e' una nota di lavorazione:
+# sta in audit/, non nella cartella che finisce online. Sul sito era
+# un file che nessuno leggeva e che raccontava i nomi delle cartelle
+# del mio computer.
+json.dump(schede, open(os.path.join('audit', 'presi-' + os.path.basename(FUORI) + '.json'),
+                       'w'), indent=1, ensure_ascii=False)
