@@ -20,24 +20,30 @@
 
 /* forma: 'alto' = 9:16 (i social), 'largo' = 16:9.
    Le didascalie descrivono quello che si vede, non quello che mi
-   piacerebbe che si vedesse. */
+   piacerebbe che si vedesse.
+
+   L'ORDINE E' QUELLO DELLA STORIA, non quello delle date: prima i corti
+   che presentano Davide, poi Luca, poi la cometa che spiega da dove
+   viene tutto, poi i pezzi lunghi. In fondo la locandina e l'unico
+   orizzontale. Chi arriva qui non conosce il mondo: se il primo video
+   che apre e' quello lungo non capisce chi sono questi animali. */
 export const PEZZI = [
-  { id: 'locandina', t: 'Azzeriamola green', d: '0:07', forma: 'alto',
-    n: 'La locandina animata della campagna: il payoff, i tre passaggi e l’invito a scrivere.' },
-  { id: 'davide-03', t: 'La cometa a forma di zero', d: '0:12', forma: 'alto',
-    n: 'L’origine di tutto: una cometa a forma di 0 entra nell’atmosfera. È il pezzo che spiega da dove nasce il mondo parallelo.' },
   { id: 'davide-01', t: 'Caro benzina', d: '0:04', forma: 'alto',
     n: 'Davide il lama davanti a una pompa di benzina. Il primo dei corti che lo hanno presentato.' },
   { id: 'davide-02', t: 'La bolletta di luce e gas', d: '0:08', forma: 'alto',
     n: 'Davide sulla porta di casa, con la bolletta appena arrivata.' },
   { id: 'luca-asino', t: 'Luca l’asino sommerso', d: '0:07', forma: 'alto',
     n: 'Un salotto sepolto sotto un mare di bollette, e Luca l’asino in mezzo.' },
+  { id: 'davide-03', t: 'La cometa a forma di zero', d: '0:12', forma: 'alto',
+    n: 'L’origine di tutto: una cometa a forma di 0 entra nell’atmosfera. È il pezzo che spiega da dove nasce il mondo parallelo.' },
+  { id: 'insieme', t: 'Insieme si può', d: '1:18', forma: 'alto',
+    n: 'Il pezzo lungo: la richiesta di partecipazione e il gancio finale, sottotitolato.' },
   { id: 'bollette-roby', t: 'Rapito dalle bollette', d: '0:30', forma: 'alto',
     n: 'Un uomo sollevato in cielo da un disco volante sopra un prato: le bollette che ti portano via.' },
   { id: 'marco', t: 'Marco', d: '0:35', forma: 'alto',
-    n: 'Ripresa reale in un viale alberato, montata con la grafica della campagna e l’outro del marchio.' },
-  { id: 'insieme', t: 'Insieme si può', d: '1:18', forma: 'alto',
-    n: 'Il pezzo lungo: la richiesta di partecipazione e il gancio finale, sottotitolato.' },
+    n: 'Sembra una ripresa dal vivo in un viale alberato e non lo è: persona, luce e movimento sono generati, con una serie di effetti costruiti per reggere il gancio dei primi secondi.' },
+  { id: 'locandina', t: 'Azzeriamola green', d: '0:07', forma: 'alto',
+    n: 'La locandina animata della campagna: il payoff, i tre passaggi e l’invito a scrivere.' },
   { id: 'dialogo-roby', t: 'Quanto ti costa la tua casa', d: '1:08', forma: 'largo',
     n: 'Un dialogo fra due persone su una panchina. L’unico orizzontale della serie.' },
 ];
