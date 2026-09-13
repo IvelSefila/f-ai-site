@@ -64,6 +64,7 @@ export const GRUPPI = [
   ['.pipe',          { numeri: 'b.mono' }],
   ['.istruzioni',    { numeri: 'b.mono' }],
   ['.appmie__grid',  { numeri: 'span.mono' }],
+  ['.union__lavori', {}],
   ['.stack__grid',   {}],
   ['.bench',         { specchio: true }],
 ];

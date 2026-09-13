@@ -770,7 +770,11 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border:0;border-radiu
   .sec__lede,.bench__panel p,.work__body p,.offerta__card p,
   .profilo__testo p,.lab__intro p,.metrics__note,.offerta__nota,
   .dossier__verdict,.brief-step__hint,.lab__note,
-  .istruzioni p,.contatto__come,.brief-data-note{font-size:15px}
+  /* .union__lavori davanti perche' le regole del blocco Union stanno
+     dopo questo blocco nel foglio: a pari specificita' vincerebbero
+     loro, e le didascalie resterebbero a 13,5px sul telefono. */
+  .istruzioni p,.contatto__come,.brief-data-note,
+  .union__lavori .union__pezzo p,.union .union__come dd{font-size:15px}
   /* .brief-data-note stava qui e vinceva sulla riga dei 15px, che sta
      sopra: due elenchi fatti a mano che si contraddicono, e vince
      l'ultimo. E' la riga che dice che i dati non escono dal browser:
@@ -1638,6 +1642,232 @@ body.ord-in-corso *{cursor:grabbing !important}
 .appmie__sotto dd{margin:0;color:var(--text);font-size:14.5px;line-height:1.55}
 .appmie__nota{margin:clamp(18px,2vw,26px) 0 0;max-width:70ch;
   color:var(--text);font-size:16px;line-height:1.6}
+
+
+/* ═══════════════════════════════════════════════════════════════════
+ * UNION ENERGIA — il caso, in fondo prima dei contatti
+ *
+ * I colori non sono scelti a occhio: sono contati sui pixel della
+ * locandina vera della campagna. Il lime #8cc63e e' quello di
+ * "AZZERIAMOLA GREEN", il verde cupo #1c4410 quello dei titoli.
+ *
+ * E' l'unico punto del sito che non usa la palette del sito: qui il
+ * marchio e' un altro, e mescolarli sarebbe un errore da principiante —
+ * il verde smeraldo di F/AI accanto al lime di Union farebbe sembrare
+ * che siano lo stesso marchio venuto male. Per la stessa ragione il
+ * blocco NON cambia quando si cambia palette dalla testata: quella
+ * comanda il sito, non il lavoro di un cliente.
+ * ═══════════════════════════════════════════════════════════════════ */
+.union{
+  --u-lime:#8cc63e; --u-lime-cupo:#6ea52b;
+  --u-verde:#1c4410; --u-verde-chiaro:#2f6b1c;
+  --u-carta:#ffffff; --u-riga:rgba(28,68,16,.16);
+  margin:0 0 clamp(34px,4vw,56px);
+  border-radius:clamp(18px,2vw,28px);overflow:hidden;
+  background:var(--u-carta);color:var(--u-verde);
+  box-shadow:0 30px 80px -34px rgba(0,0,0,.8)}
+
+/* la lastra lime con il lama */
+.union__slab{
+  position:relative;isolation:isolate;overflow:hidden;
+  display:grid;gap:clamp(18px,2vw,30px);
+  padding:clamp(24px,3.2vw,48px);
+  background:
+    radial-gradient(120% 140% at 88% 110%, rgba(255,255,255,.5), transparent 58%),
+    linear-gradient(148deg, var(--u-lime) 0%, var(--u-lime-cupo) 100%)}
+/* Tre zone, e cambiano di posto una volta sola. Sul telefono Davide
+   sta accanto ai numeri invece che sotto: da solo su una riga lasciava
+   mezza lastra di lime vuoto alla sua sinistra. */
+.union__slab{grid-template-areas:"testa testa" "piede davide";
+  grid-template-columns:minmax(0,1fr) auto;align-items:end}
+.union__testa{grid-area:testa}
+.union__piede{grid-area:piede;align-self:end;position:relative;z-index:1}
+.union__davide{grid-area:davide}
+@media(min-width:840px){
+  .union__slab{grid-template-areas:"testa davide" "piede davide";
+    grid-template-columns:minmax(0,1fr) minmax(200px,300px);
+    min-height:min(56vw,560px)}
+}
+
+/* La scena: foglie e scia di luce, i due segni della locandina. Sta
+   sotto a tutto (z-index 0 contro l'1 del testo) e non prende clic.
+   preserveAspectRatio="slice" la fa comportare come un fondo: riempie
+   sempre, e su una lastra stretta taglia invece di schiacciare. */
+.union__scena{position:absolute;inset:0;z-index:0;width:100%;height:100%;
+  pointer-events:none}
+.union__scena--stretto{display:none}
+@media(max-width:839px){
+  .union__scena--largo{display:none}
+  .union__scena--stretto{display:block}
+}
+.union__testa,.union__davide{position:relative;z-index:1}
+.union__testa{align-self:center;max-width:60ch}
+.union__testa .eyebrow{color:var(--u-verde)}
+.union__testa .eyebrow .n{color:var(--u-verde);border-right-color:rgba(28,68,16,.3)}
+.union__testa h3{margin:12px 0 0;color:var(--u-verde);
+  font-size:clamp(30px,4.2vw,52px);letter-spacing:-.025em;line-height:1.02}
+/* Il bianco sul lime fa 2,05:1, e per un titolo ne servono 3. Non e'
+   una pignoleria da tabella: su uno schermo al sole quella riga
+   sparisce. La seconda riga va quindi piu' SCURA invece che piu'
+   chiara — il contrasto c'e' lo stesso, e il verde cupo e' un colore
+   del brand tanto quanto il bianco. Il bianco resta dov'e' leggibile:
+   tutta la meta' di sotto, i bottoni play, la scritta della pastiglia. */
+.union__testa h3 em{font-style:normal;color:#0c2405}
+/* Il nome del lavoro e del cliente e' un sottotitolo, non una briciola
+   di testo minuscolo sopra il titolo: e' la seconda cosa che si legge. */
+.union__sotto{margin:10px 0 0;display:flex;flex-wrap:wrap;align-items:baseline;gap:0 12px;
+  color:#0c2405;font-family:var(--display);font-size:clamp(19px,2.1vw,26px);
+  font-weight:600;letter-spacing:-.01em;line-height:1.15}
+.union__sotto span{color:var(--u-verde);font-family:var(--mono);font-weight:400;
+  font-size:12px;letter-spacing:.12em;text-transform:uppercase}
+.union__lede{margin:16px 0 0;color:var(--u-verde);font-size:16.5px;line-height:1.62}
+
+/* Il seguito: la campagna non e' un lavoro chiuso e consegnato, e dirlo
+   cambia cosa vede un cliente — non un caso finito ma una cosa viva. */
+.union__seguito{margin:12px 0 0;max-width:62ch;color:var(--u-verde);
+  font-size:15.5px;line-height:1.58}
+.union__seguito b{color:#0c2405;font-weight:700}
+.union__lede b{color:#0c2405;font-weight:700}
+/* Il payoff e' montato come sulla locandina: "UNITI" chiaro sopra,
+   "SI VINCE" sotto in lime con la riga, e due trattini ai lati. Il lime
+   su verde cupo fa 5,5:1 e il bianco 11,4:1: la targa e' l'unico posto
+   della lastra dove il bianco si legge davvero, e infatti e' li' che
+   sta. */
+.union__claim{margin:20px 0 0;display:inline-grid;justify-items:start;
+  position:relative;gap:1px;padding:11px 22px 13px;border-radius:14px;
+  background:var(--u-verde);
+  font-family:var(--display);text-transform:uppercase;line-height:1}
+.union__claim span{color:var(--u-carta);font-size:clamp(15px,1.7vw,19px);
+  font-weight:600;letter-spacing:.16em}
+.union__claim b{color:var(--u-lime);font-size:clamp(21px,2.6vw,30px);
+  font-weight:700;letter-spacing:.02em;
+  border-bottom:3px solid var(--u-lime);padding-bottom:3px}
+.union__claim::before,.union__claim::after{content:"";position:absolute;
+  top:50%;width:14px;height:3px;border-radius:2px;background:var(--u-verde);
+  opacity:.55}
+.union__claim::before{right:calc(100% + 10px)}
+.union__claim::after{left:calc(100% + 10px)}
+
+/* I tre numeri stanno dove la locandina mette le tre icone. Li' dicono
+   cosa guadagna il cliente, qui dicono quanto lavoro c'e' dentro:
+   e' la stessa impaginazione con un altro mestiere. */
+/* Tre colonne vere, non tre elementi che vanno a capo: a 390px il
+   flex-wrap mandava il terzo numero da solo su una riga, con la
+   stanghetta del separatore appesa nel vuoto. */
+.union__conti{margin:0;padding:0;list-style:none;
+  display:grid;grid-template-columns:repeat(3,minmax(0,1fr));
+  max-width:420px}
+.union__conti li{display:grid;gap:2px;align-content:start;min-width:0;
+  padding-left:clamp(12px,1.4vw,18px);
+  border-left:1px solid rgba(28,68,16,.3)}
+.union__conti li:first-child{padding-left:0;border-left:0}
+.union__conti b{color:#0c2405;font-family:var(--display);
+  font-size:clamp(22px,2.4vw,30px);font-weight:700;line-height:1}
+.union__conti span{color:var(--u-verde);font-family:var(--mono);
+  font-size:11px;letter-spacing:.1em;text-transform:uppercase}
+
+/* La riga scritta a mano della locandina. Serve a due cose: e' un segno
+   del brand, e riempie l'angolo che altrimenti resta lime e basta. */
+.union__nota{margin:16px 0 0;max-width:34ch;text-wrap:balance;position:relative;padding-left:24px;
+  color:#0c2405;font-family:var(--display);font-style:italic;font-weight:500;
+  font-size:clamp(14px,1.5vw,17px);line-height:1.32}
+.union__nota::before{content:"";position:absolute;left:0;top:.55em;
+  width:14px;height:2px;border-radius:2px;background:var(--u-verde);opacity:.6}
+
+/* Davide si misura in ALTEZZA, non in larghezza. Scontornato e'
+   481x1564: un ritratto in piedi, alto piu' del triplo di quanto sia
+   largo. Dargli una larghezza come a un'immagine qualsiasi voleva dire
+   una lastra alta quasi mille pixel con dentro un campo di lime vuoto.
+   Con width e height a auto e i due massimi, il browser tiene le
+   proporzioni da solo e la lastra la decide l'altezza di lui.
+
+   L'ombra e' disegnata, non fotografata: quella vera era sul pavimento
+   di uno studio e sul lime si vedeva come una pozza grigia. */
+.union__davide{margin:0;display:grid;justify-items:center;align-self:end}
+.union__davide img{display:block;width:auto;height:auto;
+  max-width:100%;max-height:clamp(300px,40vw,580px);
+  filter:drop-shadow(0 26px 26px rgba(28,68,16,.30))}
+.union__davide figcaption{margin-top:10px;color:var(--u-verde);
+  font-size:11px;letter-spacing:.14em;text-transform:uppercase}
+@media(max-width:839px){
+  /* Sul telefono si appoggia al bordo destro della lastra, dentro il
+     padding: in piedi sul filo invece che a mezz'aria in mezzo al lime. */
+  /* i numeri restano attaccati al payoff, il vuoto finisce sotto di
+     loro accanto alle gambe di Davide invece che in mezzo alla lastra */
+  .union__piede{align-self:start;padding-top:4px}
+  .union__davide{justify-items:end;margin:-10px calc(-1 * clamp(24px,3.2vw,48px)) 0 0}
+  .union__davide img{max-height:min(84vw,370px)}
+  .union__davide figcaption{margin-right:clamp(24px,3.2vw,48px)}
+}
+
+/* il corpo bianco: i nove pezzi e come sono fatti */
+.union__corpo{padding:clamp(22px,3vw,42px)}
+.union__intro{margin:0 0 16px;color:var(--u-verde-chiaro);
+  font-size:11px;letter-spacing:.14em;text-transform:uppercase}
+
+/* :not([data-gr]) e' la riga che tiene separati i due sistemi. Questa
+   griglia sta sulle dodici colonne del sito come tutti gli altri
+   gruppi, e quando c'e' un preset comanda quello. Senza il :not, la mia
+   regola vinceva sul numero di colonne (ne faceva cinque) ma le carte
+   continuavano a prendere "span 3" dal preset: una carta larga tre
+   quinti della griglia, cioe' una sola per riga e mezza pagina vuota.
+   L'auto-fill resta come ripiego per quando il preset non c'e'. */
+.union__lavori{display:grid;gap:clamp(14px,1.6vw,22px)}
+.union__lavori:not([data-gr]){grid-template-columns:repeat(auto-fill,minmax(min(100%,190px),1fr))}
+.union__pezzo{display:grid;gap:8px;align-content:start;min-width:0}
+
+/* Sul telefono tutti i gruppi scendono a colonna unica, ma nove
+   copertine verticali una sotto l'altra sono uno scorrimento
+   infinito: queste stanno a due per riga, come i formati. */
+@media (max-width:900px){
+  .union__lavori[data-gr] > *{grid-column:span 6}
+}
+
+/* la copertina e' un bottone: il video nasce solo al clic */
+.union__via{position:relative;display:block;width:100%;padding:0;
+  border:1px solid var(--u-riga);border-radius:14px;overflow:hidden;
+  background:#eef3e8;cursor:pointer;line-height:0;
+  transition:border-color .2s,transform .2s}
+.union__via:hover{border-color:var(--u-lime-cupo);transform:translateY(-2px)}
+.union__via:focus-visible{outline:2px solid var(--u-verde);outline-offset:3px}
+.union__fermo{display:block;width:100%;height:auto;aspect-ratio:9/16;object-fit:cover}
+.union__pezzo[data-forma="largo"] .union__fermo{aspect-ratio:16/9}
+.union__play{position:absolute;inset:0;margin:auto;width:54px;height:54px;
+  border-radius:50%;background:rgba(255,255,255,.92);
+  box-shadow:0 6px 20px rgba(0,0,0,.3);pointer-events:none}
+.union__play::before{content:"";position:absolute;inset:0;margin:auto;
+  width:0;height:0;border-left:17px solid var(--u-verde);
+  border-top:11px solid transparent;border-bottom:11px solid transparent;
+  transform:translateX(3px)}
+/* 11px e non 10: sotto gli 11 il sito non scende da nessuna parte, e
+   una durata che non si legge tanto vale non scriverla */
+.union__durata{position:absolute;right:8px;bottom:8px;
+  padding:3px 7px 4px;border-radius:7px;background:rgba(12,20,8,.82);
+  color:#fff;font-size:11px;letter-spacing:.08em;line-height:1;pointer-events:none}
+.union__pezzo video{width:100%;border:1px solid var(--u-riga);border-radius:14px;
+  background:#0c1408;aspect-ratio:9/16;object-fit:contain}
+.union__pezzo[data-forma="largo"] video{aspect-ratio:16/9}
+.union__pezzo h4{margin:0;color:var(--u-verde);font-size:16px;
+  letter-spacing:-.005em;line-height:1.2}
+.union__pezzo p{margin:0;color:#4a5a42;font-size:13.5px;line-height:1.5}
+
+/* come sono fatti */
+.union__come{margin-top:clamp(24px,3vw,40px);padding-top:clamp(18px,2vw,26px);
+  border-top:1px solid var(--u-riga);container-type:inline-size}
+.union__come > b{display:block;margin-bottom:12px;color:var(--u-verde-chiaro);
+  font-size:11px;letter-spacing:.13em;text-transform:uppercase}
+.union__come dl{margin:0;display:grid;gap:9px}
+.union__come dl > div{display:grid;gap:2px 14px;grid-template-columns:minmax(0,1fr)}
+@container (min-width:460px){
+  .union__come dl > div{grid-template-columns:minmax(92px,auto) minmax(0,1fr)}
+}
+.union__come dt{color:var(--u-verde-chiaro);font-family:var(--mono);font-size:11px;
+  letter-spacing:.1em;text-transform:uppercase;padding-top:.25em}
+.union__come dd{margin:0;color:#40503a;font-size:14.5px;line-height:1.55}
+
+@media (prefers-reduced-motion:reduce){
+  .union__via:hover{transform:none}
+}
 
 /* come si comincia, scritto sotto il titolo del contatto */
 .contatto__come{margin:0 0 22px;max-width:62ch;color:var(--text);font-size:16px;line-height:1.6}

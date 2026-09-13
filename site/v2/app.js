@@ -2,11 +2,12 @@
 * app.js — la sessione. Tiene il filo fra le prove, parla, misura,
 * e alla fine scrive il dossier. Nessuna libreria.
 * ═══════════════════════════════════════════════════════════════════ */
-import { initHero } from './hero.js?v=20260910-152103';
-import { initStrumenti } from './strumenti.js?v=20260910-152103';
-import { initPalette } from './palette.js?v=20260910-152103';
-import { keyVisual, timeline, radar, MODES, rng, leggiColori} from './engine.js?v=20260910-152103';
-import { initBrief } from './brief.js?v=20260910-152103';
+import { initHero } from './hero.js?v=20260911-135324';
+import { initStrumenti } from './strumenti.js?v=20260911-135324';
+import { initUnion } from './union.js?v=20260911-135324';
+import { initPalette } from './palette.js?v=20260911-135324';
+import { keyVisual, timeline, radar, MODES, rng, leggiColori} from './engine.js?v=20260911-135324';
+import { initBrief } from './brief.js?v=20260911-135324';
 
 const $ = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => [...r.querySelectorAll(s)];
@@ -679,3 +680,4 @@ document.addEventListener('palette', () => {
 });
 initPalette();
 initStrumenti();
+initUnion();

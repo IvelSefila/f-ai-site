@@ -32,6 +32,7 @@ export const CONTENITORI = [
   ['.formats',       '3', 'I formati'],
   ['.istruzioni',     '2', 'Le istruzioni'],
   ['.appmie__grid',   '1', 'Le mie app'],
+  ['.union__lavori',  '4', 'I pezzi di Union Energia'],
   ['.bench',         '',  'Banco: visuale e pannello'],   /* '' = proporzioni originali */
 ];
 

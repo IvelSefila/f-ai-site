@@ -83,11 +83,41 @@ const r = await p.evaluate(() => {
   const lumRGB = v => { const l=v.slice(0,3).map(x=>{x/=255;return x<=.03928?x/12.92:((x+.055)/1.055)**2.4});
     return .2126*l[0]+.7152*l[1]+.0722*l[2]; };
 
-  /* i fondi, dal piu' esterno al piu' interno, composti in ordine */
-  const bgOf = e => {
+  /* i fondi, dal piu' esterno al piu' interno, composti in ordine.
+
+     Un fondo scritto come sfumatura non ha backgroundColor: quella
+     proprieta' resta trasparente e il colore sta dentro
+     backgroundImage. La versione prima lo saltava e andava a cercare
+     un fondo piu' su — su una lastra lime ha misurato del testo bianco
+     contro il bianco della scheda sotto e ha detto 1,00:1, cioe' "non
+     si vede", su un testo che si vedeva benissimo (e che comunque era
+     da correggere, ma per un altro motivo).
+
+     Di una sfumatura si prende la fermata PEGGIORE per quel testo: la
+     piu' vicina di luminosita' al colore della scritta. E' il punto in
+     cui la scritta si legge meno, ed e' quello che conta. */
+  const fermate = (cs) => {
+    const im = cs.backgroundImage;
+    if (!im || im === 'none' || !/gradient/.test(im)) return null;
+    return [...im.matchAll(/rgba?\(([^)]+)\)/g)].map(m => rgba('rgba(' + m[1] + ')')).filter(Boolean);
+  };
+  const bgOf = (e, fg) => {
     const strati = [];
     for (let n=e; n; n=n.parentElement) {
-      const c = rgba(getComputedStyle(n).backgroundColor);
+      const cs = getComputedStyle(n);
+      /* Una sfumatura ritagliata sul testo NON e' un fondo: e' il
+         colore della scritta. Senza questa riga il titolo d'apertura
+         veniva misurato contro se stesso — 1,00:1 su una riga che si
+         legge benissimo. Ci ero appena cascato aggiungendo la lettura
+         delle sfumature. */
+      if ((cs.webkitBackgroundClip || cs.backgroundClip) === 'text') continue;
+      const g = fermate(cs);
+      if (g && g.length) {
+        const lf = fg ? lumRGB(fg) : 0;
+        strati.push(g.slice().sort((a,b) => Math.abs(lumRGB(a)-lf) - Math.abs(lumRGB(b)-lf))[0]);
+        continue;
+      }
+      const c = rgba(cs.backgroundColor);
       if (c && c[3] > 0) strati.push(c);
     }
     let d = [5,7,11];
@@ -99,7 +129,7 @@ const r = await p.evaluate(() => {
      della sfumatura quando la scritta e' ritagliata sopra una */
   const fgOf = (e, cs) => {
     const c = rgba(cs.color);
-    if (c && c[3] > 0.05) return sopra(c, bgOf(e));
+    if (c && c[3] > 0.05) return sopra(c, bgOf(e, c));
     const clip = cs.webkitBackgroundClip || cs.backgroundClip;
     if (clip === 'text' && cs.backgroundImage !== 'none') {
       const fermate = [...cs.backgroundImage.matchAll(/rgba?\(([^)]+)\)/g)]
@@ -119,7 +149,7 @@ const r = await p.evaluate(() => {
     const req = grande ? 3 : 4.5;
     const fg = fgOf(e, cs);
     if (!fg) return;
-    const rr = ratio(fg, bgOf(e));
+    const rr = ratio(fg, bgOf(e, fg));
     if (rr < req) bassi.push(`${rr.toFixed(2)}:1 (serve ${req}) ${size}px · ${e.textContent.trim().slice(0,32)}`);
   });
   bassi.length ? push('A11Y', `${bassi.length} testi sotto contrasto AA`) : out.ok.push('contrasto AA rispettato ovunque');

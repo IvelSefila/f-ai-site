@@ -24,7 +24,7 @@
 <meta name="twitter:title" content="F/AI — Un portfolio che esegue le competenze" />
 <meta name="twitter:description" content="Sette prove manovrabili, non una lista di competenze." />
 <meta name="twitter:image" content="../assets/og-fai.jpg" />
-<link rel="stylesheet" href="v2.css?v=20260910-152103" />
+<link rel="stylesheet" href="v2.css?v=20260911-135324" />
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -816,6 +816,108 @@
 <!-- ══ contatto ══ -->
 <section class="sec sec--contact" id="contatto" aria-labelledby="contT">
   <p class="eyebrow mono"><i aria-hidden="true"></i>Disponibile per nuovi progetti</p>
+
+  <div class="union">
+    <div class="union__slab">
+      <!-- La scena della campagna: le foglie e la scia di luce che gira
+           intorno a Davide sono i due segni della locandina vera. Sono
+           disegnate qui, non ritagliate da un'immagine: pesano zero, si
+           adattano a qualsiasi larghezza e non sgranano. -->
+      <svg class="union__scena union__scena--largo" viewBox="0 0 1200 700"
+           preserveAspectRatio="xMaxYMax slice" aria-hidden="true" focusable="false">
+        <defs>
+          <linearGradient id="u-scia" x1="0" y1="1" x2="1" y2="0">
+            <stop offset="0" stop-color="#fff" stop-opacity="0"/>
+            <stop offset=".45" stop-color="#fff" stop-opacity=".62"/>
+            <stop offset="1" stop-color="#fff" stop-opacity="0"/>
+          </linearGradient>
+          <filter id="u-morbido" x="-20%" y="-20%" width="140%" height="140%">
+            <feGaussianBlur stdDeviation="7"/>
+          </filter>
+          <g id="u-foglia">
+            <path d="M0 0C22 6 32 24 26 44 8 42-6 22 0 0Z"/>
+            <path d="M1 3C10 16 18 30 24 42" fill="none" stroke="#0c2405"
+                  stroke-opacity=".5" stroke-width="1.6"/>
+          </g>
+        </defs>
+        <g fill="#0c2405" opacity=".10">
+          <use href="#u-foglia" transform="translate(60 40) rotate(24) scale(2.1)"/>
+          <use href="#u-foglia" transform="translate(170 22) rotate(-38) scale(1.5)"/>
+          <use href="#u-foglia" transform="translate(1128 452) rotate(148) scale(2.4)"/>
+          <use href="#u-foglia" transform="translate(1042 632) rotate(196) scale(1.7)"/>
+          <use href="#u-foglia" transform="translate(30 598) rotate(-14) scale(1.8)"/>
+        </g>
+        <path d="M120 690C420 690 700 610 820 470 940 330 900 190 1160 150"
+              fill="none" stroke="url(#u-scia)" stroke-width="12" stroke-linecap="round"
+              filter="url(#u-morbido)"/>
+      </svg>
+
+      <!-- Sul telefono la lastra e' alta e stretta e la scena larga non
+           ci sta: "slice" riempie tagliando, e tagliava via proprio la
+           scia. Stessi segni, geometria rifatta per una colonna. -->
+      <svg class="union__scena union__scena--stretto" viewBox="0 0 420 800"
+           preserveAspectRatio="xMidYMax slice" aria-hidden="true" focusable="false">
+        <g fill="#0c2405" opacity=".10">
+          <use href="#u-foglia" transform="translate(352 40) rotate(128) scale(1.9)"/>
+          <use href="#u-foglia" transform="translate(30 140) rotate(-26) scale(1.4)"/>
+          <use href="#u-foglia" transform="translate(46 690) rotate(-8) scale(1.7)"/>
+          <use href="#u-foglia" transform="translate(392 560) rotate(168) scale(1.3)"/>
+        </g>
+        <path d="M20 780C120 760 190 690 210 600 232 500 300 470 410 470"
+              fill="none" stroke="url(#u-scia)" stroke-width="13" stroke-linecap="round"
+              filter="url(#u-morbido)"/>
+      </svg>
+
+      <div class="union__testa">
+        <p class="eyebrow mono"><span class="n">Caso</span> Campagna in corso</p>
+        <h3>Un mondo dove le bollette<br><em>sono andate a zero.</em></h3>
+        <p class="union__sotto">Union Energia<span>per Roberto Baldizzone</span></p>
+        <p class="union__lede">Brand identity dentro un marchio che esisteva già. Ho inventato un
+          universo parallelo: una cometa a forma di <b>0</b> arriva sulla Terra, azzera le bollette
+          di luce e gas e trasforma gli animali in bipedi che parlano. Da lì nascono Davide il lama,
+          Luca l’asino e gli altri, che raccontano l’energia pulita senza fare una lezione.</p>
+        <p class="union__seguito"><b>La storia è in evoluzione:</b> i personaggi crescono, se ne
+          aggiungono di nuovi e i prossimi episodi porteranno diversi colpi di scena.</p>
+        <p class="union__claim"><span>Uniti</span> <b>si vince</b></p>
+      </div>
+
+      <div class="union__piede">
+        <ul class="union__conti">
+          <li><b>9</b><span>pezzi</span></li>
+          <li><b>4:09</b><span>girato</span></li>
+          <li><b>5</b><span>strumenti</span></li>
+        </ul>
+        <p class="union__nota">Insieme per un domani più verde</p>
+      </div>
+
+      <figure class="union__davide">
+        <img src="lavori/davide-lama.webp" width="481" height="1564" decoding="async"
+             alt="Davide, il lama bipede di Union Energia, in maglione e pantaloni">
+        <figcaption class="mono">Davide il lama</figcaption>
+      </figure>
+    </div>
+
+    <div class="union__corpo">
+      <p class="union__intro mono">Nove pezzi della campagna</p>
+      <div class="union__lavori"></div>
+
+      <div class="union__come">
+        <b class="mono">Come sono fatti</b>
+        <dl>
+          <div><dt>Immagini</dt><dd>Le basi nascono con GPT Image: personaggi, ambienti e locandine
+            costruiti su brief, non pescati da un archivio</dd></div>
+          <div><dt>Movimento</dt><dd>Gemini Omni porta le immagini ferme in video</dd></div>
+          <div><dt>Montaggio</dt><dd>Adobe Premiere Pro: ritmo, sottotitoli, grafica di campagna e
+            outro del marchio</dd></div>
+          <div><dt>Voci</dt><dd>ElevenLabs, con una voce che resta la stessa da un episodio
+            all’altro</dd></div>
+          <div><dt>Musica</dt><dd>Una parte generata con Lyria, una parte presa da librerie con
+            licenza per uso commerciale</dd></div>
+        </dl>
+      </div>
+    </div>
+  </div>
+
   <h2 id="contT">Hai un'idea da far vedere, muovere o scalare?<br><em>Diamole una direzione.</em></h2>
   <p class="contatto__come">Si comincia dalle sei domande qui sopra: due minuti, si
     compilano nel tuo browser e alla fine ti ritrovi un testo pronto da copiare e mandarmi. Se una
@@ -885,6 +987,6 @@
   <span class="voice__prog mono"><b id="voiceCount">0</b>/7</span>
 </div>
 
-<script type="module" src="app.js?v=20260910-152103"></script>
+<script type="module" src="app.js?v=20260911-135324"></script>
 </body>
 </html>
