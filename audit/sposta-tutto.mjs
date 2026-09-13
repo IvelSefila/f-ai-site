@@ -60,8 +60,12 @@ const GUARDA = () => {
     if (a === c) guasti.push(`due blocchi ${c ? 'chiari' : 'scuri'} attaccati: ${sez[i - 1].id} + ${sez[i].id}`);
   }
 
+  /* Cinque e non piu' sette: il metodo e' diventato un blocco dentro la
+     control room e la materia un blocco dentro il laboratorio, perche'
+     dicevano le stesse cose delle sezioni vicine. Le prove numerate
+     sono servizi, lavori, control room, tecnologia, laboratorio. */
   const prove = sez.filter(s => s.dataset.ordProva != null);
-  if (prove.length !== 7) guasti.push(`prove trovate: ${prove.length}`);
+  if (prove.length !== 5) guasti.push(`prove trovate: ${prove.length}`);
   prove.forEach((s, i) => {
     const atteso = due(i + 1);
     const occhio = s.querySelector('.eyebrow .n')?.textContent.trim();

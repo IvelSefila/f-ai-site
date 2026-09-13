@@ -2322,6 +2322,41 @@ body.ord-in-corso *{cursor:grabbing !important}
   line-height:1.08}
 .sec__sub .sec__lede{margin-top:12px}
 
+
+/* ═══════════════════════════════════════════════════════════════════
+ * IL MANIFESTO — lastra scura sulla carta
+ *
+ * Stessa grammatica dei tre casi: una lastra piena e un corpo chiaro
+ * sotto. La differenza e' il colore — le lastre dei clienti hanno i
+ * colori dei clienti, questa ha quello di casa. E' la prima volta che
+ * si vede questa forma scendendo, e serve proprio a quello: quando poi
+ * arrivano i tre lavori, la forma e' gia' nota.
+ *
+ * Nera e non verde perche' le palette sono sette e tre sono scure:
+ * riempire una lastra con l'accento vorrebbe dire ricalcolare il
+ * contrasto del testo sette volte. La vetrina scura sulla carta il sito
+ * ce l'ha gia' e la usa per i banchi: qui e' la stessa cosa, piu'
+ * grande.
+ * ═══════════════════════════════════════════════════════════════════ */
+.manifesto{border-radius:clamp(18px,2vw,28px);overflow:hidden;
+  background:var(--panel);
+  box-shadow:0 1px 2px rgba(5,7,11,.06), 0 26px 60px -30px rgba(5,7,11,.5)}
+.manifesto__slab{position:relative;isolation:isolate;overflow:hidden;
+  padding:clamp(26px,3.4vw,54px);
+  background:linear-gradient(152deg,#0e1620 0%,#05070b 100%);
+  /* i colori del testo tornano quelli dei fondi scuri, come nelle
+     vetrine dei banchi: senza, l'inchiostro da carta finirebbe sul nero */
+  --ink:#f2f4f7; --text:#c3ccd6; --muted:#7f8b98;
+  --em:color-mix(in srgb, var(--em-vivo) 68%, #f2f4f7);
+  color:var(--ink)}
+.manifesto__scena{position:absolute;inset:0;z-index:0;width:100%;height:100%;
+  color:var(--em-vivo);pointer-events:none;opacity:.5}
+.manifesto__slab .sec__head{position:relative;z-index:1;margin:0}
+.manifesto__slab .sec__head h2{color:var(--ink)}
+.manifesto__corpo{padding:clamp(22px,3vw,42px)}
+.manifesto__corpo .istruzioni{margin-top:0}
+.manifesto__corpo .istruzioni__nota{margin-bottom:0}
+
 /* come si comincia, scritto sotto il titolo del contatto */
 .contatto__come{margin:0 0 22px;max-width:62ch;color:var(--text);font-size:16px;line-height:1.6}
 
