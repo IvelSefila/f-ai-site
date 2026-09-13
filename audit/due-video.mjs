@@ -57,6 +57,16 @@ const VERSI = [
 ];
 
 if (process.argv[2] !== 'spezza') {
+  /* Questo non e' un controllo, e' una macchina che spende: dodici
+     crediti Higgsfield a filmato. La revisione generale del sito ha
+     lanciato in blocco tutti gli script della cartella per vedere quali
+     passavano, e questo si e' messo a generare — ventiquattro crediti
+     per niente. Adesso senza --spendi non parte. */
+  if (!process.argv.includes('--spendi')) {
+    console.log('Questo script GENERA e costa 24 crediti Higgsfield in tutto.');
+    console.log('Se e’ davvero quello che vuoi: node audit/due-video.mjs --spendi');
+    process.exit(0);
+  }
   for (const [nome, moto] of VERSI) {
     const prompt = moto + ' ' + COMUNE;
     const { stdout: costo } = await hf(['generate', 'cost', 'seedance1_5',

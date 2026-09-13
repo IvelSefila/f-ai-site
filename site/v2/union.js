@@ -28,6 +28,8 @@
    dove viene tutto, poi i pezzi lunghi, e in fondo l'unico orizzontale.
    Chi arriva qui non conosce il mondo: se il primo video che apre e'
    quello da un minuto e venti non capisce chi sono questi animali. */
+import { registra, soloIo } from './uno-alla-volta.js';
+
 export const PEZZI = [
   { id: 'locandina', t: 'Azzeriamola green', d: '0:07', forma: 'alto',
     n: 'La locandina animata della campagna: il payoff, i tre passaggi e l’invito a scrivere.' },
@@ -51,37 +53,60 @@ export const PEZZI = [
 
 const CARTELLA = 'lavori/';
 
+/* La copertina e' una funzione perche' va rifatta: quando un altro
+   video prende il turno, questa scheda deve tornare com'era. Prima
+   veniva scritta una volta sola dentro il ciclo, il video la sostituiva
+   e non tornava piu' nessuno — la scheda restava un titolo e due righe
+   di testo, e la griglia si disallineava tutta. */
+function copertina(art, p) {
+  const b = document.createElement('button');
+  b.type = 'button';
+  b.className = 'union__via';
+  b.setAttribute('aria-label', `Guarda "${p.t}", ${p.d}`);
+  b.innerHTML = `
+    <img class="union__fermo" src="${CARTELLA}${p.id}.jpg" alt=""
+         loading="lazy" decoding="async">
+    <span class="union__play" aria-hidden="true"></span>
+    <span class="union__durata mono" aria-hidden="true">${p.d}</span>`;
+  b.addEventListener('click', () => parte(art, p, b));
+  return b;
+}
+
+/* come si ferma questo blocco, detto agli altri due */
+const fermaUnion = registra(() => rimetti());
+
+function rimetti(tranne) {
+  for (const v of document.querySelectorAll('.union__lavori video')) {
+    const art = v.closest('.union__pezzo');
+    if (art === tranne) continue;
+    v.pause();
+    v.replaceWith(copertina(art, PER_ID.get(art.dataset.id)));
+    art.classList.remove('in-onda');
+  }
+}
+
+const PER_ID = new Map(PEZZI.map(p => [p.id, p]));
+
 export function initUnion() {
   const griglia = document.querySelector('.union__lavori');
   if (!griglia) return 0;
+  griglia.textContent = '';     /* via la scaletta per chi non ha JS */
 
   for (const p of PEZZI) {
     const art = document.createElement('article');
     art.className = 'union__pezzo';
     art.dataset.forma = p.forma;
-    art.innerHTML = `
-      <button type="button" class="union__via" aria-label="Guarda &quot;${p.t}&quot;, ${p.d}">
-        <img class="union__fermo" src="${CARTELLA}${p.id}.jpg" alt=""
-             loading="lazy" decoding="async">
-        <span class="union__play" aria-hidden="true"></span>
-        <span class="union__durata mono" aria-hidden="true">${p.d}</span>
-      </button>
-      <h4>${p.t}</h4>
-      <p>${p.n}</p>`;
-
-    art.querySelector('.union__via').addEventListener('click', (e) => parte(art, p, e.currentTarget));
+    art.dataset.id = p.id;
+    art.innerHTML = `<h4>${p.t}</h4><p>${p.n}</p>`;
+    art.prepend(copertina(art, p));
     griglia.appendChild(art);
   }
   return PEZZI.length;
 }
 
 function parte(art, p, bottone) {
-  /* uno alla volta */
-  for (const altro of document.querySelectorAll('.union__lavori video')) {
-    altro.pause();
-    const suo = altro.closest('.union__pezzo');
-    if (suo !== art) { altro.remove(); suo.classList.remove('in-onda'); }
-  }
+  soloIo(fermaUnion);                 /* gli altri casi si fermano */
+  rimetti(art);                       /* e dentro questo, uno alla volta */
 
   const v = document.createElement('video');
   v.src = CARTELLA + p.id + '.mp4';

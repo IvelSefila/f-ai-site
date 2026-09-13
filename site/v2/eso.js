@@ -19,6 +19,8 @@
  * 10,4 MB dei 24,3 di tutta la sezione.
  * ═══════════════════════════════════════════════════════════════════ */
 
+import { registra, soloIo } from './uno-alla-volta.js';
+
 const CARTELLA = 'eso/';
 
 export const PEZZI = [
@@ -36,36 +38,56 @@ export const PEZZI = [
     n: 'Product film: solo l’oggetto, fumo e luce radente. Serve a far vedere com’è fatto quando il resto è narrazione.' },
 ];
 
+const PER_ID = new Map(PEZZI.map(p => [p.id, p]));
+
+/* La copertina e' una funzione perche' va rifatta quando un altro video
+   prende il turno: vedi la nota in union.js. */
+function copertina(art, p) {
+  const b = document.createElement('button');
+  b.type = 'button';
+  b.className = 'eso__via';
+  b.setAttribute('aria-label', `Guarda "${p.t}", ${p.d}`);
+  b.innerHTML = `
+    <img class="eso__fermo" src="${CARTELLA}${p.id}.jpg" alt=""
+         width="${p.w}" height="${p.h}" loading="lazy" decoding="async">
+    <span class="eso__play" aria-hidden="true"></span>
+    <span class="eso__durata mono" aria-hidden="true">${p.d}</span>`;
+  b.addEventListener('click', () => parte(art, p, b));
+  return b;
+}
+
+const fermaEso = registra(() => rimetti());
+
+function rimetti(tranne) {
+  for (const v of document.querySelectorAll('.eso__lavori video')) {
+    const art = v.closest('.eso__pezzo');
+    if (art === tranne) continue;
+    v.pause();
+    v.replaceWith(copertina(art, PER_ID.get(art.dataset.id)));
+    art.classList.remove('in-onda');
+  }
+}
+
 export function initEso() {
   const griglia = document.querySelector('.eso__lavori');
   if (!griglia) return 0;
+  griglia.textContent = '';     /* via la scaletta per chi non ha JS */
 
   for (const p of PEZZI) {
     const art = document.createElement('article');
     art.className = 'eso__pezzo';
     art.dataset.forma = p.w >= p.h ? 'largo' : 'alto';
-    art.innerHTML = `
-      <button type="button" class="eso__via" aria-label="Guarda &quot;${p.t}&quot;, ${p.d}">
-        <img class="eso__fermo" src="${CARTELLA}${p.id}.jpg" alt=""
-             width="${p.w}" height="${p.h}" loading="lazy" decoding="async">
-        <span class="eso__play" aria-hidden="true"></span>
-        <span class="eso__durata mono" aria-hidden="true">${p.d}</span>
-      </button>
-      <h4>${p.t}</h4>
-      <p>${p.n}</p>`;
-    art.querySelector('.eso__via').addEventListener('click', (e) => parte(art, p, e.currentTarget));
+    art.dataset.id = p.id;
+    art.innerHTML = `<h4>${p.t}</h4><p>${p.n}</p>`;
+    art.prepend(copertina(art, p));
     griglia.appendChild(art);
   }
   return PEZZI.length;
 }
 
 function parte(art, p, bottone) {
-  /* uno alla volta */
-  for (const altro of document.querySelectorAll('.eso__lavori video')) {
-    altro.pause();
-    const suo = altro.closest('.eso__pezzo');
-    if (suo !== art) { altro.remove(); suo.classList.remove('in-onda'); }
-  }
+  soloIo(fermaEso);
+  rimetti(art);
 
   const v = document.createElement('video');
   v.src = CARTELLA + p.id + '.mp4';

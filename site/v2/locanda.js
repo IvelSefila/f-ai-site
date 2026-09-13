@@ -16,6 +16,8 @@
  * lo stesso video esportato due volte.
  * ═══════════════════════════════════════════════════════════════════ */
 
+import { registra, soloIo } from './uno-alla-volta.js';
+
 const CARTELLA = 'locanda/';
 
 export const PEZZI = [
@@ -52,27 +54,21 @@ export const BRANI = [
 export function initLocanda() {
   const griglia = document.querySelector('.locanda__lavori');
   if (griglia) {
+    griglia.textContent = '';   /* via la scaletta per chi non ha JS */
     for (const p of PEZZI) {
       const art = document.createElement('article');
       art.className = 'locanda__pezzo';
       art.style.setProperty('--forma', p.w + ' / ' + p.h);
-      art.innerHTML = `
-        <button type="button" class="locanda__via" aria-label="Guarda &quot;${p.t}&quot;, ${p.d}">
-          <img class="locanda__fermo" src="${CARTELLA}${p.id}.jpg" alt=""
-               width="${p.w}" height="${p.h}" loading="lazy" decoding="async">
-          <span class="locanda__play" aria-hidden="true"></span>
-          <span class="locanda__durata mono" aria-hidden="true">${p.d}</span>
-        </button>
-        <h4>${p.t}</h4>
-        <p>${p.n}</p>`;
-      art.querySelector('.locanda__via')
-         .addEventListener('click', (e) => parte(art, p, e.currentTarget));
+      art.dataset.id = p.id;
+      art.innerHTML = `<h4>${p.t}</h4><p>${p.n}</p>`;
+      art.prepend(copertina(art, p));
       griglia.appendChild(art);
     }
   }
 
   const lista = document.querySelector('.locanda__brani');
   if (lista) {
+    lista.textContent = '';     /* via la scaletta per chi non ha JS */
     for (const b of BRANI) {
       const li = document.createElement('li');
       li.className = 'locanda__brano';
@@ -91,7 +87,26 @@ export function initLocanda() {
 }
 
 /* ── i video, uno alla volta ──────────────────────────────────────── */
+const PER_ID = new Map(PEZZI.map(p => [p.id, p]));
+
+/* La copertina e' una funzione perche' va rifatta quando un altro video
+   prende il turno: vedi la nota in union.js. */
+function copertina(art, p) {
+  const b = document.createElement('button');
+  b.type = 'button';
+  b.className = 'locanda__via';
+  b.setAttribute('aria-label', `Guarda "${p.t}", ${p.d}`);
+  b.innerHTML = `
+    <img class="locanda__fermo" src="${CARTELLA}${p.id}.jpg" alt=""
+         width="${p.w}" height="${p.h}" loading="lazy" decoding="async">
+    <span class="locanda__play" aria-hidden="true"></span>
+    <span class="locanda__durata mono" aria-hidden="true">${p.d}</span>`;
+  b.addEventListener('click', () => parte(art, p, b));
+  return b;
+}
+
 function parte(art, p, bottone) {
+  soloIo(fermaLocanda);
   fermaTutto(art);
   const v = document.createElement('video');
   v.src = CARTELLA + p.id + '.mp4';
@@ -117,6 +132,7 @@ function suona(b, bottone) {
     else { a.pause(); bottone.classList.remove('suona'); }
     return;
   }
+  soloIo(fermaLocanda);
   fermaTutto();
   const a = new Audio(CARTELLA + b.id + '.m4a');
   a.preload = 'none';
@@ -134,11 +150,15 @@ function suona(b, bottone) {
 
 /* Video e canzoni si fermano a vicenda: un video che parla sopra una
    canzone e' lo stesso errore di due video insieme. */
+const fermaLocanda = registra(() => fermaTutto());
+
 function fermaTutto(tranne) {
   for (const altro of document.querySelectorAll('.locanda__lavori video')) {
-    altro.pause();
     const suo = altro.closest('.locanda__pezzo');
-    if (suo !== tranne) { altro.remove(); suo.classList.remove('in-onda'); }
+    if (suo === tranne) continue;
+    altro.pause();
+    altro.replaceWith(copertina(suo, PER_ID.get(suo.dataset.id)));
+    suo.classList.remove('in-onda');
   }
   if (suonando) {
     suonando.audio.pause();
