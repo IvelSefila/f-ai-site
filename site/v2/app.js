@@ -67,7 +67,8 @@ const VOICE = {
   regia: 'Prova 03. Sposta la testina: cambia l’artefatto, non una barra.',
   tecnologia: 'Prova 04. Locale, cloud o ibrido: stime dichiarate, non promesse.',
   laboratorio: 'Prova 05. Quattro motori di gioco scritti da zero.',
-  brief: 'Sei domande. Il riepilogo si costruisce qui, nel tuo browser.',
+  /* il brief non e' piu' una sezione: sta dentro il contatto */
+  contatto: 'Sei domande. Il riepilogo si costruisce qui, nel tuo browser.',
   verdetto: 'Sessione chiusa. Il dossier qui sotto lo hai scritto tu.',
 };
 

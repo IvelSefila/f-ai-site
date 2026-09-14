@@ -11,7 +11,7 @@
  *
  *   1 · l'apertura e' la prima sezione, il contatto e' l'ultima
  *   2 · dalla seconda sezione in poi chiaro e scuro si alternano
- *   3 · le sette prove sono numerate 01…07 nell'ordine della pagina,
+ *   3 · le cinque prove sono numerate 01…05 nell'ordine della pagina,
  *       e occhiello, numerone e testata dicono tutti lo stesso numero
  *   4 · dentro ogni gruppo i numeri stampati vanno 01, 02, 03…
  *   5 · niente scorrimento orizzontale
@@ -179,7 +179,7 @@ for (const [nome, vp, dito] of [['telefono', { width: 390, height: 844 }, true],
 
   /* ── una sezione si sposta dalla mappa ───────────────────────── */
   const prima = await idSezioni(p);
-  /* "lavori" e' chiara: la porto sul posto di "brief", chiara anche lei.
+  /* "lavori" e' chiara: la porto sul posto di "come", chiara anche lei.
      A meta' corsa guardo la mappa: e' li' che si vede il rifiuto. */
   const q = await presaSezione(p, 'lavori');
   await p.mouse.move(q.x, q.y);
@@ -199,7 +199,12 @@ for (const [nome, vp, dito] of [['telefono', { width: 390, height: 844 }, true],
   dice(spenti.includes('regia') && spenti.includes('banchi'),
        'e sono spente anche le scure, che romperebbero l’alternanza');
 
-  const bersaglio = await dove(p, '#brief', 0, 0.5, 0.5);
+  /* Si atterra su "come" e non piu' sul brief: il brief non e' piu' una
+     sezione, e' un blocco dentro il contatto — e il contatto e' una
+     delle caselle spente, quindi la prova trascinava nel vuoto e non
+     scambiava piu' niente. Due sezioni chiare si scambiano senza
+     rompere l'alternanza. */
+  const bersaglio = await dove(p, '#come', 0, 0.5, 0.5);
   for (let k = 1; k <= 10; k++) {
     await p.mouse.move(q.x + (bersaglio.x - q.x) * k / 10, q.y + (bersaglio.y - q.y) * k / 10);
     await dorme(p, 22);

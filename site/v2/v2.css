@@ -356,7 +356,14 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border:0;border-radiu
 .metrics__note{margin:18px 0 0;color:var(--muted);font-size:13.5px;line-height:1.6;max-width:66ch}
 
 /* contatto */
+/* Il contatto adesso contiene anche il brief: il titolone da 84px
+   andava bene quando sotto non c'era niente, qui diventa il capo di una
+   sezione che ha dentro un modulo. */
 .sec--contact{text-align:left;padding-block:var(--space)}
+.brief__capo{margin:0 0 clamp(18px,2vw,26px)}
+.brief__capo h3{font-size:clamp(22px,2.6vw,34px);letter-spacing:-.02em;line-height:1.08;
+  margin:0 0 10px}
+#contatto .brief{margin-top:clamp(30px,4vw,52px)}
 .sec--contact h2{font-size:clamp(36px,5.4vw,84px);max-width:18ch;margin-bottom:clamp(26px,4vw,44px)}
 .foot{margin-top:clamp(50px,8vw,90px);padding-top:18px;border-top:1px solid var(--rule);
   display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap;color:var(--muted)}
@@ -780,7 +787,8 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border:0;border-radiu
   .istruzioni p,.contatto__come,.brief-data-note,
   .union__lavori .union__pezzo p,.union .union__come dd,
   .locanda__lavori .locanda__pezzo p,.locanda .locanda__come dd,
-  .locanda__brani .locanda__nome em,.locanda .locanda__firma,
+  .locanda__brani .locanda__nome em,.union .caso-firma,.eso .caso-firma,
+  .locanda .caso-firma,
   .eso__lavori .eso__pezzo p,.eso .eso__come dd,
   .eso .eso__tavola figcaption{font-size:15px}
   /* .brief-data-note stava qui e vinceva sulla riga dei 15px, che sta
@@ -2245,12 +2253,20 @@ body.ord-in-corso *{cursor:grabbing !important}
   letter-spacing:-.005em;line-height:1.2}
 .locanda__pezzo p{margin:0;color:#5a4a40;font-size:13.5px;line-height:1.5}
 
-/* La riga della firma sta subito sotto le nove copertine: chi guarda
-   una locandina animata la prima cosa che si chiede e' con cosa e'
-   fatta, e la risposta non deve stare in fondo alla tabella. */
-.locanda__firma{margin:clamp(16px,2vw,22px) 0 0;max-width:66ch;
-  color:#4c3d34;font-size:14.5px;line-height:1.55}
-.locanda__firma b{color:var(--l-bordeaux);font-weight:600}
+/* La riga della catena, uguale in tutti e tre i casi. Sta subito sotto
+   le copertine perche' chi guarda un pezzo la prima cosa che si chiede
+   e' con cosa e' fatto, e la risposta non deve stare in fondo a una
+   tabella. Nasce per la Locanda e adesso ce l'hanno tutti e tre: le
+   tabelle ripetevano la stessa catena — GPT Image, Photoshop, Premiere —
+   tre volte, e tre lavori diversi sembravano lo stesso lavoro. */
+.caso-firma{margin:clamp(16px,2vw,22px) 0 0;max-width:66ch;
+  font-size:14.5px;line-height:1.55}
+.union .caso-firma{color:#4a5a42}
+.union .caso-firma b{color:var(--u-verde);font-weight:600}
+.eso .caso-firma{color:#4a5a66}
+.eso .caso-firma b{color:var(--e-fondo);font-weight:600}
+.locanda .caso-firma{color:#4c3d34}
+.locanda .caso-firma b{color:var(--l-bordeaux);font-weight:600}
 
 /* i cinque brani */
 .locanda__musica{margin-top:clamp(24px,3vw,40px);padding-top:clamp(18px,2vw,26px);
