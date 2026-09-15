@@ -4,4 +4,4 @@ Allow: /
 
 # I motori che alimentano le risposte degli assistenti passano di qui e
 # leggono questa riga per prima.
-Sitemap: https://f-ai.studio/sitemap.xml
+Sitemap: https://ivelsefila.github.io/f-ai-site/sitemap.xml

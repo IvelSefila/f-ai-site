@@ -1,0 +1,84 @@
+# ═══════════════════════════════════════════════════════════════════
+# PRONTO, MA NON IN SERVIZIO.
+#
+# Sta qui e non in .github/workflows/ per due ragioni. La prima e' che
+# il sito per adesso e' privato e non si pubblica: un workflow acceso in
+# un repo dove non si vuole pubblicare e' solo un modo per farlo per
+# sbaglio. La seconda e' pratica: caricare file dentro .github/workflows
+# richiede un permesso in piu' sul token (`workflow`), e senza quello
+# GitHub rifiuta l'intero caricamento — compreso il resto del lavoro.
+#
+# Il giorno che si pubblica:
+#   1. dare il permesso:  gh auth refresh -h github.com -s workflow
+#   2. copiarlo al suo posto:  .github/workflows/pages.yml
+#   3. su GitHub: Settings -> Pages -> Source: GitHub Actions
+#   4. controllare l'indirizzo:  python audit/indirizzo.py <indirizzo>
+# ═══════════════════════════════════════════════════════════════════
+# Pubblica il sito su GitHub Pages.
+#
+# Pubblica la cartella site/ intera, non solo site/v2: la pagina chiama
+# i caratteri tipografici e l'immagine social da ../assets/, e site/
+# index.html e' il rimando che porta alla pagina vera. Tagliando si
+# romperebbero tutti e tre.
+#
+# Sono 166 MB, dentro i limiti di Pages con parecchio margine. Chi apre
+# la pagina ne scarica 739 KB: i ventiquattro video nascono solo al clic
+# di chi li vuole vedere. 68 di quei 166 MB sono site/pixel/, che la
+# pagina non usa piu'. NON SI TOCCANO: restano dove sono, e se un giorno
+# si pubblica si decide allora se escluderle.
+name: Pubblica su Pages
+
+# SOLO A MANO, e di proposito. Il sito per adesso e' privato: si guarda
+# in locale e basta. Con il tiro su main come innesco sarebbe bastato un
+# push distratto per mandarlo online — e con lui l'indirizzo email.
+# Il giorno che si pubblica si rimette qui sotto:
+#   push:
+#     branches: [main]
+# Attenzione a una cosa, quel giorno: Pages da un repo privato pubblica
+# comunque un sito PUBBLICO. Il repo resta chiuso, la pagina no.
+on:
+  workflow_dispatch:      # solo dal pulsante Actions, su richiesta
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Una pubblicazione alla volta. Senza questo, due push ravvicinati si
+# sovrascrivono a vicenda e vince quello che finisce per ultimo, che non
+# e' detto sia l'ultimo partito.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  pubblica:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Controlla che l'indirizzo dichiarato sia questo
+        # Il canonical dice ai motori qual e' la pagina vera. Se punta a
+        # un dominio che non e' questo, il sito si autoesclude dalle
+        # ricerche senza che nessun errore lo dica. Qui si ferma prima.
+        run: |
+          atteso="https://${GITHUB_REPOSITORY_OWNER,,}.github.io/${GITHUB_REPOSITORY#*/}/v2/index.html"
+          trovato=$(grep -oP '(?<=rel="canonical" href=")[^"]*' site/v2/index.html)
+          echo "atteso:  $atteso"
+          echo "trovato: $trovato"
+          if [ "$atteso" != "$trovato" ]; then
+            echo "::error::Il canonical non corrisponde all'indirizzo di pubblicazione. Lancia: python audit/indirizzo.py"
+            exit 1
+          fi
+
+      - uses: actions/configure-pages@v5
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+
+      - id: deploy
+        uses: actions/deploy-pages@v4
