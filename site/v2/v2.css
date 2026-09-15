@@ -388,6 +388,9 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border:0;border-radiu
    sta a sinistra, dove l'occhio torna, ed e' l'unico pezzo che non ha
    il colore della cenere. */
 .foot__posta{color:var(--em);font-size:13px;letter-spacing:.06em;text-transform:none;
+  /* e' l'unico collegamento del piede e l'ultima cosa cliccabile della
+     pagina: il dito deve prenderlo. Da solo era alto 22px. */
+  display:inline-flex;align-items:center;min-height:44px;
   border-bottom:1px solid transparent;transition:border-color .2s}
 .foot__posta:hover{border-bottom-color:var(--em)}
 .sec--chiara .foot__posta{color:var(--em-c)}
