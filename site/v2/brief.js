@@ -275,10 +275,27 @@ function createBriefController() {
       const built = buildSummary();
       preparedSummary = built.text;
       if (summaryCopy) summaryCopy.textContent = preparedSummary;
-      /* Il tasto della posta non c'e' piu': un indirizzo non c'e'
-         ancora, e aprire il programma di posta su una casella
-         inventata mandava il brief da nessuna parte. Resta la copia,
-         che qui esisteva gia'. */
+      /* Il tasto della posta. L'indirizzo NON e' scritto qui: si legge
+         dal collegamento nel piede, che e' l'unico posto del sito dove
+         sta. Se quel collegamento sparisce, sparisce anche il tasto —
+         meglio niente tasto che un tasto che manda nel vuoto, che era
+         esattamente la ragione per cui prima non c'era.
+         Il corpo passa per encodeURIComponent: un riepilogo ha a capo,
+         accenti e due punti, e in un mailto vanno cifrati o il
+         programma di posta taglia il testo al primo carattere strano. */
+      const recapito = document.getElementById('recapito');
+      const posta = document.getElementById('brief-mail');
+      if (posta) {
+        const dove = recapito && recapito.getAttribute('href');
+        if (dove) {
+          posta.href = dove
+            + '?subject=' + encodeURIComponent('Brief dal sito F/AI')
+            + '&body=' + encodeURIComponent(preparedSummary);
+          posta.hidden = false;
+        } else {
+          posta.hidden = true;
+        }
+      }
       form.hidden = true;
       setInert(form, true);
       if (summary) {

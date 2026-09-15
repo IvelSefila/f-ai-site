@@ -32,9 +32,18 @@ await p.waitForTimeout(900);
 const fine = await p.evaluate(()=>({
   riepilogoVisibile: !document.getElementById('brief-summary').hidden,
   righeRiepilogo: (document.getElementById('brief-copy')?.textContent||'').split('\n').filter(Boolean).length,
-  /* il tasto della posta non c'e' piu': si controlla che resti quello
-     della copia, che e' l'unica via d'uscita del brief */
-  tastoPosta: !!document.getElementById('brief-mail'),
+  /* Il tasto della posta e' tornato, adesso che un indirizzo c'e'.
+     Si guarda che punti davvero a una casella e che si porti dietro il
+     riepilogo: un mailto senza corpo sarebbe un tasto che apre una
+     lettera vuota. */
+  tastoPosta: (() => {
+    const m = document.getElementById('brief-mail');
+    if (!m || m.hidden) return 'MANCA';
+    const h = m.getAttribute('href') || '';
+    return /^mailto:[^?]+@/.test(h) && /[?&]body=.+/.test(h)
+      ? 'porta a ' + h.slice(7, h.indexOf('?')) + ' col riepilogo dentro'
+      : 'ROTTO: ' + h.slice(0, 60);
+  })(),
   tastoCopia: (document.getElementById('brief-copy-button')?.textContent||'').trim(),
   errore: document.getElementById('brief-error')?.hidden ? 'nessuno' : document.getElementById('brief-error')?.textContent,
 }));

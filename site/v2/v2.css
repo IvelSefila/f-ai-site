@@ -384,6 +384,24 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border:0;border-radiu
 .sec--contact h2{font-size:clamp(36px,5.4vw,84px);max-width:18ch;margin-bottom:clamp(26px,4vw,44px)}
 .foot{margin-top:clamp(50px,8vw,90px);padding-top:18px;border-top:1px solid var(--rule);
   display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap;color:var(--muted)}
+/* L'indirizzo e' l'unica cosa del piede che uno deve poter prendere:
+   sta a sinistra, dove l'occhio torna, ed e' l'unico pezzo che non ha
+   il colore della cenere. */
+.foot__posta{color:var(--em);font-size:13px;letter-spacing:.06em;text-transform:none;
+  border-bottom:1px solid transparent;transition:border-color .2s}
+.foot__posta:hover{border-bottom-color:var(--em)}
+.sec--chiara .foot__posta{color:var(--em-c)}
+.sec--chiara .foot__posta:hover{border-bottom-color:var(--em-c)}
+
+/* Il tasto della posta e' il primo del riepilogo: pieno, mentre la
+   copia resta di contorno. Prima l'unica uscita era la copia, e non
+   portava da nessuna parte. */
+.brief__posta{display:inline-flex;align-items:center;gap:9px;
+  padding:13px 20px;border-radius:999px;background:var(--em-banda);color:#fff;
+  font-family:var(--mono);font-size:11px;font-weight:600;letter-spacing:.13em;
+  text-transform:uppercase;transition:filter .2s}
+.brief__posta:hover{filter:brightness(1.12)}
+.brief__posta i{font-style:normal}
 
 /* ═══ voce di sistema ═══ */
 .voice{position:fixed;z-index:290;left:var(--gutter);right:var(--gutter);bottom:16px;

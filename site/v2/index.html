@@ -1321,9 +1321,11 @@
         <section class="brief-summary" id="brief-summary" aria-labelledby="brief-summary-title" tabindex="-1" hidden>
           <span>F/AI / RIEPILOGO</span>
           <h3 id="brief-summary-title">IL BRIEF È PRONTO.</h3>
-          <p>Controlla il riepilogo, poi copialo: lo incolli dove preferisci.</p>
+          <p>Controlla il riepilogo, poi mandamelo. Il tasto apre il tuo programma di posta
+            col testo già dentro; se preferisci, copialo e incollalo dove vuoi.</p>
           <pre id="brief-copy"></pre>
           <div class="brief-summary__actions">
+            <a id="brief-mail" class="brief__posta" href="#"><span>MANDAMELO PER EMAIL</span><i aria-hidden="true">→</i></a>
             <button id="brief-copy-button" type="button"><span>COPIA IL RIEPILOGO</span><i aria-hidden="true">□</i></button>
             <button id="brief-edit" type="button"><span>MODIFICA LE RISPOSTE</span><i aria-hidden="true">←</i></button>
           </div>
@@ -1332,7 +1334,13 @@
       </div><!-- /.brief__shell -->
   </section>
 
-  <footer class="foot mono"><span>F/AI</span><span>Grafica / Video / Social / AI</span><span>© 2026</span></footer>
+  <!-- L'INDIRIZZO STA QUI E SOLO QUI. brief.js lo legge da questo
+       collegamento per il tasto della posta: cambiarlo qui lo cambia
+       dappertutto. -->
+  <footer class="foot mono">
+    <a class="foot__posta" id="recapito" href="mailto:fabriziomana@gmail.com">fabriziomana@gmail.com</a>
+    <span>Grafica / Video / Social / AI</span><span>F/AI &middot; &copy; 2026</span>
+  </footer>
 </section>
 
 </main>
