@@ -15,6 +15,22 @@
   --em-c:#06714f; --em-c-bright:#056347; --em-c-light:#08805a;
   --em-c-deep:#04553d; --em-c-dim:rgba(6,113,79,.10);
   --em-banda:#08805a;
+  /* LA SCALA. Sette gradini per i titoli, quattro per il testo. Fuori
+     da questi non si inventano altre misure: erano cinquantacinque
+     dichiarazioni diverse e sullo schermo facevano trentotto corpi. */
+  --d1:clamp(64px,11vw,150px);
+  --d2:clamp(40px,5.1vw,84px);
+  --d3:clamp(34px,4.6vw,72px);
+  --d4:clamp(30px,3.9vw,52px);
+  --d5:clamp(24px,2.8vw,38px);
+  --d6:clamp(22px,2.4vw,30px);
+  --d7:clamp(19px,2vw,25px);
+  --t-lede:clamp(15px,1.1vw,18px);
+  --t-base:17px;      /* il corpo del sito */
+  --t-grande:17px;     /* e il gradino sopra --t-corpo: sono la stessa cosa */
+  --t-corpo:15px;
+  --t-mini:13px;
+  --t-micro:11px;
   --display:"Barlow Condensed","Arial Narrow",sans-serif;
   --body:"Manrope",system-ui,Arial,sans-serif;
   --mono:ui-monospace,"SFMono-Regular",Consolas,monospace;
@@ -39,7 +55,7 @@
 *{box-sizing:border-box}
 html{scroll-behavior:smooth;scroll-padding-top:calc(var(--bar) + 20px);color-scheme:dark}
 body{margin:0;min-width:320px;overflow-x:hidden;background:var(--stage);color:var(--ink);
-  font:400 17px/1.62 var(--body);-webkit-font-smoothing:antialiased}
+  font:400 var(--t-base)/1.62 var(--body);-webkit-font-smoothing:antialiased}
 img,canvas{display:block;max-width:100%}
 button,input{font:inherit;color:inherit}
 a{color:inherit;text-decoration:none}
@@ -48,7 +64,7 @@ h1,h2,h3{font-family:var(--display);font-weight:600;text-transform:uppercase;
 h2 em{font-style:normal;color:var(--em)}
 p{margin:0 0 1em}p:last-child{margin-bottom:0}
 strong{color:var(--ink);font-weight:700}
-.mono{font-family:var(--mono);font-size:11px;letter-spacing:.13em;text-transform:uppercase;font-weight:600}
+.mono{font-family:var(--mono);font-size:var(--t-micro);letter-spacing:.13em;text-transform:uppercase;font-weight:600}
 :focus-visible{outline:2px solid var(--em-bright);outline-offset:3px;border-radius:2px}
 ::selection{background:var(--em);color:var(--stage)}
 
@@ -60,7 +76,7 @@ strong{color:var(--ink);font-weight:700}
 .bar{position:fixed;z-index:300;inset:0 0 auto;height:var(--bar);padding-inline:var(--gutter);
   display:flex;align-items:center;gap:clamp(12px,2.4vw,28px);
   background:rgba(5,7,11,.82);backdrop-filter:blur(14px);border-bottom:1px solid var(--rule-2)}
-.brand{font-family:var(--display);font-size:26px;letter-spacing:-.04em;font-weight:600}
+.brand{font-family:var(--display);font-size:var(--d7);letter-spacing:-.04em;font-weight:600}
 .brand span{color:var(--em)}
 .bar__sess{color:var(--muted);white-space:nowrap}
 .bar__sess b{color:var(--em);font-variant-numeric:tabular-nums}
@@ -115,7 +131,7 @@ strong{color:var(--ink);font-weight:700}
   width:min(100%,var(--content));margin-inline:auto}
 .hero__content>*{max-width:min(100%,47vw)}
 @media(max-width:900px){.hero__content>*{max-width:100%}}
-.hero h1{font-size:clamp(40px,5.1vw,84px);line-height:.87;margin:0}
+.hero h1{font-size:var(--d2);line-height:.87;margin:0}
 .hero h1 span{display:block;opacity:0;transform:translateY(.2em);animation:rise .85s var(--ease) forwards}
 .hero h1 span:nth-child(1){animation-delay:.12s}
 .hero h1 span:nth-child(2){animation-delay:.24s;color:#b9c1cb}
@@ -123,7 +139,7 @@ strong{color:var(--ink);font-weight:700}
   background:linear-gradient(96deg,#f4fbf8 6%,var(--em-light) 52%,#2a9a72 100%);
   -webkit-background-clip:text;background-clip:text;color:transparent}
 @keyframes rise{to{opacity:1;transform:none}}
-.hero__copy{margin:clamp(18px,3vh,32px) 0 0;color:var(--text);font-size:clamp(15px,1.1vw,18px);
+.hero__copy{margin:clamp(18px,3vh,32px) 0 0;color:var(--text);font-size:var(--t-lede);
   opacity:0;animation:rise .85s .5s var(--ease) forwards}
 .hero__actions{margin-top:clamp(22px,3.4vh,36px);display:flex;flex-wrap:wrap;gap:10px;
   opacity:0;animation:rise .85s .62s var(--ease) forwards}
@@ -137,7 +153,7 @@ strong{color:var(--ink);font-weight:700}
 .read{position:absolute;z-index:2;right:var(--gutter);top:calc(var(--bar) + 32px);
   width:min(300px,40vw);text-align:right;pointer-events:none}
 .read .mono{color:var(--muted);display:block;margin-bottom:6px}
-.read p{margin:0;color:var(--em-light);font-family:var(--mono);font-size:12px;line-height:1.65;min-height:3.3em}
+.read p{margin:0;color:var(--em-light);font-family:var(--mono);font-size:var(--t-mini);line-height:1.65;min-height:3.3em}
 .read p::after{content:"▌";color:var(--em);animation:blink 1s steps(1) infinite}
 @keyframes blink{50%{opacity:0}}
 @media(max-width:900px){.read{display:none}}
@@ -146,8 +162,8 @@ strong{color:var(--ink);font-weight:700}
   display:flex;align-items:flex-end;gap:clamp(12px,3vw,44px);flex-wrap:wrap;
   border-top:1px solid var(--rule);background:linear-gradient(0deg,rgba(5,7,11,.92),transparent)}
 .hud dl{margin:0;display:flex;gap:clamp(12px,2.4vw,34px);flex-wrap:wrap}
-.hud dt{color:var(--muted);font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;margin-bottom:3px}
-.hud dd{margin:0;font-family:var(--mono);font-size:13px;font-weight:700;font-variant-numeric:tabular-nums}
+.hud dt{color:var(--muted);font-family:var(--mono);font-size:var(--t-micro);letter-spacing:.1em;text-transform:uppercase;margin-bottom:3px}
+.hud dd{margin:0;font-family:var(--mono);font-size:var(--t-mini);font-weight:700;font-variant-numeric:tabular-nums}
 .hud dd.on{color:var(--em)}
 .hud__hint{margin-left:auto;color:var(--muted);white-space:nowrap}
 .hud__hint b{color:var(--em)}
@@ -199,12 +215,12 @@ strong{color:var(--ink);font-weight:700}
 /* Due righe riservate al nome anche quando ne basta una: "Locanda del
    Castello" va a capo e le altre tre no, e senza questo le etichette
    sotto partivano da quattro quote diverse. */
-.vetrina__caso b{color:var(--ink);font-size:12.5px;font-weight:600;line-height:1.2;
+.vetrina__caso b{color:var(--ink);font-size:var(--t-mini);font-weight:600;line-height:1.2;
   min-height:2.4em}
 /* 11px e non 9,5: il foglio dichiara 11px come pavimento tipografico
    della UI, e le prime quattro etichette che ho scritto lo sfondavano.
    Lo spazio c'era: la striscia finiva a 825px su uno schermo da 900. */
-.vetrina__caso span{color:var(--muted);font-size:11px;letter-spacing:.08em}
+.vetrina__caso span{color:var(--muted);font-size:var(--t-micro);letter-spacing:.08em}
 .vetrina__caso:hover{transform:translateY(-3px)}
 .vetrina__caso:hover img{border-color:var(--em);filter:brightness(1.06)}
 .vetrina__caso:focus-visible{outline:2px solid var(--em-bright);outline-offset:4px;
@@ -219,20 +235,20 @@ strong{color:var(--ink);font-weight:700}
 .sec>*{width:min(100%,var(--content));margin-inline:auto}
 .sec--alt{background:var(--alt)}
 .sec__head{margin-bottom:clamp(34px,5vw,64px)}
-.sec__head h2{font-size:clamp(34px,4.4vw,66px)}
-.sec__lede{margin-top:clamp(16px,2vw,24px);max-width:60ch;color:var(--text);font-size:clamp(15px,1.05vw,18px)}
+.sec__head h2{font-size:var(--d3)}
+.sec__lede{margin-top:clamp(16px,2vw,24px);max-width:60ch;color:var(--text);font-size:var(--t-lede)}
 
 /* ═══ bottoni ═══ */
 .btn{display:inline-flex;align-items:center;gap:14px;padding:13px 20px;border:1px solid var(--rule);
-  border-radius:var(--r-pill);font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;
+  border-radius:var(--r-pill);font-family:var(--mono);font-size:var(--t-micro);letter-spacing:.1em;text-transform:uppercase;
   font-weight:700;cursor:pointer;background:transparent;transition:border-color .2s,background .2s,color .2s,transform .15s}
 .btn:hover{border-color:var(--em);color:var(--em)}
 .btn:active{transform:scale(.985)}
 .btn--solid{background:var(--em);border-color:var(--em);color:var(--stage)}
 .btn--solid:hover{background:var(--em-bright);border-color:var(--em-bright);color:var(--stage)}
-.btn--sm{padding:10px 15px;font-size:11px;gap:10px}
-.btn--lg{padding:17px 26px;font-size:12px}
-.btn i{font-style:normal;font-size:1.15em}
+.btn--sm{padding:10px 15px;font-size:var(--t-micro);gap:10px}
+.btn--lg{padding:17px 26px;font-size:var(--t-mini)}
+.btn i{font-style:normal;font-size:var(--t-grande)}
 
 /* ═══ banchi ═══ */
 .bench{display:grid;gap:clamp(20px,2.6vw,38px);align-items:start}
@@ -240,13 +256,13 @@ strong{color:var(--ink);font-weight:700}
 .bench__stage{margin:0;border:1px solid var(--rule);border-radius:var(--r);overflow:hidden;background:#06090e}
 .bench__stage canvas{width:100%;height:auto;cursor:crosshair}
 .bench__stage figcaption{display:flex;justify-content:space-between;gap:12px;padding:10px 14px;
-  border-top:1px solid var(--rule);color:var(--muted);font-family:var(--mono);font-size:11px;
+  border-top:1px solid var(--rule);color:var(--muted);font-family:var(--mono);font-size:var(--t-micro);
   letter-spacing:.12em;text-transform:uppercase;font-variant-numeric:tabular-nums}
 .bench__stage figcaption span:first-child{color:var(--em)}
 .bench__stage--graph{background:var(--panel)}
 .bench__panel{border:1px solid var(--rule);border-radius:var(--r);background:var(--panel);padding:clamp(18px,2vw,26px)}
-.bench__panel h3{font-size:clamp(22px,2vw,30px);margin-bottom:.5em}
-.bench__panel p{color:var(--text);font-size:15px;line-height:1.6}
+.bench__panel h3{font-size:var(--d6);margin-bottom:.5em}
+.bench__panel p{color:var(--text);font-size:var(--t-corpo);line-height:1.6}
 .bench__acts{margin-top:18px;display:flex;flex-wrap:wrap;gap:8px}
 
 .ctl{display:block;margin:20px 0 0}
@@ -270,7 +286,7 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border:0;border-radiu
 .decis{margin-top:22px;padding-top:16px;border-top:1px solid var(--rule-2)}
 .decis>.mono{color:var(--muted);display:block;margin-bottom:10px}
 .decis ul{margin:0;padding:0;list-style:none;display:grid;gap:6px}
-.decis li{display:flex;gap:9px;color:var(--text);font-family:var(--mono);font-size:11px;
+.decis li{display:flex;gap:9px;color:var(--text);font-family:var(--mono);font-size:var(--t-micro);
   letter-spacing:.04em;line-height:1.5}
 .decis li::before{content:"▸";color:var(--em);flex:none}
 .decis li b{color:var(--em-light);font-weight:700}
@@ -279,18 +295,18 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border:0;border-radiu
 .phases{margin-top:22px;display:grid;gap:4px}
 .phases button{display:flex;gap:10px;align-items:center;padding:10px 12px;text-align:left;
   border:1px solid var(--rule-2);border-radius:var(--r-min);background:transparent;color:var(--muted);cursor:pointer;
-  font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;transition:.2s}
+  font-family:var(--mono);font-size:var(--t-micro);letter-spacing:.12em;text-transform:uppercase;transition:.2s}
 .phases button b{color:var(--muted)}
 .phases button:hover{border-color:var(--em-dim);color:var(--text)}
 .phases button[aria-pressed=true]{background:var(--em);border-color:var(--em);color:var(--stage)}
 .phases button[aria-pressed=true] b{color:var(--stage)}
-.phases__note{margin:12px 0 0;color:var(--muted);font-size:14px;min-height:2.8em}
+.phases__note{margin:12px 0 0;color:var(--muted);font-size:var(--t-corpo);min-height:2.8em}
 
 /* tab dei banchi */
 .tabs{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:24px}
 .tabs button{display:flex;gap:9px;align-items:center;padding:11px 16px;border:1px solid var(--rule);
   border-radius:var(--r-pill);background:transparent;color:var(--muted);cursor:pointer;
-  font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;font-weight:700;transition:.2s}
+  font-family:var(--mono);font-size:var(--t-micro);letter-spacing:.12em;text-transform:uppercase;font-weight:700;transition:.2s}
 .tabs button b{color:var(--muted)}
 .tabs button:hover{border-color:var(--em);color:var(--em)}
 .tabs button[aria-selected=true]{background:var(--em);border-color:var(--em);color:var(--stage)}
@@ -304,7 +320,7 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border:0;border-radiu
    ci stanno sulla stessa riga: misurato, sbordavano di 3px. Andando a
    capo la didascalia diventa di due righe invece che tagliata. */
 .formats figcaption{padding:8px 10px;border-top:1px solid var(--rule);color:var(--muted);
-  font-family:var(--mono);font-size:11px;letter-spacing:.13em;text-transform:uppercase;
+  font-family:var(--mono);font-size:var(--t-micro);letter-spacing:.13em;text-transform:uppercase;
   display:flex;flex-wrap:wrap;justify-content:space-between;gap:2px 8px}
 .formats figcaption b{color:var(--em)}
 
@@ -314,7 +330,7 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border:0;border-radiu
   display:flex;flex-direction:column}
 .work canvas{width:100%;height:auto;background:#06090e}
 .work__meta{display:flex;justify-content:space-between;gap:10px;padding:10px 14px;border-bottom:1px solid var(--rule);
-  color:var(--muted);font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase}
+  color:var(--muted);font-family:var(--mono);font-size:var(--t-micro);letter-spacing:.12em;text-transform:uppercase}
 .work__meta b{color:var(--em)}
 /* flex e non grid: la carta si allunga per pareggiare la riga, e una
    griglia distribuisce l'altezza in piu' fra le righe — nella carta
@@ -323,11 +339,11 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border:0;border-radiu
    servono e l'avanzo va tutto nel margine automatico del seed, che
    e' dove lo volevo. */
 .work__body{padding:16px;display:flex;flex-direction:column;gap:10px;flex:1}
-.work__body h3{font-size:26px}
-.work__body p{color:var(--text);font-size:14.5px;line-height:1.55;margin:0}
+.work__body h3{font-size:var(--d7)}
+.work__body p{color:var(--text);font-size:var(--t-corpo);line-height:1.55;margin:0}
 .work__seed{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:auto;
   padding-top:12px;border-top:1px solid var(--rule-2);color:var(--muted);
-  font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase}
+  font-family:var(--mono);font-size:var(--t-micro);letter-spacing:.1em;text-transform:uppercase}
 
 /* pipeline */
 .pipe{margin:0;padding:0;list-style:none;display:grid;gap:1px;background:var(--rule);
@@ -336,9 +352,9 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border:0;border-radiu
 .pipe li{background:var(--panel);padding:22px 18px 18px;display:grid;gap:8px;align-content:start;
   transition:background .4s var(--ease)}
 .pipe li b{color:var(--muted);transition:color .4s}
-.pipe li h3{font-size:30px}
-.pipe li p{color:var(--text);font-size:14px;line-height:1.55;margin:0}
-.pipe__st{margin-top:10px;color:var(--muted);font-size:11px}
+.pipe li h3{font-size:var(--d7)}
+.pipe li p{color:var(--text);font-size:var(--t-corpo);line-height:1.55;margin:0}
+.pipe__st{margin-top:10px;color:var(--muted);font-size:var(--t-micro)}
 .pipe li.on{background:var(--panel-2)}
 .pipe li.on b,.pipe li.on .pipe__st{color:var(--em)}
 .pipe li.done .pipe__st{color:var(--em-light)}
@@ -346,7 +362,7 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border:0;border-radiu
 /* modalità radar */
 .modes{display:flex;gap:6px;margin-bottom:20px;flex-wrap:wrap}
 .modes button{padding:9px 15px;border:1px solid var(--rule);border-radius:var(--r-pill);background:transparent;
-  color:var(--muted);cursor:pointer;font-family:var(--mono);font-size:11px;letter-spacing:.12em;
+  color:var(--muted);cursor:pointer;font-family:var(--mono);font-size:var(--t-micro);letter-spacing:.12em;
   text-transform:uppercase;font-weight:700;transition:.2s}
 .modes button:hover{border-color:var(--em);color:var(--em)}
 .modes button[aria-pressed=true]{background:var(--em);border-color:var(--em);color:var(--stage)}
@@ -356,9 +372,9 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border:0;border-radiu
 @media(min-width:640px){.graph{grid-template-columns:repeat(5,1fr);align-items:center}}
 .node{border:1px solid var(--rule);border-radius:var(--r-min);background:var(--panel-2);padding:12px 12px 13px;
   display:grid;gap:5px;transition:border-color .3s,background .3s,box-shadow .3s}
-.node .mono{color:var(--muted);font-size:11px}
-.node b{font-family:var(--display);font-size:20px;text-transform:uppercase;letter-spacing:-.02em}
-.node span.out{color:var(--muted);font-family:var(--mono);font-size:11px;min-height:1.4em}
+.node .mono{color:var(--muted);font-size:var(--t-micro)}
+.node b{font-family:var(--display);font-size:var(--t-grande);text-transform:uppercase;letter-spacing:-.02em}
+.node span.out{color:var(--muted);font-family:var(--mono);font-size:var(--t-micro);min-height:1.4em}
 .node.run{border-color:var(--em);background:color-mix(in srgb,var(--em) 10%,transparent);box-shadow:0 0 0 3px color-mix(in srgb,var(--em) 12%,transparent)}
 .node.ok{border-color:var(--em-deep)}
 .node.ok span.out{color:var(--em-light)}
@@ -371,9 +387,9 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border:0;border-radiu
   display:grid;gap:8px;align-content:start;transition:border-color .3s,transform .3s}
 .lab__card:hover{border-color:var(--em);transform:translateY(-3px)}
 .lab__card .mono{color:var(--muted)}
-.lab__card i{font-style:normal;font-size:28px;color:var(--em);line-height:1}
-.lab__card h3{font-size:28px}
-.lab__card p{color:var(--muted);margin:0;font-size:11px}
+.lab__card i{font-style:normal;font-size:var(--d7);color:var(--em);line-height:1}
+.lab__card h3{font-size:var(--d7)}
+.lab__card p{color:var(--muted);margin:0;font-size:var(--t-micro)}
 /* I quattro titoli del laboratorio devono partire alla stessa altezza.
    L'etichetta sopra ("03 · Danza delle correnti") e' piu' lunga in una
    carta che nelle altre e sotto i ~230px di colonna va a capo: misurato
@@ -390,7 +406,7 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border:0;border-radiu
   .lab[data-gr] > .lab__card{grid-template-rows:subgrid;grid-row:span 4;row-gap:8px}
 }
 
-.lab__note{margin-top:20px;color:var(--muted);font-size:14px;max-width:62ch}
+.lab__note{margin-top:20px;color:var(--muted);font-size:var(--t-corpo);max-width:62ch}
 
 /* ── LE ISTRUZIONI ────────────────────────────────────────────────
    Sei voci che dicono cosa si puo' toccare in questa pagina. Stanno
@@ -403,14 +419,14 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border:0;border-radiu
   align-content:start;padding:17px 19px;
   border:1px solid var(--rule);border-radius:var(--r);background:var(--panel)}
 .istruzioni b{grid-row:1/4;padding-top:5px;color:var(--em);
-  font-size:11px;letter-spacing:.12em;font-variant-numeric:tabular-nums}
-.istruzioni h3{margin:0;font-size:19px;letter-spacing:-.01em;line-height:1.15}
-.istruzioni p{margin:0;color:var(--text);font-size:14.5px;line-height:1.55}
-.istruzioni em{font-style:normal;color:var(--em);font-family:var(--mono);font-size:.92em}
-.istruzioni__nota{margin:24px 0 0;color:var(--muted);font-size:15px;line-height:1.6;max-width:66ch}
+  font-size:var(--t-micro);letter-spacing:.12em;font-variant-numeric:tabular-nums}
+.istruzioni h3{margin:0;font-size:var(--t-grande);letter-spacing:-.01em;line-height:1.15}
+.istruzioni p{margin:0;color:var(--text);font-size:var(--t-corpo);line-height:1.55}
+.istruzioni em{font-style:normal;color:var(--em);font-family:var(--mono);font-size:var(--t-mini)}
+.istruzioni__nota{margin:24px 0 0;color:var(--muted);font-size:var(--t-corpo);line-height:1.6;max-width:66ch}
 @media (max-width:760px){
   .istruzioni li{padding:15px 16px}
-  .istruzioni h3{font-size:18px}
+  .istruzioni h3{font-size:var(--t-grande)}
 }
 
 /* verdetto */
@@ -420,18 +436,18 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border:0;border-radiu
   border-bottom:1px solid var(--rule);color:var(--em)}
 .dossier__grid{margin:0;padding:20px 18px;display:grid;gap:18px;
   grid-template-columns:repeat(auto-fit,minmax(140px,1fr));border-bottom:1px solid var(--rule-2)}
-.dossier__grid dt{color:var(--muted);font-family:var(--mono);font-size:11px;letter-spacing:.1em;
+.dossier__grid dt{color:var(--muted);font-family:var(--mono);font-size:var(--t-micro);letter-spacing:.1em;
   text-transform:uppercase;margin-bottom:5px}
-.dossier__grid dd{margin:0;font-family:var(--display);font-size:34px;line-height:1;color:var(--em);
+.dossier__grid dd{margin:0;font-family:var(--display);font-size:var(--d7);line-height:1;color:var(--em);
   font-variant-numeric:tabular-nums}
 /* max-width in ch e non in px: il tetto e' in BATTUTE, che e' l'unita'
    in cui si legge. A tutta larghezza questo verdetto arrivava a 149
    battute per riga — oltre le ~85 l'occhio perde il capo riga e
    rilegge la stessa. Misurato da audit/amichevole.mjs. */
-.dossier__verdict{margin:0;padding:18px;max-width:64ch;color:var(--text);font-size:17px;line-height:1.6;
+.dossier__verdict{margin:0;padding:18px;max-width:64ch;color:var(--text);font-size:var(--t-grande);line-height:1.6;
   border-bottom:1px solid var(--rule-2)}
 .dossier__list{margin:0;padding:14px 18px;list-style:none;display:grid;gap:7px}
-.dossier__list li{display:flex;gap:10px;color:var(--muted);font-family:var(--mono);font-size:11px;letter-spacing:.05em}
+.dossier__list li{display:flex;gap:10px;color:var(--muted);font-family:var(--mono);font-size:var(--t-micro);letter-spacing:.05em}
 .dossier__list li::before{content:"○";color:var(--muted)}
 .dossier__list li.seen{color:var(--text)}
 .dossier__list li.seen::before{content:"●";color:var(--em)}
@@ -440,11 +456,11 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border:0;border-radiu
 .metrics{margin-top:26px;border:1px solid var(--rule);border-radius:var(--r);background:var(--panel);padding:20px 18px}
 .metrics>.mono{color:var(--muted);display:block;margin-bottom:16px}
 .metrics dl{margin:0;display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(120px,1fr))}
-.metrics dt{color:var(--muted);font-family:var(--mono);font-size:11px;letter-spacing:.1em;
+.metrics dt{color:var(--muted);font-family:var(--mono);font-size:var(--t-micro);letter-spacing:.1em;
   text-transform:uppercase;margin-bottom:4px}
-.metrics dd{margin:0;font-family:var(--mono);font-size:19px;font-weight:700;color:var(--em);
+.metrics dd{margin:0;font-family:var(--mono);font-size:var(--t-grande);font-weight:700;color:var(--em);
   font-variant-numeric:tabular-nums}
-.metrics__note{margin:18px 0 0;color:var(--muted);font-size:13.5px;line-height:1.6;max-width:66ch}
+.metrics__note{margin:18px 0 0;color:var(--muted);font-size:var(--t-mini);line-height:1.6;max-width:66ch}
 
 /* contatto */
 /* Il contatto adesso contiene anche il brief: il titolone da 84px
@@ -452,16 +468,16 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border:0;border-radiu
    sezione che ha dentro un modulo. */
 .sec--contact{text-align:left;padding-block:var(--space)}
 .brief__capo{margin:0 0 clamp(18px,2vw,26px)}
-.brief__capo h3{font-size:clamp(22px,2.6vw,34px);letter-spacing:-.02em;line-height:1.08;
+.brief__capo h3{font-size:var(--d6);letter-spacing:-.02em;line-height:1.08;
   margin:0 0 10px}
 #contatto .brief{margin-top:clamp(30px,4vw,52px)}
-.sec--contact h2{font-size:clamp(36px,5.4vw,84px);max-width:18ch;margin-bottom:clamp(26px,4vw,44px)}
+.sec--contact h2{font-size:var(--d2);max-width:18ch;margin-bottom:clamp(26px,4vw,44px)}
 .foot{margin-top:clamp(50px,8vw,90px);padding-top:18px;border-top:1px solid var(--rule);
   display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap;color:var(--muted)}
 /* L'indirizzo e' l'unica cosa del piede che uno deve poter prendere:
    sta a sinistra, dove l'occhio torna, ed e' l'unico pezzo che non ha
    il colore della cenere. */
-.foot__posta{color:var(--em);font-size:13px;letter-spacing:.06em;text-transform:none;
+.foot__posta{color:var(--em);font-size:var(--t-mini);letter-spacing:.06em;text-transform:none;
   /* e' l'unico collegamento del piede e l'ultima cosa cliccabile della
      pagina: il dito deve prenderlo. Da solo era alto 22px. */
   display:inline-flex;align-items:center;min-height:44px;
@@ -475,7 +491,7 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border:0;border-radiu
    portava da nessuna parte. */
 .brief__posta{display:inline-flex;align-items:center;gap:9px;
   padding:13px 20px;border-radius:var(--r-pill);background:var(--em-banda);color:#fff;
-  font-family:var(--mono);font-size:11px;font-weight:600;letter-spacing:.13em;
+  font-family:var(--mono);font-size:var(--t-micro);font-weight:600;letter-spacing:.13em;
   text-transform:uppercase;transition:filter .2s}
 .brief__posta:hover{filter:brightness(1.12)}
 .brief__posta i{font-style:normal}
@@ -488,7 +504,7 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border:0;border-radiu
   transition:opacity .5s var(--ease),transform .5s var(--ease)}
 .voice.on{opacity:1;transform:none}
 .voice__dot{width:7px;height:7px;border-radius:var(--r-tondo);background:var(--em);flex:none;animation:ping 2.6s ease-out infinite}
-.voice p{margin:0;flex:1;min-width:0;color:var(--em-light);font-family:var(--mono);font-size:11px;
+.voice p{margin:0;flex:1;min-width:0;color:var(--em-light);font-family:var(--mono);font-size:var(--t-micro);
   letter-spacing:.05em;line-height:1.5;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .voice__prog{color:var(--muted);flex:none}
 .voice__prog b{color:var(--em)}
@@ -543,7 +559,7 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border:0;border-radiu
 .mat__hint{margin-top:14px;color:var(--muted)}
 .mat__hint b{color:var(--em)}
 .mat--loading{display:grid;place-items:center;height:clamp(380px,44vw,600px);
-  color:var(--muted);font-family:var(--mono);font-size:11px;letter-spacing:.13em;text-transform:uppercase}
+  color:var(--muted);font-family:var(--mono);font-size:var(--t-micro);letter-spacing:.13em;text-transform:uppercase}
 
 /* Pavimento tipografico: 11px sulla UI reale, lo stesso standard che
    l'audit pretendeva dal sito precedente. Le didascalie dei formati
@@ -569,9 +585,9 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border:0;border-radiu
   gap:6px 16px;flex-wrap:wrap;padding:17px 18px 15px;
   border-bottom:1px solid var(--rule);color:var(--muted)}
 .stack__head strong{color:var(--ink);font-weight:700;font-family:var(--display);
-  font-size:clamp(21px,2.4vw,27px);letter-spacing:.01em;text-transform:uppercase;
+  font-size:var(--d7);letter-spacing:.01em;text-transform:uppercase;
   line-height:1.05}
-.stack__head span{font-size:12px;letter-spacing:.1em}
+.stack__head span{font-size:var(--t-mini);letter-spacing:.1em}
 /* Due colonne come nell'originale: le categorie 03 e 06 attraversano tutto,
    le altre stanno a coppie. Con auto-fit venivano quattro colonne e due
    restavano vuote. */
@@ -588,8 +604,8 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border:0;border-radiu
 .stack__group > div :is(span,button){display:inline-flex;align-items:center;gap:9px;
   padding:9px 15px 10px;border:1px solid color-mix(in srgb,var(--tool) 34%,transparent);
   border-radius:var(--r-pill);background:color-mix(in srgb,var(--tool) 7%,var(--panel-2));
-  color:var(--ink);font-size:15px;line-height:1.2;transition:border-color .2s,background .2s}
-.stack__group > div button{font:inherit;font-size:15px;cursor:pointer;text-align:left}
+  color:var(--ink);font-size:var(--t-corpo);line-height:1.2;transition:border-color .2s,background .2s}
+.stack__group > div button{font:inherit;font-size:var(--t-corpo);cursor:pointer;text-align:left}
 .stack__group > div button:focus-visible{outline:2px solid var(--tool);outline-offset:2px}
 .stack__group > div button:active{transform:translateY(1px)}
 .stack__group > div :is(span,button)::before{content:"";width:7px;height:7px;border-radius:var(--r-tondo);
@@ -606,7 +622,7 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border:0;border-radiu
 
 @media(max-width:560px){
   .stack__grid{padding:14px;gap:20px}
-  .stack__group > div span{font-size:14px;padding:8px 13px 9px}
+  .stack__group > div span{font-size:var(--t-corpo);padding:8px 13px 9px}
 }
 
 /* richiamo al laboratorio */
@@ -632,7 +648,7 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border:0;border-radiu
 .brief__form{padding:clamp(20px,2.4vw,34px)}
 
 .brief__progress{display:flex;flex-direction:column;gap:10px;margin-bottom:clamp(22px,2.6vw,34px)}
-.brief__progress span{font-family:var(--mono);font-size:11px;letter-spacing:.13em;
+.brief__progress span{font-family:var(--mono);font-size:var(--t-micro);letter-spacing:.13em;
   text-transform:uppercase;color:var(--muted)}
 .brief__progress i{display:block;height:2px;background:var(--rule);position:relative}
 .brief__progress i::after{content:"";position:absolute;inset:0 auto 0 0;width:var(--progress,16%);
@@ -641,16 +657,16 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border:0;border-radiu
 .brief-step{margin:0;padding:0;border:0;min-width:0}
 .brief-step[hidden]{display:none}
 .brief-step legend{padding:0;margin-bottom:16px;display:flex;gap:12px;align-items:baseline;
-  font-family:var(--display);font-size:clamp(22px,2.4vw,34px);font-weight:600;
+  font-family:var(--display);font-size:var(--d6);font-weight:600;
   text-transform:uppercase;letter-spacing:-.02em;color:var(--ink);line-height:1.02}
-.brief-step legend span{font-family:var(--mono);font-size:11px;letter-spacing:.13em;
+.brief-step legend span{font-family:var(--mono);font-size:var(--t-micro);letter-spacing:.13em;
   color:var(--em);flex:none;transform:translateY(-.15em)}
-.brief-step__hint{margin:0 0 16px;color:var(--muted);font-size:14px}
+.brief-step__hint{margin:0 0 16px;color:var(--muted);font-size:var(--t-corpo)}
 
 .brief-options{display:grid;gap:8px;grid-template-columns:repeat(auto-fit,minmax(min(100%,230px),1fr))}
 .brief-options label{display:flex;align-items:center;gap:12px;padding:14px 16px;cursor:pointer;
   border:1px solid var(--rule);border-radius:var(--r);background:var(--panel-2);
-  color:var(--text);font-size:15px;line-height:1.35;transition:border-color .2s,background .2s,color .2s}
+  color:var(--text);font-size:var(--t-corpo);line-height:1.35;transition:border-color .2s,background .2s,color .2s}
 .brief-options label:hover{border-color:var(--em-dim);color:var(--ink)}
 .brief-options input{appearance:none;-webkit-appearance:none;margin:0;flex:none;
   width:18px;height:18px;border:1px solid var(--muted);background:transparent;
@@ -664,20 +680,20 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border:0;border-radiu
 
 .brief-date{grid-column:1/-1}
 .brief-date input{width:100%;margin-top:10px;padding:12px 14px;border:1px solid var(--rule);
-  border-radius:var(--r);background:var(--stage);color:var(--ink);font-size:15px}
+  border-radius:var(--r);background:var(--stage);color:var(--ink);font-size:var(--t-corpo)}
 
 .brief-fields{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(min(100%,240px),1fr));
   margin-top:6px}
 .brief-fields__wide{grid-column:1/-1}
-.brief-fields label{display:grid;gap:8px;font-size:14px;color:var(--muted)}
-.brief-fields label > span{font-family:var(--mono);font-size:11px;letter-spacing:.13em;
+.brief-fields label{display:grid;gap:8px;font-size:var(--t-corpo);color:var(--muted)}
+.brief-fields label > span{font-family:var(--mono);font-size:var(--t-micro);letter-spacing:.13em;
   text-transform:uppercase}
 /* <small> ereditava la riduzione del browser e scendeva a 9,2px:
    stesso pavimento di 11px che vale per tutto il resto della UI. */
-.brief-fields label > span small{font-size:11px;text-transform:none;letter-spacing:.02em;opacity:.75}
+.brief-fields label > span small{font-size:var(--t-micro);text-transform:none;letter-spacing:.02em;opacity:.75}
 .brief-fields input,.brief-fields textarea,.brief-fields select{width:100%;padding:13px 15px;
   border:1px solid var(--rule);border-radius:var(--r);background:var(--stage);color:var(--ink);
-  font-size:15px;font-family:var(--body);transition:border-color .2s}
+  font-size:var(--t-corpo);font-family:var(--body);transition:border-color .2s}
 .brief-fields input:focus,.brief-fields textarea:focus{outline:none;border-color:var(--em)}
 .brief-fields textarea{resize:vertical;min-height:104px;line-height:1.55}
 
@@ -686,18 +702,18 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border:0;border-radiu
 .brief-consent input{appearance:none;-webkit-appearance:none;margin:2px 0 0;flex:none;
   width:18px;height:18px;border:1px solid var(--muted);border-radius:var(--r-min);background:transparent}
 .brief-consent input:checked{border-color:var(--em);background:var(--em);box-shadow:inset 0 0 0 3px var(--panel-2)}
-.brief-consent > span{font-family:var(--mono);font-size:11px;letter-spacing:.1em;color:var(--text)}
+.brief-consent > span{font-family:var(--mono);font-size:var(--t-micro);letter-spacing:.1em;color:var(--text)}
 .brief-data-note{margin:16px 0 0;padding-left:14px;border-left:2px solid var(--em-deep);
-  color:var(--muted);font-size:13.5px;line-height:1.6}
+  color:var(--muted);font-size:var(--t-mini);line-height:1.6}
 
 .brief__error{margin:16px 0 0;padding:12px 15px;border:1px solid var(--cut,#ff6a40);border-radius:var(--r);
-  background:rgba(255,106,64,.08);color:#ff9d7a;font-size:14px}
+  background:rgba(255,106,64,.08);color:#ff9d7a;font-size:var(--t-corpo)}
 .brief__error[hidden]{display:none}
 
 .brief__nav{margin-top:clamp(20px,2.4vw,30px);display:flex;flex-wrap:wrap;gap:10px}
 .brief__nav button{display:inline-flex;align-items:center;gap:14px;padding:14px 22px;cursor:pointer;
   border:1px solid var(--rule);border-radius:var(--r-pill);background:transparent;color:var(--ink);
-  font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;
+  font-family:var(--mono);font-size:var(--t-micro);letter-spacing:.1em;text-transform:uppercase;font-weight:700;
   transition:border-color .2s,background .2s,color .2s}
 .brief__nav button:hover{border-color:var(--em);color:var(--em)}
 .brief__nav button[type=submit]{background:var(--em);border-color:var(--em);color:var(--stage)}
@@ -706,37 +722,41 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border:0;border-radiu
 
 .brief-summary{padding:clamp(20px,2.4vw,34px);border-top:1px solid var(--rule);display:grid;gap:14px}
 .brief-summary[hidden]{display:none}
-.brief-summary > span{font-family:var(--mono);font-size:11px;letter-spacing:.13em;
+.brief-summary > span{font-family:var(--mono);font-size:var(--t-micro);letter-spacing:.13em;
   text-transform:uppercase;color:var(--em)}
-.brief-summary h3{font-size:clamp(28px,3.4vw,46px)}
-.brief-summary > p{margin:0;color:var(--text);font-size:15px}
+.brief-summary h3{font-size:var(--d4)}
+.brief-summary > p{margin:0;color:var(--text);font-size:var(--t-corpo)}
 #brief-copy{margin:0;padding:18px;border:1px solid var(--rule);border-radius:var(--r);
-  background:var(--stage);color:var(--text);font-family:var(--mono);font-size:12.5px;
+  background:var(--stage);color:var(--text);font-family:var(--mono);font-size:var(--t-mini);
   line-height:1.7;white-space:pre-wrap;overflow-x:auto;max-height:420px;overflow-y:auto}
 .brief-summary__actions{display:flex;flex-wrap:wrap;gap:8px}
 .brief-summary__actions button,.brief-summary__actions a{display:inline-flex;align-items:center;gap:12px;
   padding:12px 18px;cursor:pointer;border:1px solid var(--rule);border-radius:var(--r-pill);
-  background:transparent;color:var(--ink);font-family:var(--mono);font-size:11px;letter-spacing:.1em;
+  background:transparent;color:var(--ink);font-family:var(--mono);font-size:var(--t-micro);letter-spacing:.1em;
   text-transform:uppercase;font-weight:700;transition:border-color .2s,background .2s,color .2s}
 .brief-summary__actions a{background:var(--em);border-color:var(--em);color:var(--stage)}
 .brief-summary__actions button:hover{border-color:var(--em);color:var(--em)}
 .brief-summary__actions a:hover{background:var(--em-bright);border-color:var(--em-bright)}
-.brief-summary__status{margin:0;color:var(--em-light);font-family:var(--mono);font-size:11px;
+.brief-summary__status{margin:0;color:var(--em-light);font-family:var(--mono);font-size:var(--t-micro);
   letter-spacing:.1em;min-height:1.3em}
 
 /* ═══ profilo ═══ */
 .profilo{display:grid;gap:clamp(24px,3vw,48px);align-items:center}
 @media(min-width:900px){.profilo{grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr)}}
 .profilo__testo{display:grid;gap:18px;max-width:62ch}
-.profilo__testo p{margin:0;color:var(--text);font-size:clamp(15px,1.05vw,17px);line-height:1.7}
+.profilo__testo p{margin:0;color:var(--text);font-size:var(--t-lede);line-height:1.7}
 .profilo__lead{padding-left:16px;border-left:2px solid var(--em);color:var(--ink)!important;
-  font-size:clamp(17px,1.35vw,21px)!important;line-height:1.6!important}
+  font-size:var(--d7)!important;line-height:1.6!important}
 .profilo__mark{display:flex;align-items:center;justify-content:center;gap:.12em;
   font-family:var(--display);font-weight:600;text-transform:uppercase;letter-spacing:-.04em;
-  font-size:clamp(64px,11vw,150px);line-height:.8;color:transparent;
+  font-size:var(--d1);line-height:.8;color:transparent;
   -webkit-text-stroke:1px color-mix(in srgb,var(--em) 28%,transparent);user-select:none}
-.profilo__mark b{color:var(--em);-webkit-text-stroke:0;font-weight:600}
-@media(max-width:899px){.profilo__mark{justify-content:flex-start;font-size:clamp(52px,18vw,96px)}}
+/* La barra non e' una lettera: e' la cucitura. Stessa idea dell'eroe —
+   di qua la mano, di la' la macchina — inclinata come li', e piena
+   mentre le lettere restano in contorno. */
+.profilo__mark b{color:var(--em);-webkit-text-stroke:0;font-weight:600;
+  font-size:1.16em;transform:skewX(-6deg);margin-inline:.02em}
+@media(max-width:899px){.profilo__mark{justify-content:flex-start;font-size:var(--d2)}}
 
 /* ═══ le quattro competenze ═══
    I banchi dimostrano; questo blocco dichiara che cosa offro. Sono due
@@ -750,14 +770,14 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border:0;border-radiu
   transition:border-color .25s,transform .25s}
 .offerta__card:hover{border-color:var(--em);transform:translateY(-3px)}
 .offerta__card > .mono{color:var(--em)}
-.offerta__card h3{font-size:clamp(22px,1.9vw,28px)}
-.offerta__card p{margin:0;color:var(--text);font-size:14.5px;line-height:1.6}
-.offerta__tag{color:var(--muted)!important;font-size:11px!important;letter-spacing:.08em;line-height:1.6!important}
+.offerta__card h3{font-size:var(--d7)}
+.offerta__card p{margin:0;color:var(--text);font-size:var(--t-corpo);line-height:1.6}
+.offerta__tag{color:var(--muted)!important;font-size:var(--t-micro)!important;letter-spacing:.08em;line-height:1.6!important}
 .offerta__card .btn{margin-top:6px;justify-self:start}
-.offerta__nota{margin:20px 0 0;color:var(--muted);font-size:14px;max-width:70ch}
+.offerta__nota{margin:20px 0 0;color:var(--muted);font-size:var(--t-corpo);max-width:70ch}
 
 /* ═══ breakdown dei lavori ═══ */
-.work__tag{margin:0;color:var(--muted);font-size:11px;letter-spacing:.08em;line-height:1.6}
+.work__tag{margin:0;color:var(--muted);font-size:var(--t-micro);letter-spacing:.08em;line-height:1.6}
 .work__break{border-top:1px solid var(--rule-2);padding-top:12px}
 /* 24px di altezza minima: era 22, e il minimo per un bersaglio da
    puntatore (WCAG 2.5.8) e' 24. Due pixel, ma sono gli unici due
@@ -771,23 +791,23 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border:0;border-radiu
 .work__break[open] summary::before{transform:rotate(45deg)}
 .work__break summary:hover{color:var(--em-bright)}
 .work__break dl{margin:12px 0 0;display:grid;gap:9px}
-.work__break dt{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;
+.work__break dt{font-family:var(--mono);font-size:var(--t-micro);letter-spacing:.1em;text-transform:uppercase;
   color:var(--em-light)}
-.work__break dd{margin:2px 0 0;color:var(--text);font-size:14px;line-height:1.55}
+.work__break dd{margin:2px 0 0;color:var(--text);font-size:var(--t-corpo);line-height:1.55}
 
 /* occhiello dello studio e nota d'uso dell'hero */
 .hero__studio{margin:0 0 clamp(14px,2vh,24px);color:var(--muted);font-family:var(--mono);
-  font-size:11px;letter-spacing:.13em;text-transform:uppercase;line-height:1.6;
+  font-size:var(--t-micro);letter-spacing:.13em;text-transform:uppercase;line-height:1.6;
   opacity:0;animation:rise .85s .18s var(--ease) forwards}
-.hero__nota{margin:12px 0 0;max-width:66ch;color:var(--muted);font-size:14px;line-height:1.6;
+.hero__nota{margin:12px 0 0;max-width:66ch;color:var(--muted);font-size:var(--t-corpo);line-height:1.6;
   opacity:0;animation:rise .85s .56s var(--ease) forwards}
 .phases__come{margin:18px 0 0;color:var(--muted)}
 /* introduzione del laboratorio */
 .lab__intro{margin-top:clamp(24px,3vw,40px);display:grid;gap:12px;max-width:70ch}
 .lab__intro > .mono{color:var(--em)}
-.lab__intro h3{font-size:clamp(24px,2.6vw,38px)}
+.lab__intro h3{font-size:var(--d5)}
 .lab__intro h3 em{font-style:normal;color:var(--em)}
-.lab__intro p{margin:0;max-width:68ch;color:var(--text);font-size:15px;line-height:1.65}
+.lab__intro p{margin:0;max-width:68ch;color:var(--text);font-size:var(--t-corpo);line-height:1.65}
 
 /* ═══════════════════════════════════════════════════════════════════
  * VARIAZIONE — 03.09.2026
@@ -809,8 +829,8 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border:0;border-radiu
    che sono 821px di citazione, ne aveva 75. La classe che dice quanto
    respira una sezione aveva finito per dire anche quanto conta.
    Adesso sp-* governa lo spazio e t-* governa la voce. */
-.sec.t-forte .sec__head h2{font-size:clamp(38px,5.2vw,78px)}
-.sec.t-piano .sec__head h2{font-size:clamp(30px,3.7vw,54px)}
+.sec.t-forte .sec__head h2{font-size:var(--d3)}
+.sec.t-piano .sec__head h2{font-size:var(--d4)}
 
 /* ── apertura A · larga: il titolo prende tutto, il testo si ritira ── */
 @media(min-width:960px){
@@ -818,7 +838,7 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border:0;border-radiu
     column-gap:clamp(30px,4vw,72px);align-items:end}
   .ap-larga .sec__head .eyebrow{grid-column:1/-1}
   .ap-larga .sec__head h2{grid-column:1;max-width:none}
-  .ap-larga .sec__lede{grid-column:2;margin-top:0;font-size:15px;color:var(--muted)}
+  .ap-larga .sec__lede{grid-column:2;margin-top:0;font-size:var(--t-corpo);color:var(--muted)}
 }
 
 /* ── apertura B · numero: una cifra grande fa da ancora ── */
@@ -826,7 +846,7 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border:0;border-radiu
 @media(min-width:860px){
   .ap-numero .sec__head{padding-left:clamp(96px,10vw,168px)}
   .ap-numero .sec__head::before{content:attr(data-num);position:absolute;left:0;top:-.06em;
-    font-family:var(--display);font-weight:600;font-size:clamp(96px,11vw,176px);line-height:.8;
+    font-family:var(--display);font-weight:600;font-size:var(--d1);line-height:.8;
     color:transparent;-webkit-text-stroke:1px color-mix(in srgb,var(--em) 34%,transparent);letter-spacing:-.04em;
     pointer-events:none;user-select:none}
 }
@@ -881,7 +901,7 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border:0;border-radiu
      restano raggiungibili scorrendo, che su un telefono e' il gesto
      naturale comunque */
   .bar__nav a[data-solo-largo]{display:none}
-  .bar__nav a{padding:6px 7px;font-size:10px}
+  .bar__nav a{padding:6px 7px;font-size:var(--t-micro)}
   /* Su un telefono le destinazioni che ci stanno sono due, e il verdetto
      non e' una di quelle: si arriva in fondo scorrendo comunque, mentre
      "Contatto" e' l'unica voce che porta dove serve. Con tutti e tre gli
@@ -924,19 +944,19 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border:0;border-radiu
   .locanda .caso-firma,.cest .caso-firma,
   .eso__lavori .eso__pezzo p,.eso .eso__come dd,
   .cest__lavori .cest__pezzo p,.cest .cest__come dd,
-  .eso .eso__tavola figcaption{font-size:15px}
+  .eso .eso__tavola figcaption{font-size:var(--t-corpo)}
   /* .brief-data-note stava qui e vinceva sulla riga dei 15px, che sta
      sopra: due elenchi fatti a mano che si contraddicono, e vince
      l'ultimo. E' la riga che dice che i dati non escono dal browser:
      e' proprio quella che deve leggersi. */
-  .work__break dd,.decis li,.brief-options label{font-size:14.5px}
+  .work__break dd,.decis li,.brief-options label{font-size:var(--t-corpo)}
   /* la nota dell'apertura sta a 15 come il resto: e' la prima
      istruzione che uno legge, e a 14px su un telefono si strizza
      gli occhi proprio dove serve capire cosa si puo' toccare */
-  .hero__nota{font-size:15px}
-  .phases__note{font-size:14px}
-  .hud dd{font-size:12px}
-  .hud dt,.formats figcaption,.dossier__grid dt,.metrics dt{font-size:11px}
+  .hero__nota{font-size:var(--t-corpo)}
+  .phases__note{font-size:var(--t-corpo)}
+  .hud dd{font-size:var(--t-mini)}
+  .hud dt,.formats figcaption,.dossier__grid dt,.metrics dt{font-size:var(--t-micro)}
 }
 
 @media (max-width:900px){
@@ -964,11 +984,11 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border:0;border-radiu
 
 /* ── 1 · comando di scena, raggiungibile col dito ── */
 .scene-pick{display:flex;align-items:center;gap:6px;margin-left:auto}
-.scene-pick > .mono{color:var(--muted);font-size:11px;letter-spacing:.1em;
+.scene-pick > .mono{color:var(--muted);font-size:var(--t-micro);letter-spacing:.1em;
   text-transform:uppercase;margin-right:2px}
 .scene-pick button{min-width:38px;min-height:32px;padding:0 8px;
   border:1px solid var(--rule-2);border-radius:var(--r-min);background:transparent;
-  color:var(--muted);font-family:var(--mono);font-size:12px;font-weight:700;
+  color:var(--muted);font-family:var(--mono);font-size:var(--t-mini);font-weight:700;
   font-variant-numeric:tabular-nums;cursor:pointer;transition:border-color .2s,color .2s}
 .scene-pick button[aria-pressed="true"]{border-color:var(--em);color:var(--em);
   background:var(--em-dim)}
@@ -1010,7 +1030,7 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border:0;border-radiu
   .hud__hint{margin-left:0;white-space:normal;flex:1 1 100%;line-height:1.6}
   .hud__hint--puntatore{display:inline}
   .scene-pick{margin-left:0;flex:1 1 100%;justify-content:flex-start}
-  .scene-pick button{min-width:52px;min-height:44px;font-size:13px}
+  .scene-pick button{min-width:52px;min-height:44px;font-size:var(--t-mini)}
   /* il testo dell'hero non è più costretto a metà schermo */
   .hero__content>*{max-width:100%}
 }
@@ -1084,7 +1104,7 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border:0;border-radiu
         Affiancati sono 3 miniature da 109px e il confronto — che è il
         senso della sezione — si legge in un colpo d'occhio. ── */
   .formats{grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;align-items:end}
-  .formats figcaption{padding:6px 7px;font-size:10px;line-height:1.35}
+  .formats figcaption{padding:6px 7px;font-size:var(--t-micro);line-height:1.35}
   .formats figcaption b{display:block}
 
   /* ── il grafo del flusso: cinque nodi in colonna facevano 601px, e il
@@ -1092,7 +1112,7 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border:0;border-radiu
         in alto fuori campo. Su due colonne il flusso ci sta intero. ── */
   .graph{grid-template-columns:1fr 1fr;padding:14px;gap:10px;min-height:0}
   .graph .node{padding:10px 10px 11px}
-  .graph .node b{font-size:17px}
+  .graph .node b{font-size:var(--t-grande)}
   .graph .node:last-child{grid-column:1 / -1}
 
   /* ── le cinque fasi: 246px di bottoni sopra un visuale da 218px non
@@ -1393,11 +1413,11 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border:0;border-radiu
   border:1px solid rgba(221,231,242,.14);border-radius:var(--r-card);padding:0;
   background:#0b0f16;color:#f2f4f7;
   width:min(560px,calc(100vw - 32px));max-height:calc(100dvh - 32px);
-  font:400 15px/1.6 var(--body)}
+  font:400 var(--t-corpo)/1.6 var(--body)}
 .pal::backdrop{background:rgba(5,7,11,.72);backdrop-filter:blur(6px)}
-.pal__tit{margin:0;padding:18px 20px 0;color:#7f8b98;font-size:11px;
+.pal__tit{margin:0;padding:18px 20px 0;color:#7f8b98;font-size:var(--t-micro);
   letter-spacing:.14em;text-transform:uppercase}
-.pal__sub{margin:8px 20px 0;color:#c3ccd6;font-size:14px;line-height:1.55}
+.pal__sub{margin:8px 20px 0;color:#c3ccd6;font-size:var(--t-corpo);line-height:1.55}
 .pal__griglia{display:grid;gap:8px;padding:16px 20px;
   grid-template-columns:repeat(auto-fit,minmax(150px,1fr))}
 .pal__griglia button{
@@ -1409,9 +1429,9 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border:0;border-radiu
 .pal__griglia i{grid-row:1/3;width:30px;height:30px;border-radius:var(--r-min);
   background:linear-gradient(135deg,var(--campione),var(--campione2));
   box-shadow:inset 0 0 0 1px rgba(255,255,255,.14)}
-.pal__griglia b{font-family:var(--display);font-size:19px;letter-spacing:-.01em;
+.pal__griglia b{font-family:var(--display);font-size:var(--t-grande);letter-spacing:-.01em;
   text-transform:uppercase;line-height:1}
-.pal__griglia span{color:#7f8b98;font-size:12px;line-height:1.35}
+.pal__griglia span{color:#7f8b98;font-size:var(--t-mini);line-height:1.35}
 .pal__griglia button[aria-checked="true"]{
   border-color:var(--campione);background:color-mix(in srgb,var(--campione) 12%,transparent)}
 .pal__griglia button:focus-visible{outline:2px solid var(--campione);outline-offset:2px}
@@ -1426,7 +1446,7 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border:0;border-radiu
   padding:14px 20px 18px;border-top:1px solid rgba(221,231,242,.08);
   position:sticky;bottom:0;background:#0b0f16;z-index:2}
 .pal{overscroll-behavior:contain}
-.pal__piede .mono{color:#7f8b98;font-size:11px;letter-spacing:.08em}
+.pal__piede .mono{color:#7f8b98;font-size:var(--t-micro);letter-spacing:.08em}
 
 /* l'accenno: senza, la pressione lunga non la scopre nessuno */
 /* width:max-content e' l'unica riga che tiene in piedi questa bolla.
@@ -1439,18 +1459,18 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border:0;border-radiu
   width:max-content;max-width:min(560px,calc(100vw - 28px));
   padding:11px 12px 11px 16px;border:1px solid var(--em-dim);border-radius:var(--r-pill);
   background:rgba(11,15,22,.95);backdrop-filter:blur(10px);
-  color:#c3ccd6;font-size:12px;letter-spacing:.03em;
+  color:#c3ccd6;font-size:var(--t-mini);letter-spacing:.03em;
   opacity:0;transition:opacity .35s var(--ease),translate .35s var(--ease)}
 .pal-accenno.in{opacity:1;translate:-50% 0}
 .pal-accenno span{min-width:0}
 .pal-accenno button{width:44px;height:44px;flex:none;border-radius:var(--r-tondo);
   border:1px solid rgba(221,231,242,.14);background:transparent;color:#7f8b98;
-  cursor:pointer;font-size:13px;line-height:1}
+  cursor:pointer;font-size:var(--t-mini);line-height:1}
 
 @media (max-width:760px){
   .pal__griglia{grid-template-columns:1fr;padding:14px 16px}
   .pal__griglia button{min-height:56px}
-  .pal-accenno{bottom:70px;font-size:12.5px;padding-block:13px}
+  .pal-accenno{bottom:70px;font-size:var(--t-mini);padding-block:13px}
   .pal-accenno button{width:46px;height:46px}
   .pal__piede{flex-wrap:wrap}
   .pal__piede .btn{min-height:46px;flex:1}
@@ -1483,7 +1503,7 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border:0;border-radiu
   transform:scale(1.08);
   box-shadow:0 0 0 2px var(--stage),0 0 0 4px var(--campione)}
 .bar__pal button:focus-visible{outline:2px solid var(--em-bright);outline-offset:1px}
-.bar__pal__piu{color:var(--muted);font:600 16px/1 var(--mono);letter-spacing:.06em}
+.bar__pal__piu{color:var(--muted);font:600 var(--t-grande)/1 var(--mono);letter-spacing:.06em}
 .bar__pal__piu:hover{color:var(--em)}
 @media (pointer:coarse){.bar__pal button{width:44px;height:44px}}
 @media (max-width:900px){.bar__pal{order:2;margin-left:auto;margin-right:2px}}
@@ -1571,15 +1591,15 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border:0;border-radiu
 .pal__gr button{display:grid;gap:3px;text-align:left;padding:9px 11px;
   border:1px solid rgba(221,231,242,.14);border-radius:var(--r-min);
   background:transparent;color:inherit;cursor:pointer;font:inherit}
-.pal__gr button i{font-style:normal;font-family:var(--mono);font-size:9px;
+.pal__gr button i{font-style:normal;font-family:var(--mono);font-size:var(--t-micro);
   letter-spacing:-1px;color:var(--em);line-height:1}
-.pal__gr button b{font-size:13px;font-weight:600}
-.pal__gr button span{color:#7f8b98;font-size:11px}
+.pal__gr button b{font-size:var(--t-mini);font-weight:600}
+.pal__gr button span{color:#7f8b98;font-size:var(--t-micro)}
 .pal__gr button[aria-checked="true"]{border-color:var(--em);
   background:color-mix(in srgb,var(--em) 12%,transparent)}
 .pal__gr button:focus-visible{outline:2px solid var(--em-bright);outline-offset:2px}
 .pal__vedi{display:flex;align-items:center;gap:10px;margin:12px 0 0;
-  color:#c3ccd6;font-size:13px;cursor:pointer;min-height:44px}
+  color:#c3ccd6;font-size:var(--t-mini);cursor:pointer;min-height:44px}
 .pal__vedi input{width:20px;height:20px;accent-color:var(--em)}
 @media (max-width:760px){
   .pal__gr{grid-template-columns:1fr}
@@ -1588,7 +1608,7 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border:0;border-radiu
 
 /* l'etichetta dei campioni: senza, quattro pallini in una barra non
    dicono a cosa servono. Sparisce quando lo spazio non basta. */
-.bar__pal__eti{margin-left:auto;color:var(--muted);font-size:10px;
+.bar__pal__eti{margin-left:auto;color:var(--muted);font-size:var(--t-micro);
   letter-spacing:.14em;text-transform:uppercase;white-space:nowrap}
 .bar__pal__eti + .bar__pal{margin-left:8px}
 @media (max-width:1120px){.bar__pal__eti{display:none}}
@@ -1664,11 +1684,11 @@ body.ord-mappa main > section[id] > *{display:none}
 body.ord-mappa main > section[id] > .ord-banda{display:flex}
 
 .ord-banda{display:none;width:100%;align-items:center;gap:12px;
-  font-size:12px;letter-spacing:.08em;overflow:hidden}
+  font-size:var(--t-mini);letter-spacing:.08em;overflow:hidden}
 .ord-banda b{color:var(--em);min-width:20px;font-variant-numeric:tabular-nums}
 .ord-banda span{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
   color:var(--ink);font-weight:600;text-transform:uppercase}
-.ord-banda i{font-style:normal;color:var(--muted);font-size:10px;text-transform:uppercase}
+.ord-banda i{font-style:normal;color:var(--muted);font-size:var(--t-micro);text-transform:uppercase}
 
 /* dove si puo' atterrare, e dove no. Il rifiuto si vede PRIMA di
    sbagliare: le sezioni dell'altro tono, e le due fisse, si spengono. */
@@ -1741,18 +1761,18 @@ body.ord-in-corso *{cursor:grabbing !important}
 .appmie__testa{max-width:66ch;margin-bottom:clamp(20px,2.4vw,30px)}
 .appmie__testa .eyebrow{color:var(--muted)}
 .appmie__testa .eyebrow .n{color:var(--em);border-right-color:var(--rule)}
-.appmie__testa h3{margin:10px 0 0;font-size:clamp(27px,3.4vw,40px);
+.appmie__testa h3{margin:10px 0 0;font-size:var(--d5);
   letter-spacing:-.02em;line-height:1.06}
 .appmie__testa h3 em{font-style:normal;color:var(--em)}
-.appmie__lede{margin:14px 0 0;color:var(--text);font-size:16px;line-height:1.6}
+.appmie__lede{margin:14px 0 0;color:var(--text);font-size:var(--t-grande);line-height:1.6}
 
 .appmie__card{display:grid;gap:10px;align-content:start;
   padding:clamp(18px,2vw,26px);border:1px solid var(--rule);border-radius:var(--r);
   background:var(--panel);box-shadow:0 1px 2px rgba(5,7,11,.05)}
-.appmie__card > span.mono{color:var(--em);font-size:11px;letter-spacing:.12em;overflow-wrap:anywhere}
-.appmie__card h4{margin:0;font-family:var(--display);font-size:clamp(26px,3vw,34px);
+.appmie__card > span.mono{color:var(--em);font-size:var(--t-micro);letter-spacing:.12em;overflow-wrap:anywhere}
+.appmie__card h4{margin:0;font-family:var(--display);font-size:var(--d6);
   font-weight:600;letter-spacing:-.02em;line-height:1.05;text-transform:uppercase}
-.appmie__cos{margin:0;max-width:66ch;color:var(--text);font-size:16px;line-height:1.6}
+.appmie__cos{margin:0;max-width:66ch;color:var(--text);font-size:var(--t-grande);line-height:1.6}
 
 /* Le capacita' a colonne: sono tante, e in colonna unica diventavano un
    muro che nessuno legge fino in fondo. */
@@ -1769,10 +1789,10 @@ body.ord-in-corso *{cursor:grabbing !important}
      quinta va sotto, che si legge molto meglio. */
   grid-template-columns:repeat(auto-fit,minmax(min(100%,250px),1fr))}
 .appmie__capacita section{display:grid;gap:8px;align-content:start}
-.appmie__capacita b{color:var(--em);font-size:11px;letter-spacing:.13em;text-transform:uppercase}
+.appmie__capacita b{color:var(--em);font-size:var(--t-micro);letter-spacing:.13em;text-transform:uppercase}
 .appmie__capacita ul{margin:0;padding:0;list-style:none;display:grid;gap:7px}
 .appmie__capacita li{position:relative;padding-left:16px;color:var(--text);
-  font-size:15px;line-height:1.5}
+  font-size:var(--t-corpo);line-height:1.5}
 .appmie__capacita li::before{content:"";position:absolute;left:1px;top:.58em;
   width:5px;height:5px;border-radius:var(--r-tondo);background:var(--em-light)}
 .appmie__capacita em{font-style:normal;font-weight:600;color:var(--ink)}
@@ -1798,18 +1818,18 @@ body.ord-in-corso *{cursor:grabbing !important}
 .appmie__sotto{margin:10px 0 0;padding-top:14px;border-top:1px solid var(--rule-2);
   container-type:inline-size}
 .appmie__sotto > b{display:block;margin-bottom:10px;color:var(--muted);
-  font-size:11px;letter-spacing:.13em;text-transform:uppercase}
+  font-size:var(--t-micro);letter-spacing:.13em;text-transform:uppercase}
 .appmie__sotto dl{margin:0;display:grid;gap:8px}
 .appmie__sotto dl > div{display:grid;gap:2px 14px;
   grid-template-columns:minmax(0,1fr)}
 @container (min-width:420px){
   .appmie__sotto dl > div{grid-template-columns:minmax(84px,auto) minmax(0,1fr)}
 }
-.appmie__sotto dt{color:var(--em);font-family:var(--mono);font-size:11px;
+.appmie__sotto dt{color:var(--em);font-family:var(--mono);font-size:var(--t-micro);
   letter-spacing:.1em;text-transform:uppercase;padding-top:.25em}
-.appmie__sotto dd{margin:0;color:var(--text);font-size:14.5px;line-height:1.55}
+.appmie__sotto dd{margin:0;color:var(--text);font-size:var(--t-corpo);line-height:1.55}
 .appmie__nota{margin:clamp(18px,2vw,26px) 0 0;max-width:70ch;
-  color:var(--text);font-size:16px;line-height:1.6}
+  color:var(--text);font-size:var(--t-grande);line-height:1.6}
 
 
 /* ═══════════════════════════════════════════════════════════════════
@@ -1883,7 +1903,7 @@ body.ord-in-corso *{cursor:grabbing !important}
 .union__testa .eyebrow{color:var(--u-verde)}
 .union__testa .eyebrow .n{color:var(--u-verde);border-right-color:rgba(28,68,16,.3)}
 .union__testa h3{margin:12px 0 0;color:var(--u-verde);
-  font-size:clamp(30px,4.2vw,52px);letter-spacing:-.025em;line-height:1.02}
+  font-size:var(--d4);letter-spacing:-.025em;line-height:1.02}
 /* Il bianco sul lime fa 2,05:1, e per un titolo ne servono 3. Non e'
    una pignoleria da tabella: su uno schermo al sole quella riga
    sparisce. La seconda riga va quindi piu' SCURA invece che piu'
@@ -1894,16 +1914,16 @@ body.ord-in-corso *{cursor:grabbing !important}
 /* Il nome del lavoro e del cliente e' un sottotitolo, non una briciola
    di testo minuscolo sopra il titolo: e' la seconda cosa che si legge. */
 .union__sotto{margin:10px 0 0;display:flex;flex-wrap:wrap;align-items:baseline;gap:0 12px;
-  color:#0c2405;font-family:var(--display);font-size:clamp(19px,2.1vw,26px);
+  color:#0c2405;font-family:var(--display);font-size:var(--d7);
   font-weight:600;letter-spacing:-.01em;line-height:1.15}
 .union__sotto span{color:var(--u-verde);font-family:var(--mono);font-weight:400;
-  font-size:12px;letter-spacing:.12em;text-transform:uppercase}
-.union__lede{margin:16px 0 0;color:var(--u-verde);font-size:16.5px;line-height:1.62}
+  font-size:var(--t-mini);letter-spacing:.12em;text-transform:uppercase}
+.union__lede{margin:16px 0 0;color:var(--u-verde);font-size:var(--t-grande);line-height:1.62}
 
 /* Il seguito: la campagna non e' un lavoro chiuso e consegnato, e dirlo
    cambia cosa vede un cliente — non un caso finito ma una cosa viva. */
 .union__seguito{margin:12px 0 0;max-width:62ch;color:var(--u-verde);
-  font-size:15.5px;line-height:1.58}
+  font-size:var(--t-corpo);line-height:1.58}
 .union__seguito b{color:#0c2405;font-weight:700}
 .union__lede b{color:#0c2405;font-weight:700}
 /* Il payoff e' montato come sulla locandina: "UNITI" chiaro sopra,
@@ -1915,9 +1935,9 @@ body.ord-in-corso *{cursor:grabbing !important}
   position:relative;gap:1px;padding:11px 22px 13px;border-radius:var(--r-media);
   background:var(--u-verde);
   font-family:var(--display);text-transform:uppercase;line-height:1}
-.union__claim span{color:var(--u-carta);font-size:clamp(15px,1.7vw,19px);
+.union__claim span{color:var(--u-carta);font-size:var(--t-lede);
   font-weight:600;letter-spacing:.16em}
-.union__claim b{color:var(--u-lime);font-size:clamp(21px,2.6vw,30px);
+.union__claim b{color:var(--u-lime);font-size:var(--d6);
   font-weight:700;letter-spacing:.02em;
   border-bottom:3px solid var(--u-lime);padding-bottom:3px}
 .union__claim::before,.union__claim::after{content:"";position:absolute;
@@ -1940,19 +1960,19 @@ body.ord-in-corso *{cursor:grabbing !important}
   border-left:1px solid rgba(28,68,16,.3)}
 .union__conti li:first-child{padding-left:0;border-left:0}
 .union__conti b{color:#0c2405;font-family:var(--display);
-  font-size:clamp(22px,2.4vw,30px);font-weight:700;line-height:1}
+  font-size:var(--d6);font-weight:700;line-height:1}
 /* Sul telefono la lastra e' alta e la sfumatura arriva al lime cupo
    proprio dove stanno i numeri: misurato sui pixel veri, il verde
    #1c4410 li' faceva 4,33:1 e per undici pixel ne servono 4,5. Il
    verde piu' scuro ne fa 5,8 su quello stesso lime. */
 .union__conti span{color:#0c2405;font-family:var(--mono);
-  font-size:11px;letter-spacing:.1em;text-transform:uppercase}
+  font-size:var(--t-micro);letter-spacing:.1em;text-transform:uppercase}
 
 /* La riga scritta a mano della locandina. Serve a due cose: e' un segno
    del brand, e riempie l'angolo che altrimenti resta lime e basta. */
 .union__nota{margin:16px 0 0;max-width:34ch;text-wrap:balance;position:relative;padding-left:24px;
   color:#0c2405;font-family:var(--display);font-style:italic;font-weight:500;
-  font-size:clamp(14px,1.5vw,17px);line-height:1.32}
+  font-size:var(--t-lede);line-height:1.32}
 .union__nota::before{content:"";position:absolute;left:0;top:.55em;
   width:14px;height:2px;border-radius:2px;background:var(--u-verde);opacity:.6}
 
@@ -1970,7 +1990,7 @@ body.ord-in-corso *{cursor:grabbing !important}
   max-width:100%;max-height:clamp(300px,40vw,580px);
   filter:drop-shadow(0 26px 26px rgba(28,68,16,.30))}
 .union__davide figcaption{margin-top:10px;color:var(--u-verde);
-  font-size:11px;letter-spacing:.14em;text-transform:uppercase}
+  font-size:var(--t-micro);letter-spacing:.14em;text-transform:uppercase}
 @media(max-width:839px){
   /* Sul telefono si appoggia al bordo destro della lastra, dentro il
      padding: in piedi sul filo invece che a mezz'aria in mezzo al lime. */
@@ -1985,7 +2005,7 @@ body.ord-in-corso *{cursor:grabbing !important}
 /* il corpo bianco: i nove pezzi e come sono fatti */
 .union__corpo{padding:clamp(22px,3vw,42px)}
 .union__intro{margin:0 0 16px;color:var(--u-verde-chiaro);
-  font-size:11px;letter-spacing:.14em;text-transform:uppercase}
+  font-size:var(--t-micro);letter-spacing:.14em;text-transform:uppercase}
 
 /* :not([data-gr]) e' la riga che tiene separati i due sistemi. Questa
    griglia sta sulle dodici colonne del sito come tutti gli altri
@@ -2025,27 +2045,27 @@ body.ord-in-corso *{cursor:grabbing !important}
    una durata che non si legge tanto vale non scriverla */
 .union__durata{position:absolute;right:8px;bottom:8px;
   padding:3px 7px 4px;border-radius:var(--r-min);background:rgba(12,20,8,.82);
-  color:#fff;font-size:11px;letter-spacing:.08em;line-height:1;pointer-events:none}
+  color:#fff;font-size:var(--t-micro);letter-spacing:.08em;line-height:1;pointer-events:none}
 .union__pezzo video{width:100%;border:1px solid var(--u-riga);border-radius:var(--r-media);
   background:#0c1408;aspect-ratio:9/16;object-fit:contain}
 .union__pezzo[data-forma="largo"] video{aspect-ratio:16/9}
-.union__pezzo h4{margin:0;color:var(--u-verde);font-size:16px;
+.union__pezzo h4{margin:0;color:var(--u-verde);font-size:var(--t-grande);
   letter-spacing:-.005em;line-height:1.2}
-.union__pezzo p{margin:0;color:#4a5a42;font-size:13.5px;line-height:1.5}
+.union__pezzo p{margin:0;color:#4a5a42;font-size:var(--t-mini);line-height:1.5}
 
 /* come sono fatti */
 .union__come{margin-top:clamp(24px,3vw,40px);padding-top:clamp(18px,2vw,26px);
   border-top:1px solid var(--u-riga);container-type:inline-size}
 .union__come > b{display:block;margin-bottom:12px;color:var(--u-verde-chiaro);
-  font-size:11px;letter-spacing:.13em;text-transform:uppercase}
+  font-size:var(--t-micro);letter-spacing:.13em;text-transform:uppercase}
 .union__come dl{margin:0;display:grid;gap:9px}
 .union__come dl > div{display:grid;gap:2px 14px;grid-template-columns:minmax(0,1fr)}
 @container (min-width:460px){
   .union__come dl > div{grid-template-columns:minmax(92px,auto) minmax(0,1fr)}
 }
-.union__come dt{color:var(--u-verde-chiaro);font-family:var(--mono);font-size:11px;
+.union__come dt{color:var(--u-verde-chiaro);font-family:var(--mono);font-size:var(--t-micro);
   letter-spacing:.1em;text-transform:uppercase;padding-top:.25em}
-.union__come dd{margin:0;color:#40503a;font-size:14.5px;line-height:1.55}
+.union__come dd{margin:0;color:#40503a;font-size:var(--t-corpo);line-height:1.55}
 
 @media (prefers-reduced-motion:reduce){
   .union__via:hover{transform:none}
@@ -2139,28 +2159,28 @@ body.ord-in-corso *{cursor:grabbing !important}
 .eso__testa .eyebrow .n,.cest__testa .eyebrow .n{color:var(--sk-tenue);
   border-right-color:color-mix(in srgb, var(--sk-tenue) 40%, transparent)}
 .eso__testa h3,.cest__testa h3{margin:12px 0 0;color:var(--sk-chiaro);
-  font-size:clamp(30px,4.2vw,52px);letter-spacing:-.025em;line-height:1.02}
+  font-size:var(--d4);letter-spacing:-.025em;line-height:1.02}
 .eso__testa h3 em,.cest__testa h3 em{font-style:normal;color:var(--sk-vivo)}
 .eso__sotto,.cest__sotto{margin:10px 0 0;display:flex;flex-wrap:wrap;align-items:baseline;
   gap:0 12px;color:var(--sk-chiaro);font-family:var(--display);
-  font-size:clamp(19px,2.1vw,26px);font-weight:600;letter-spacing:-.01em;line-height:1.15}
+  font-size:var(--d7);font-weight:600;letter-spacing:-.01em;line-height:1.15}
 .eso__sotto span,.cest__sotto span{color:var(--sk-tenue);font-family:var(--mono);
-  font-weight:400;font-size:12px;letter-spacing:.12em;text-transform:uppercase}
-.eso__lede,.cest__lede{margin:16px 0 0;font-size:16.5px;line-height:1.62;
+  font-weight:400;font-size:var(--t-mini);letter-spacing:.12em;text-transform:uppercase}
+.eso__lede,.cest__lede{margin:16px 0 0;font-size:var(--t-grande);line-height:1.62;
   color:color-mix(in srgb, var(--sk-chiaro) 92%, transparent)}
 .eso__lede b,.cest__lede b{color:var(--sk-carta);font-weight:700}
 .eso__seguito,.cest__seguito{margin:12px 0 0;max-width:62ch;
   color:color-mix(in srgb, var(--sk-chiaro) 78%, transparent);
-  font-size:15.5px;line-height:1.58}
+  font-size:var(--t-corpo);line-height:1.58}
 
 /* La targa del payoff: e' la frase dell'endcard del marchio. */
 .eso__claim,.cest__claim{margin:20px 0 0;display:inline-grid;justify-items:start;
   position:relative;gap:2px;padding:11px 22px 13px;border-radius:var(--r-media);
   background:var(--sk-targa);border:1px solid var(--sk-targa-riga);
   font-family:var(--display);line-height:1.15}
-.eso__claim span,.cest__claim span{color:var(--sk-tenue);font-size:clamp(13px,1.4vw,15px);
+.eso__claim span,.cest__claim span{color:var(--sk-tenue);font-size:var(--t-micro);
   font-weight:600;letter-spacing:.18em;text-transform:uppercase}
-.eso__claim b,.cest__claim b{color:var(--sk-carta);font-size:clamp(17px,2.1vw,24px);
+.eso__claim b,.cest__claim b{color:var(--sk-carta);font-size:var(--d7);
   font-weight:600;letter-spacing:-.01em}
 
 .eso__conti,.cest__conti{margin:0;padding:0;list-style:none;
@@ -2170,13 +2190,13 @@ body.ord-in-corso *{cursor:grabbing !important}
   border-left:1px solid color-mix(in srgb, var(--sk-tenue) 28%, transparent)}
 .eso__conti li:first-child,.cest__conti li:first-child{padding-left:0;border-left:0}
 .eso__conti b,.cest__conti b{color:var(--sk-vivo);font-family:var(--display);
-  font-size:clamp(22px,2.4vw,30px);font-weight:700;line-height:1}
+  font-size:var(--d6);font-weight:700;line-height:1}
 .eso__conti span,.cest__conti span{color:color-mix(in srgb, var(--sk-chiaro) 82%, transparent);
-  font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase}
+  font-family:var(--mono);font-size:var(--t-micro);letter-spacing:.1em;text-transform:uppercase}
 .eso__nota,.cest__nota{margin:16px 0 0;max-width:34ch;position:relative;padding-left:24px;
   color:color-mix(in srgb, var(--sk-chiaro) 75%, transparent);
   font-family:var(--display);font-style:italic;
-  font-size:clamp(14px,1.5vw,17px);line-height:1.32}
+  font-size:var(--t-lede);line-height:1.32}
 .eso__nota::before,.cest__nota::before{content:"";position:absolute;left:0;top:.6em;
   width:14px;height:2px;border-radius:2px;background:var(--sk-vivo);opacity:.8}
 
@@ -2194,7 +2214,7 @@ body.ord-in-corso *{cursor:grabbing !important}
   padding:clamp(14px,1.6vw,22px);border-radius:var(--r-media);background:var(--sk-carta);
   box-shadow:0 20px 44px -18px rgba(0,0,0,.6)}
 .eso__figura figcaption,.cest__figura figcaption{margin-top:10px;color:var(--sk-tenue);
-  font-size:11px;letter-spacing:.14em;text-transform:uppercase}
+  font-size:var(--t-micro);letter-spacing:.14em;text-transform:uppercase}
 @media(max-width:839px){
   /* Stessa cosa vista sulla Locanda: con l'oggetto accanto ai numeri, su
      350px al terzo numero restano 50 pixel e "DOCUMENTI" finisce
@@ -2211,7 +2231,7 @@ body.ord-in-corso *{cursor:grabbing !important}
 /* il corpo chiaro */
 .eso__corpo,.cest__corpo{padding:clamp(22px,3vw,42px)}
 .eso__intro,.cest__intro{margin:0 0 16px;color:var(--sk-etichetta);
-  font-size:11px;letter-spacing:.14em;text-transform:uppercase}
+  font-size:var(--t-micro);letter-spacing:.14em;text-transform:uppercase}
 
 .eso__lavori,.cest__lavori{display:grid;gap:clamp(14px,1.6vw,22px)}
 /* Misurato su uno schermo da 1440: con 220px venivano fuori cinque
@@ -2256,34 +2276,34 @@ body.ord-in-corso *{cursor:grabbing !important}
   transform:translateX(3px)}
 .eso__durata,.cest__durata{position:absolute;right:8px;bottom:8px;
   padding:3px 7px 4px;border-radius:var(--r-min);background:rgba(4,8,14,.84);
-  color:#fff;font-size:11px;letter-spacing:.08em;line-height:1;pointer-events:none}
+  color:#fff;font-size:var(--t-micro);letter-spacing:.08em;line-height:1;pointer-events:none}
 .eso__pezzo video,.cest__pezzo video{width:100%;border:1px solid var(--sk-riga);
   border-radius:var(--r-media);background:var(--sk-nero);aspect-ratio:16/9;object-fit:contain}
-.eso__pezzo h4,.cest__pezzo h4{margin:0;color:var(--sk-titolo);font-size:16px;
+.eso__pezzo h4,.cest__pezzo h4{margin:0;color:var(--sk-titolo);font-size:var(--t-grande);
   letter-spacing:-.005em;line-height:1.2}
-.eso__pezzo p,.cest__pezzo p{margin:0;color:var(--sk-grigio);font-size:13.5px;line-height:1.5}
+.eso__pezzo p,.cest__pezzo p{margin:0;color:var(--sk-grigio);font-size:var(--t-mini);line-height:1.5}
 
 /* la tavola di riferimento (solo esoscheletri) */
 .eso__tavola{margin:clamp(24px,3vw,40px) 0 0;padding-top:clamp(18px,2vw,26px);
   border-top:1px solid var(--sk-riga);display:grid;gap:12px}
 .eso__tavola img{display:block;width:100%;height:auto;border-radius:var(--r-media);
   border:1px solid var(--sk-riga)}
-.eso__tavola figcaption{max-width:66ch;color:var(--sk-grigio);font-size:14.5px;line-height:1.55}
+.eso__tavola figcaption{max-width:66ch;color:var(--sk-grigio);font-size:var(--t-corpo);line-height:1.55}
 
 /* e poi, di suo */
 .eso__come,.cest__come{margin-top:clamp(24px,3vw,40px);padding-top:clamp(18px,2vw,26px);
   border-top:1px solid var(--sk-riga);container-type:inline-size}
 .eso__come > b,.cest__come > b{display:block;margin-bottom:12px;color:var(--sk-etichetta);
-  font-size:11px;letter-spacing:.13em;text-transform:uppercase}
+  font-size:var(--t-micro);letter-spacing:.13em;text-transform:uppercase}
 .eso__come dl,.cest__come dl{margin:0;display:grid;gap:9px}
 .eso__come dl > div,.cest__come dl > div{display:grid;gap:2px 14px;
   grid-template-columns:minmax(0,1fr)}
 @container (min-width:460px){
   .eso__come dl > div,.cest__come dl > div{grid-template-columns:minmax(92px,auto) minmax(0,1fr)}
 }
-.eso__come dt,.cest__come dt{color:var(--sk-etichetta);font-family:var(--mono);font-size:11px;
+.eso__come dt,.cest__come dt{color:var(--sk-etichetta);font-family:var(--mono);font-size:var(--t-micro);
   letter-spacing:.1em;text-transform:uppercase;padding-top:.25em}
-.eso__come dd,.cest__come dd{margin:0;color:var(--sk-testo);font-size:14.5px;line-height:1.55}
+.eso__come dd,.cest__come dd{margin:0;color:var(--sk-testo);font-size:var(--t-corpo);line-height:1.55}
 
 @media (prefers-reduced-motion:reduce){
   .eso__via:hover,.cest__via:hover{transform:none}
@@ -2349,17 +2369,17 @@ body.ord-in-corso *{cursor:grabbing !important}
 .locanda__testa .eyebrow{color:var(--l-oro-chiaro)}
 .locanda__testa .eyebrow .n{color:var(--l-oro-chiaro);border-right-color:rgba(217,179,106,.4)}
 .locanda__testa h3{margin:12px 0 0;color:var(--l-carta);
-  font-size:clamp(30px,4.2vw,52px);letter-spacing:-.025em;line-height:1.02}
+  font-size:var(--d4);letter-spacing:-.025em;line-height:1.02}
 .locanda__testa h3 em{font-style:normal;color:var(--l-oro-chiaro)}
 .locanda__sotto{margin:10px 0 0;display:flex;flex-wrap:wrap;align-items:baseline;gap:0 12px;
-  color:var(--l-carta);font-family:var(--display);font-size:clamp(19px,2.1vw,26px);
+  color:var(--l-carta);font-family:var(--display);font-size:var(--d7);
   font-weight:600;letter-spacing:-.01em;line-height:1.15}
 .locanda__sotto span{color:var(--l-oro-chiaro);font-family:var(--mono);font-weight:400;
-  font-size:12px;letter-spacing:.12em;text-transform:uppercase}
-.locanda__lede{margin:16px 0 0;color:rgba(245,236,221,.92);font-size:16.5px;line-height:1.62}
+  font-size:var(--t-mini);letter-spacing:.12em;text-transform:uppercase}
+.locanda__lede{margin:16px 0 0;color:rgba(245,236,221,.92);font-size:var(--t-grande);line-height:1.62}
 .locanda__lede b{color:var(--l-carta);font-weight:700}
 .locanda__seguito{margin:12px 0 0;max-width:62ch;color:rgba(245,236,221,.8);
-  font-size:15.5px;line-height:1.58}
+  font-size:var(--t-corpo);line-height:1.58}
 
 /* La targa del payoff: crema su bordeaux, con l'oro intorno. E' la
    frase che sta sulle loro locandine vere. */
@@ -2367,9 +2387,9 @@ body.ord-in-corso *{cursor:grabbing !important}
   position:relative;gap:2px;padding:11px 22px 13px;border-radius:var(--r-media);
   background:rgba(245,236,221,.10);border:1px solid rgba(217,179,106,.45);
   font-family:var(--display);line-height:1.15}
-.locanda__claim span{color:var(--l-oro-chiaro);font-size:clamp(13px,1.4vw,15px);
+.locanda__claim span{color:var(--l-oro-chiaro);font-size:var(--t-micro);
   font-weight:600;letter-spacing:.16em;text-transform:uppercase}
-.locanda__claim b{color:var(--l-carta);font-size:clamp(17px,2.1vw,24px);
+.locanda__claim b{color:var(--l-carta);font-size:var(--d7);
   font-weight:600;font-style:italic;letter-spacing:-.01em}
 
 .locanda__conti{margin:0;padding:0;list-style:none;
@@ -2378,12 +2398,12 @@ body.ord-in-corso *{cursor:grabbing !important}
   padding-left:clamp(12px,1.4vw,18px);border-left:1px solid rgba(217,179,106,.3)}
 .locanda__conti li:first-child{padding-left:0;border-left:0}
 .locanda__conti b{color:var(--l-oro-chiaro);font-family:var(--display);
-  font-size:clamp(22px,2.4vw,30px);font-weight:700;line-height:1}
+  font-size:var(--d6);font-weight:700;line-height:1}
 .locanda__conti span{color:rgba(245,236,221,.82);font-family:var(--mono);
-  font-size:11px;letter-spacing:.1em;text-transform:uppercase}
+  font-size:var(--t-micro);letter-spacing:.1em;text-transform:uppercase}
 .locanda__nota{margin:16px 0 0;max-width:34ch;position:relative;padding-left:24px;
   color:rgba(245,236,221,.75);font-family:var(--display);font-style:italic;
-  font-size:clamp(14px,1.5vw,17px);line-height:1.32}
+  font-size:var(--t-lede);line-height:1.32}
 .locanda__nota::before{content:"";position:absolute;left:0;top:.6em;
   width:14px;height:2px;border-radius:2px;background:var(--l-oro-chiaro);opacity:.7}
 
@@ -2398,7 +2418,7 @@ body.ord-in-corso *{cursor:grabbing !important}
   padding:clamp(14px,1.6vw,22px);border-radius:var(--r-media);background:var(--l-carta);
   box-shadow:0 20px 44px -18px rgba(0,0,0,.6)}
 .locanda__marchio figcaption{margin-top:10px;color:var(--l-oro-chiaro);
-  font-size:11px;letter-spacing:.14em;text-transform:uppercase}
+  font-size:var(--t-micro);letter-spacing:.14em;text-transform:uppercase}
 @media(max-width:839px){
   /* Su 390px l'insegna si prendeva 168 pixel dei 350 della lastra, e i
      tre numeri restavano in 55 pixel a testa: "MARCHIO LOCANDINE
@@ -2415,7 +2435,7 @@ body.ord-in-corso *{cursor:grabbing !important}
 /* il corpo chiaro: le locandine, i brani, come sono fatti */
 .locanda__corpo{padding:clamp(22px,3vw,42px)}
 .locanda__intro{margin:0 0 16px;color:#6d4a30;
-  font-size:11px;letter-spacing:.14em;text-transform:uppercase}
+  font-size:var(--t-micro);letter-spacing:.14em;text-transform:uppercase}
 
 .locanda__lavori{display:grid;gap:clamp(14px,1.6vw,22px)}
 .locanda__lavori:not([data-gr]){grid-template-columns:repeat(auto-fill,minmax(min(100%,200px),1fr))}
@@ -2452,12 +2472,12 @@ body.ord-in-corso *{cursor:grabbing !important}
   transform:translateX(3px)}
 .locanda__durata{position:absolute;right:8px;bottom:8px;
   padding:3px 7px 4px;border-radius:var(--r-min);background:rgba(26,10,12,.82);
-  color:#fff;font-size:11px;letter-spacing:.08em;line-height:1;pointer-events:none}
+  color:#fff;font-size:var(--t-micro);letter-spacing:.08em;line-height:1;pointer-events:none}
 .locanda__pezzo video{width:100%;border:1px solid var(--l-riga);border-radius:var(--r-media);
   background:#1a0a0c;aspect-ratio:3/4;object-fit:contain}
-.locanda__pezzo h4{margin:0;color:var(--l-bordeaux);font-size:16px;
+.locanda__pezzo h4{margin:0;color:var(--l-bordeaux);font-size:var(--t-grande);
   letter-spacing:-.005em;line-height:1.2}
-.locanda__pezzo p{margin:0;color:#5a4a40;font-size:13.5px;line-height:1.5}
+.locanda__pezzo p{margin:0;color:#5a4a40;font-size:var(--t-mini);line-height:1.5}
 
 /* La riga della catena, uguale in tutti e tre i casi. Sta subito sotto
    le copertine perche' chi guarda un pezzo la prima cosa che si chiede
@@ -2466,7 +2486,7 @@ body.ord-in-corso *{cursor:grabbing !important}
    tabelle ripetevano la stessa catena — GPT Image, Photoshop, Premiere —
    tre volte, e tre lavori diversi sembravano lo stesso lavoro. */
 .caso-firma{margin:clamp(16px,2vw,22px) 0 0;max-width:66ch;
-  font-size:14.5px;line-height:1.55}
+  font-size:var(--t-corpo);line-height:1.55}
 .union .caso-firma{color:#4a5a42}
 .union .caso-firma b{color:var(--u-verde);font-weight:600}
 .eso .caso-firma,.cest .caso-firma{color:var(--sk-grigio)}
@@ -2499,26 +2519,26 @@ body.ord-in-corso *{cursor:grabbing !important}
   width:9px;height:12px;border:0;border-left:3px solid var(--l-carta);
   border-right:3px solid var(--l-carta);transform:none}
 .locanda__nome{display:grid;gap:1px;min-width:0}
-.locanda__nome b{color:var(--l-bordeaux);font-size:14.5px;font-weight:600;line-height:1.2}
-.locanda__nome em{color:#6b5a4e;font-style:normal;font-size:12.5px;line-height:1.3}
+.locanda__nome b{color:var(--l-bordeaux);font-size:var(--t-corpo);font-weight:600;line-height:1.2}
+.locanda__nome em{color:#6b5a4e;font-style:normal;font-size:var(--t-mini);line-height:1.3}
 /* #7a6656 sul crema della riga faceva 4,39:1 e per undici pixel ne
    servono 4,5. Mancava per un niente, ed e' comunque un niente che su
    uno schermo al sole si vede. */
-.locanda__min{color:#6f5b4c;font-size:11px;letter-spacing:.08em}
+.locanda__min{color:#6f5b4c;font-size:var(--t-micro);letter-spacing:.08em}
 
 /* come sono fatti */
 .locanda__come{margin-top:clamp(24px,3vw,40px);padding-top:clamp(18px,2vw,26px);
   border-top:1px solid var(--l-riga);container-type:inline-size}
 .locanda__come > b{display:block;margin-bottom:12px;color:#6d4a30;
-  font-size:11px;letter-spacing:.13em;text-transform:uppercase}
+  font-size:var(--t-micro);letter-spacing:.13em;text-transform:uppercase}
 .locanda__come dl{margin:0;display:grid;gap:9px}
 .locanda__come dl > div{display:grid;gap:2px 14px;grid-template-columns:minmax(0,1fr)}
 @container (min-width:460px){
   .locanda__come dl > div{grid-template-columns:minmax(92px,auto) minmax(0,1fr)}
 }
-.locanda__come dt{color:#6d4a30;font-family:var(--mono);font-size:11px;
+.locanda__come dt{color:#6d4a30;font-family:var(--mono);font-size:var(--t-micro);
   letter-spacing:.1em;text-transform:uppercase;padding-top:.25em}
-.locanda__come dd{margin:0;color:#4c3d34;font-size:14.5px;line-height:1.55}
+.locanda__come dd{margin:0;color:#4c3d34;font-size:var(--t-corpo);line-height:1.55}
 
 @media (prefers-reduced-motion:reduce){
   .locanda__via:hover{transform:none}
@@ -2530,7 +2550,7 @@ body.ord-in-corso *{cursor:grabbing !important}
    chi arriva senza JS (o un motore di ricerca che non lo esegue)
    trovava tre griglie vuote. */
 .scaletta{margin:0;padding:0 0 0 18px;display:grid;gap:6px;
-  color:inherit;font-size:15px;line-height:1.5}
+  color:inherit;font-size:var(--t-corpo);line-height:1.5}
 
 
 /* Un secondo capo dentro una sezione, per quando una sezione contiene
@@ -2540,7 +2560,7 @@ body.ord-in-corso *{cursor:grabbing !important}
 .sec__sub{margin:clamp(34px,4vw,58px) 0 clamp(18px,2vw,26px);
   padding-top:clamp(22px,2.6vw,32px);border-top:1px solid var(--rule-2);
   max-width:74ch}
-.sec__sub h3{margin:10px 0 0;font-size:clamp(22px,2.6vw,34px);letter-spacing:-.02em;
+.sec__sub h3{margin:10px 0 0;font-size:var(--d6);letter-spacing:-.02em;
   line-height:1.08}
 .sec__sub .sec__lede{margin-top:12px}
 
@@ -2580,7 +2600,7 @@ body.ord-in-corso *{cursor:grabbing !important}
 .manifesto__corpo .istruzioni__nota{margin-bottom:0}
 
 /* come si comincia, scritto sotto il titolo del contatto */
-.contatto__come{margin:0 0 22px;max-width:62ch;color:var(--text);font-size:16px;line-height:1.6}
+.contatto__come{margin:0 0 22px;max-width:62ch;color:var(--text);font-size:var(--t-grande);line-height:1.6}
 
 
 /* ═══════════════════════════════════════════════════════════════════
@@ -2596,29 +2616,29 @@ body.ord-in-corso *{cursor:grabbing !important}
   width:min(460px,calc(100vw - 32px));max-height:calc(100dvh - 32px);
   padding:0;border:1px solid color-mix(in srgb,var(--tool) 40%,transparent);
   border-radius:var(--r-card);background:#0b0f16;color:#f2f4f7;
-  font:400 15px/1.6 var(--body);overflow:auto;overscroll-behavior:contain}
+  font:400 var(--t-corpo)/1.6 var(--body);overflow:auto;overscroll-behavior:contain}
 .scheda::backdrop{background:rgba(5,7,11,.72);backdrop-filter:blur(6px)}
 .scheda__cat{margin:0;padding:18px 22px 0;color:var(--tool);
-  font-size:11px;letter-spacing:.14em;text-transform:uppercase}
-.scheda h3{margin:6px 0 0;padding:0 22px;font-size:26px;letter-spacing:-.01em;line-height:1.15}
+  font-size:var(--t-micro);letter-spacing:.14em;text-transform:uppercase}
+.scheda h3{margin:6px 0 0;padding:0 22px;font-size:var(--d7);letter-spacing:-.01em;line-height:1.15}
 /* Due blocchi separati, e si devono vedere separati: la definizione e'
    per chi non sa cosa sia lo strumento, l'elenco e' per chi vuole
    sapere cosa ci faccio. Un paragrafo solo li avrebbe impastati, ed era
    il difetto della prima versione — scritta bene e poco utile. */
-.scheda__cos{margin:12px 0 0;padding:0 22px;color:#c3ccd6;font-size:15.5px;line-height:1.6}
+.scheda__cos{margin:12px 0 0;padding:0 22px;color:#c3ccd6;font-size:var(--t-corpo);line-height:1.6}
 .scheda__eti{margin:20px 0 0;padding:0 22px;color:var(--tool);
-  font-size:11px;letter-spacing:.14em;text-transform:uppercase}
+  font-size:var(--t-micro);letter-spacing:.14em;text-transform:uppercase}
 .scheda__lista{margin:10px 0 20px;padding:0 22px;list-style:none;display:grid;gap:7px}
 .scheda__lista li{position:relative;padding-left:17px;color:#f2f4f7;
-  font-size:15.5px;line-height:1.5}
+  font-size:var(--t-corpo);line-height:1.5}
 .scheda__lista li::before{content:"";position:absolute;left:2px;top:.62em;
   width:6px;height:6px;border-radius:var(--r-tondo);background:var(--tool)}
 .scheda__piede{position:sticky;bottom:0;display:flex;align-items:center;justify-content:space-between;
   gap:14px;padding:14px 22px 18px;background:#0b0f16;
   border-top:1px solid rgba(221,231,242,.08)}
-.scheda__piede .mono{color:#7f8b98;font-size:11px;letter-spacing:.08em}
+.scheda__piede .mono{color:#7f8b98;font-size:var(--t-micro);letter-spacing:.08em}
 @media (max-width:560px){
-  .scheda h3{font-size:23px}
+  .scheda h3{font-size:var(--d7)}
   .scheda__piede{flex-wrap:wrap}
   .scheda__piede .btn{min-height:46px;flex:1}
 }
