@@ -1,0 +1,1743 @@
+[
+  {
+    "antipattern": "side-tab",
+    "name": "Side-tab accent border",
+    "description": "Thick colored border on one side of a card — the most recognizable tell of AI-generated UIs. Use a subtler accent or remove it entirely.",
+    "severity": "warning",
+    "category": "slop",
+    "file": "C:\\Users\\fabri\\Documents\\sito internet\\F-AI-sites-claude\\site\\v2\\index.html",
+    "line": 0,
+    "snippet": "border-bottom: 3px"
+  },
+  {
+    "antipattern": "low-contrast",
+    "name": "Low contrast text",
+    "description": "Text does not meet WCAG AA contrast requirements (4.5:1 for body, 3:1 for large text). Increase the contrast between text and background.",
+    "severity": "warning",
+    "category": "quality",
+    "file": "C:\\Users\\fabri\\Documents\\sito internet\\F-AI-sites-claude\\site\\v2\\index.html",
+    "line": 0,
+    "snippet": "3.5:1 (need 4.5:1) — text #7f8b98 on #ffffff"
+  },
+  {
+    "antipattern": "gradient-text",
+    "name": "Gradient text",
+    "description": "Gradient text is decorative rather than meaningful — a common AI tell, especially on headings and metrics. Use solid colors for text.",
+    "severity": "warning",
+    "category": "slop",
+    "file": "C:\\Users\\fabri\\Documents\\sito internet\\F-AI-sites-claude\\site\\v2\\index.html",
+    "line": 0,
+    "snippet": "background-clip: text + gradient"
+  },
+  {
+    "antipattern": "low-contrast",
+    "name": "Low contrast text",
+    "description": "Text does not meet WCAG AA contrast requirements (4.5:1 for body, 3:1 for large text). Increase the contrast between text and background.",
+    "severity": "warning",
+    "category": "quality",
+    "file": "C:\\Users\\fabri\\Documents\\sito internet\\F-AI-sites-claude\\site\\v2\\index.html",
+    "line": 0,
+    "snippet": "1.3:1 (need 4.5:1) — text #dfe5ec on #ffffff"
+  },
+  {
+    "antipattern": "low-contrast",
+    "name": "Low contrast text",
+    "description": "Text does not meet WCAG AA contrast requirements (4.5:1 for body, 3:1 for large text). Increase the contrast between text and background.",
+    "severity": "warning",
+    "category": "quality",
+    "file": "C:\\Users\\fabri\\Documents\\sito internet\\F-AI-sites-claude\\site\\v2\\index.html",
+    "line": 0,
+    "snippet": "3.5:1 (need 4.5:1) — text #7f8b98 on #ffffff"
+  },
+  {
+    "antipattern": "low-contrast",
+    "name": "Low contrast text",
+    "description": "Text does not meet WCAG AA contrast requirements (4.5:1 for body, 3:1 for large text). Increase the contrast between text and background.",
+    "severity": "warning",
+    "category": "quality",
+    "file": "C:\\Users\\fabri\\Documents\\sito internet\\F-AI-sites-claude\\site\\v2\\index.html",
+    "line": 0,
+    "snippet": "3.5:1 (need 4.5:1) — text #7f8b98 on #ffffff"
+  },
+  {
+    "antipattern": "low-contrast",
+    "name": "Low contrast text",
+    "description": "Text does not meet WCAG AA contrast requirements (4.5:1 for body, 3:1 for large text). Increase the contrast between text and background.",
+    "severity": "warning",
+    "category": "quality",
+    "file": "C:\\Users\\fabri\\Documents\\sito internet\\F-AI-sites-claude\\site\\v2\\index.html",
+    "line": 0,
+    "snippet": "2.3:1 (need 4.5:1) — text #14c08a on #ffffff"
+  },
+  {
+    "antipattern": "low-contrast",
+    "name": "Low contrast text",
+    "description": "Text does not meet WCAG AA contrast requirements (4.5:1 for body, 3:1 for large text). Increase the contrast between text and background.",
+    "severity": "warning",
+    "category": "quality",
+    "file": "C:\\Users\\fabri\\Documents\\sito internet\\F-AI-sites-claude\\site\\v2\\index.html",
+    "line": 0,
+    "snippet": "3.5:1 (need 4.5:1) — text #7f8b98 on #ffffff"
+  },
+  {
+    "antipattern": "low-contrast",
+    "name": "Low contrast text",
+    "description": "Text does not meet WCAG AA contrast requirements (4.5:1 for body, 3:1 for large text). Increase the contrast between text and background.",
+    "severity": "warning",
+    "category": "quality",
+    "file": "C:\\Users\\fabri\\Documents\\sito internet\\F-AI-sites-claude\\site\\v2\\index.html",
+    "line": 0,
+    "snippet": "3.5:1 (need 4.5:1) — text #7f8b98 on #ffffff"
+  },
+  {
+    "antipattern": "low-contrast",
+    "name": "Low contrast text",
+    "description": "Text does not meet WCAG AA contrast requirements (4.5:1 for body, 3:1 for large text). Increase the contrast between text and background.",
+    "severity": "warning",
+    "category": "quality",
+    "file": "C:\\Users\\fabri\\Documents\\sito internet\\F-AI-sites-claude\\site\\v2\\index.html",
+    "line": 0,
+    "snippet": "3.5:1 (need 4.5:1) — text #7f8b98 on #ffffff"
+  },
+  {
+    "antipattern": "low-contrast",
+    "name": "Low contrast text",
+    "description": "Text does not meet WCAG AA contrast requirements (4.5:1 for body, 3:1 for large text). Increase the contrast between text and background.",
+    "severity": "warning",
+    "category": "quality",
+    "file": "C:\\Users\\fabri\\Documents\\sito internet\\F-AI-sites-claude\\site\\v2\\index.html",
+    "line": 0,
+    "snippet": "2.3:1 (need 4.5:1) — text #14c08a on #ffffff"
+  },
+  {
+    "antipattern": "low-contrast",
+    "name": "Low contrast text",
+    "description": "Text does not meet WCAG AA contrast requirements (4.5:1 for body, 3:1 for large text). Increase the contrast between text and background.",
+    "severity": "warning",
+    "category": "quality",
+    "file": "C:\\Users\\fabri\\Documents\\sito internet\\F-AI-sites-claude\\site\\v2\\index.html",
+    "line": 0,
+    "snippet": "2.3:1 (need 4.5:1) — text #14c08a on #ffffff"
+  },
+  {
+    "antipattern": "low-contrast",
+    "name": "Low contrast text",
+    "description": "Text does not meet WCAG AA contrast requirements (4.5:1 for body, 3:1 for large text). Increase the contrast between text and background.",
+    "severity": "warning",
+    "category": "quality",
+    "file": "C:\\Users\\fabri\\Documents\\sito internet\\F-AI-sites-claude\\site\\v2\\index.html",
+    "line": 0,
+    "snippet": "2.3:1 (need 4.5:1) — text #14c08a on #ffffff"
+  },
+  {
+    "antipattern": "low-contrast",
+    "name": "Low contrast text",
+    "description": "Text does not meet WCAG AA contrast requirements (4.5:1 for body, 3:1 for large text). Increase the contrast between text and background.",
+    "severity": "warning",
+    "category": "quality",
+    "file": "C:\\Users\\fabri\\Documents\\sito internet\\F-AI-sites-claude\\site\\v2\\index.html",
+    "line": 0,
+    "snippet": "2.3:1 (need 4.5:1) — text #14c08a on #ffffff"
+  },
+  {
+    "antipattern": "low-contrast",
+    "name": "Low contrast text",
+    "description": "Text does not meet WCAG AA contrast requirements (4.5:1 for body, 3:1 for large text). Increase the contrast between text and background.",
+    "severity": "warning",
+    "category": "quality",
+    "file": "C:\\Users\\fabri\\Documents\\sito internet\\F-AI-sites-claude\\site\\v2\\index.html",
+    "line": 0,
+    "snippet": "1.0:1 (need 4.5:1) — text #000000 on #05070b"
+  },
+  {
+    "antipattern": "low-contrast",
+    "name": "Low contrast text",
+    "description": "Text does not meet WCAG AA contrast requirements (4.5:1 for body, 3:1 for large text). Increase the contrast between text and background.",
+    "severity": "warning",
+    "category": "quality",
+    "file": "C:\\Users\\fabri\\Documents\\sito internet\\F-AI-sites-claude\\site\\v2\\index.html",
+    "line": 0,
+    "snippet": "1.1:1 (need 4.5:1) — text #000000 on #0b0f16"
+  },
+  {
+    "antipattern": "low-contrast",
+    "name": "Low contrast text",
+    "description": "Text does not meet WCAG AA contrast requirements (4.5:1 for body, 3:1 for large text). Increase the contrast between text and background.",
+    "severity": "warning",
+    "category": "quality",
+    "file": "C:\\Users\\fabri\\Documents\\sito internet\\F-AI-sites-claude\\site\\v2\\index.html",
+    "line": 0,
+    "snippet": "1.1:1 (need 4.5:1) — text #000000 on #0b0f16"
+  },
+  {
+    "antipattern": "low-contrast",
+    "name": "Low contrast text",
+    "description": "Text does not meet WCAG AA contrast requirements (4.5:1 for body, 3:1 for large text). Increase the contrast between text and background.",
+    "severity": "warning",
+    "category": "quality",
+    "file": "C:\\Users\\fabri\\Documents\\sito internet\\F-AI-sites-claude\\site\\v2\\index.html",
+    "line": 0,
+    "snippet": "1.1:1 (need 4.5:1) — text #000000 on #0b0f16"
+  },
+  {
+    "antipattern": "low-contrast",
+    "name": "Low contrast text",
+    "description": "Text does not meet WCAG AA contrast requirements (4.5:1 for body, 3:1 for large text). Increase the contrast between text and background.",
+    "severity": "warning",
+    "category": "quality",
+    "file": "C:\\Users\\fabri\\Documents\\sito internet\\F-AI-sites-claude\\site\\v2\\index.html",
+    "line": 0,
+    "snippet": "1.1:1 (need 4.5:1) — text #000000 on #0b0f16"
+  },
+  {
+    "antipattern": "low-contrast",
+    "name": "Low contrast text",
+    "description": "Text does not meet WCAG AA contrast requirements (4.5:1 for body, 3:1 for large text). Increase the contrast between text and background.",
+    "severity": "warning",
+    "category": "quality",
+    "file": "C:\\Users\\fabri\\Documents\\sito internet\\F-AI-sites-claude\\site\\v2\\index.html",
+    "line": 0,
+    "snippet": "1.1:1 (need 4.5:1) — text #000000 on #0b0f16"
+  },
+  {
+    "antipattern": "low-contrast",
+    "name": "Low contrast text",
+    "description": "Text does not meet WCAG AA contrast requirements (4.5:1 for body, 3:1 for large text). Increase the contrast between text and background.",
+    "severity": "warning",
+    "category": "quality",
+    "file": "C:\\Users\\fabri\\Documents\\sito internet\\F-AI-sites-claude\\site\\v2\\index.html",
+    "line": 0,
+    "snippet": "1.1:1 (need 4.5:1) — text #000000 on #0b0f16"
+  },
+  {
+    "antipattern": "low-contrast",
+    "name": "Low contrast text",
+    "description": "Text does not meet WCAG AA contrast requirements (4.5:1 for body, 3:1 for large text). Increase the contrast between text and background.",
+    "severity": "warning",
+    "category": "quality",
+    "file": "C:\\Users\\fabri\\Documents\\sito internet\\F-AI-sites-claude\\site\\v2\\index.html",
+    "line": 0,
+    "snippet": "1.1:1 (need 4.5:1) — text #000000 on #0b0f16"
+  },
+  {
+    "antipattern": "low-contrast",
+    "name": "Low contrast text",
+    "description": "Text does not meet WCAG AA contrast requirements (4.5:1 for body, 3:1 for large text). Increase the contrast between text and background.",
+    "severity": "warning",
+    "category": "quality",
+    "file": "C:\\Users\\fabri\\Documents\\sito internet\\F-AI-sites-claude\\site\\v2\\index.html",
+    "line": 0,
+    "snippet": "1.1:1 (need 4.5:1) — text #000000 on #0b0f16"
+  },
+  {
+    "antipattern": "low-contrast",
+    "name": "Low contrast text",
+    "description": "Text does not meet WCAG AA contrast requirements (4.5:1 for body, 3:1 for large text). Increase the contrast between text and background.",
+    "severity": "warning",
+    "category": "quality",
+    "file": "C:\\Users\\fabri\\Documents\\sito internet\\F-AI-sites-claude\\site\\v2\\index.html",
+    "line": 0,
+    "snippet": "1.1:1 (need 4.5:1) — text #000000 on #0b0f16"
+  },
+  {
+    "antipattern": "low-contrast",
+    "name": "Low contrast text",
+    "description": "Text does not meet WCAG AA contrast requirements (4.5:1 for body, 3:1 for large text). Increase the contrast between text and background.",
+    "severity": "warning",
+    "category": "quality",
+    "file": "C:\\Users\\fabri\\Documents\\sito internet\\F-AI-sites-claude\\site\\v2\\index.html",
+    "line": 0,
+    "snippet": "1.1:1 (need 4.5:1) — text #000000 on #0b0f16"
+  },
+  {
+    "antipattern": "low-contrast",
+    "name": "Low contrast text",
+    "description": "Text does not meet WCAG AA contrast requirements (4.5:1 for body, 3:1 for large text). Increase the contrast between text and background.",
+    "severity": "warning",
+    "category": "quality",
+    "file": "C:\\Users\\fabri\\Documents\\sito internet\\F-AI-sites-claude\\site\\v2\\index.html",
+    "line": 0,
+    "snippet": "1.1:1 (need 4.5:1) — text #000000 on #0b0f16"
+  },
+  {
+    "antipattern": "low-contrast",
+    "name": "Low contrast text",
+    "description": "Text does not meet WCAG AA contrast requirements (4.5:1 for body, 3:1 for large text). Increase the contrast between text and background.",
+    "severity": "warning",
+    "category": "quality",
+    "file": "C:\\Users\\fabri\\Documents\\sito internet\\F-AI-sites-claude\\site\\v2\\index.html",
+    "line": 0,
+    "snippet": "1.1:1 (need 4.5:1) — text #000000 on #0b0f16"
+  },
+  {
+    "antipattern": "low-contrast",
+    "name": "Low contrast text",
+    "description": "Text does not meet WCAG AA contrast requirements (4.5:1 for body, 3:1 for large text). Increase the contrast between text and background.",
+    "severity": "warning",
+    "category": "quality",
+    "file": "C:\\Users\\fabri\\Documents\\sito internet\\F-AI-sites-claude\\site\\v2\\index.html",
+    "line": 0,
+    "snippet": "3.8:1 (need 4.5:1) — text #1c4410 on #6ea52b"
+  },
+  {
+    "antipattern": "low-contrast",
+    "name": "Low contrast text",
+    "description": "Text does not meet WCAG AA contrast requirements (4.5:1 for body, 3:1 for large text). Increase the contrast between text and background.",
+    "severity": "warning",
+    "category": "quality",
+    "file": "C:\\Users\\fabri\\Documents\\sito internet\\F-AI-sites-claude\\site\\v2\\index.html",
+    "line": 0,
+    "snippet": "3.8:1 (need 4.5:1) — text #1c4410 on #6ea52b"
+  },
+  {
+    "antipattern": "low-contrast",
+    "name": "Low contrast text",
+    "description": "Text does not meet WCAG AA contrast requirements (4.5:1 for body, 3:1 for large text). Increase the contrast between text and background.",
+    "severity": "warning",
+    "category": "quality",
+    "file": "C:\\Users\\fabri\\Documents\\sito internet\\F-AI-sites-claude\\site\\v2\\index.html",
+    "line": 0,
+    "snippet": "3.8:1 (need 4.5:1) — text #1c4410 on #6ea52b"
+  },
+  {
+    "antipattern": "low-contrast",
+    "name": "Low contrast text",
+    "description": "Text does not meet WCAG AA contrast requirements (4.5:1 for body, 3:1 for large text). Increase the contrast between text and background.",
+    "severity": "warning",
+    "category": "quality",
+    "file": "C:\\Users\\fabri\\Documents\\sito internet\\F-AI-sites-claude\\site\\v2\\index.html",
+    "line": 0,
+    "snippet": "3.8:1 (need 4.5:1) — text #1c4410 on #6ea52b"
+  },
+  {
+    "antipattern": "low-contrast",
+    "name": "Low contrast text",
+    "description": "Text does not meet WCAG AA contrast requirements (4.5:1 for body, 3:1 for large text). Increase the contrast between text and background.",
+    "severity": "warning",
+    "category": "quality",
+    "file": "C:\\Users\\fabri\\Documents\\sito internet\\F-AI-sites-claude\\site\\v2\\index.html",
+    "line": 0,
+    "snippet": "3.8:1 (need 4.5:1) — text #1c4410 on #6ea52b"
+  },
+  {
+    "antipattern": "low-contrast",
+    "name": "Low contrast text",
+    "description": "Text does not meet WCAG AA contrast requirements (4.5:1 for body, 3:1 for large text). Increase the contrast between text and background.",
+    "severity": "warning",
+    "category": "quality",
+    "file": "C:\\Users\\fabri\\Documents\\sito internet\\F-AI-sites-claude\\site\\v2\\index.html",
+    "line": 0,
+    "snippet": "1.0:1 (need 4.5:1) — text #000000 on #05070b"
+  },
+  {
+    "antipattern": "low-contrast",
+    "name": "Low contrast text",
+    "description": "Text does not meet WCAG AA contrast requirements (4.5:1 for body, 3:1 for large text). Increase the contrast between text and background.",
+    "severity": "warning",
+    "category": "quality",
+    "file": "C:\\Users\\fabri\\Documents\\sito internet\\F-AI-sites-claude\\site\\v2\\index.html",
+    "line": 0,
+    "snippet": "1.1:1 (need 4.5:1) — text #000000 on #0b0f16"
+  },
+  {
+    "antipattern": "low-contrast",
+    "name": "Low contrast text",
+    "description": "Text does not meet WCAG AA contrast requirements (4.5:1 for body, 3:1 for large text). Increase the contrast between text and background.",
+    "severity": "warning",
+    "category": "quality",
+    "file": "C:\\Users\\fabri\\Documents\\sito internet\\F-AI-sites-claude\\site\\v2\\index.html",
+    "line": 0,
+    "snippet": "1.1:1 (need 4.5:1) — text #000000 on #0b0f16"
+  },
+  {
+    "antipattern": "low-contrast",
+    "name": "Low contrast text",
+    "description": "Text does not meet WCAG AA contrast requirements (4.5:1 for body, 3:1 for large text). Increase the contrast between text and background.",
+    "severity": "warning",
+    "category": "quality",
+    "file": "C:\\Users\\fabri\\Documents\\sito internet\\F-AI-sites-claude\\site\\v2\\index.html",
+    "line": 0,
+    "snippet": "1.0:1 (need 4.5:1) — text #000000 on #05070b"
+  },
+  {
+    "antipattern": "low-contrast",
+    "name": "Low contrast text",
+    "description": "Text does not meet WCAG AA contrast requirements (4.5:1 for body, 3:1 for large text). Increase the contrast between text and background.",
+    "severity": "warning",
+    "category": "quality",
+    "file": "C:\\Users\\fabri\\Documents\\sito internet\\F-AI-sites-claude\\site\\v2\\index.html",
+    "line": 0,
+    "snippet": "1.1:1 (need 3:1) — text #000000 on #0b0f16"
+  },
+  {
+    "antipattern": "low-contrast",
+    "name": "Low contrast text",
+    "description": "Text does not meet WCAG AA contrast requirements (4.5:1 for body, 3:1 for large text). Increase the contrast between text and background.",
+    "severity": "warning",
+    "category": "quality",
+    "file": "C:\\Users\\fabri\\Documents\\sito internet\\F-AI-sites-claude\\site\\v2\\index.html",
+    "line": 0,
+    "snippet": "1.1:1 (need 3:1) — text #000000 on #0b0f16"
+  },
+  {
+    "antipattern": "low-contrast",
+    "name": "Low contrast text",
+    "description": "Text does not meet WCAG AA contrast requirements (4.5:1 for body, 3:1 for large text). Increase the contrast between text and background.",
+    "severity": "warning",
+    "category": "quality",
+    "file": "C:\\Users\\fabri\\Documents\\sito internet\\F-AI-sites-claude\\site\\v2\\index.html",
+    "line": 0,
+    "snippet": "1.1:1 (need 3:1) — text #000000 on #0b0f16"
+  },
+  {
+    "antipattern": "low-contrast",
+    "name": "Low contrast text",
+    "description": "Text does not meet WCAG AA contrast requirements (4.5:1 for body, 3:1 for large text). Increase the contrast between text and background.",
+    "severity": "warning",
+    "category": "quality",
+    "file": "C:\\Users\\fabri\\Documents\\sito internet\\F-AI-sites-claude\\site\\v2\\index.html",
+    "line": 0,
+    "snippet": "1.1:1 (need 3:1) — text #000000 on #0b0f16"
+  },
+  {
+    "antipattern": "low-contrast",
+    "name": "Low contrast text",
+    "description": "Text does not meet WCAG AA contrast requirements (4.5:1 for body, 3:1 for large text). Increase the contrast between text and background.",
+    "severity": "warning",
+    "category": "quality",
+    "file": "C:\\Users\\fabri\\Documents\\sito internet\\F-AI-sites-claude\\site\\v2\\index.html",
+    "line": 0,
+    "snippet": "1.1:1 (need 3:1) — text #000000 on #0b0f16"
+  },
+  {
+    "antipattern": "low-contrast",
+    "name": "Low contrast text",
+    "description": "Text does not meet WCAG AA contrast requirements (4.5:1 for body, 3:1 for large text). Increase the contrast between text and background.",
+    "severity": "warning",
+    "category": "quality",
+    "file": "C:\\Users\\fabri\\Documents\\sito internet\\F-AI-sites-claude\\site\\v2\\index.html",
+    "line": 0,
+    "snippet": "1.0:1 (need 4.5:1) — text #000000 on #05070b"
+  },
+  {
+    "antipattern": "low-contrast",
+    "name": "Low contrast text",
+    "description": "Text does not meet WCAG AA contrast requirements (4.5:1 for body, 3:1 for large text). Increase the contrast between text and background.",
+    "severity": "warning",
+    "category": "quality",
+    "file": "C:\\Users\\fabri\\Documents\\sito internet\\F-AI-sites-claude\\site\\v2\\index.html",
+    "line": 0,
+    "snippet": "1.0:1 (need 4.5:1) — text #000000 on #05070b"
+  },
+  {
+    "antipattern": "low-contrast",
+    "name": "Low contrast text",
+    "description": "Text does not meet WCAG AA contrast requirements (4.5:1 for body, 3:1 for large text). Increase the contrast between text and background.",
+    "severity": "warning",
+    "category": "quality",
+    "file": "C:\\Users\\fabri\\Documents\\sito internet\\F-AI-sites-claude\\site\\v2\\index.html",
+    "line": 0,
+    "snippet": "1.1:1 (need 3:1) — text #000000 on #0b0f16"
+  },
+  {
+    "antipattern": "low-contrast",
+    "name": "Low contrast text",
+    "description": "Text does not meet WCAG AA contrast requirements (4.5:1 for body, 3:1 for large text). Increase the contrast between text and background.",
+    "severity": "warning",
+    "category": "quality",
+    "file": "C:\\Users\\fabri\\Documents\\sito internet\\F-AI-sites-claude\\site\\v2\\index.html",
+    "line": 0,
+    "snippet": "1.1:1 (need 3:1) — text #000000 on #0b0f16"
+  },
+  {
+    "antipattern": "low-contrast",
+    "name": "Low contrast text",
+    "description": "Text does not meet WCAG AA contrast requirements (4.5:1 for body, 3:1 for large text). Increase the contrast between text and background.",
+    "severity": "warning",
+    "category": "quality",
+    "file": "C:\\Users\\fabri\\Documents\\sito internet\\F-AI-sites-claude\\site\\v2\\index.html",
+    "line": 0,
+    "snippet": "1.1:1 (need 3:1) — text #000000 on #0b0f16"
+  },
+  {
+    "antipattern": "low-contrast",
+    "name": "Low contrast text",
+    "description": "Text does not meet WCAG AA contrast requirements (4.5:1 for body, 3:1 for large text). Increase the contrast between text and background.",
+    "severity": "warning",
+    "category": "quality",
+    "file": "C:\\Users\\fabri\\Documents\\sito internet\\F-AI-sites-claude\\site\\v2\\index.html",
+    "line": 0,
+    "snippet": "1.1:1 (need 3:1) — text #000000 on #0b0f16"
+  },
+  {
+    "antipattern": "low-contrast",
+    "name": "Low contrast text",
+    "description": "Text does not meet WCAG AA contrast requirements (4.5:1 for body, 3:1 for large text). Increase the contrast between text and background.",
+    "severity": "warning",
+    "category": "quality",
+    "file": "C:\\Users\\fabri\\Documents\\sito internet\\F-AI-sites-claude\\site\\v2\\index.html",
+    "line": 0,
+    "snippet": "1.0:1 (need 4.5:1) — text #000000 on #05070b"
+  },
+  {
+    "antipattern": "low-contrast",
+    "name": "Low contrast text",
+    "description": "Text does not meet WCAG AA contrast requirements (4.5:1 for body, 3:1 for large text). Increase the contrast between text and background.",
+    "severity": "warning",
+    "category": "quality",
+    "file": "C:\\Users\\fabri\\Documents\\sito internet\\F-AI-sites-claude\\site\\v2\\index.html",
+    "line": 0,
+    "snippet": "1.0:1 (need 4.5:1) — text #000000 on #05070b"
+  },
+  {
+    "antipattern": "low-contrast",
+    "name": "Low contrast text",
+    "description": "Text does not meet WCAG AA contrast requirements (4.5:1 for body, 3:1 for large text). Increase the contrast between text and background.",
+    "severity": "warning",
+    "category": "quality",
+    "file": "C:\\Users\\fabri\\Documents\\sito internet\\F-AI-sites-claude\\site\\v2\\index.html",
+    "line": 0,
+    "snippet": "1.1:1 (need 4.5:1) — text #000000 on #0b0f16"
+  },
+  {
+    "antipattern": "low-contrast",
+    "name": "Low contrast text",
+    "description": "Text does not meet WCAG AA contrast requirements (4.5:1 for body, 3:1 for large text). Increase the contrast between text and background.",
+    "severity": "warning",
+    "category": "quality",
+    "file": "C:\\Users\\fabri\\Documents\\sito internet\\F-AI-sites-claude\\site\\v2\\index.html",
+    "line": 0,
+    "snippet": "1.0:1 (need 4.5:1) — text #000000 on #05070b"
+  },
+  {
+    "antipattern": "low-contrast",
+    "name": "Low contrast text",
+    "description": "Text does not meet WCAG AA contrast requirements (4.5:1 for body, 3:1 for large text). Increase the contrast between text and background.",
+    "severity": "warning",
+    "category": "quality",
+    "file": "C:\\Users\\fabri\\Documents\\sito internet\\F-AI-sites-claude\\site\\v2\\index.html",
+    "line": 0,
+    "snippet": "1.1:1 (need 3:1) — text #000000 on #0b0f16"
+  },
+  {
+    "antipattern": "low-contrast",
+    "name": "Low contrast text",
+    "description": "Text does not meet WCAG AA contrast requirements (4.5:1 for body, 3:1 for large text). Increase the contrast between text and background.",
+    "severity": "warning",
+    "category": "quality",
+    "file": "C:\\Users\\fabri\\Documents\\sito internet\\F-AI-sites-claude\\site\\v2\\index.html",
+    "line": 0,
+    "snippet": "1.1:1 (need 3:1) — text #000000 on #0b0f16"
+  },
+  {
+    "antipattern": "low-contrast",
+    "name": "Low contrast text",
+    "description": "Text does not meet WCAG AA contrast requirements (4.5:1 for body, 3:1 for large text). Increase the contrast between text and background.",
+    "severity": "warning",
+    "category": "quality",
+    "file": "C:\\Users\\fabri\\Documents\\sito internet\\F-AI-sites-claude\\site\\v2\\index.html",
+    "line": 0,
+    "snippet": "1.1:1 (need 3:1) — text #000000 on #0b0f16"
+  },
+  {
+    "antipattern": "low-contrast",
+    "name": "Low contrast text",
+    "description": "Text does not meet WCAG AA contrast requirements (4.5:1 for body, 3:1 for large text). Increase the contrast between text and background.",
+    "severity": "warning",
+    "category": "quality",
+    "file": "C:\\Users\\fabri\\Documents\\sito internet\\F-AI-sites-claude\\site\\v2\\index.html",
+    "line": 0,
+    "snippet": "1.1:1 (need 3:1) — text #000000 on #0b0f16"
+  },
+  {
+    "antipattern": "low-contrast",
+    "name": "Low contrast text",
+    "description": "Text does not meet WCAG AA contrast requirements (4.5:1 for body, 3:1 for large text). Increase the contrast between text and background.",
+    "severity": "warning",
+    "category": "quality",
+    "file": "C:\\Users\\fabri\\Documents\\sito internet\\F-AI-sites-claude\\site\\v2\\index.html",
+    "line": 0,
+    "snippet": "1.1:1 (need 3:1) — text #000000 on #0b0f16"
+  },
+  {
+    "antipattern": "low-contrast",
+    "name": "Low contrast text",
+    "description": "Text does not meet WCAG AA contrast requirements (4.5:1 for body, 3:1 for large text). Increase the contrast between text and background.",
+    "severity": "warning",
+    "category": "quality",
+    "file": "C:\\Users\\fabri\\Documents\\sito internet\\F-AI-sites-claude\\site\\v2\\index.html",
+    "line": 0,
+    "snippet": "1.1:1 (need 3:1) — text #000000 on #0b0f16"
+  },
+  {
+    "antipattern": "low-contrast",
+    "name": "Low contrast text",
+    "description": "Text does not meet WCAG AA contrast requirements (4.5:1 for body, 3:1 for large text). Increase the contrast between text and background.",
+    "severity": "warning",
+    "category": "quality",
+    "file": "C:\\Users\\fabri\\Documents\\sito internet\\F-AI-sites-claude\\site\\v2\\index.html",
+    "line": 0,
+    "snippet": "1.1:1 (need 4.5:1) — text #000000 on #0b0f16"
+  },
+  {
+    "antipattern": "low-contrast",
+    "name": "Low contrast text",
+    "description": "Text does not meet WCAG AA contrast requirements (4.5:1 for body, 3:1 for large text). Increase the contrast between text and background.",
+    "severity": "warning",
+    "category": "quality",
+    "file": "C:\\Users\\fabri\\Documents\\sito internet\\F-AI-sites-claude\\site\\v2\\index.html",
+    "line": 0,
+    "snippet": "1.0:1 (need 4.5:1) — text #000000 on #05070b"
+  },
+  {
+    "antipattern": "low-contrast",
+    "name": "Low contrast text",
+    "description": "Text does not meet WCAG AA contrast requirements (4.5:1 for body, 3:1 for large text). Increase the contrast between text and background.",
+    "severity": "warning",
+    "category": "quality",
+    "file": "C:\\Users\\fabri\\Documents\\sito internet\\F-AI-sites-claude\\site\\v2\\index.html",
+    "line": 0,
+    "snippet": "1.0:1 (need 4.5:1) — text #000000 on #05070b"
+  },
+  {
+    "antipattern": "low-contrast",
+    "name": "Low contrast text",
+    "description": "Text does not meet WCAG AA contrast requirements (4.5:1 for body, 3:1 for large text). Increase the contrast between text and background.",
+    "severity": "warning",
+    "category": "quality",
+    "file": "C:\\Users\\fabri\\Documents\\sito internet\\F-AI-sites-claude\\site\\v2\\index.html",
+    "line": 0,
+    "snippet": "1.0:1 (need 4.5:1) — text #000000 on #05070b"
+  },
+  {
+    "antipattern": "low-contrast",
+    "name": "Low contrast text",
+    "description": "Text does not meet WCAG AA contrast requirements (4.5:1 for body, 3:1 for large text). Increase the contrast between text and background.",
+    "severity": "warning",
+    "category": "quality",
+    "file": "C:\\Users\\fabri\\Documents\\sito internet\\F-AI-sites-claude\\site\\v2\\index.html",
+    "line": 0,
+    "snippet": "1.0:1 (need 4.5:1) — text #000000 on #05070b"
+  },
+  {
+    "antipattern": "low-contrast",
+    "name": "Low contrast text",
+    "description": "Text does not meet WCAG AA contrast requirements (4.5:1 for body, 3:1 for large text). Increase the contrast between text and background.",
+    "severity": "warning",
+    "category": "quality",
+    "file": "C:\\Users\\fabri\\Documents\\sito internet\\F-AI-sites-claude\\site\\v2\\index.html",
+    "line": 0,
+    "snippet": "1.0:1 (need 4.5:1) — text #000000 on #05070b"
+  },
+  {
+    "antipattern": "low-contrast",
+    "name": "Low contrast text",
+    "description": "Text does not meet WCAG AA contrast requirements (4.5:1 for body, 3:1 for large text). Increase the contrast between text and background.",
+    "severity": "warning",
+    "category": "quality",
+    "file": "C:\\Users\\fabri\\Documents\\sito internet\\F-AI-sites-claude\\site\\v2\\index.html",
+    "line": 0,
+    "snippet": "1.0:1 (need 4.5:1) — text #000000 on #05070b"
+  },
+  {
+    "antipattern": "low-contrast",
+    "name": "Low contrast text",
+    "description": "Text does not meet WCAG AA contrast requirements (4.5:1 for body, 3:1 for large text). Increase the contrast between text and background.",
+    "severity": "warning",
+    "category": "quality",
+    "file": "C:\\Users\\fabri\\Documents\\sito internet\\F-AI-sites-claude\\site\\v2\\index.html",
+    "line": 0,
+    "snippet": "1.0:1 (need 4.5:1) — text #000000 on #05070b"
+  },
+  {
+    "antipattern": "low-contrast",
+    "name": "Low contrast text",
+    "description": "Text does not meet WCAG AA contrast requirements (4.5:1 for body, 3:1 for large text). Increase the contrast between text and background.",
+    "severity": "warning",
+    "category": "quality",
+    "file": "C:\\Users\\fabri\\Documents\\sito internet\\F-AI-sites-claude\\site\\v2\\index.html",
+    "line": 0,
+    "snippet": "1.0:1 (need 4.5:1) — text #000000 on #05070b"
+  },
+  {
+    "antipattern": "low-contrast",
+    "name": "Low contrast text",
+    "description": "Text does not meet WCAG AA contrast requirements (4.5:1 for body, 3:1 for large text). Increase the contrast between text and background.",
+    "severity": "warning",
+    "category": "quality",
+    "file": "C:\\Users\\fabri\\Documents\\sito internet\\F-AI-sites-claude\\site\\v2\\index.html",
+    "line": 0,
+    "snippet": "1.0:1 (need 4.5:1) — text #000000 on #05070b"
+  },
+  {
+    "antipattern": "low-contrast",
+    "name": "Low contrast text",
+    "description": "Text does not meet WCAG AA contrast requirements (4.5:1 for body, 3:1 for large text). Increase the contrast between text and background.",
+    "severity": "warning",
+    "category": "quality",
+    "file": "C:\\Users\\fabri\\Documents\\sito internet\\F-AI-sites-claude\\site\\v2\\index.html",
+    "line": 0,
+    "snippet": "1.0:1 (need 4.5:1) — text #000000 on #05070b"
+  },
+  {
+    "antipattern": "low-contrast",
+    "name": "Low contrast text",
+    "description": "Text does not meet WCAG AA contrast requirements (4.5:1 for body, 3:1 for large text). Increase the contrast between text and background.",
+    "severity": "warning",
+    "category": "quality",
+    "file": "C:\\Users\\fabri\\Documents\\sito internet\\F-AI-sites-claude\\site\\v2\\index.html",
+    "line": 0,
+    "snippet": "1.0:1 (need 4.5:1) — text #000000 on #05070b"
+  },
+  {
+    "antipattern": "low-contrast",
+    "name": "Low contrast text",
+    "description": "Text does not meet WCAG AA contrast requirements (4.5:1 for body, 3:1 for large text). Increase the contrast between text and background.",
+    "severity": "warning",
+    "category": "quality",
+    "file": "C:\\Users\\fabri\\Documents\\sito internet\\F-AI-sites-claude\\site\\v2\\index.html",
+    "line": 0,
+    "snippet": "1.0:1 (need 4.5:1) — text #000000 on #05070b"
+  },
+  {
+    "antipattern": "low-contrast",
+    "name": "Low contrast text",
+    "description": "Text does not meet WCAG AA contrast requirements (4.5:1 for body, 3:1 for large text). Increase the contrast between text and background.",
+    "severity": "warning",
+    "category": "quality",
+    "file": "C:\\Users\\fabri\\Documents\\sito internet\\F-AI-sites-claude\\site\\v2\\index.html",
+    "line": 0,
+    "snippet": "1.0:1 (need 4.5:1) — text #000000 on #05070b"
+  },
+  {
+    "antipattern": "low-contrast",
+    "name": "Low contrast text",
+    "description": "Text does not meet WCAG AA contrast requirements (4.5:1 for body, 3:1 for large text). Increase the contrast between text and background.",
+    "severity": "warning",
+    "category": "quality",
+    "file": "C:\\Users\\fabri\\Documents\\sito internet\\F-AI-sites-claude\\site\\v2\\index.html",
+    "line": 0,
+    "snippet": "1.0:1 (need 4.5:1) — text #000000 on #05070b"
+  },
+  {
+    "antipattern": "low-contrast",
+    "name": "Low contrast text",
+    "description": "Text does not meet WCAG AA contrast requirements (4.5:1 for body, 3:1 for large text). Increase the contrast between text and background.",
+    "severity": "warning",
+    "category": "quality",
+    "file": "C:\\Users\\fabri\\Documents\\sito internet\\F-AI-sites-claude\\site\\v2\\index.html",
+    "line": 0,
+    "snippet": "1.0:1 (need 4.5:1) — text #000000 on #05070b"
+  },
+  {
+    "antipattern": "low-contrast",
+    "name": "Low contrast text",
+    "description": "Text does not meet WCAG AA contrast requirements (4.5:1 for body, 3:1 for large text). Increase the contrast between text and background.",
+    "severity": "warning",
+    "category": "quality",
+    "file": "C:\\Users\\fabri\\Documents\\sito internet\\F-AI-sites-claude\\site\\v2\\index.html",
+    "line": 0,
+    "snippet": "1.0:1 (need 4.5:1) — text #000000 on #05070b"
+  },
+  {
+    "antipattern": "low-contrast",
+    "name": "Low contrast text",
+    "description": "Text does not meet WCAG AA contrast requirements (4.5:1 for body, 3:1 for large text). Increase the contrast between text and background.",
+    "severity": "warning",
+    "category": "quality",
+    "file": "C:\\Users\\fabri\\Documents\\sito internet\\F-AI-sites-claude\\site\\v2\\index.html",
+    "line": 0,
+    "snippet": "1.0:1 (need 4.5:1) — text #000000 on #05070b"
+  },
+  {
+    "antipattern": "low-contrast",
+    "name": "Low contrast text",
+    "description": "Text does not meet WCAG AA contrast requirements (4.5:1 for body, 3:1 for large text). Increase the contrast between text and background.",
+    "severity": "warning",
+    "category": "quality",
+    "file": "C:\\Users\\fabri\\Documents\\sito internet\\F-AI-sites-claude\\site\\v2\\index.html",
+    "line": 0,
+    "snippet": "1.0:1 (need 4.5:1) — text #000000 on #05070b"
+  },
+  {
+    "antipattern": "low-contrast",
+    "name": "Low contrast text",
+    "description": "Text does not meet WCAG AA contrast requirements (4.5:1 for body, 3:1 for large text). Increase the contrast between text and background.",
+    "severity": "warning",
+    "category": "quality",
+    "file": "C:\\Users\\fabri\\Documents\\sito internet\\F-AI-sites-claude\\site\\v2\\index.html",
+    "line": 0,
+    "snippet": "1.0:1 (need 4.5:1) — text #000000 on #05070b"
+  },
+  {
+    "antipattern": "low-contrast",
+    "name": "Low contrast text",
+    "description": "Text does not meet WCAG AA contrast requirements (4.5:1 for body, 3:1 for large text). Increase the contrast between text and background.",
+    "severity": "warning",
+    "category": "quality",
+    "file": "C:\\Users\\fabri\\Documents\\sito internet\\F-AI-sites-claude\\site\\v2\\index.html",
+    "line": 0,
+    "snippet": "1.0:1 (need 4.5:1) — text #000000 on #05070b"
+  },
+  {
+    "antipattern": "low-contrast",
+    "name": "Low contrast text",
+    "description": "Text does not meet WCAG AA contrast requirements (4.5:1 for body, 3:1 for large text). Increase the contrast between text and background.",
+    "severity": "warning",
+    "category": "quality",
+    "file": "C:\\Users\\fabri\\Documents\\sito internet\\F-AI-sites-claude\\site\\v2\\index.html",
+    "line": 0,
+    "snippet": "1.0:1 (need 4.5:1) — text #000000 on #05070b"
+  },
+  {
+    "antipattern": "low-contrast",
+    "name": "Low contrast text",
+    "description": "Text does not meet WCAG AA contrast requirements (4.5:1 for body, 3:1 for large text). Increase the contrast between text and background.",
+    "severity": "warning",
+    "category": "quality",
+    "file": "C:\\Users\\fabri\\Documents\\sito internet\\F-AI-sites-claude\\site\\v2\\index.html",
+    "line": 0,
+    "snippet": "1.0:1 (need 4.5:1) — text #000000 on #05070b"
+  },
+  {
+    "antipattern": "low-contrast",
+    "name": "Low contrast text",
+    "description": "Text does not meet WCAG AA contrast requirements (4.5:1 for body, 3:1 for large text). Increase the contrast between text and background.",
+    "severity": "warning",
+    "category": "quality",
+    "file": "C:\\Users\\fabri\\Documents\\sito internet\\F-AI-sites-claude\\site\\v2\\index.html",
+    "line": 0,
+    "snippet": "1.0:1 (need 4.5:1) — text #000000 on #05070b"
+  },
+  {
+    "antipattern": "low-contrast",
+    "name": "Low contrast text",
+    "description": "Text does not meet WCAG AA contrast requirements (4.5:1 for body, 3:1 for large text). Increase the contrast between text and background.",
+    "severity": "warning",
+    "category": "quality",
+    "file": "C:\\Users\\fabri\\Documents\\sito internet\\F-AI-sites-claude\\site\\v2\\index.html",
+    "line": 0,
+    "snippet": "1.0:1 (need 4.5:1) — text #000000 on #05070b"
+  },
+  {
+    "antipattern": "low-contrast",
+    "name": "Low contrast text",
+    "description": "Text does not meet WCAG AA contrast requirements (4.5:1 for body, 3:1 for large text). Increase the contrast between text and background.",
+    "severity": "warning",
+    "category": "quality",
+    "file": "C:\\Users\\fabri\\Documents\\sito internet\\F-AI-sites-claude\\site\\v2\\index.html",
+    "line": 0,
+    "snippet": "1.0:1 (need 4.5:1) — text #000000 on #05070b"
+  },
+  {
+    "antipattern": "low-contrast",
+    "name": "Low contrast text",
+    "description": "Text does not meet WCAG AA contrast requirements (4.5:1 for body, 3:1 for large text). Increase the contrast between text and background.",
+    "severity": "warning",
+    "category": "quality",
+    "file": "C:\\Users\\fabri\\Documents\\sito internet\\F-AI-sites-claude\\site\\v2\\index.html",
+    "line": 0,
+    "snippet": "1.0:1 (need 4.5:1) — text #000000 on #05070b"
+  },
+  {
+    "antipattern": "low-contrast",
+    "name": "Low contrast text",
+    "description": "Text does not meet WCAG AA contrast requirements (4.5:1 for body, 3:1 for large text). Increase the contrast between text and background.",
+    "severity": "warning",
+    "category": "quality",
+    "file": "C:\\Users\\fabri\\Documents\\sito internet\\F-AI-sites-claude\\site\\v2\\index.html",
+    "line": 0,
+    "snippet": "1.0:1 (need 4.5:1) — text #000000 on #05070b"
+  },
+  {
+    "antipattern": "low-contrast",
+    "name": "Low contrast text",
+    "description": "Text does not meet WCAG AA contrast requirements (4.5:1 for body, 3:1 for large text). Increase the contrast between text and background.",
+    "severity": "warning",
+    "category": "quality",
+    "file": "C:\\Users\\fabri\\Documents\\sito internet\\F-AI-sites-claude\\site\\v2\\index.html",
+    "line": 0,
+    "snippet": "1.0:1 (need 4.5:1) — text #000000 on #05070b"
+  },
+  {
+    "antipattern": "low-contrast",
+    "name": "Low contrast text",
+    "description": "Text does not meet WCAG AA contrast requirements (4.5:1 for body, 3:1 for large text). Increase the contrast between text and background.",
+    "severity": "warning",
+    "category": "quality",
+    "file": "C:\\Users\\fabri\\Documents\\sito internet\\F-AI-sites-claude\\site\\v2\\index.html",
+    "line": 0,
+    "snippet": "1.0:1 (need 4.5:1) — text #000000 on #05070b"
+  },
+  {
+    "antipattern": "low-contrast",
+    "name": "Low contrast text",
+    "description": "Text does not meet WCAG AA contrast requirements (4.5:1 for body, 3:1 for large text). Increase the contrast between text and background.",
+    "severity": "warning",
+    "category": "quality",
+    "file": "C:\\Users\\fabri\\Documents\\sito internet\\F-AI-sites-claude\\site\\v2\\index.html",
+    "line": 0,
+    "snippet": "1.0:1 (need 4.5:1) — text #000000 on #05070b"
+  },
+  {
+    "antipattern": "low-contrast",
+    "name": "Low contrast text",
+    "description": "Text does not meet WCAG AA contrast requirements (4.5:1 for body, 3:1 for large text). Increase the contrast between text and background.",
+    "severity": "warning",
+    "category": "quality",
+    "file": "C:\\Users\\fabri\\Documents\\sito internet\\F-AI-sites-claude\\site\\v2\\index.html",
+    "line": 0,
+    "snippet": "1.0:1 (need 4.5:1) — text #000000 on #05070b"
+  },
+  {
+    "antipattern": "low-contrast",
+    "name": "Low contrast text",
+    "description": "Text does not meet WCAG AA contrast requirements (4.5:1 for body, 3:1 for large text). Increase the contrast between text and background.",
+    "severity": "warning",
+    "category": "quality",
+    "file": "C:\\Users\\fabri\\Documents\\sito internet\\F-AI-sites-claude\\site\\v2\\index.html",
+    "line": 0,
+    "snippet": "1.0:1 (need 4.5:1) — text #000000 on #05070b"
+  },
+  {
+    "antipattern": "low-contrast",
+    "name": "Low contrast text",
+    "description": "Text does not meet WCAG AA contrast requirements (4.5:1 for body, 3:1 for large text). Increase the contrast between text and background.",
+    "severity": "warning",
+    "category": "quality",
+    "file": "C:\\Users\\fabri\\Documents\\sito internet\\F-AI-sites-claude\\site\\v2\\index.html",
+    "line": 0,
+    "snippet": "1.0:1 (need 4.5:1) — text #000000 on #05070b"
+  },
+  {
+    "antipattern": "low-contrast",
+    "name": "Low contrast text",
+    "description": "Text does not meet WCAG AA contrast requirements (4.5:1 for body, 3:1 for large text). Increase the contrast between text and background.",
+    "severity": "warning",
+    "category": "quality",
+    "file": "C:\\Users\\fabri\\Documents\\sito internet\\F-AI-sites-claude\\site\\v2\\index.html",
+    "line": 0,
+    "snippet": "1.0:1 (need 4.5:1) — text #000000 on #05070b"
+  },
+  {
+    "antipattern": "low-contrast",
+    "name": "Low contrast text",
+    "description": "Text does not meet WCAG AA contrast requirements (4.5:1 for body, 3:1 for large text). Increase the contrast between text and background.",
+    "severity": "warning",
+    "category": "quality",
+    "file": "C:\\Users\\fabri\\Documents\\sito internet\\F-AI-sites-claude\\site\\v2\\index.html",
+    "line": 0,
+    "snippet": "1.0:1 (need 4.5:1) — text #000000 on #05070b"
+  },
+  {
+    "antipattern": "low-contrast",
+    "name": "Low contrast text",
+    "description": "Text does not meet WCAG AA contrast requirements (4.5:1 for body, 3:1 for large text). Increase the contrast between text and background.",
+    "severity": "warning",
+    "category": "quality",
+    "file": "C:\\Users\\fabri\\Documents\\sito internet\\F-AI-sites-claude\\site\\v2\\index.html",
+    "line": 0,
+    "snippet": "1.0:1 (need 4.5:1) — text #000000 on #05070b"
+  },
+  {
+    "antipattern": "low-contrast",
+    "name": "Low contrast text",
+    "description": "Text does not meet WCAG AA contrast requirements (4.5:1 for body, 3:1 for large text). Increase the contrast between text and background.",
+    "severity": "warning",
+    "category": "quality",
+    "file": "C:\\Users\\fabri\\Documents\\sito internet\\F-AI-sites-claude\\site\\v2\\index.html",
+    "line": 0,
+    "snippet": "1.0:1 (need 4.5:1) — text #000000 on #05070b"
+  },
+  {
+    "antipattern": "low-contrast",
+    "name": "Low contrast text",
+    "description": "Text does not meet WCAG AA contrast requirements (4.5:1 for body, 3:1 for large text). Increase the contrast between text and background.",
+    "severity": "warning",
+    "category": "quality",
+    "file": "C:\\Users\\fabri\\Documents\\sito internet\\F-AI-sites-claude\\site\\v2\\index.html",
+    "line": 0,
+    "snippet": "1.0:1 (need 4.5:1) — text #000000 on #05070b"
+  },
+  {
+    "antipattern": "low-contrast",
+    "name": "Low contrast text",
+    "description": "Text does not meet WCAG AA contrast requirements (4.5:1 for body, 3:1 for large text). Increase the contrast between text and background.",
+    "severity": "warning",
+    "category": "quality",
+    "file": "C:\\Users\\fabri\\Documents\\sito internet\\F-AI-sites-claude\\site\\v2\\index.html",
+    "line": 0,
+    "snippet": "1.0:1 (need 4.5:1) — text #000000 on #05070b"
+  },
+  {
+    "antipattern": "low-contrast",
+    "name": "Low contrast text",
+    "description": "Text does not meet WCAG AA contrast requirements (4.5:1 for body, 3:1 for large text). Increase the contrast between text and background.",
+    "severity": "warning",
+    "category": "quality",
+    "file": "C:\\Users\\fabri\\Documents\\sito internet\\F-AI-sites-claude\\site\\v2\\index.html",
+    "line": 0,
+    "snippet": "1.0:1 (need 4.5:1) — text #000000 on #05070b"
+  },
+  {
+    "antipattern": "low-contrast",
+    "name": "Low contrast text",
+    "description": "Text does not meet WCAG AA contrast requirements (4.5:1 for body, 3:1 for large text). Increase the contrast between text and background.",
+    "severity": "warning",
+    "category": "quality",
+    "file": "C:\\Users\\fabri\\Documents\\sito internet\\F-AI-sites-claude\\site\\v2\\index.html",
+    "line": 0,
+    "snippet": "1.0:1 (need 4.5:1) — text #000000 on #05070b"
+  },
+  {
+    "antipattern": "dark-glow",
+    "name": "Glowing shadow accents",
+    "description": "Colored glow shadows — a zero-offset chromatic halo (box- or text-shadow) on any background, or any colored blurred shadow on a dark background — are the default \"cool\" look of AI-generated UIs. Use neutral elevation shadows and subtle, purposeful lighting instead.",
+    "severity": "warning",
+    "category": "slop",
+    "file": "C:\\Users\\fabri\\Documents\\sito internet\\F-AI-sites-claude\\site\\v2\\index.html",
+    "line": 0,
+    "snippet": "Zero-offset box-shadow glow (#14c08a)"
+  },
+  {
+    "antipattern": "all-caps-body",
+    "name": "All-caps body text",
+    "description": "Long passages in uppercase are hard to read. We recognize words by shape (ascenders and descenders), which all-caps removes. Reserve uppercase for short labels and headings.",
+    "severity": "warning",
+    "category": "quality",
+    "file": "C:\\Users\\fabri\\Documents\\sito internet\\F-AI-sites-claude\\site\\v2\\index.html",
+    "line": 0,
+    "snippet": "text-transform: uppercase on 37 chars of body text"
+  },
+  {
+    "antipattern": "all-caps-body",
+    "name": "All-caps body text",
+    "description": "Long passages in uppercase are hard to read. We recognize words by shape (ascenders and descenders), which all-caps removes. Reserve uppercase for short labels and headings.",
+    "severity": "warning",
+    "category": "quality",
+    "file": "C:\\Users\\fabri\\Documents\\sito internet\\F-AI-sites-claude\\site\\v2\\index.html",
+    "line": 0,
+    "snippet": "text-transform: uppercase on 73 chars of body text"
+  },
+  {
+    "antipattern": "all-caps-body",
+    "name": "All-caps body text",
+    "description": "Long passages in uppercase are hard to read. We recognize words by shape (ascenders and descenders), which all-caps removes. Reserve uppercase for short labels and headings.",
+    "severity": "warning",
+    "category": "quality",
+    "file": "C:\\Users\\fabri\\Documents\\sito internet\\F-AI-sites-claude\\site\\v2\\index.html",
+    "line": 0,
+    "snippet": "text-transform: uppercase on 60 chars of body text"
+  },
+  {
+    "antipattern": "all-caps-body",
+    "name": "All-caps body text",
+    "description": "Long passages in uppercase are hard to read. We recognize words by shape (ascenders and descenders), which all-caps removes. Reserve uppercase for short labels and headings.",
+    "severity": "warning",
+    "category": "quality",
+    "file": "C:\\Users\\fabri\\Documents\\sito internet\\F-AI-sites-claude\\site\\v2\\index.html",
+    "line": 0,
+    "snippet": "text-transform: uppercase on 49 chars of body text"
+  },
+  {
+    "antipattern": "cramped-padding",
+    "name": "Cramped padding",
+    "description": "Text is too close to the edge of its container. Two shapes: (1) an element with its own text where the padding is too low for the font size, and (2) a wrapper with text-bearing children and near-zero padding against a visible boundary (border, outline, or non-transparent background) — children land flush against the boundary line. Add at least 8px (ideally 12–16px) of padding inside bordered, outlined, or colored containers.",
+    "severity": "warning",
+    "category": "quality",
+    "file": "C:\\Users\\fabri\\Documents\\sito internet\\F-AI-sites-claude\\site\\v2\\index.html",
+    "line": 0,
+    "snippet": "<section> \"sec\": children flush against bg on all sides (no inset)"
+  },
+  {
+    "antipattern": "cramped-padding",
+    "name": "Cramped padding",
+    "description": "Text is too close to the edge of its container. Two shapes: (1) an element with its own text where the padding is too low for the font size, and (2) a wrapper with text-bearing children and near-zero padding against a visible boundary (border, outline, or non-transparent background) — children land flush against the boundary line. Add at least 8px (ideally 12–16px) of padding inside bordered, outlined, or colored containers.",
+    "severity": "warning",
+    "category": "quality",
+    "file": "C:\\Users\\fabri\\Documents\\sito internet\\F-AI-sites-claude\\site\\v2\\index.html",
+    "line": 0,
+    "snippet": "<div> \"manifesto\": children flush against bg on all sides (no inset)"
+  },
+  {
+    "antipattern": "cramped-padding",
+    "name": "Cramped padding",
+    "description": "Text is too close to the edge of its container. Two shapes: (1) an element with its own text where the padding is too low for the font size, and (2) a wrapper with text-bearing children and near-zero padding against a visible boundary (border, outline, or non-transparent background) — children land flush against the boundary line. Add at least 8px (ideally 12–16px) of padding inside bordered, outlined, or colored containers.",
+    "severity": "warning",
+    "category": "quality",
+    "file": "C:\\Users\\fabri\\Documents\\sito internet\\F-AI-sites-claude\\site\\v2\\index.html",
+    "line": 0,
+    "snippet": "<section> \"sec\": children flush against bg on top/right/left (no inset)"
+  },
+  {
+    "antipattern": "all-caps-body",
+    "name": "All-caps body text",
+    "description": "Long passages in uppercase are hard to read. We recognize words by shape (ascenders and descenders), which all-caps removes. Reserve uppercase for short labels and headings.",
+    "severity": "warning",
+    "category": "quality",
+    "file": "C:\\Users\\fabri\\Documents\\sito internet\\F-AI-sites-claude\\site\\v2\\index.html",
+    "line": 0,
+    "snippet": "text-transform: uppercase on 62 chars of body text"
+  },
+  {
+    "antipattern": "all-caps-body",
+    "name": "All-caps body text",
+    "description": "Long passages in uppercase are hard to read. We recognize words by shape (ascenders and descenders), which all-caps removes. Reserve uppercase for short labels and headings.",
+    "severity": "warning",
+    "category": "quality",
+    "file": "C:\\Users\\fabri\\Documents\\sito internet\\F-AI-sites-claude\\site\\v2\\index.html",
+    "line": 0,
+    "snippet": "text-transform: uppercase on 57 chars of body text"
+  },
+  {
+    "antipattern": "all-caps-body",
+    "name": "All-caps body text",
+    "description": "Long passages in uppercase are hard to read. We recognize words by shape (ascenders and descenders), which all-caps removes. Reserve uppercase for short labels and headings.",
+    "severity": "warning",
+    "category": "quality",
+    "file": "C:\\Users\\fabri\\Documents\\sito internet\\F-AI-sites-claude\\site\\v2\\index.html",
+    "line": 0,
+    "snippet": "text-transform: uppercase on 53 chars of body text"
+  },
+  {
+    "antipattern": "all-caps-body",
+    "name": "All-caps body text",
+    "description": "Long passages in uppercase are hard to read. We recognize words by shape (ascenders and descenders), which all-caps removes. Reserve uppercase for short labels and headings.",
+    "severity": "warning",
+    "category": "quality",
+    "file": "C:\\Users\\fabri\\Documents\\sito internet\\F-AI-sites-claude\\site\\v2\\index.html",
+    "line": 0,
+    "snippet": "text-transform: uppercase on 49 chars of body text"
+  },
+  {
+    "antipattern": "all-caps-body",
+    "name": "All-caps body text",
+    "description": "Long passages in uppercase are hard to read. We recognize words by shape (ascenders and descenders), which all-caps removes. Reserve uppercase for short labels and headings.",
+    "severity": "warning",
+    "category": "quality",
+    "file": "C:\\Users\\fabri\\Documents\\sito internet\\F-AI-sites-claude\\site\\v2\\index.html",
+    "line": 0,
+    "snippet": "text-transform: uppercase on 46 chars of body text"
+  },
+  {
+    "antipattern": "all-caps-body",
+    "name": "All-caps body text",
+    "description": "Long passages in uppercase are hard to read. We recognize words by shape (ascenders and descenders), which all-caps removes. Reserve uppercase for short labels and headings.",
+    "severity": "warning",
+    "category": "quality",
+    "file": "C:\\Users\\fabri\\Documents\\sito internet\\F-AI-sites-claude\\site\\v2\\index.html",
+    "line": 0,
+    "snippet": "text-transform: uppercase on 31 chars of body text"
+  },
+  {
+    "antipattern": "cramped-padding",
+    "name": "Cramped padding",
+    "description": "Text is too close to the edge of its container. Two shapes: (1) an element with its own text where the padding is too low for the font size, and (2) a wrapper with text-bearing children and near-zero padding against a visible boundary (border, outline, or non-transparent background) — children land flush against the boundary line. Add at least 8px (ideally 12–16px) of padding inside bordered, outlined, or colored containers.",
+    "severity": "warning",
+    "category": "quality",
+    "file": "C:\\Users\\fabri\\Documents\\sito internet\\F-AI-sites-claude\\site\\v2\\index.html",
+    "line": 0,
+    "snippet": "<div> \"appmie\": children flush against bg on all sides (no inset)"
+  },
+  {
+    "antipattern": "all-caps-body",
+    "name": "All-caps body text",
+    "description": "Long passages in uppercase are hard to read. We recognize words by shape (ascenders and descenders), which all-caps removes. Reserve uppercase for short labels and headings.",
+    "severity": "warning",
+    "category": "quality",
+    "file": "C:\\Users\\fabri\\Documents\\sito internet\\F-AI-sites-claude\\site\\v2\\index.html",
+    "line": 0,
+    "snippet": "text-transform: uppercase on 32 chars of body text"
+  },
+  {
+    "antipattern": "cramped-padding",
+    "name": "Cramped padding",
+    "description": "Text is too close to the edge of its container. Two shapes: (1) an element with its own text where the padding is too low for the font size, and (2) a wrapper with text-bearing children and near-zero padding against a visible boundary (border, outline, or non-transparent background) — children land flush against the boundary line. Add at least 8px (ideally 12–16px) of padding inside bordered, outlined, or colored containers.",
+    "severity": "warning",
+    "category": "quality",
+    "file": "C:\\Users\\fabri\\Documents\\sito internet\\F-AI-sites-claude\\site\\v2\\index.html",
+    "line": 0,
+    "snippet": "<div> \"bench__panel\": children flush against border+bg on right/left (no inset)"
+  },
+  {
+    "antipattern": "cramped-padding",
+    "name": "Cramped padding",
+    "description": "Text is too close to the edge of its container. Two shapes: (1) an element with its own text where the padding is too low for the font size, and (2) a wrapper with text-bearing children and near-zero padding against a visible boundary (border, outline, or non-transparent background) — children land flush against the boundary line. Add at least 8px (ideally 12–16px) of padding inside bordered, outlined, or colored containers.",
+    "severity": "warning",
+    "category": "quality",
+    "file": "C:\\Users\\fabri\\Documents\\sito internet\\F-AI-sites-claude\\site\\v2\\index.html",
+    "line": 0,
+    "snippet": "<div> \"bench__panel\": children flush against border+bg on right/left (no inset)"
+  },
+  {
+    "antipattern": "cramped-padding",
+    "name": "Cramped padding",
+    "description": "Text is too close to the edge of its container. Two shapes: (1) an element with its own text where the padding is too low for the font size, and (2) a wrapper with text-bearing children and near-zero padding against a visible boundary (border, outline, or non-transparent background) — children land flush against the boundary line. Add at least 8px (ideally 12–16px) of padding inside bordered, outlined, or colored containers.",
+    "severity": "warning",
+    "category": "quality",
+    "file": "C:\\Users\\fabri\\Documents\\sito internet\\F-AI-sites-claude\\site\\v2\\index.html",
+    "line": 0,
+    "snippet": "<div> \"bench__panel\": children flush against border+bg on right/left (no inset)"
+  },
+  {
+    "antipattern": "cramped-padding",
+    "name": "Cramped padding",
+    "description": "Text is too close to the edge of its container. Two shapes: (1) an element with its own text where the padding is too low for the font size, and (2) a wrapper with text-bearing children and near-zero padding against a visible boundary (border, outline, or non-transparent background) — children land flush against the boundary line. Add at least 8px (ideally 12–16px) of padding inside bordered, outlined, or colored containers.",
+    "severity": "warning",
+    "category": "quality",
+    "file": "C:\\Users\\fabri\\Documents\\sito internet\\F-AI-sites-claude\\site\\v2\\index.html",
+    "line": 0,
+    "snippet": "<div> \"bench__panel\": children flush against border+bg on right/left (no inset)"
+  },
+  {
+    "antipattern": "cramped-padding",
+    "name": "Cramped padding",
+    "description": "Text is too close to the edge of its container. Two shapes: (1) an element with its own text where the padding is too low for the font size, and (2) a wrapper with text-bearing children and near-zero padding against a visible boundary (border, outline, or non-transparent background) — children land flush against the boundary line. Add at least 8px (ideally 12–16px) of padding inside bordered, outlined, or colored containers.",
+    "severity": "warning",
+    "category": "quality",
+    "file": "C:\\Users\\fabri\\Documents\\sito internet\\F-AI-sites-claude\\site\\v2\\index.html",
+    "line": 0,
+    "snippet": "<section> \"sec\": children flush against bg on all sides (no inset)"
+  },
+  {
+    "antipattern": "cramped-padding",
+    "name": "Cramped padding",
+    "description": "Text is too close to the edge of its container. Two shapes: (1) an element with its own text where the padding is too low for the font size, and (2) a wrapper with text-bearing children and near-zero padding against a visible boundary (border, outline, or non-transparent background) — children land flush against the boundary line. Add at least 8px (ideally 12–16px) of padding inside bordered, outlined, or colored containers.",
+    "severity": "warning",
+    "category": "quality",
+    "file": "C:\\Users\\fabri\\Documents\\sito internet\\F-AI-sites-claude\\site\\v2\\index.html",
+    "line": 0,
+    "snippet": "<div> \"union\": children flush against bg on all sides (no inset)"
+  },
+  {
+    "antipattern": "cramped-padding",
+    "name": "Cramped padding",
+    "description": "Text is too close to the edge of its container. Two shapes: (1) an element with its own text where the padding is too low for the font size, and (2) a wrapper with text-bearing children and near-zero padding against a visible boundary (border, outline, or non-transparent background) — children land flush against the boundary line. Add at least 8px (ideally 12–16px) of padding inside bordered, outlined, or colored containers.",
+    "severity": "warning",
+    "category": "quality",
+    "file": "C:\\Users\\fabri\\Documents\\sito internet\\F-AI-sites-claude\\site\\v2\\index.html",
+    "line": 0,
+    "snippet": "<li>: children flush against border-left on left (no inset)"
+  },
+  {
+    "antipattern": "cramped-padding",
+    "name": "Cramped padding",
+    "description": "Text is too close to the edge of its container. Two shapes: (1) an element with its own text where the padding is too low for the font size, and (2) a wrapper with text-bearing children and near-zero padding against a visible boundary (border, outline, or non-transparent background) — children land flush against the boundary line. Add at least 8px (ideally 12–16px) of padding inside bordered, outlined, or colored containers.",
+    "severity": "warning",
+    "category": "quality",
+    "file": "C:\\Users\\fabri\\Documents\\sito internet\\F-AI-sites-claude\\site\\v2\\index.html",
+    "line": 0,
+    "snippet": "<li>: children flush against border-left on left (no inset)"
+  },
+  {
+    "antipattern": "cramped-padding",
+    "name": "Cramped padding",
+    "description": "Text is too close to the edge of its container. Two shapes: (1) an element with its own text where the padding is too low for the font size, and (2) a wrapper with text-bearing children and near-zero padding against a visible boundary (border, outline, or non-transparent background) — children land flush against the boundary line. Add at least 8px (ideally 12–16px) of padding inside bordered, outlined, or colored containers.",
+    "severity": "warning",
+    "category": "quality",
+    "file": "C:\\Users\\fabri\\Documents\\sito internet\\F-AI-sites-claude\\site\\v2\\index.html",
+    "line": 0,
+    "snippet": "<li>: children flush against border-left on left (no inset)"
+  },
+  {
+    "antipattern": "all-caps-body",
+    "name": "All-caps body text",
+    "description": "Long passages in uppercase are hard to read. We recognize words by shape (ascenders and descenders), which all-caps removes. Reserve uppercase for short labels and headings.",
+    "severity": "warning",
+    "category": "quality",
+    "file": "C:\\Users\\fabri\\Documents\\sito internet\\F-AI-sites-claude\\site\\v2\\index.html",
+    "line": 0,
+    "snippet": "text-transform: uppercase on 52 chars of body text"
+  },
+  {
+    "antipattern": "cramped-padding",
+    "name": "Cramped padding",
+    "description": "Text is too close to the edge of its container. Two shapes: (1) an element with its own text where the padding is too low for the font size, and (2) a wrapper with text-bearing children and near-zero padding against a visible boundary (border, outline, or non-transparent background) — children land flush against the boundary line. Add at least 8px (ideally 12–16px) of padding inside bordered, outlined, or colored containers.",
+    "severity": "warning",
+    "category": "quality",
+    "file": "C:\\Users\\fabri\\Documents\\sito internet\\F-AI-sites-claude\\site\\v2\\index.html",
+    "line": 0,
+    "snippet": "<div> \"union__come\": children flush against border-top on top (no inset)"
+  },
+  {
+    "antipattern": "cramped-padding",
+    "name": "Cramped padding",
+    "description": "Text is too close to the edge of its container. Two shapes: (1) an element with its own text where the padding is too low for the font size, and (2) a wrapper with text-bearing children and near-zero padding against a visible boundary (border, outline, or non-transparent background) — children land flush against the boundary line. Add at least 8px (ideally 12–16px) of padding inside bordered, outlined, or colored containers.",
+    "severity": "warning",
+    "category": "quality",
+    "file": "C:\\Users\\fabri\\Documents\\sito internet\\F-AI-sites-claude\\site\\v2\\index.html",
+    "line": 0,
+    "snippet": "<div> \"eso\": children flush against bg on all sides (no inset)"
+  },
+  {
+    "antipattern": "tight-leading",
+    "name": "Tight line height",
+    "description": "Line height below 1.3x the font size makes multi-line text hard to read. Use 1.5 to 1.7 for body text so lines have room to breathe.",
+    "severity": "warning",
+    "category": "quality",
+    "file": "C:\\Users\\fabri\\Documents\\sito internet\\F-AI-sites-claude\\site\\v2\\index.html",
+    "line": 0,
+    "snippet": "line-height 1.08x (need >=1.3)"
+  },
+  {
+    "antipattern": "all-caps-body",
+    "name": "All-caps body text",
+    "description": "Long passages in uppercase are hard to read. We recognize words by shape (ascenders and descenders), which all-caps removes. Reserve uppercase for short labels and headings.",
+    "severity": "warning",
+    "category": "quality",
+    "file": "C:\\Users\\fabri\\Documents\\sito internet\\F-AI-sites-claude\\site\\v2\\index.html",
+    "line": 0,
+    "snippet": "text-transform: uppercase on 33 chars of body text"
+  },
+  {
+    "antipattern": "cramped-padding",
+    "name": "Cramped padding",
+    "description": "Text is too close to the edge of its container. Two shapes: (1) an element with its own text where the padding is too low for the font size, and (2) a wrapper with text-bearing children and near-zero padding against a visible boundary (border, outline, or non-transparent background) — children land flush against the boundary line. Add at least 8px (ideally 12–16px) of padding inside bordered, outlined, or colored containers.",
+    "severity": "warning",
+    "category": "quality",
+    "file": "C:\\Users\\fabri\\Documents\\sito internet\\F-AI-sites-claude\\site\\v2\\index.html",
+    "line": 0,
+    "snippet": "<li>: children flush against border-left on left (no inset)"
+  },
+  {
+    "antipattern": "cramped-padding",
+    "name": "Cramped padding",
+    "description": "Text is too close to the edge of its container. Two shapes: (1) an element with its own text where the padding is too low for the font size, and (2) a wrapper with text-bearing children and near-zero padding against a visible boundary (border, outline, or non-transparent background) — children land flush against the boundary line. Add at least 8px (ideally 12–16px) of padding inside bordered, outlined, or colored containers.",
+    "severity": "warning",
+    "category": "quality",
+    "file": "C:\\Users\\fabri\\Documents\\sito internet\\F-AI-sites-claude\\site\\v2\\index.html",
+    "line": 0,
+    "snippet": "<li>: children flush against border-left on left (no inset)"
+  },
+  {
+    "antipattern": "tight-leading",
+    "name": "Tight line height",
+    "description": "Line height below 1.3x the font size makes multi-line text hard to read. Use 1.5 to 1.7 for body text so lines have room to breathe.",
+    "severity": "warning",
+    "category": "quality",
+    "file": "C:\\Users\\fabri\\Documents\\sito internet\\F-AI-sites-claude\\site\\v2\\index.html",
+    "line": 0,
+    "snippet": "line-height 1.24x (need >=1.3)"
+  },
+  {
+    "antipattern": "all-caps-body",
+    "name": "All-caps body text",
+    "description": "Long passages in uppercase are hard to read. We recognize words by shape (ascenders and descenders), which all-caps removes. Reserve uppercase for short labels and headings.",
+    "severity": "warning",
+    "category": "quality",
+    "file": "C:\\Users\\fabri\\Documents\\sito internet\\F-AI-sites-claude\\site\\v2\\index.html",
+    "line": 0,
+    "snippet": "text-transform: uppercase on 39 chars of body text"
+  },
+  {
+    "antipattern": "cramped-padding",
+    "name": "Cramped padding",
+    "description": "Text is too close to the edge of its container. Two shapes: (1) an element with its own text where the padding is too low for the font size, and (2) a wrapper with text-bearing children and near-zero padding against a visible boundary (border, outline, or non-transparent background) — children land flush against the boundary line. Add at least 8px (ideally 12–16px) of padding inside bordered, outlined, or colored containers.",
+    "severity": "warning",
+    "category": "quality",
+    "file": "C:\\Users\\fabri\\Documents\\sito internet\\F-AI-sites-claude\\site\\v2\\index.html",
+    "line": 0,
+    "snippet": "<div> \"eso__come\": children flush against border-top on top (no inset)"
+  },
+  {
+    "antipattern": "cramped-padding",
+    "name": "Cramped padding",
+    "description": "Text is too close to the edge of its container. Two shapes: (1) an element with its own text where the padding is too low for the font size, and (2) a wrapper with text-bearing children and near-zero padding against a visible boundary (border, outline, or non-transparent background) — children land flush against the boundary line. Add at least 8px (ideally 12–16px) of padding inside bordered, outlined, or colored containers.",
+    "severity": "warning",
+    "category": "quality",
+    "file": "C:\\Users\\fabri\\Documents\\sito internet\\F-AI-sites-claude\\site\\v2\\index.html",
+    "line": 0,
+    "snippet": "<div> \"locanda\": children flush against bg on all sides (no inset)"
+  },
+  {
+    "antipattern": "cramped-padding",
+    "name": "Cramped padding",
+    "description": "Text is too close to the edge of its container. Two shapes: (1) an element with its own text where the padding is too low for the font size, and (2) a wrapper with text-bearing children and near-zero padding against a visible boundary (border, outline, or non-transparent background) — children land flush against the boundary line. Add at least 8px (ideally 12–16px) of padding inside bordered, outlined, or colored containers.",
+    "severity": "warning",
+    "category": "quality",
+    "file": "C:\\Users\\fabri\\Documents\\sito internet\\F-AI-sites-claude\\site\\v2\\index.html",
+    "line": 0,
+    "snippet": "<li>: children flush against border-left on left (no inset)"
+  },
+  {
+    "antipattern": "cramped-padding",
+    "name": "Cramped padding",
+    "description": "Text is too close to the edge of its container. Two shapes: (1) an element with its own text where the padding is too low for the font size, and (2) a wrapper with text-bearing children and near-zero padding against a visible boundary (border, outline, or non-transparent background) — children land flush against the boundary line. Add at least 8px (ideally 12–16px) of padding inside bordered, outlined, or colored containers.",
+    "severity": "warning",
+    "category": "quality",
+    "file": "C:\\Users\\fabri\\Documents\\sito internet\\F-AI-sites-claude\\site\\v2\\index.html",
+    "line": 0,
+    "snippet": "<li>: children flush against border-left on left (no inset)"
+  },
+  {
+    "antipattern": "cramped-padding",
+    "name": "Cramped padding",
+    "description": "Text is too close to the edge of its container. Two shapes: (1) an element with its own text where the padding is too low for the font size, and (2) a wrapper with text-bearing children and near-zero padding against a visible boundary (border, outline, or non-transparent background) — children land flush against the boundary line. Add at least 8px (ideally 12–16px) of padding inside bordered, outlined, or colored containers.",
+    "severity": "warning",
+    "category": "quality",
+    "file": "C:\\Users\\fabri\\Documents\\sito internet\\F-AI-sites-claude\\site\\v2\\index.html",
+    "line": 0,
+    "snippet": "<li>: children flush against border-left on left (no inset)"
+  },
+  {
+    "antipattern": "all-caps-body",
+    "name": "All-caps body text",
+    "description": "Long passages in uppercase are hard to read. We recognize words by shape (ascenders and descenders), which all-caps removes. Reserve uppercase for short labels and headings.",
+    "severity": "warning",
+    "category": "quality",
+    "file": "C:\\Users\\fabri\\Documents\\sito internet\\F-AI-sites-claude\\site\\v2\\index.html",
+    "line": 0,
+    "snippet": "text-transform: uppercase on 44 chars of body text"
+  },
+  {
+    "antipattern": "cramped-padding",
+    "name": "Cramped padding",
+    "description": "Text is too close to the edge of its container. Two shapes: (1) an element with its own text where the padding is too low for the font size, and (2) a wrapper with text-bearing children and near-zero padding against a visible boundary (border, outline, or non-transparent background) — children land flush against the boundary line. Add at least 8px (ideally 12–16px) of padding inside bordered, outlined, or colored containers.",
+    "severity": "warning",
+    "category": "quality",
+    "file": "C:\\Users\\fabri\\Documents\\sito internet\\F-AI-sites-claude\\site\\v2\\index.html",
+    "line": 0,
+    "snippet": "<div> \"locanda__musica\": children flush against border-top on top (no inset)"
+  },
+  {
+    "antipattern": "all-caps-body",
+    "name": "All-caps body text",
+    "description": "Long passages in uppercase are hard to read. We recognize words by shape (ascenders and descenders), which all-caps removes. Reserve uppercase for short labels and headings.",
+    "severity": "warning",
+    "category": "quality",
+    "file": "C:\\Users\\fabri\\Documents\\sito internet\\F-AI-sites-claude\\site\\v2\\index.html",
+    "line": 0,
+    "snippet": "text-transform: uppercase on 58 chars of body text"
+  },
+  {
+    "antipattern": "cramped-padding",
+    "name": "Cramped padding",
+    "description": "Text is too close to the edge of its container. Two shapes: (1) an element with its own text where the padding is too low for the font size, and (2) a wrapper with text-bearing children and near-zero padding against a visible boundary (border, outline, or non-transparent background) — children land flush against the boundary line. Add at least 8px (ideally 12–16px) of padding inside bordered, outlined, or colored containers.",
+    "severity": "warning",
+    "category": "quality",
+    "file": "C:\\Users\\fabri\\Documents\\sito internet\\F-AI-sites-claude\\site\\v2\\index.html",
+    "line": 0,
+    "snippet": "<div> \"locanda__come\": children flush against border-top on top (no inset)"
+  },
+  {
+    "antipattern": "cramped-padding",
+    "name": "Cramped padding",
+    "description": "Text is too close to the edge of its container. Two shapes: (1) an element with its own text where the padding is too low for the font size, and (2) a wrapper with text-bearing children and near-zero padding against a visible boundary (border, outline, or non-transparent background) — children land flush against the boundary line. Add at least 8px (ideally 12–16px) of padding inside bordered, outlined, or colored containers.",
+    "severity": "warning",
+    "category": "quality",
+    "file": "C:\\Users\\fabri\\Documents\\sito internet\\F-AI-sites-claude\\site\\v2\\index.html",
+    "line": 0,
+    "snippet": "<div> \"cest\": children flush against bg on all sides (no inset)"
+  },
+  {
+    "antipattern": "cramped-padding",
+    "name": "Cramped padding",
+    "description": "Text is too close to the edge of its container. Two shapes: (1) an element with its own text where the padding is too low for the font size, and (2) a wrapper with text-bearing children and near-zero padding against a visible boundary (border, outline, or non-transparent background) — children land flush against the boundary line. Add at least 8px (ideally 12–16px) of padding inside bordered, outlined, or colored containers.",
+    "severity": "warning",
+    "category": "quality",
+    "file": "C:\\Users\\fabri\\Documents\\sito internet\\F-AI-sites-claude\\site\\v2\\index.html",
+    "line": 0,
+    "snippet": "<li>: children flush against border-left on left (no inset)"
+  },
+  {
+    "antipattern": "cramped-padding",
+    "name": "Cramped padding",
+    "description": "Text is too close to the edge of its container. Two shapes: (1) an element with its own text where the padding is too low for the font size, and (2) a wrapper with text-bearing children and near-zero padding against a visible boundary (border, outline, or non-transparent background) — children land flush against the boundary line. Add at least 8px (ideally 12–16px) of padding inside bordered, outlined, or colored containers.",
+    "severity": "warning",
+    "category": "quality",
+    "file": "C:\\Users\\fabri\\Documents\\sito internet\\F-AI-sites-claude\\site\\v2\\index.html",
+    "line": 0,
+    "snippet": "<li>: children flush against border-left on left (no inset)"
+  },
+  {
+    "antipattern": "cramped-padding",
+    "name": "Cramped padding",
+    "description": "Text is too close to the edge of its container. Two shapes: (1) an element with its own text where the padding is too low for the font size, and (2) a wrapper with text-bearing children and near-zero padding against a visible boundary (border, outline, or non-transparent background) — children land flush against the boundary line. Add at least 8px (ideally 12–16px) of padding inside bordered, outlined, or colored containers.",
+    "severity": "warning",
+    "category": "quality",
+    "file": "C:\\Users\\fabri\\Documents\\sito internet\\F-AI-sites-claude\\site\\v2\\index.html",
+    "line": 0,
+    "snippet": "<li>: children flush against border-left on left (no inset)"
+  },
+  {
+    "antipattern": "all-caps-body",
+    "name": "All-caps body text",
+    "description": "Long passages in uppercase are hard to read. We recognize words by shape (ascenders and descenders), which all-caps removes. Reserve uppercase for short labels and headings.",
+    "severity": "warning",
+    "category": "quality",
+    "file": "C:\\Users\\fabri\\Documents\\sito internet\\F-AI-sites-claude\\site\\v2\\index.html",
+    "line": 0,
+    "snippet": "text-transform: uppercase on 49 chars of body text"
+  },
+  {
+    "antipattern": "cramped-padding",
+    "name": "Cramped padding",
+    "description": "Text is too close to the edge of its container. Two shapes: (1) an element with its own text where the padding is too low for the font size, and (2) a wrapper with text-bearing children and near-zero padding against a visible boundary (border, outline, or non-transparent background) — children land flush against the boundary line. Add at least 8px (ideally 12–16px) of padding inside bordered, outlined, or colored containers.",
+    "severity": "warning",
+    "category": "quality",
+    "file": "C:\\Users\\fabri\\Documents\\sito internet\\F-AI-sites-claude\\site\\v2\\index.html",
+    "line": 0,
+    "snippet": "<div> \"cest__come\": children flush against border-top on top (no inset)"
+  },
+  {
+    "antipattern": "cramped-padding",
+    "name": "Cramped padding",
+    "description": "Text is too close to the edge of its container. Two shapes: (1) an element with its own text where the padding is too low for the font size, and (2) a wrapper with text-bearing children and near-zero padding against a visible boundary (border, outline, or non-transparent background) — children land flush against the boundary line. Add at least 8px (ideally 12–16px) of padding inside bordered, outlined, or colored containers.",
+    "severity": "warning",
+    "category": "quality",
+    "file": "C:\\Users\\fabri\\Documents\\sito internet\\F-AI-sites-claude\\site\\v2\\index.html",
+    "line": 0,
+    "snippet": "<section> \"sec\": children flush against bg on all sides (no inset)"
+  },
+  {
+    "antipattern": "cramped-padding",
+    "name": "Cramped padding",
+    "description": "Text is too close to the edge of its container. Two shapes: (1) an element with its own text where the padding is too low for the font size, and (2) a wrapper with text-bearing children and near-zero padding against a visible boundary (border, outline, or non-transparent background) — children land flush against the boundary line. Add at least 8px (ideally 12–16px) of padding inside bordered, outlined, or colored containers.",
+    "severity": "warning",
+    "category": "quality",
+    "file": "C:\\Users\\fabri\\Documents\\sito internet\\F-AI-sites-claude\\site\\v2\\index.html",
+    "line": 0,
+    "snippet": "<div> \"bench__panel\": children flush against border+bg on right/bottom/left (no inset)"
+  },
+  {
+    "antipattern": "all-caps-body",
+    "name": "All-caps body text",
+    "description": "Long passages in uppercase are hard to read. We recognize words by shape (ascenders and descenders), which all-caps removes. Reserve uppercase for short labels and headings.",
+    "severity": "warning",
+    "category": "quality",
+    "file": "C:\\Users\\fabri\\Documents\\sito internet\\F-AI-sites-claude\\site\\v2\\index.html",
+    "line": 0,
+    "snippet": "text-transform: uppercase on 44 chars of body text"
+  },
+  {
+    "antipattern": "all-caps-body",
+    "name": "All-caps body text",
+    "description": "Long passages in uppercase are hard to read. We recognize words by shape (ascenders and descenders), which all-caps removes. Reserve uppercase for short labels and headings.",
+    "severity": "warning",
+    "category": "quality",
+    "file": "C:\\Users\\fabri\\Documents\\sito internet\\F-AI-sites-claude\\site\\v2\\index.html",
+    "line": 0,
+    "snippet": "text-transform: uppercase on 31 chars of body text"
+  },
+  {
+    "antipattern": "all-caps-body",
+    "name": "All-caps body text",
+    "description": "Long passages in uppercase are hard to read. We recognize words by shape (ascenders and descenders), which all-caps removes. Reserve uppercase for short labels and headings.",
+    "severity": "warning",
+    "category": "quality",
+    "file": "C:\\Users\\fabri\\Documents\\sito internet\\F-AI-sites-claude\\site\\v2\\index.html",
+    "line": 0,
+    "snippet": "text-transform: uppercase on 51 chars of body text"
+  },
+  {
+    "antipattern": "cramped-padding",
+    "name": "Cramped padding",
+    "description": "Text is too close to the edge of its container. Two shapes: (1) an element with its own text where the padding is too low for the font size, and (2) a wrapper with text-bearing children and near-zero padding against a visible boundary (border, outline, or non-transparent background) — children land flush against the boundary line. Add at least 8px (ideally 12–16px) of padding inside bordered, outlined, or colored containers.",
+    "severity": "warning",
+    "category": "quality",
+    "file": "C:\\Users\\fabri\\Documents\\sito internet\\F-AI-sites-claude\\site\\v2\\index.html",
+    "line": 0,
+    "snippet": "<section> \"sec\": children flush against bg on all sides (no inset)"
+  },
+  {
+    "antipattern": "cramped-padding",
+    "name": "Cramped padding",
+    "description": "Text is too close to the edge of its container. Two shapes: (1) an element with its own text where the padding is too low for the font size, and (2) a wrapper with text-bearing children and near-zero padding against a visible boundary (border, outline, or non-transparent background) — children land flush against the boundary line. Add at least 8px (ideally 12–16px) of padding inside bordered, outlined, or colored containers.",
+    "severity": "warning",
+    "category": "quality",
+    "file": "C:\\Users\\fabri\\Documents\\sito internet\\F-AI-sites-claude\\site\\v2\\index.html",
+    "line": 0,
+    "snippet": "<div> \"bench__panel\": children flush against border+bg on right/left (no inset)"
+  },
+  {
+    "antipattern": "cramped-padding",
+    "name": "Cramped padding",
+    "description": "Text is too close to the edge of its container. Two shapes: (1) an element with its own text where the padding is too low for the font size, and (2) a wrapper with text-bearing children and near-zero padding against a visible boundary (border, outline, or non-transparent background) — children land flush against the boundary line. Add at least 8px (ideally 12–16px) of padding inside bordered, outlined, or colored containers.",
+    "severity": "warning",
+    "category": "quality",
+    "file": "C:\\Users\\fabri\\Documents\\sito internet\\F-AI-sites-claude\\site\\v2\\index.html",
+    "line": 0,
+    "snippet": "<section> \"sec\": children flush against bg on all sides (no inset)"
+  },
+  {
+    "antipattern": "all-caps-body",
+    "name": "All-caps body text",
+    "description": "Long passages in uppercase are hard to read. We recognize words by shape (ascenders and descenders), which all-caps removes. Reserve uppercase for short labels and headings.",
+    "severity": "warning",
+    "category": "quality",
+    "file": "C:\\Users\\fabri\\Documents\\sito internet\\F-AI-sites-claude\\site\\v2\\index.html",
+    "line": 0,
+    "snippet": "text-transform: uppercase on 31 chars of body text"
+  },
+  {
+    "antipattern": "all-caps-body",
+    "name": "All-caps body text",
+    "description": "Long passages in uppercase are hard to read. We recognize words by shape (ascenders and descenders), which all-caps removes. Reserve uppercase for short labels and headings.",
+    "severity": "warning",
+    "category": "quality",
+    "file": "C:\\Users\\fabri\\Documents\\sito internet\\F-AI-sites-claude\\site\\v2\\index.html",
+    "line": 0,
+    "snippet": "text-transform: uppercase on 73 chars of body text"
+  },
+  {
+    "antipattern": "cramped-padding",
+    "name": "Cramped padding",
+    "description": "Text is too close to the edge of its container. Two shapes: (1) an element with its own text where the padding is too low for the font size, and (2) a wrapper with text-bearing children and near-zero padding against a visible boundary (border, outline, or non-transparent background) — children land flush against the boundary line. Add at least 8px (ideally 12–16px) of padding inside bordered, outlined, or colored containers.",
+    "severity": "warning",
+    "category": "quality",
+    "file": "C:\\Users\\fabri\\Documents\\sito internet\\F-AI-sites-claude\\site\\v2\\index.html",
+    "line": 0,
+    "snippet": "<div> \"bench__panel\": children flush against border+bg on right/left (no inset)"
+  },
+  {
+    "antipattern": "all-caps-body",
+    "name": "All-caps body text",
+    "description": "Long passages in uppercase are hard to read. We recognize words by shape (ascenders and descenders), which all-caps removes. Reserve uppercase for short labels and headings.",
+    "severity": "warning",
+    "category": "quality",
+    "file": "C:\\Users\\fabri\\Documents\\sito internet\\F-AI-sites-claude\\site\\v2\\index.html",
+    "line": 0,
+    "snippet": "text-transform: uppercase on 63 chars of body text"
+  },
+  {
+    "antipattern": "all-caps-body",
+    "name": "All-caps body text",
+    "description": "Long passages in uppercase are hard to read. We recognize words by shape (ascenders and descenders), which all-caps removes. Reserve uppercase for short labels and headings.",
+    "severity": "warning",
+    "category": "quality",
+    "file": "C:\\Users\\fabri\\Documents\\sito internet\\F-AI-sites-claude\\site\\v2\\index.html",
+    "line": 0,
+    "snippet": "text-transform: uppercase on 53 chars of body text"
+  },
+  {
+    "antipattern": "cramped-padding",
+    "name": "Cramped padding",
+    "description": "Text is too close to the edge of its container. Two shapes: (1) an element with its own text where the padding is too low for the font size, and (2) a wrapper with text-bearing children and near-zero padding against a visible boundary (border, outline, or non-transparent background) — children land flush against the boundary line. Add at least 8px (ideally 12–16px) of padding inside bordered, outlined, or colored containers.",
+    "severity": "warning",
+    "category": "quality",
+    "file": "C:\\Users\\fabri\\Documents\\sito internet\\F-AI-sites-claude\\site\\v2\\index.html",
+    "line": 0,
+    "snippet": "<section> \"sec\": children flush against bg on all sides (no inset)"
+  },
+  {
+    "antipattern": "all-caps-body",
+    "name": "All-caps body text",
+    "description": "Long passages in uppercase are hard to read. We recognize words by shape (ascenders and descenders), which all-caps removes. Reserve uppercase for short labels and headings.",
+    "severity": "warning",
+    "category": "quality",
+    "file": "C:\\Users\\fabri\\Documents\\sito internet\\F-AI-sites-claude\\site\\v2\\index.html",
+    "line": 0,
+    "snippet": "text-transform: uppercase on 31 chars of body text"
+  },
+  {
+    "antipattern": "cramped-padding",
+    "name": "Cramped padding",
+    "description": "Text is too close to the edge of its container. Two shapes: (1) an element with its own text where the padding is too low for the font size, and (2) a wrapper with text-bearing children and near-zero padding against a visible boundary (border, outline, or non-transparent background) — children land flush against the boundary line. Add at least 8px (ideally 12–16px) of padding inside bordered, outlined, or colored containers.",
+    "severity": "warning",
+    "category": "quality",
+    "file": "C:\\Users\\fabri\\Documents\\sito internet\\F-AI-sites-claude\\site\\v2\\index.html",
+    "line": 0,
+    "snippet": "<section> \"sec\": children flush against bg on right/left (no inset)"
+  },
+  {
+    "antipattern": "cramped-padding",
+    "name": "Cramped padding",
+    "description": "Text is too close to the edge of its container. Two shapes: (1) an element with its own text where the padding is too low for the font size, and (2) a wrapper with text-bearing children and near-zero padding against a visible boundary (border, outline, or non-transparent background) — children land flush against the boundary line. Add at least 8px (ideally 12–16px) of padding inside bordered, outlined, or colored containers.",
+    "severity": "warning",
+    "category": "quality",
+    "file": "C:\\Users\\fabri\\Documents\\sito internet\\F-AI-sites-claude\\site\\v2\\index.html",
+    "line": 0,
+    "snippet": "<div> \"brief__shell\": children flush against border+bg on all sides (no inset)"
+  },
+  {
+    "antipattern": "all-caps-body",
+    "name": "All-caps body text",
+    "description": "Long passages in uppercase are hard to read. We recognize words by shape (ascenders and descenders), which all-caps removes. Reserve uppercase for short labels and headings.",
+    "severity": "warning",
+    "category": "quality",
+    "file": "C:\\Users\\fabri\\Documents\\sito internet\\F-AI-sites-claude\\site\\v2\\index.html",
+    "line": 0,
+    "snippet": "text-transform: uppercase on 34 chars of body text"
+  },
+  {
+    "antipattern": "all-caps-body",
+    "name": "All-caps body text",
+    "description": "Long passages in uppercase are hard to read. We recognize words by shape (ascenders and descenders), which all-caps removes. Reserve uppercase for short labels and headings.",
+    "severity": "warning",
+    "category": "quality",
+    "file": "C:\\Users\\fabri\\Documents\\sito internet\\F-AI-sites-claude\\site\\v2\\index.html",
+    "line": 0,
+    "snippet": "text-transform: uppercase on 40 chars of body text"
+  },
+  {
+    "antipattern": "cramped-padding",
+    "name": "Cramped padding",
+    "description": "Text is too close to the edge of its container. Two shapes: (1) an element with its own text where the padding is too low for the font size, and (2) a wrapper with text-bearing children and near-zero padding against a visible boundary (border, outline, or non-transparent background) — children land flush against the boundary line. Add at least 8px (ideally 12–16px) of padding inside bordered, outlined, or colored containers.",
+    "severity": "warning",
+    "category": "quality",
+    "file": "C:\\Users\\fabri\\Documents\\sito internet\\F-AI-sites-claude\\site\\v2\\index.html",
+    "line": 0,
+    "snippet": "<dialog> \"playlab-dialog\": children flush against bg on all sides (no inset)"
+  },
+  {
+    "antipattern": "tiny-text",
+    "name": "Tiny body text",
+    "description": "Body text below 12px is hard to read, especially on high-DPI screens. Use at least 14px for body content, 16px is ideal.",
+    "severity": "warning",
+    "category": "quality",
+    "file": "C:\\Users\\fabri\\Documents\\sito internet\\F-AI-sites-claude\\site\\v2\\index.html",
+    "line": 0,
+    "snippet": "11px body text"
+  },
+  {
+    "antipattern": "gradient-text",
+    "name": "Gradient text",
+    "description": "Gradient text is decorative rather than meaningful — a common AI tell, especially on headings and metrics. Use solid colors for text.",
+    "severity": "warning",
+    "category": "slop",
+    "file": "C:\\Users\\fabri\\Documents\\sito internet\\F-AI-sites-claude\\site\\v2\\index.html",
+    "line": 0,
+    "snippet": "background-clip: text + gradient"
+  },
+  {
+    "antipattern": "pulsing-dot",
+    "name": "Pulsing status dot",
+    "description": "Small pulsing status dots simulate liveness decoratively. Reserve pulse animation for indicators tied to genuinely live, changing data; a static indicator with clear labeling is honest and calmer.",
+    "severity": "warning",
+    "category": "slop",
+    "file": "C:\\Users\\fabri\\Documents\\sito internet\\F-AI-sites-claude\\site\\v2\\index.html",
+    "line": 0,
+    "snippet": ".eyebrow i — 7x7px dot with infinite \"ping\" animation"
+  },
+  {
+    "antipattern": "pulsing-dot",
+    "name": "Pulsing status dot",
+    "description": "Small pulsing status dots simulate liveness decoratively. Reserve pulse animation for indicators tied to genuinely live, changing data; a static indicator with clear labeling is honest and calmer.",
+    "severity": "warning",
+    "category": "slop",
+    "file": "C:\\Users\\fabri\\Documents\\sito internet\\F-AI-sites-claude\\site\\v2\\index.html",
+    "line": 0,
+    "snippet": ".voice__dot — 7x7px dot with infinite \"ping\" animation"
+  },
+  {
+    "antipattern": "dark-glow",
+    "name": "Glowing shadow accents",
+    "description": "Colored glow shadows — a zero-offset chromatic halo (box- or text-shadow) on any background, or any colored blurred shadow on a dark background — are the default \"cool\" look of AI-generated UIs. Use neutral elevation shadows and subtle, purposeful lighting instead.",
+    "severity": "warning",
+    "category": "slop",
+    "file": "C:\\Users\\fabri\\Documents\\sito internet\\F-AI-sites-claude\\site\\v2\\index.html",
+    "line": 0,
+    "snippet": "Zero-offset box-shadow glow (#14c08a)"
+  },
+  {
+    "antipattern": "repeating-stripes-gradient",
+    "name": "Repeating-gradient stripes",
+    "description": "Repeating-gradient stripes used as surface decoration are a recurring generated-UI signature. Reach for a deliberate texture or leave the surface plain.",
+    "severity": "advisory",
+    "category": "slop",
+    "file": "C:\\Users\\fabri\\Documents\\sito internet\\F-AI-sites-claude\\site\\v2\\index.html",
+    "line": 0,
+    "snippet": "repeating-gradient decorative stripes",
+    "advisory": true
+  }
+]
