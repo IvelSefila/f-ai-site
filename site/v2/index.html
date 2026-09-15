@@ -244,28 +244,28 @@
         <h3>Grafica pubblicitaria</h3>
         <p>Creo la direzione visiva e la porto nei formati che servono alla campagna.</p>
         <p class="offerta__tag mono">Key visual · Declinazioni · Motion graphic · Digitale e stampa</p>
-        <a class="btn btn--sm" href="#brief">Parliamo della campagna <i aria-hidden="true">↗</i></a>
+        <a class="btn btn--sm" href="#brief" data-brief="grafica">Parliamo della campagna <i aria-hidden="true">↗</i></a>
       </article>
       <article class="offerta__card">
         <span class="mono">02 / Movimento</span>
         <h3>Video e post-produzione</h3>
         <p>Costruisco ritmo, racconto e finitura con riprese esistenti, materiali creati o generazione assistita.</p>
         <p class="offerta__tag mono">Montaggio · Motion · Compositing · Formati brevi e lunghi</p>
-        <a class="btn btn--sm" href="#brief">Parliamo del video <i aria-hidden="true">↗</i></a>
+        <a class="btn btn--sm" href="#brief" data-brief="video">Parliamo del video <i aria-hidden="true">↗</i></a>
       </article>
       <article class="offerta__card">
         <span class="mono">03 / Continuità</span>
         <h3>Sistemi per social media</h3>
         <p>Trasformo una direzione creativa in format riconoscibili e facili da produrre con continuità.</p>
         <p class="offerta__tag mono">Format · Template · Adattamenti · Flusso di revisione</p>
-        <a class="btn btn--sm" href="#brief">Organizziamo i contenuti <i aria-hidden="true">↗</i></a>
+        <a class="btn btn--sm" href="#brief" data-brief="social">Organizziamo i contenuti <i aria-hidden="true">↗</i></a>
       </article>
       <article class="offerta__card">
         <span class="mono">04 / Sistemi</span>
         <h3>Flussi e prototipi AI</h3>
         <p>Collego strumenti, passaggi e controlli umani per ridurre il lavoro ripetitivo e verificare rapidamente nuove idee.</p>
         <p class="offerta__tag mono">Automazioni · Agenti · Prototipi · Locale o cloud</p>
-        <a class="btn btn--sm" href="#brief">Valutiamo il flusso <i aria-hidden="true">↗</i></a>
+        <a class="btn btn--sm" href="#brief" data-brief="ai">Valutiamo il flusso <i aria-hidden="true">↗</i></a>
       </article>
     </div>
     <p class="offerta__nota">Web design e prototipazione sono capacità trasversali: le uso quando il progetto richiede un’esperienza o un’applicazione.</p>
@@ -1052,34 +1052,28 @@
 </section>
 
 <!-- ══ 05 · tecnologia ══ -->
-<section class="sec sec--alt sp-m sec--chiara t-piano" id="tecnologia" data-proof="tecnologia" aria-labelledby="tecT">
+<section class="sec sp-l ap-stretta sec--chiara t-piano" id="profilo" aria-labelledby="profT">
   <header class="sec__head">
-    <p class="eyebrow mono"><span class="n">Prova 04</span> Tecnologia</p>
-    <h2 id="tecT">La tecnologia giusta.<br><em>Non quella di moda.</em></h2>
-    <p class="sec__lede">Ho una workstation su cui installo, confronto e integro modelli. Scelgo fra locale, cloud e ibrido su assi vere — e i numeri qui sotto sono dichiarati per quello che sono: <strong>stime dalla mia esperienza</strong>, non misure di laboratorio.</p>
+    <p class="eyebrow mono"><span class="n">Profilo</span> Creativo + tecnico</p>
+    <h2 id="profT">Un profilo visivo.<br><em>Un metodo tecnico.</em></h2>
   </header>
-  <div class="bench bench--invertito">
-    <figure class="bench__stage">
-      <canvas id="radar" width="900" height="700" aria-label="Confronto fra lavorazione locale, cloud e ibrida su cinque assi."></canvas>
-      <figcaption class="mono"><span id="radarMode">Locale</span><span>stime dichiarate</span></figcaption>
-    </figure>
-    <div class="bench__panel">
-      <div class="modes mono" role="group" aria-label="Modalità di lavorazione">
-        <button type="button" aria-pressed="true" data-mode="0">Locale</button>
-        <button type="button" aria-pressed="false" data-mode="1">Cloud</button>
-        <button type="button" aria-pressed="false" data-mode="2">Ibrido</button>
-      </div>
-      <h3 id="modeTitle">Più controllo sul flusso</h3>
-      <p id="modeCopy">Il lavoro locale offre più controllo su file, configurazioni e iterazioni; richiede capacità hardware e gestione tecnica.</p>
+  <div class="profilo">
+    <div class="profilo__testo">
+      <p class="profilo__lead">Vengo dalla grafica e dal montaggio, e ci sono arrivato prima che
+        esistessero questi strumenti. È la ragione per cui non mi impressionano: so ancora
+        distinguere un lavoro finito da un lavoro che sembra finito.</p>
+      <p>Il valore non è “usare l’AI”, ma sapere quale usare, quando evitarla e come dirigere il
+        risultato. Quello che vedi in questa pagina — i lavori, gli strumenti, le due applicazioni
+        — è tutto lavoro mio, e questo è il modo più onesto che ho trovato per mostrarlo.</p>
     </div>
+    <aside class="profilo__mark" aria-hidden="true"><span>ART</span><b>×</b><span>AI</span></aside>
   </div>
-
 </section>
 
 <!-- ══ 06 · laboratorio ══ -->
 <section class="sec sp-s ap-numero t-piano" id="laboratorio" data-proof="laboratorio" aria-labelledby="labT">
-  <header class="sec__head" data-num="05">
-    <p class="eyebrow mono"><span class="n">Prova 05</span> Playlab</p>
+  <header class="sec__head" data-num="04">
+    <p class="eyebrow mono"><span class="n">Prova 04</span> Playlab</p>
     <h2 id="labT">Quattro giochi,<br><em>scritti da zero.</em></h2>
     <p class="sec__lede">Quattro giochi originali che girano dentro questa pagina, più un
       costruttore che te ne fa uno rispondendo a sedici domande. Non è un passatempo: se so
@@ -1174,22 +1168,28 @@
 </section>
 
 <!-- ══ profilo ══ -->
-<section class="sec sp-l ap-stretta sec--chiara t-piano" id="profilo" aria-labelledby="profT">
+<section class="sec sec--alt sp-m sec--chiara t-piano" id="tecnologia" data-proof="tecnologia" aria-labelledby="tecT">
   <header class="sec__head">
-    <p class="eyebrow mono"><span class="n">Profilo</span> Creativo + tecnico</p>
-    <h2 id="profT">Un profilo visivo.<br><em>Un metodo tecnico.</em></h2>
+    <p class="eyebrow mono"><span class="n">Prova 05</span> Tecnologia</p>
+    <h2 id="tecT">La tecnologia giusta.<br><em>Non quella di moda.</em></h2>
+    <p class="sec__lede">Ho una workstation su cui installo, confronto e integro modelli. Scelgo fra locale, cloud e ibrido su assi vere — e i numeri qui sotto sono dichiarati per quello che sono: <strong>stime dalla mia esperienza</strong>, non misure di laboratorio.</p>
   </header>
-  <div class="profilo">
-    <div class="profilo__testo">
-      <p class="profilo__lead">Vengo dalla grafica e dal montaggio, e ci sono arrivato prima che
-        esistessero questi strumenti. È la ragione per cui non mi impressionano: so ancora
-        distinguere un lavoro finito da un lavoro che sembra finito.</p>
-      <p>Il valore non è “usare l’AI”, ma sapere quale usare, quando evitarla e come dirigere il
-        risultato. Quello che vedi in questa pagina — i lavori, gli strumenti, le due applicazioni
-        — è tutto lavoro mio, e questo è il modo più onesto che ho trovato per mostrarlo.</p>
+  <div class="bench bench--invertito">
+    <figure class="bench__stage">
+      <canvas id="radar" width="900" height="700" aria-label="Confronto fra lavorazione locale, cloud e ibrida su cinque assi."></canvas>
+      <figcaption class="mono"><span id="radarMode">Locale</span><span>stime dichiarate</span></figcaption>
+    </figure>
+    <div class="bench__panel">
+      <div class="modes mono" role="group" aria-label="Modalità di lavorazione">
+        <button type="button" aria-pressed="true" data-mode="0">Locale</button>
+        <button type="button" aria-pressed="false" data-mode="1">Cloud</button>
+        <button type="button" aria-pressed="false" data-mode="2">Ibrido</button>
+      </div>
+      <h3 id="modeTitle">Più controllo sul flusso</h3>
+      <p id="modeCopy">Il lavoro locale offre più controllo su file, configurazioni e iterazioni; richiede capacità hardware e gestione tecnica.</p>
     </div>
-    <aside class="profilo__mark" aria-hidden="true"><span>ART</span><b>×</b><span>AI</span></aside>
   </div>
+
 </section>
 
 <!-- ══ 08 · verdetto ══ -->

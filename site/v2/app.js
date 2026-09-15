@@ -584,7 +584,17 @@ $('#dsPrint').addEventListener('click', () => { renderDossier(); act(); print();
 Il modulo che il cliente compila. Il controller è quello originale,
 estratto in brief.js: i dati restano nel browser e finiscono in una
 email solo se è lui ad aprirla. */
-initBrief();
+const brief = initBrief();
+/* Gli inviti delle quattro schede dei servizi aprono il brief con la
+   loro risposta gia' segnata. Senza JavaScript restano collegamenti a
+   #brief e portano al modulo come prima: la scorciatoia si perde, la
+   strada no. */
+$$('[data-brief]').forEach(a => a.addEventListener('click', (e) => {
+  if (!brief?.apriCon) return;        /* il modulo non c'e': vale l'ancora */
+  e.preventDefault();
+  brief.apriCon(a.dataset.brief);
+  act();
+}));
 $$('#brief-form input, #brief-form textarea, #brief-form select').forEach(el =>
   el.addEventListener('change', act, { once: true }));
 $('#brief-next')?.addEventListener('click', act);

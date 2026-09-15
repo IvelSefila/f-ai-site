@@ -524,6 +524,15 @@ export function initOrdine() {
       p.dataset.ordId = i;
     });
 
+  /* Una passata di rinumerazione anche all'apertura, non solo dopo uno
+     spostamento. I numeri delle prove e quelli della testata sono
+     scritti a mano nell'HTML, e appena si cambia l'ordine delle sezioni
+     nel file quei numeri restano indietro senza che nessun errore lo
+     dica: e' successo scambiando tecnologia e profilo, e la testata ha
+     continuato a dire "04 Tecnologia" per un pezzo. Facendola girare
+     qui, la fonte della verita' diventa l'ordine in pagina. */
+  if (pag) rinumeraSezioni();
+
   const m = leggi();
   if (!Object.keys(m).length) return;
   for (const g of gruppi) {

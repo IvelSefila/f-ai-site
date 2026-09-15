@@ -405,7 +405,22 @@ function createBriefController() {
     editButton?.addEventListener("click", () => open(steps.length - 1, true));
     showStep(currentStep, false);
 
-    return { open };
+    /* Apre il brief con una risposta gia' scelta alla prima domanda.
+       Serve agli inviti delle quattro schede dei servizi: prima
+       promettevano quattro cose diverse e portavano tutti e quattro
+       alla stessa domanda vuota. */
+    function apriCon(tipo) {
+      const scelta = $(`input[name="project_type"][value="${tipo}"]`, form);
+      if (scelta) {
+        scelta.checked = true;
+        /* l'evento serve: il modulo ricalcola il riepilogo e sblocca
+           l'avanti ascoltando "change", non leggendo il DOM */
+        scelta.dispatchEvent(new Event('change', { bubbles: true }));
+      }
+      open(0, true);
+    }
+
+    return { open, apriCon };
   }
 
 export function initBrief() {
