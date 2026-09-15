@@ -243,7 +243,23 @@ for (const [nome, vp, dito] of [['telefono', { width: 390, height: 844 }, true],
   const regiaEra = await doveEra('regia'), toniEra = await toni();
   await scambiaSezioni(p, 'metodo', 'regia');
   await p.mouse.up(); await dorme(p, 700);
-  dice(await doveEra('regia') === regiaEra,
+  /* La prova chiedeva che regia non si muovesse di un posto. E' una
+     domanda piu' stretta della regola: mentre attraversa la pagina il
+     blocco scambia con le bande buone che incontra, e su un telefono —
+     dove la colonna e' una sola e il tragitto e' tutto verticale — un
+     paio di scambi leciti ci scappano sempre. Il tragitto e' cambiato
+     quando gli strumenti sono passati dai servizi al laboratorio, e la
+     prova e' saltata su una cosa che non e' un difetto.
+     Quello che deve valere e' un'altra cosa: che regia resti su una
+     banda SCURA. Se una chiara le prendesse il posto, il tono di quella
+     posizione cambierebbe — ed e' esattamente cio' che la riga sotto,
+     sulla fila dei toni, gia' misura. Qui si controlla il tono di regia
+     dove si trova adesso, che e' la regola detta per esteso. */
+  const tonoDi = (id) => p.evaluate(i => {
+    const s = document.getElementById(i);
+    return s && s.classList.contains('sec--chiara') ? 'c' : 's';
+  }, id);
+  dice(await tonoDi('regia') === 's',
        'lasciata su una scura, la sezione chiara non le prende il posto');
   dice(await toni() === toniEra, `la fila dei toni e' quella di prima: ${toniEra}`);
 

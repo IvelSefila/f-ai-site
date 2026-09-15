@@ -54,8 +54,19 @@ for (const [nome, vp, dito] of [['telefono', { width: 390, height: 844 }, true],
     const tutte = [...document.querySelectorAll('#main > section')];
     return { sezione: sez.id, posizione: tutte.indexOf(sez) + 1, quante: tutte.length };
   });
-  dice(!!dove && dove.sezione === 'banchi',
-       `il blocco sta nei servizi, sezione ${dove?.posizione} di ${dove?.quante}`);
+  /* Stava nei servizi, PRIMA dei lavori: 698px di nomi di prodotti
+     altrui incontrati da chi non aveva ancora visto un cliente. Adesso
+     sta nel laboratorio, che viene dopo i quattro casi — la stessa lista
+     letta li' sono ricevute invece che pretese. Si controlla anche che
+     stia dopo i lavori, perche' e' quello il punto: la sezione da sola
+     potrebbe cambiare nome un giorno, l'ordine no. */
+  dice(!!dove && dove.sezione === 'laboratorio',
+       `il blocco sta nel laboratorio, sezione ${dove?.posizione} di ${dove?.quante}`);
+  const dopoILavori = await p.evaluate(() => {
+    const t = [...document.querySelectorAll('#main > section')].map(s => s.id);
+    return t.indexOf('laboratorio') > t.indexOf('lavori');
+  });
+  dice(dopoILavori, 'e arriva dopo i quattro casi, non prima');
 
   /* ── ogni pastiglia ha la sua scheda ────────────────────────────── */
   const conto = await p.evaluate(() => {
