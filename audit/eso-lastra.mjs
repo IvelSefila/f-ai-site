@@ -14,14 +14,14 @@ for (const [nome, vp] of [['telefono', { width: 390, height: 844 }],
   await p.evaluate(() => { document.querySelectorAll('.rv').forEach(e => e.classList.add('in'));
     for (const s of ['.pal-accenno', '.coda', '.testata', '.sessione']) {
       const e = document.querySelector(s); if (e) e.style.display = 'none'; } });
-  await p.evaluate(() => Promise.all([...document.querySelectorAll('.eso__dispositivo img')]
+  await p.evaluate(() => Promise.all([...document.querySelectorAll('.eso__figura img')]
     .map(i => i.decode().catch(() => {}))));
   await p.waitForTimeout(300);
   await (await p.$('.eso__slab')).screenshot({
     path: `audit/v2shots/eso-${nome}.jpg`, type: 'jpeg', quality: 86 });
   const m = await p.evaluate(() => {
     const s = document.querySelector('.eso__slab').getBoundingClientRect();
-    const d = document.querySelector('.eso__dispositivo img').getBoundingClientRect();
+    const d = document.querySelector('.eso__figura img').getBoundingClientRect();
     return { lastra: [Math.round(s.width), Math.round(s.height)],
              dispositivo: [Math.round(d.width), Math.round(d.height)],
              senzaScroll: document.documentElement.scrollWidth <= innerWidth };

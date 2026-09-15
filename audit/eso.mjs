@@ -64,7 +64,7 @@ for (const [nome, vp, dito] of [['telefono', { width: 390, height: 844 }, true],
       dopoUnion: !!u && dopo(u, e),
       primaLocanda: !!l && dopo(e, l),
       pezzi: document.querySelectorAll('.eso__pezzo').length,
-      dispositivo: !!document.querySelector('.eso__dispositivo img'),
+      dispositivo: !!document.querySelector('.eso__figura img'),
       tavola: !!document.querySelector('.eso__tavola img'),
       claim: (document.querySelector('.eso__claim') || {}).textContent || '',
     };

@@ -7,6 +7,7 @@ import { initStrumenti } from './strumenti.js?v=20260911-135324';
 import { initUnion } from './union.js?v=20260911-135324';
 import { initEso } from './eso.js?v=20260911-135324';
 import { initLocanda } from './locanda.js?v=20260911-135324';
+import { initCest } from './cest.js?v=20260911-135324';
 import { initPalette } from './palette.js?v=20260911-135324';
 import { keyVisual, timeline, radar, MODES, rng, leggiColori} from './engine.js?v=20260911-135324';
 import { initBrief } from './brief.js?v=20260911-135324';
@@ -710,9 +711,10 @@ document.addEventListener('palette', () => {
 });
 initPalette();
 initStrumenti();
-/* I tre casi avvisano quando qualcuno guarda davvero un pezzo: e' la
-   prova "Lavori" del dossier, e vale piu' di uno scorrimento. */
+/* I quattro casi avvisano quando qualcuno guarda davvero un pezzo: e'
+   la prova "Lavori" del dossier, e vale piu' di uno scorrimento. */
 const guardato = () => { act(); proof('lavori'); };
 initUnion(guardato);
 initEso(guardato);
 initLocanda(guardato);
+initCest(guardato);

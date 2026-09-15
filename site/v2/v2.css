@@ -788,8 +788,9 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border:0;border-radiu
   .union__lavori .union__pezzo p,.union .union__come dd,
   .locanda__lavori .locanda__pezzo p,.locanda .locanda__come dd,
   .locanda__brani .locanda__nome em,.union .caso-firma,.eso .caso-firma,
-  .locanda .caso-firma,
+  .locanda .caso-firma,.cest .caso-firma,
   .eso__lavori .eso__pezzo p,.eso .eso__come dd,
+  .cest__lavori .cest__pezzo p,.cest .cest__come dd,
   .eso .eso__tavola figcaption{font-size:15px}
   /* .brief-data-note stava qui e vinceva sulla riga dei 15px, che sta
      sopra: due elenchi fatti a mano che si contraddicono, e vince
@@ -1906,127 +1907,175 @@ body.ord-in-corso *{cursor:grabbing !important}
 
 
 /* ═══════════════════════════════════════════════════════════════════
- * ESOSCHELETRI — il caso, fra Union Energia e la Locanda
+ * SCHEDA TECNICA — la lastra scura di due casi: esoscheletri e CETS
  *
- * I colori sono quelli del sito che ho costruito per il prodotto, presi
- * dalle sue variabili: notte #04070c, superficie #0e1624, ciano #00f0ff,
- * ghiaccio #c4ecff. Il verde neon #00ff8c c'e' nel loro sistema ma qui
- * NON si usa per il testo: e' a un soffio dallo smeraldo di F/AI, e due
- * verdi quasi uguali uno accanto all'altro fanno sembrare che il lavoro
- * del cliente sia una parte del mio sito. Resta il ciano, che di
- * confusione non ne fa.
+ * Due lavori diversissimi che hanno pero' la stessa grammatica: una
+ * lastra scura con l'oggetto del cliente, un corpo chiaro sotto, e i
+ * video tutti dentro una cornice 16:9 — perche' in quella fila un
+ * trailer orizzontale e un reel verticale devono partire dalla stessa
+ * quota. Le regole quindi sono scritte una volta per tutti e due; ogni
+ * caso dichiara soltanto le sue sigle di colore.
  *
- * Terza lastra, terzo mondo: Union e' lime di giorno, la Locanda e'
- * bordeaux di sera, questa e' una scheda tecnica. Reticolo, tracce, e
- * l'oggetto scontornato che ci sta dentro come in un manuale.
+ * ESOSCHELETRI — i colori sono quelli del sito che ho costruito per il
+ * prodotto: notte #04070c, superficie #0e1624, ciano #00f0ff, ghiaccio
+ * #c4ecff. Il verde neon #00ff8c c'e' nel loro sistema ma qui NON si usa
+ * per il testo: e' a un soffio dallo smeraldo di F/AI, e due verdi quasi
+ * uguali uno accanto all'altro fanno sembrare che il lavoro del cliente
+ * sia una parte del mio sito. Resta il ciano, che confusione non ne fa.
  *
- * Il ciano su #0b1522 fa 13,2:1 e il ghiaccio 15,6:1: qui il contrasto
- * non e' un problema, e' una conseguenza del fondo quasi nero.
+ * CETS — blu d'ordinanza, quello del marchio. Per lo stesso motivo di
+ * sopra l'accento NON e' il verde del tricolore: quello vive nella scena
+ * disegnata e nella targa, dove e' segno e non testo. Sul testo ci vanno
+ * il bianco e un acciaio chiaro, che su quel blu fanno 7,6:1.
  * ═══════════════════════════════════════════════════════════════════ */
 .eso{
-  --e-notte:#060b14; --e-fondo:#0b1522;
-  --e-ciano:#00f0ff; --e-ciano-tenue:#7fe9ff;
-  --e-ghiaccio:#e8f3fa; --e-carta:#ffffff;
-  --e-riga:rgba(11,21,34,.14);
+  --sk-notte:#060b14; --sk-fondo:#0b1522;
+  --sk-vivo:#00f0ff; --sk-tenue:#7fe9ff;
+  --sk-chiaro:#e8f3fa; --sk-carta:#ffffff;
+  --sk-riga:rgba(11,21,34,.14);
+  --sk-targa:rgba(0,240,255,.07); --sk-targa-riga:rgba(0,240,255,.4);
+  --sk-alone:rgba(0,240,255,.22);
+  --sk-inchiostro:#16222e; --sk-titolo:#12212e;
+  --sk-etichetta:#2d4a5c; --sk-grigio:#4a5a66; --sk-testo:#3d4c58;
+  --sk-buio:#0a121c; --sk-nero:#05090f;
+  --sk-bordo:var(--sk-vivo)}
+
+/* CETS — centro elaborazione dati. Il blu dello scudo, e il tricolore
+   solo come segno: vedi la nota in cima. */
+.cest{
+  --sk-notte:#070e19; --sk-fondo:#14243a;
+  --sk-vivo:#ffffff; --sk-tenue:#9db8d6;
+  --sk-chiaro:#cfe0f2; --sk-carta:#ffffff;
+  --sk-riga:rgba(20,36,58,.14);
+  --sk-targa:rgba(193,39,45,.14); --sk-targa-riga:rgba(216,86,92,.55);
+  --sk-alone:rgba(157,184,214,.18);
+  --sk-inchiostro:#16222e; --sk-titolo:#12212e;
+  --sk-etichetta:#2d4a5c; --sk-grigio:#4a5a66; --sk-testo:#3d4c58;
+  --sk-buio:#0a121c; --sk-nero:#05090f;
+  --sk-bordo:var(--sk-fondo)}
+
+.eso,.cest{
   margin:0 0 clamp(34px,4vw,56px);
   border-radius:clamp(18px,2vw,28px);overflow:hidden;
-  background:var(--e-carta);color:#16222e;
+  background:var(--sk-carta);color:var(--sk-inchiostro);
   box-shadow:0 30px 80px -34px rgba(0,0,0,.8)}
 
-.eso__slab{
+.eso__slab,.cest__slab{
   position:relative;isolation:isolate;overflow:hidden;
   display:grid;gap:clamp(18px,2vw,30px);
   padding:clamp(24px,3.2vw,48px);
-  grid-template-areas:"testa testa" "piede dispositivo";
+  grid-template-areas:"testa testa" "piede figura";
   grid-template-columns:minmax(0,1fr) auto;align-items:end;
-  background:linear-gradient(158deg, var(--e-fondo) 0%, var(--e-notte) 100%)}
+  background:linear-gradient(158deg, var(--sk-fondo) 0%, var(--sk-notte) 100%)}
 @media(min-width:840px){
-  .eso__slab{grid-template-areas:"testa dispositivo" "piede dispositivo";
+  .eso__slab,.cest__slab{grid-template-areas:"testa figura" "piede figura";
     grid-template-columns:minmax(0,1fr) minmax(200px,300px);
     min-height:min(52vw,520px)}
 }
-.eso__scena{position:absolute;inset:0;z-index:0;width:100%;height:100%;
+.eso__scena,.cest__scena{position:absolute;inset:0;z-index:0;width:100%;height:100%;
   pointer-events:none}
-.eso__scena--stretto{display:none}
+.eso__scena--stretto,.cest__scena--stretto{display:none}
 @media(max-width:839px){
-  .eso__scena--largo{display:none}
-  .eso__scena--stretto{display:block}
+  .eso__scena--largo,.cest__scena--largo{display:none}
+  .eso__scena--stretto,.cest__scena--stretto{display:block}
 }
-.eso__testa{grid-area:testa;align-self:center;max-width:60ch;position:relative;z-index:1}
-.eso__piede{grid-area:piede;align-self:end;position:relative;z-index:1}
+.eso__testa,.cest__testa{grid-area:testa;align-self:center;max-width:60ch;
+  position:relative;z-index:1}
+.eso__piede,.cest__piede{grid-area:piede;align-self:end;position:relative;z-index:1}
 
-.eso__testa .eyebrow{color:var(--e-ciano-tenue)}
-.eso__testa .eyebrow .n{color:var(--e-ciano-tenue);border-right-color:rgba(127,233,255,.4)}
-.eso__testa h3{margin:12px 0 0;color:var(--e-ghiaccio);
+.eso__testa .eyebrow,.cest__testa .eyebrow{color:var(--sk-tenue)}
+.eso__testa .eyebrow .n,.cest__testa .eyebrow .n{color:var(--sk-tenue);
+  border-right-color:color-mix(in srgb, var(--sk-tenue) 40%, transparent)}
+.eso__testa h3,.cest__testa h3{margin:12px 0 0;color:var(--sk-chiaro);
   font-size:clamp(30px,4.2vw,52px);letter-spacing:-.025em;line-height:1.02}
-.eso__testa h3 em{font-style:normal;color:var(--e-ciano)}
-.eso__sotto{margin:10px 0 0;display:flex;flex-wrap:wrap;align-items:baseline;gap:0 12px;
-  color:var(--e-ghiaccio);font-family:var(--display);font-size:clamp(19px,2.1vw,26px);
-  font-weight:600;letter-spacing:-.01em;line-height:1.15}
-.eso__sotto span{color:var(--e-ciano-tenue);font-family:var(--mono);font-weight:400;
-  font-size:12px;letter-spacing:.12em;text-transform:uppercase}
-.eso__lede{margin:16px 0 0;color:rgba(232,243,250,.92);font-size:16.5px;line-height:1.62}
-.eso__lede b{color:var(--e-carta);font-weight:700}
-.eso__seguito{margin:12px 0 0;max-width:62ch;color:rgba(232,243,250,.78);
+.eso__testa h3 em,.cest__testa h3 em{font-style:normal;color:var(--sk-vivo)}
+.eso__sotto,.cest__sotto{margin:10px 0 0;display:flex;flex-wrap:wrap;align-items:baseline;
+  gap:0 12px;color:var(--sk-chiaro);font-family:var(--display);
+  font-size:clamp(19px,2.1vw,26px);font-weight:600;letter-spacing:-.01em;line-height:1.15}
+.eso__sotto span,.cest__sotto span{color:var(--sk-tenue);font-family:var(--mono);
+  font-weight:400;font-size:12px;letter-spacing:.12em;text-transform:uppercase}
+.eso__lede,.cest__lede{margin:16px 0 0;font-size:16.5px;line-height:1.62;
+  color:color-mix(in srgb, var(--sk-chiaro) 92%, transparent)}
+.eso__lede b,.cest__lede b{color:var(--sk-carta);font-weight:700}
+.eso__seguito,.cest__seguito{margin:12px 0 0;max-width:62ch;
+  color:color-mix(in srgb, var(--sk-chiaro) 78%, transparent);
   font-size:15.5px;line-height:1.58}
 
 /* La targa del payoff: e' la frase dell'endcard del marchio. */
-.eso__claim{margin:20px 0 0;display:inline-grid;justify-items:start;
+.eso__claim,.cest__claim{margin:20px 0 0;display:inline-grid;justify-items:start;
   position:relative;gap:2px;padding:11px 22px 13px;border-radius:12px;
-  background:rgba(0,240,255,.07);border:1px solid rgba(0,240,255,.4);
+  background:var(--sk-targa);border:1px solid var(--sk-targa-riga);
   font-family:var(--display);line-height:1.15}
-.eso__claim span{color:var(--e-ciano-tenue);font-size:clamp(13px,1.4vw,15px);
+.eso__claim span,.cest__claim span{color:var(--sk-tenue);font-size:clamp(13px,1.4vw,15px);
   font-weight:600;letter-spacing:.18em;text-transform:uppercase}
-.eso__claim b{color:var(--e-carta);font-size:clamp(17px,2.1vw,24px);
+.eso__claim b,.cest__claim b{color:var(--sk-carta);font-size:clamp(17px,2.1vw,24px);
   font-weight:600;letter-spacing:-.01em}
 
-.eso__conti{margin:0;padding:0;list-style:none;
+.eso__conti,.cest__conti{margin:0;padding:0;list-style:none;
   display:grid;grid-template-columns:repeat(3,minmax(0,1fr));max-width:400px}
-.eso__conti li{display:grid;gap:2px;align-content:start;min-width:0;
-  padding-left:clamp(12px,1.4vw,18px);border-left:1px solid rgba(127,233,255,.28)}
-.eso__conti li:first-child{padding-left:0;border-left:0}
-.eso__conti b{color:var(--e-ciano);font-family:var(--display);
+.eso__conti li,.cest__conti li{display:grid;gap:2px;align-content:start;min-width:0;
+  padding-left:clamp(12px,1.4vw,18px);
+  border-left:1px solid color-mix(in srgb, var(--sk-tenue) 28%, transparent)}
+.eso__conti li:first-child,.cest__conti li:first-child{padding-left:0;border-left:0}
+.eso__conti b,.cest__conti b{color:var(--sk-vivo);font-family:var(--display);
   font-size:clamp(22px,2.4vw,30px);font-weight:700;line-height:1}
-.eso__conti span{color:rgba(232,243,250,.82);font-family:var(--mono);
-  font-size:11px;letter-spacing:.1em;text-transform:uppercase}
-.eso__nota{margin:16px 0 0;max-width:34ch;position:relative;padding-left:24px;
-  color:rgba(232,243,250,.75);font-family:var(--display);font-style:italic;
+.eso__conti span,.cest__conti span{color:color-mix(in srgb, var(--sk-chiaro) 82%, transparent);
+  font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase}
+.eso__nota,.cest__nota{margin:16px 0 0;max-width:34ch;position:relative;padding-left:24px;
+  color:color-mix(in srgb, var(--sk-chiaro) 75%, transparent);
+  font-family:var(--display);font-style:italic;
   font-size:clamp(14px,1.5vw,17px);line-height:1.32}
-.eso__nota::before{content:"";position:absolute;left:0;top:.6em;
-  width:14px;height:2px;border-radius:2px;background:var(--e-ciano);opacity:.8}
+.eso__nota::before,.cest__nota::before{content:"";position:absolute;left:0;top:.6em;
+  width:14px;height:2px;border-radius:2px;background:var(--sk-vivo);opacity:.8}
 
-/* Il dispositivo e' nero su fondo bianco nel file di partenza e nero su
-   fondo quasi nero qui: perche' si stacchi ha bisogno di un alone, non
-   di un'ombra. */
-.eso__dispositivo{grid-area:dispositivo;position:relative;z-index:1;
+/* L'oggetto del cliente sulla lastra. Sono due cose diverse: il
+   dispositivo e' scontornato e su fondo quasi nero ha bisogno di un
+   alone per staccarsi, il marchio CETS e' un cerchio bianco e va su una
+   targa bianca — scontornarlo darebbe comunque un disco bianco, ma col
+   contorno a scaletta. */
+.eso__figura,.cest__figura{grid-area:figura;position:relative;z-index:1;
   margin:0;display:grid;justify-items:center;align-self:end}
-.eso__dispositivo img{display:block;width:auto;height:auto;
-  max-width:100%;max-height:clamp(260px,34vw,470px);
-  filter:drop-shadow(0 0 34px rgba(0,240,255,.22)) drop-shadow(0 18px 30px rgba(0,0,0,.5))}
-.eso__dispositivo figcaption{margin-top:10px;color:var(--e-ciano-tenue);
+.eso__figura img,.cest__figura img{display:block;width:auto;height:auto;
+  max-width:100%;max-height:clamp(260px,34vw,470px)}
+.eso__figura img{filter:drop-shadow(0 0 34px var(--sk-alone)) drop-shadow(0 18px 30px rgba(0,0,0,.5))}
+.cest__figura img{max-height:clamp(210px,26vw,340px);
+  padding:clamp(14px,1.6vw,22px);border-radius:14px;background:var(--sk-carta);
+  box-shadow:0 20px 44px -18px rgba(0,0,0,.6)}
+.eso__figura figcaption,.cest__figura figcaption{margin-top:10px;color:var(--sk-tenue);
   font-size:11px;letter-spacing:.14em;text-transform:uppercase}
 @media(max-width:839px){
-  /* Stessa cosa vista sulla Locanda: con il dispositivo accanto ai
-     numeri, su 350px al terzo numero restano 50 pixel e "DOCUMENTI"
-     finisce tagliato. Il dispositivo va su una riga sua — e su un
-     telefono e' anche la cosa che si vuole vedere piu' grande. */
-  .eso__slab{grid-template-areas:"testa" "piede" "dispositivo";
+  /* Stessa cosa vista sulla Locanda: con l'oggetto accanto ai numeri, su
+     350px al terzo numero restano 50 pixel e "DOCUMENTI" finisce
+     tagliato. L'oggetto va su una riga sua — e su un telefono e' anche
+     la cosa che si vuole vedere piu' grande. */
+  .eso__slab,.cest__slab{grid-template-areas:"testa" "piede" "figura";
     grid-template-columns:minmax(0,1fr)}
-  .eso__piede{align-self:start;padding-top:4px}
-  .eso__dispositivo{justify-self:center;margin-top:6px}
-  .eso__dispositivo img{max-height:min(74vw,330px)}
+  .eso__piede,.cest__piede{align-self:start;padding-top:4px}
+  .eso__figura,.cest__figura{justify-self:center;margin-top:6px}
+  .eso__figura img{max-height:min(74vw,330px)}
+  .cest__figura img{max-height:min(62vw,290px)}
 }
 
 /* il corpo chiaro */
-.eso__corpo{padding:clamp(22px,3vw,42px)}
-.eso__intro{margin:0 0 16px;color:#2d4a5c;
+.eso__corpo,.cest__corpo{padding:clamp(22px,3vw,42px)}
+.eso__intro,.cest__intro{margin:0 0 16px;color:var(--sk-etichetta);
   font-size:11px;letter-spacing:.14em;text-transform:uppercase}
 
-.eso__lavori{display:grid;gap:clamp(14px,1.6vw,22px)}
-.eso__lavori:not([data-gr]){grid-template-columns:repeat(auto-fill,minmax(min(100%,220px),1fr))}
-.eso__pezzo{display:grid;gap:8px;align-content:start;min-width:0}
+.eso__lavori,.cest__lavori{display:grid;gap:clamp(14px,1.6vw,22px)}
+/* Misurato su uno schermo da 1440: con 220px venivano fuori cinque
+   colonne, e tutti e due i casi hanno esattamente SEI pezzi — il sesto
+   restava da solo su una riga sua. Due righe c'erano comunque, ma la
+   seconda era vuota per quattro quinti.
+   Tre colonne fanno due righe piene. E c'e' una ragione piu' seria del
+   pareggio: in questa griglia meta' dei pezzi sono verticali dentro una
+   cornice 16:9, quindi dell'immagine si vede una striscia larga un
+   terzo della colonna. A 228px quella striscia era 72 pixel e la
+   scritta dentro non si leggeva; a 394 sono 125 e si legge. */
+.eso__lavori:not([data-gr]),.cest__lavori:not([data-gr]){
+  grid-template-columns:repeat(auto-fill,minmax(min(100%,340px),1fr))}
+.eso__pezzo,.cest__pezzo{display:grid;gap:8px;align-content:start;min-width:0}
 @media (max-width:900px){
-  .eso__lavori[data-gr] > *{grid-column:span 6}
+  .eso__lavori[data-gr] > *,.cest__lavori[data-gr] > *{grid-column:span 6}
 }
 
 /* Qui la cornice e' 16:9 per tutti, orizzontali e verticali insieme:
@@ -2034,53 +2083,58 @@ body.ord-in-corso *{cursor:grabbing !important}
    partire alla stessa quota. I verticali ci stanno dentro interi, con
    le due bande ai lati — che e' esattamente come si vedono quando
    qualcuno li guarda da un computer. */
-.eso__via{position:relative;display:block;width:100%;padding:0;
+.eso__via,.cest__via{position:relative;display:block;width:100%;padding:0;
   aspect-ratio:16/9;
-  border:1px solid var(--e-riga);border-radius:14px;overflow:hidden;
-  background:#0a121c;cursor:pointer;line-height:0;
+  border:1px solid var(--sk-riga);border-radius:14px;overflow:hidden;
+  background:var(--sk-buio);cursor:pointer;line-height:0;
   transition:border-color .2s,transform .2s}
-.eso__via:hover{border-color:var(--e-ciano);transform:translateY(-2px)}
-.eso__via:focus-visible{outline:2px solid var(--e-fondo);outline-offset:3px}
-.eso__fermo{display:block;width:100%;height:100%;object-fit:contain}
-.eso__play{position:absolute;inset:0;margin:auto;width:54px;height:54px;
+/* il bordo acceso non puo' essere --sk-vivo per tutti e due: su CETS
+   quello e' il bianco, e un bordo bianco sul corpo bianco non si vede.
+   Ha una sigla sua. */
+.eso__via:hover,.cest__via:hover{border-color:var(--sk-bordo);transform:translateY(-2px)}
+.eso__via:focus-visible,.cest__via:focus-visible{outline:2px solid var(--sk-fondo);
+  outline-offset:3px}
+.eso__fermo,.cest__fermo{display:block;width:100%;height:100%;object-fit:contain}
+.eso__play,.cest__play{position:absolute;inset:0;margin:auto;width:54px;height:54px;
   border-radius:50%;background:rgba(255,255,255,.94);
   box-shadow:0 6px 20px rgba(0,0,0,.4);pointer-events:none}
-.eso__play::before{content:"";position:absolute;inset:0;margin:auto;
-  width:0;height:0;border-left:17px solid var(--e-fondo);
+.eso__play::before,.cest__play::before{content:"";position:absolute;inset:0;margin:auto;
+  width:0;height:0;border-left:17px solid var(--sk-fondo);
   border-top:11px solid transparent;border-bottom:11px solid transparent;
   transform:translateX(3px)}
-.eso__durata{position:absolute;right:8px;bottom:8px;
+.eso__durata,.cest__durata{position:absolute;right:8px;bottom:8px;
   padding:3px 7px 4px;border-radius:7px;background:rgba(4,8,14,.84);
   color:#fff;font-size:11px;letter-spacing:.08em;line-height:1;pointer-events:none}
-.eso__pezzo video{width:100%;border:1px solid var(--e-riga);border-radius:14px;
-  background:#05090f;aspect-ratio:16/9;object-fit:contain}
-.eso__pezzo h4{margin:0;color:#12212e;font-size:16px;
+.eso__pezzo video,.cest__pezzo video{width:100%;border:1px solid var(--sk-riga);
+  border-radius:14px;background:var(--sk-nero);aspect-ratio:16/9;object-fit:contain}
+.eso__pezzo h4,.cest__pezzo h4{margin:0;color:var(--sk-titolo);font-size:16px;
   letter-spacing:-.005em;line-height:1.2}
-.eso__pezzo p{margin:0;color:#4a5a66;font-size:13.5px;line-height:1.5}
+.eso__pezzo p,.cest__pezzo p{margin:0;color:var(--sk-grigio);font-size:13.5px;line-height:1.5}
 
-/* la tavola di riferimento */
+/* la tavola di riferimento (solo esoscheletri) */
 .eso__tavola{margin:clamp(24px,3vw,40px) 0 0;padding-top:clamp(18px,2vw,26px);
-  border-top:1px solid var(--e-riga);display:grid;gap:12px}
+  border-top:1px solid var(--sk-riga);display:grid;gap:12px}
 .eso__tavola img{display:block;width:100%;height:auto;border-radius:12px;
-  border:1px solid var(--e-riga)}
-.eso__tavola figcaption{max-width:66ch;color:#4a5a66;font-size:14.5px;line-height:1.55}
+  border:1px solid var(--sk-riga)}
+.eso__tavola figcaption{max-width:66ch;color:var(--sk-grigio);font-size:14.5px;line-height:1.55}
 
-/* come sono fatti */
-.eso__come{margin-top:clamp(24px,3vw,40px);padding-top:clamp(18px,2vw,26px);
-  border-top:1px solid var(--e-riga);container-type:inline-size}
-.eso__come > b{display:block;margin-bottom:12px;color:#2d4a5c;
+/* e poi, di suo */
+.eso__come,.cest__come{margin-top:clamp(24px,3vw,40px);padding-top:clamp(18px,2vw,26px);
+  border-top:1px solid var(--sk-riga);container-type:inline-size}
+.eso__come > b,.cest__come > b{display:block;margin-bottom:12px;color:var(--sk-etichetta);
   font-size:11px;letter-spacing:.13em;text-transform:uppercase}
-.eso__come dl{margin:0;display:grid;gap:9px}
-.eso__come dl > div{display:grid;gap:2px 14px;grid-template-columns:minmax(0,1fr)}
+.eso__come dl,.cest__come dl{margin:0;display:grid;gap:9px}
+.eso__come dl > div,.cest__come dl > div{display:grid;gap:2px 14px;
+  grid-template-columns:minmax(0,1fr)}
 @container (min-width:460px){
-  .eso__come dl > div{grid-template-columns:minmax(92px,auto) minmax(0,1fr)}
+  .eso__come dl > div,.cest__come dl > div{grid-template-columns:minmax(92px,auto) minmax(0,1fr)}
 }
-.eso__come dt{color:#2d4a5c;font-family:var(--mono);font-size:11px;
+.eso__come dt,.cest__come dt{color:var(--sk-etichetta);font-family:var(--mono);font-size:11px;
   letter-spacing:.1em;text-transform:uppercase;padding-top:.25em}
-.eso__come dd{margin:0;color:#3d4c58;font-size:14.5px;line-height:1.55}
+.eso__come dd,.cest__come dd{margin:0;color:var(--sk-testo);font-size:14.5px;line-height:1.55}
 
 @media (prefers-reduced-motion:reduce){
-  .eso__via:hover{transform:none}
+  .eso__via:hover,.cest__via:hover{transform:none}
 }
 
 /* ═══════════════════════════════════════════════════════════════════
@@ -2263,8 +2317,8 @@ body.ord-in-corso *{cursor:grabbing !important}
   font-size:14.5px;line-height:1.55}
 .union .caso-firma{color:#4a5a42}
 .union .caso-firma b{color:var(--u-verde);font-weight:600}
-.eso .caso-firma{color:#4a5a66}
-.eso .caso-firma b{color:var(--e-fondo);font-weight:600}
+.eso .caso-firma,.cest .caso-firma{color:var(--sk-grigio)}
+.eso .caso-firma b,.cest .caso-firma b{color:var(--sk-fondo);font-weight:600}
 .locanda .caso-firma{color:#4c3d34}
 .locanda .caso-firma b{color:var(--l-bordeaux);font-weight:600}
 

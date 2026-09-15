@@ -21,9 +21,9 @@ Serve il server sulla porta 8899 (`python server.py` dalla cartella
 | `stress.mjs` | **prova a romperlo**: 320px, doppi clic, colonne cambiate mentre un video suona, ordine spostato e ricaricato, avanti e indietro |
 | `v2.mjs` `v2mob.mjs` `v2click.mjs` | il sito intero, sul telefono, e dopo una serie di clic |
 | `v2a11y.mjs` | contrasti e accessibilità, leggendo il foglio di stile |
-| `contrasto-vero.mjs` | contrasti misurati **sui pixel**, sulle tre lastre dei casi |
+| `contrasto-vero.mjs` | contrasti misurati **sui pixel**, sulle quattro lastre dei casi |
 | `amichevole.mjs` | corpo del testo, bersagli, righe troppo lunghe, graffe del CSS |
-| `union.mjs` `eso.mjs` `locanda.mjs` | i tre casi: pezzi, copertine, un video alla volta |
+| `union.mjs` `eso.mjs` `locanda.mjs` `cest.mjs` | i quattro casi: pezzi, copertine, un video alla volta |
 | `scalette.mjs` | che gli elenchi nell'HTML non si allontanino dai moduli |
 | `colonne-tengono.mjs` | sette gruppi per sette preset per tre larghezze |
 | `sposta-tutto.mjs` | che spostando i blocchi non si rompa niente |

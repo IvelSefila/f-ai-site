@@ -34,10 +34,10 @@ await p.waitForTimeout(2400);
 const dati = await p.evaluate(() => {
   const pezzi = [];
   /* ogni blocco che ha un nome proprio: sezione o sotto-blocco */
-  const zone = [...document.querySelectorAll('#main > section, .sec__sub, .union, .eso, .locanda')];
+  const zone = [...document.querySelectorAll('#main > section, .sec__sub, .union, .eso, .locanda, .cest')];
   const zonaDi = (n) => {
     for (let e = n; e; e = e.parentElement) {
-      if (e.matches?.('.sec__sub,.union,.eso,.locanda')) return e.id || e.className.split(' ')[0];
+      if (e.matches?.('.sec__sub,.union,.eso,.locanda,.cest')) return e.id || e.className.split(' ')[0];
       if (e.matches?.('#main > section')) return e.id;
     }
     return '?';

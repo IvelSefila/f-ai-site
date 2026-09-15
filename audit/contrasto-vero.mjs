@@ -50,7 +50,8 @@ await p.waitForTimeout(500);
 
 for (const [nome, lastra] of [['Union Energia', '.union__slab'],
                               ['Esoscheletri', '.eso__slab'],
-                              ['Locanda del Castello', '.locanda__slab']]) {
+                              ['Locanda del Castello', '.locanda__slab'],
+                              ['Studio CETS', '.cest__slab']]) {
   console.log(`\n════ ${nome} · ${forma} ${vp.width}px ════`);
   const el = await p.$(lastra);
   if (!el) { console.log('  ✗ lastra non trovata'); rotte++; continue; }

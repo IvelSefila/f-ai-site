@@ -1,0 +1,38 @@
+[
+ {
+  "id": "antincendio",
+  "da": "antincendio primo.mp4",
+  "mb": 4.1,
+  "s": 31.0
+ },
+ {
+  "id": "amministratori",
+  "da": "amministratori completo .mp4",
+  "mb": 5.3,
+  "s": 40.4
+ },
+ {
+  "id": "ced-voce",
+  "da": "ced 3.mp4",
+  "mb": 2.4,
+  "s": 13.9
+ },
+ {
+  "id": "ced-vita",
+  "da": "ced finito .mp4",
+  "mb": 3.0,
+  "s": 16.2
+ },
+ {
+  "id": "marchio-largo",
+  "da": "logo cets animato 16 9.mp4",
+  "mb": 0.3,
+  "s": 5.0
+ },
+ {
+  "id": "marchio-alto",
+  "da": "logo cets animato 9 16 2.mp4",
+  "mb": 0.5,
+  "s": 5.2
+ }
+]

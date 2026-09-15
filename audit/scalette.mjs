@@ -30,7 +30,7 @@ const ps = await spento.newPage();
 await ps.goto(SITO, { waitUntil: 'domcontentloaded' });
 const nellHtml = await ps.evaluate(() => {
   const fuori = {};
-  for (const g of document.querySelectorAll('.union__lavori,.eso__lavori,.locanda__lavori,.locanda__brani')) {
+  for (const g of document.querySelectorAll('.union__lavori,.eso__lavori,.locanda__lavori,.cest__lavori,.locanda__brani')) {
     fuori[g.className] = [...g.querySelectorAll('.scaletta li, li')].map(li => li.textContent.trim());
   }
   return fuori;
@@ -44,7 +44,7 @@ await pa.goto(SITO, { waitUntil: 'networkidle' });
 await pa.waitForTimeout(2000);
 const nelModulo = await pa.evaluate(() => {
   const fuori = {};
-  for (const g of document.querySelectorAll('.union__lavori,.eso__lavori,.locanda__lavori,.locanda__brani')) {
+  for (const g of document.querySelectorAll('.union__lavori,.eso__lavori,.locanda__lavori,.cest__lavori,.locanda__brani')) {
     fuori[g.className] = [...g.querySelectorAll('h4, .locanda__nome b')].map(h => h.textContent.trim());
     fuori[g.className + ' scaletta rimasta'] = g.querySelectorAll('.scaletta').length;
   }
