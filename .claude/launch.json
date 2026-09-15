@@ -1,0 +1,16 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "F-AI v2",
+      "runtimeExecutable": "python",
+      "runtimeArgs": [
+        "C:/Users/fabri/Documents/sito internet/F-AI-sites-claude/serve.py",
+        "8899",
+        "C:/Users/fabri/Documents/sito internet/F-AI-sites-claude/site"
+      ],
+      "port": 8899,
+      "url": "http://localhost:8899"
+    }
+  ]
+}
