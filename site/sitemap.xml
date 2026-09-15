@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Una pagina sola: la mappa e' corta per davvero. Serve comunque,
+     perche' e' il posto da cui un motore parte quando non ha ancora
+     nessun collegamento verso il sito. -->
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>https://f-ai.studio/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>1.0</priority>
+  </url>
+</urlset>
