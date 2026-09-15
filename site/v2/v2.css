@@ -52,10 +52,27 @@ strong{color:var(--ink);font-weight:700}
   background:rgba(5,7,11,.82);backdrop-filter:blur(14px);border-bottom:1px solid var(--rule-2)}
 .brand{font-family:var(--display);font-size:26px;letter-spacing:-.04em;font-weight:600}
 .brand span{color:var(--em)}
-.bar__sess{color:var(--muted)}
+.bar__sess{color:var(--muted);white-space:nowrap}
 .bar__sess b{color:var(--em);font-variant-numeric:tabular-nums}
 .bar__nav{margin-left:auto;display:flex;gap:4px}
 .bar__nav a{padding:6px 9px;color:var(--muted);border:1px solid transparent;border-radius:3px;transition:color .2s,border-color .2s}
+/* La cifra resta, ma davanti alla parola e in sordina: serve a dire
+   "sei alla terza prova", non a fare da nome. Sotto i 1200 sparisce
+   lei per prima, che e' la meta' che si puo' perdere. */
+.bar__nav a .n{color:var(--muted);opacity:.55;margin-right:5px}
+.bar__nav a.on .n{opacity:.8}
+@media(max-width:1200px){.bar__nav a .n{display:none}}
+/* Misurato: sotto i 1150 la barra deborda. Si sfoltisce in ordine di
+   quanto una cosa serve — prima l'etichetta della palette (i pallini si
+   spiegano da soli), poi l'orologio (lo stesso numero sta nel verdetto),
+   poi le voci di raccordo. Lavori e Contatto non se ne vanno mai. */
+@media(max-width:1300px){.bar__pal__eti{display:none}}
+@media(max-width:1150px){.bar__sess{display:none}}
+@media(max-width:1080px){.bar__nav a[data-solo-largo]{display:none}}
+/* Sul telefono restano le due voci che uno cerca davvero. Prima erano
+   sei cifre su una riga tutta loro, e la testata veniva alta 115px su
+   844: un quinto dello schermo speso in etichette che non dicevano
+   niente. */
 .bar__nav a:hover,.bar__nav a.on{color:var(--em);border-color:var(--em-dim)}
 .bar__cta{display:flex;align-items:center;gap:7px;padding:8px 13px;border:1px solid var(--em);
   border-radius:999px;color:var(--em);transition:background .2s,color .2s}
@@ -381,6 +398,12 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border:0;border-radiu
 .voice__prog{color:var(--muted);flex:none}
 .voice__prog b{color:var(--em)}
 @media(max-width:620px){.voice p{white-space:normal}}
+/* Il nastro e' fisso e non occupa spazio nel flusso: senza questo, la
+   fine della pagina gli scorre sotto e le ultime righe si leggono da
+   dietro un vetro. Tiene da parte la propria altezza piu' il suo stacco
+   dal bordo. */
+#main{padding-block-end:72px}
+@media(max-width:620px){#main{padding-block-end:96px}}
 
 /* ═══ reveal ═══ */
 .rv{opacity:0;transform:translateY(22px)}
@@ -684,9 +707,15 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border:0;border-radiu
 .sec.sp-m{padding-block:clamp(74px,8.4vw,122px)}
 .sec.sp-s{padding-block:clamp(50px,5.4vw,82px)}
 
-/* le aperture di capitolo portano un titolo più grande */
-.sec.sp-l .sec__head h2{font-size:clamp(38px,5.2vw,78px)}
-.sec.sp-s .sec__head h2{font-size:clamp(30px,3.7vw,54px)}
+/* Il corpo del titolo NON dipende dalla spaziatura.
+   Erano attaccati, e il risultato misurato era questo: #lavori — i
+   quattro casi, il 38% della pagina — aveva il titolo piu' piccolo di
+   tutti (53px) perche' e' una sezione lunga e quindi "sp-s"; #profilo,
+   che sono 821px di citazione, ne aveva 75. La classe che dice quanto
+   respira una sezione aveva finito per dire anche quanto conta.
+   Adesso sp-* governa lo spazio e t-* governa la voce. */
+.sec.t-forte .sec__head h2{font-size:clamp(38px,5.2vw,78px)}
+.sec.t-piano .sec__head h2{font-size:clamp(30px,3.7vw,54px)}
 
 /* ── apertura A · larga: il titolo prende tutto, il testo si ritira ── */
 @media(min-width:960px){
@@ -744,16 +773,25 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border:0;border-radiu
 @media (max-width:900px){
   /* 2 · La navigazione torna, come striscia scorrevole sotto il marchio.
          Ventiquattro schermate senza un modo per saltare erano troppe. */
-  .bar{height:auto;flex-wrap:wrap;padding-block:8px;row-gap:6px}
-  .bar__nav{display:flex;order:3;flex:1 0 100%;gap:6px;margin-left:0;
+  .bar{height:var(--bar);flex-wrap:nowrap;padding-block:0;row-gap:0}
+  .bar__nav{display:flex;order:3;flex:0 1 auto;gap:4px;margin-left:auto;min-width:0;
     overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch;
     padding-bottom:2px;scroll-snap-type:x proximity}
   .bar__nav::-webkit-scrollbar{display:none}
   .bar__nav a{flex:none;min-width:44px;min-height:44px;display:grid;place-items:center;
     scroll-snap-align:start;border:1px solid var(--rule-2);border-radius:8px}
   .bar__nav a.on{border-color:var(--em);background:var(--em-dim)}
-  .bar__sess{display:inline;order:2;margin-left:auto}
-  .bar__cta{order:1}
+  .bar__sess{display:none}
+  /* qui ci stanno solo i lavori e la chiusura: le altre quattro voci
+     restano raggiungibili scorrendo, che su un telefono e' il gesto
+     naturale comunque */
+  .bar__nav a[data-solo-largo]{display:none}
+  .bar__nav a{padding:6px 7px;font-size:10px}
+  /* Su un telefono le destinazioni che ci stanno sono due, e il verdetto
+     non e' una di quelle: si arriva in fondo scorrendo comunque, mentre
+     "Contatto" e' l'unica voce che porta dove serve. Con tutti e tre gli
+     elementi, "CONTATTO" usciva dal bordo tagliato a meta'. */
+  .bar__cta{display:none}
   /* l'ancoraggio segue --bar, ridefinita qui sotto a 113px */
 }
 
@@ -858,10 +896,11 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border:0;border-radiu
         tre elementi assoluti che si pestavano i piedi, e la soluzione
         adottata era nasconderli. ── */
 @media (max-width:900px){
-  /* La barra va a due righe e misura 113px, non i 64 della variabile:
-     l'occhiello dell'hero finiva sotto la navigazione per 13px.
-     Correggendo --bar si aggiusta anche l'ancoraggio delle sezioni. */
-  :root{--bar:113px}
+  /* La barra andava a due righe e misurava 113px, non i 60 della
+     variabile, perche' la navigazione — sei cifre — si prendeva una riga
+     tutta sua: un quinto di uno schermo da 844 per etichette che non
+     dicevano niente. Adesso in quella riga ci stanno due voci sole,
+     Lavori e Contatto, e la barra torna alta quanto dice la variabile. */
   .hero{padding-bottom:40px;row-gap:0}
   .read,.rail,.hud{position:static;inset:auto}
   .read{order:1;display:block;width:auto;max-width:none;text-align:left;

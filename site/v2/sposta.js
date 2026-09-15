@@ -200,11 +200,20 @@ function rinumeraSezioni() {
   prove.forEach((s, i) => {
     const a = per.get(s.id);
     if (!a) return;
-    a.textContent = due(i + 1);
+    /* Si riscrive SOLO la cifra. Prima qui c'era a.textContent = numero,
+       che al primo spostamento cancellava anche la parola e rimandava la
+       testata alle sei cifre mute da cui e' appena uscita. */
+    const cifra = a.querySelector('.n');
+    if (cifra) cifra.textContent = due(i + 1);
+    else a.textContent = due(i + 1);
     nav.appendChild(a);                     /* in fila come stanno in pagina */
   });
-  const p = per.get('profilo');             /* la P del profilo resta in coda */
-  if (p) nav.appendChild(p);
+  /* profilo e contatto non sono prove e non si spostano: restano in coda,
+     in quest'ordine */
+  for (const id of ['profilo', 'contatto']) {
+    const a = per.get(id);
+    if (a) nav.appendChild(a);
+  }
 }
 
 /* ── l'animazione del riassestamento ──────────────────────────────

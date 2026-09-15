@@ -73,9 +73,17 @@ const GUARDA = () => {
     const testa = s.querySelector('.sec__head[data-num]');
     if (testa && testa.dataset.num !== atteso) guasti.push(`numerone di ${s.id}: ${testa.dataset.num} invece di ${atteso}`);
   });
-  const nav = [...document.querySelectorAll('.bar__nav a')].filter(a => a.textContent.trim() !== 'P');
+  /* La testata adesso dice "01 Servizi", non "01": la cifra sta in uno
+     <span class="n"> e la parola le sta accanto. Si controlla la cifra,
+     che e' la parte che deve seguire lo spostamento, e si escludono le
+     due voci che prove non sono — profilo e contatto — che stanno in
+     coda e non si rinumerano. */
+  const FUORI = new Set(['#profilo', '#contatto']);
+  const nav = [...document.querySelectorAll('.bar__nav a')]
+    .filter(a => !FUORI.has(a.getAttribute('href')));
   nav.forEach((a, i) => {
-    if (a.textContent.trim() !== due(i + 1)) guasti.push(`testata in posizione ${i + 1}: "${a.textContent.trim()}"`);
+    const cifra = (a.querySelector('.n') || a).textContent.trim();
+    if (cifra !== due(i + 1)) guasti.push(`testata in posizione ${i + 1}: "${cifra}"`);
     const s = document.querySelector(a.getAttribute('href'));
     if (s && prove.indexOf(s) !== i) guasti.push(`la testata manda a ${a.getAttribute('href')} col numero sbagliato`);
   });
