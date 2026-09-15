@@ -1752,10 +1752,20 @@ body.ord-in-corso *{cursor:grabbing !important}
 .union{
   --u-lime:#8cc63e; --u-lime-cupo:#6ea52b;
   --u-verde:#1c4410; --u-verde-chiaro:#2f6b1c;
-  --u-carta:#ffffff; --u-riga:rgba(28,68,16,.16);
+  --u-carta:#ffffff;
+  /* La carta del corpo chiaro NON e' bianca. La Locanda lo faceva gia'
+     — il suo corpo e' color crema — ed era l'unica dei quattro: gli
+     altri tre cadevano da una lastra a colori pieni sullo stesso bianco
+     di tutti, e il mondo del cliente finiva alla porta. Questo e' il
+     bianco con dentro un soffio del verde della campagna: si vede
+     appena, e basta a far capire che si e' ancora dentro lo stesso
+     lavoro. --u-carta resta bianco puro perche' e' anche il colore di
+     certe parole SULLA lastra scura, dove tingerlo non avrebbe senso. */
+  --u-corpo:#f8faf4;
+  --u-riga:rgba(28,68,16,.16);
   margin:0 0 clamp(34px,4vw,56px);
   border-radius:clamp(18px,2vw,28px);overflow:hidden;
-  background:var(--u-carta);color:var(--u-verde);
+  background:var(--u-corpo);color:var(--u-verde);
   box-shadow:0 30px 80px -34px rgba(0,0,0,.8)}
 
 /* la lastra lime con il lama */
@@ -1998,7 +2008,10 @@ body.ord-in-corso *{cursor:grabbing !important}
   --sk-inchiostro:#16222e; --sk-titolo:#12212e;
   --sk-etichetta:#2d4a5c; --sk-grigio:#4a5a66; --sk-testo:#3d4c58;
   --sk-buio:#0a121c; --sk-nero:#05090f;
-  --sk-bordo:var(--sk-vivo)}
+  --sk-bordo:var(--sk-vivo);
+  /* vedi la nota su --u-corpo: la carta del corpo porta un soffio del
+     colore del caso. Qui e' il ciano della scheda tecnica. */
+  --sk-corpo:#f3f8fb}
 
 /* CETS — centro elaborazione dati. Il blu dello scudo, e il tricolore
    solo come segno: vedi la nota in cima. */
@@ -2012,12 +2025,14 @@ body.ord-in-corso *{cursor:grabbing !important}
   --sk-inchiostro:#16222e; --sk-titolo:#12212e;
   --sk-etichetta:#2d4a5c; --sk-grigio:#4a5a66; --sk-testo:#3d4c58;
   --sk-buio:#0a121c; --sk-nero:#05090f;
-  --sk-bordo:var(--sk-fondo)}
+  --sk-bordo:var(--sk-fondo);
+  /* il blu dello scudo, diluito fino a diventare carta */
+  --sk-corpo:#f5f7fa}
 
 .eso,.cest{
   margin:0 0 clamp(34px,4vw,56px);
   border-radius:clamp(18px,2vw,28px);overflow:hidden;
-  background:var(--sk-carta);color:var(--sk-inchiostro);
+  background:var(--sk-corpo);color:var(--sk-inchiostro);
   box-shadow:0 30px 80px -34px rgba(0,0,0,.8)}
 
 .eso__slab,.cest__slab{
