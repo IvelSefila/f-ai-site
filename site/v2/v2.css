@@ -94,7 +94,15 @@ strong{color:var(--ink);font-weight:700}
              linear-gradient(0deg,rgba(5,7,11,.92) 0%,transparent 30%)}
 .hero__scan{position:absolute;inset:0;z-index:1;pointer-events:none;opacity:.14;mix-blend-mode:soft-light;
   background:repeating-linear-gradient(0deg,rgba(255,255,255,.5) 0 1px,transparent 1px 3px)}
-.hero__content{position:relative;z-index:2;width:min(100%,var(--content));margin-inline:auto}
+/* min-width:0 serve da quando l'eroe contiene la vetrina. .hero e' una
+   griglia, e una griglia dimensiona la colonna sul contenuto MINIMO dei
+   figli: quattro copertine da 92px piu' gli spazi fanno 392px, e su un
+   telefono da 390 quel numero diventava la larghezza di tutto il
+   contenitore. Il paragrafo del titolo finiva due parole fuori
+   schermo, tagliato di netto. Con min-width:0 la colonna torna a
+   obbedire alla larghezza dichiarata e la fila scorre dentro se stessa. */
+.hero__content{position:relative;z-index:2;min-width:0;
+  width:min(100%,var(--content));margin-inline:auto}
 .hero__content>*{max-width:min(100%,47vw)}
 @media(max-width:900px){.hero__content>*{max-width:100%}}
 .hero h1{font-size:clamp(40px,5.1vw,84px);line-height:.87;margin:0}
@@ -138,6 +146,62 @@ strong{color:var(--ink);font-weight:700}
 .rail i{position:absolute;inset:0 auto 0 0;width:50%;background:var(--em);box-shadow:0 0 12px color-mix(in srgb,var(--em) 70%,transparent)}
 .rail b{position:absolute;top:50%;left:50%;width:11px;height:11px;border-radius:50%;
   background:var(--em-bright);transform:translate(-50%,-50%);box-shadow:0 0 0 4px color-mix(in srgb,var(--em) 16%,transparent)}
+
+
+/* ═══════════════════════════════════════════════════════════════════
+ * LA VETRINA — quattro lavori veri nella prima schermata
+ *
+ * Misurato prima: la sezione dei lavori cominciava al 25% di una pagina
+ * alta 27.000 px. Su un telefono sono dodici schermate. Chi apriva il
+ * sito vedeva un titolo, sette righe e un fondo astratto — e se ne
+ * andava senza aver visto niente di fatto.
+ *
+ * Le copertine sono 3:4 e non quadrate perche' tre delle quattro nascono
+ * verticali: il quadrato le avrebbe tagliate nel punto dove sta il
+ * soggetto. Sono 132 px su schermo e 264 nel file, per gli schermi fitti.
+ *
+ * La fila scorre di lato quando non ci sta: su 320px quattro copertine
+ * da 132 non entrano, e stringerle fino a farle entrare le renderebbe
+ * illeggibili — che e' l'unica cosa che non devono essere.
+ * ═══════════════════════════════════════════════════════════════════ */
+/* Sta PRIMA dei bottoni, e non e' un dettaglio di impaginazione.
+   Messa dopo, il suo fondo cadeva a 904px su uno schermo da 900: la
+   striscia restava fuori dalla prima schermata, cioe' non faceva la sola
+   cosa per cui esiste. Messa prima entra tutta, e l'ordine del discorso
+   migliora: titolo, che faccio, ecco quattro cose che ho fatto, adesso
+   parliamone. I bottoni chiedono qualcosa dopo aver dato qualcosa. */
+.vetrina{margin-top:clamp(20px,2.6vh,30px);margin-bottom:2px;min-width:0}
+.vetrina__eti{margin:0 0 10px;color:var(--muted)}
+/* min-width:0 non e' ornamentale. Quattro copertine da 92px piu' i tre
+   spazi fanno 392px di larghezza minima, e senza questa riga quel 392
+   diventa il pavimento di tutto il contenitore dell'eroe: su un telefono
+   da 390 il paragrafo del titolo finiva due parole fuori dallo schermo,
+   tagliato. La fila deve scorrere dentro se stessa, non allargare chi la
+   contiene. */
+.vetrina__fila{display:flex;gap:clamp(8px,1vw,14px);min-width:0;
+  overflow-x:auto;scrollbar-width:none;padding-bottom:2px}
+.vetrina__fila::-webkit-scrollbar{display:none}
+.vetrina__caso{flex:none;width:clamp(92px,8.4vw,124px);display:grid;gap:5px;
+  transition:transform .22s var(--ease)}
+.vetrina__caso img{width:100%;height:auto;aspect-ratio:3/4;object-fit:cover;
+  border-radius:10px;border:1px solid var(--rule);
+  transition:border-color .22s,filter .22s}
+/* Due righe riservate al nome anche quando ne basta una: "Locanda del
+   Castello" va a capo e le altre tre no, e senza questo le etichette
+   sotto partivano da quattro quote diverse. */
+.vetrina__caso b{color:var(--ink);font-size:12.5px;font-weight:600;line-height:1.2;
+  min-height:2.4em}
+/* 11px e non 9,5: il foglio dichiara 11px come pavimento tipografico
+   della UI, e le prime quattro etichette che ho scritto lo sfondavano.
+   Lo spazio c'era: la striscia finiva a 825px su uno schermo da 900. */
+.vetrina__caso span{color:var(--muted);font-size:11px;letter-spacing:.08em}
+.vetrina__caso:hover{transform:translateY(-3px)}
+.vetrina__caso:hover img{border-color:var(--em);filter:brightness(1.06)}
+.vetrina__caso:focus-visible{outline:2px solid var(--em-bright);outline-offset:4px;
+  border-radius:12px}
+@media (prefers-reduced-motion:reduce){
+  .vetrina__caso,.vetrina__caso:hover{transition:none;transform:none}
+}
 
 /* ═══ sezioni ═══ */
 .sec{position:relative;padding:var(--space) var(--gutter);

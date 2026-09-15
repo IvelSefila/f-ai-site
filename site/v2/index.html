@@ -135,8 +135,38 @@
     </h1>
     <p class="hero__copy">Grafico pubblicitario, video editor e AI builder. Campagne che si declinano su ogni formato, video montati sul ritmo, contenuti social che si producono con continuità, flussi automatici che tolgono di mezzo il lavoro ripetitivo. Strumenti tradizionali e modelli AI, in locale o in cloud: scelgo di volta in volta quello che dà il risultato migliore.</p>
     <p class="hero__nota">Questo confine non è un’immagine: è calcolato fotogramma per fotogramma. Trascinalo e decidi quanta macchina entra nel lavoro.</p>
+    <!-- La prima schermata non aveva un solo lavoro dentro: titolo,
+         paragrafo, due bottoni e un fondo astratto. Il lavoro vero
+         cominciava al 25% della pagina. Queste sono quattro copertine
+         vere, una per cliente, e portano al loro caso. -->
+    <nav class="vetrina" aria-label="I quattro clienti">
+      <p class="vetrina__eti mono">Quattro marchi, dall’idea alla pubblicazione</p>
+      <div class="vetrina__fila">
+      <a class="vetrina__caso" href="#caso-union">
+        <img src="eroe/union.webp" width="264" height="352" alt="Union Energia — Campagna"
+             loading="eager" decoding="async">
+        <b>Union Energia</b><span class="mono">Campagna</span>
+      </a>
+      <a class="vetrina__caso" href="#caso-eso">
+        <img src="eroe/eso.webp" width="264" height="352" alt="Human Robots — Lancio di prodotto"
+             loading="eager" decoding="async">
+        <b>Human Robots</b><span class="mono">Lancio di prodotto</span>
+      </a>
+      <a class="vetrina__caso" href="#caso-locanda">
+        <img src="eroe/locanda.webp" width="264" height="352" alt="Locanda del Castello — Identità"
+             loading="eager" decoding="async">
+        <b>Locanda del Castello</b><span class="mono">Identità</span>
+      </a>
+      <a class="vetrina__caso" href="#caso-cest">
+        <img src="eroe/cest.webp" width="264" height="352" alt="Studio CETS — Marchio e campagna"
+             loading="eager" decoding="async">
+        <b>Studio CETS</b><span class="mono">Marchio e campagna</span>
+      </a>
+      </div>
+    </nav>
+
     <div class="hero__actions">
-      <a class="btn btn--solid" href="#banchi">Guarda cosa faccio <i aria-hidden="true">↓</i></a>
+      <a class="btn btn--solid" href="#lavori">Guarda cosa faccio <i aria-hidden="true">↓</i></a>
       <a class="btn" href="#contatto">Raccontami cosa ti serve <i aria-hidden="true">↗</i></a>
     </div>
   </div>
@@ -503,7 +533,7 @@
       parte da solo: si scarica solo quello che apri.</p>
   </header>
 
-  <div class="union">
+  <div class="union" id="caso-union">
     <div class="union__slab">
       <!-- La scena della campagna: le foglie e la scia di luce che gira
            intorno a Davide sono i due segni della locandina vera. Sono
@@ -623,7 +653,7 @@
 
 
 
-  <div class="eso">
+  <div class="eso" id="caso-eso">
     <div class="eso__slab">
       <!-- La scena: un reticolo tecnico e la traccia di un passo. Sono i
            due segni del mondo in cui vive questo prodotto — una scheda
@@ -738,7 +768,7 @@
     </div>
   </div>
 
-  <div class="locanda">
+  <div class="locanda" id="caso-locanda">
     <div class="locanda__slab">
       <!-- La scena: l'arco del cancello che sta dentro il monogramma, e
            le stelle a quattro punte del marchio. Come per Union, due
@@ -857,7 +887,7 @@
     </div>
   </div>
 
-  <div class="cest">
+  <div class="cest" id="caso-cest">
     <div class="cest__slab">
       <!-- La scena: una risma di fogli che si accumula e la fascia
            tricolore dello scudo. Sono i due segni di questo lavoro — la
