@@ -155,9 +155,18 @@ function ricorda(gruppo) {
 
 export function ordineCambiato(gruppo) { return !!leggi()[chiaveGruppo(gruppo)]; }
 
+/* Rimette il gruppo com'era.
+   Guardava data-ordId, e data-ordId ce l'hanno solo i pezzi che si
+   possono spostare: le sezioni fisse ne sono senza di proposito, cosi'
+   nessun ordine salvato puo' muoverle. Ma in fase di RIMESSA quella
+   scelta diventava un difetto — riappendendo solo i mobili, quelli
+   finivano tutti in coda ai fissi, e azzerando la pagina il contatto
+   saltava in seconda posizione. Serviva un secondo indice, quello di
+   casa, che ce l'hanno TUTTI: qui si riordina su quello, e i fissi
+   tornano esattamente dove stavano. */
 export function rimetti(gruppo) {
-  const pezzi = pezziDi(gruppo).filter(p => p.dataset.ordId != null)
-    .sort((a, b) => +a.dataset.ordId - +b.dataset.ordId);
+  const pezzi = pezziDi(gruppo).filter(p => p.dataset.ordCasa != null)
+    .sort((a, b) => +a.dataset.ordCasa - +b.dataset.ordCasa);
   conVolo(gruppo, () => pezzi.forEach(p => gruppo.appendChild(p)));
   ricorda(gruppo);
 }
@@ -502,6 +511,19 @@ function posa(e) {
 
 /* ── all'avvio: dare un nome ai pezzi, poi rimetterli come li aveva
       lasciati chi guarda ──────────────────────────────────────────── */
+/* Rimette in fila TUTTI i gruppi, sezioni comprese, e poi butta la
+   memoria. L'ordine conta: rimetti() salva l'ordine nuovo mentre lo
+   applica, quindi se si cancellasse la memoria per prima si riscriverebbe
+   subito dopo. Si rimette a posto, e solo alla fine si dimentica. */
+export function azzeraOrdine() {
+  const gruppi = [];
+  for (const [sel] of GRUPPI) document.querySelectorAll(sel).forEach(g => gruppi.push(g));
+  const pag = pagina();
+  if (pag) gruppi.push(pag);
+  for (const g of gruppi) rimetti(g);
+  try { localStorage.removeItem(CHIAVE); } catch {}
+}
+
 export function initOrdine() {
   const gruppi = [];
   for (const [sel] of GRUPPI) document.querySelectorAll(sel).forEach(g => gruppi.push(g));
@@ -516,10 +538,16 @@ export function initOrdine() {
     });
   }
 
-  /* le fisse restano senza nome, cosi' nessun ordine salvato puo'
-     spostarle nemmeno per sbaglio */
+  /* Due indici, e servono a due cose diverse.
+     ordCasa ce l'hanno tutti: e' il posto in cui un pezzo nasce, e serve
+     a rimetterlo li' quando si azzera.
+     ordId ce l'hanno solo i pezzi che si possono spostare: e' il nome con
+     cui un ordine salvato li richiama, e le sezioni fisse ne restano
+     senza apposta, cosi' nessun ordine salvato puo' muoverle nemmeno per
+     sbaglio. */
   for (const g of gruppi)
     pezziDi(g).forEach((p, i) => {
+      p.dataset.ordCasa = i;
       if (g === pag && (p.tagName !== 'SECTION' || fissa(p))) return;
       p.dataset.ordId = i;
     });

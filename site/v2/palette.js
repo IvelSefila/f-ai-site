@@ -1,7 +1,7 @@
 import { PRESET, applicaGriglia, contenitoreDi, nomeContenitore,
-         mostraGriglia, grigliaVisibile, initGriglia } from './griglia.js?v=20260911-135324';
+         mostraGriglia, grigliaVisibile, initGriglia, azzeraGriglia } from './griglia.js?v=20260911-135324';
 import { initOrdine, bersaglioDi, spostaDi, puoAndare, rimetti, ordineCambiato,
-         iniziaTrascino, traTrascinando } from './sposta.js?v=20260911-135324';
+         iniziaTrascino, traTrascinando, azzeraOrdine } from './sposta.js?v=20260911-135324';
 
 /* ═══════════════════════════════════════════════════════════════════
  * PALETTE — tieni premuto su un riquadro e scegli il colore del sito
@@ -125,11 +125,60 @@ function costruisciPannello() {
         <input type="checkbox" data-gr-vedi> Mostra la griglia
       </label>
     </div>
+    <div class="pal__sez pal__sez--azzera">
+      <p class="pal__tit mono">Rimetti com'era</p>
+      <p class="pal__sub" style="margin-inline:0">Colore, ordine dei blocchi e impaginazione
+        tornano come li ho lasciati io. <b>Le risposte del brief non si toccano.</b></p>
+      <button type="button" class="btn btn--sm pal__azzera" data-pal-azzera>
+        Rimetti tutto come all'inizio</button>
+      <p class="pal__fatto mono" role="status" aria-live="polite"></p>
+    </div>
     <div class="pal__piede">
       <span class="mono">Tieni premuto su un riquadro: trascina, o lascia per riaprire</span>
       <button type="button" class="btn btn--sm" data-pal-chiudi>Chiudi</button>
     </div>`;
   document.body.appendChild(d);
+
+  /* ── il tasto che rimette tutto com'era ──────────────────────────
+     Chiede due volte. Non e' distruttivo — non si perde niente che non
+     sia una scelta di aspetto — ma e' l'unico comando della pagina che
+     disfa tutto insieme il lavoro di chi sta guardando, e sta a due dita
+     dal tasto Chiudi. Un colpo di pollice sbagliato non deve bastare. */
+  const azzera = d.querySelector('[data-pal-azzera]');
+  const fatto = d.querySelector('.pal__fatto');
+  let sicuro = false, orologio = null;
+  const calma = () => {
+    sicuro = false;
+    azzera.textContent = "Rimetti tutto come all'inizio";
+    azzera.classList.remove('pal__azzera--certo');
+    clearTimeout(orologio);
+  };
+  azzera.addEventListener('click', () => {
+    if (!sicuro) {
+      sicuro = true;
+      azzera.textContent = 'Sicuro? Premi di nuovo';
+      azzera.classList.add('pal__azzera--certo');
+      /* la domanda scade: se uno se ne va e torna dopo un minuto, il
+         tasto non deve essere rimasto armato */
+      orologio = setTimeout(calma, 6000);
+      return;
+    }
+    calma();
+    azzeraOrdine();
+    azzeraGriglia();
+    applica('smeraldo');
+    try { localStorage.removeItem(CHIAVE); } catch {}
+    d.querySelectorAll('[data-gr-set]').forEach(b => b.setAttribute('aria-checked', 'false'));
+    const vedi = d.querySelector('[data-gr-vedi]');
+    if (vedi) vedi.checked = false;
+    segna();
+    segnaGr();
+    segnaPos();
+    fatto.textContent = 'Fatto: tutto com\u2019era.';
+    setTimeout(() => { fatto.textContent = ''; }, 4000);
+  });
+  /* chiudendo il pannello la domanda si annulla */
+  d.addEventListener('close', calma);
 
   const bottoni = [...d.querySelectorAll('[data-pal]')];
   const segna = () => bottoni.forEach(b =>

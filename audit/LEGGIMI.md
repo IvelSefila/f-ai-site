@@ -28,6 +28,7 @@ Serve il server sulla porta 8899 (`python server.py` dalla cartella
 | `colonne-tengono.mjs` | sette gruppi per sette preset per tre larghezze |
 | `sposta-tutto.mjs` | che spostando i blocchi non si rompa niente |
 | `strumenti.mjs` | che tutte le schede degli strumenti si aprano |
+| `azzera.mjs` | il tasto "rimetti com'era": azzera davvero, regge il ricarico, e non tocca le risposte del brief |
 | `servizi.mjs` | le quattro finestre dei servizi: complete, senza collegamenti morti, e gli strumenti citati stanno davvero nell'elenco |
 | `radice.mjs` `solo-tuo.mjs` | la radice porta al sito; quello che uno cambia lo vede solo lui |
 | `v2brief.mjs` `v2lab.mjs` `v2mat.mjs` | brief, laboratorio, materia |

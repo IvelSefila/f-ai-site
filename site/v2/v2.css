@@ -1520,6 +1520,17 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border:0;border-radiu
    un dialog lo fa da solo — ma tagliato di netto sul bordo sembra
    rotto, e "Chiudi" finiva fuori vista. Cosi' il fondo del pannello si
    vede sempre, e si capisce che sopra c'e' altro. */
+/* ── il tasto che rimette tutto com'era ──────────────────────────────
+   Sta in fondo al pannello, dove si va a cercare quando si e' combinato
+   un guaio. Non e' rosso: non si distrugge niente, si torna indietro — e
+   un rosso qui spaventerebbe per una cosa che non fa paura. Diventa
+   caldo solo mentre e' armato, cioe' solo nei sei secondi in cui il
+   prossimo colpo fa davvero qualcosa. */
+.pal__azzera{width:100%;justify-content:center}
+.pal__azzera--certo{border-color:var(--em-bright);background:var(--em-dim);
+  color:var(--em-bright)}
+.pal__fatto{min-height:1.2em;margin:8px 0 0;color:var(--em);text-align:center}
+
 .pal__piede{display:flex;align-items:center;justify-content:space-between;gap:14px;
   padding:14px 20px 18px;border-top:1px solid rgba(221,231,242,.08);
   position:sticky;bottom:0;background:#0b0f16;z-index:2}

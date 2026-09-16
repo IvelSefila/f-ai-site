@@ -82,6 +82,23 @@ export function grigliaVisibile() {
   return document.documentElement.hasAttribute('data-gr-visibile');
 }
 
+/* Rimette ogni contenitore al preset di partenza, spegne la griglia a
+   vista e butta le due chiavi di memoria. Non si limita a cancellare la
+   memoria: senza rimettere anche i data-gr, il reso resterebbe quello
+   scelto fino al prossimo ricarico, e un tasto "rimetti com'era" che
+   chiede di ricaricare non e' un tasto, e' un consiglio. */
+export function azzeraGriglia() {
+  for (const [sel, def] of CONTENITORI)
+    document.querySelectorAll(sel).forEach(el => {
+      if (def) el.dataset.gr = def; else delete el.dataset.gr;
+    });
+  document.documentElement.removeAttribute('data-gr-visibile');
+  try {
+    localStorage.removeItem(CHIAVE);
+    localStorage.removeItem(CHIAVE + '-vista');
+  } catch {}
+}
+
 export function initGriglia() {
   /* i valori di partenza: nessun cambiamento rispetto a prima */
   for (const [sel, def] of CONTENITORI)
