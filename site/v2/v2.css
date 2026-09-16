@@ -774,6 +774,84 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border:0;border-radiu
 .offerta__card p{margin:0;color:var(--text);font-size:var(--t-corpo);line-height:1.6}
 .offerta__tag{color:var(--muted)!important;font-size:var(--t-micro)!important;letter-spacing:.08em;line-height:1.6!important}
 .offerta__card .btn{margin-top:6px;justify-self:start}
+/* ═══════════════════════════════════════════════════════════════════
+ * LA FINESTRA DI UN SERVIZIO
+ *
+ * Le quattro schede dicevano una riga a testa e chiedevano subito
+ * "Parliamo della campagna": chiedevano a chi non sapeva ancora cosa
+ * stesse chiedendo. Adesso si aprono, e dentro c'e' il mestiere —
+ * cosa ti arriva, come ci arrivo, con cosa, e dove si vede.
+ *
+ * Piu' larga di quella degli strumenti (560 contro 460): li' ci sta una
+ * definizione e un elenco, qui quattro blocchi e i collegamenti ai
+ * lavori. Stesso fondo, stesso vetro, stessa Esc: e' la stessa finestra
+ * del sito, non una seconda inventata per l'occasione.
+ * ═══════════════════════════════════════════════════════════════════ */
+.serv{
+  color-scheme:dark;
+  width:min(560px,calc(100vw - 32px));max-height:calc(100dvh - 32px);
+  padding:0;border:1px solid color-mix(in srgb,var(--em) 34%,transparent);
+  border-radius:var(--r-card);background:#0b0f16;color:#f2f4f7;
+  font:400 var(--t-corpo)/1.6 var(--body);overflow:auto;overscroll-behavior:contain}
+.serv::backdrop{background:rgba(5,7,11,.72);backdrop-filter:blur(6px)}
+.serv__cat{margin:0;padding:20px 24px 0;display:flex;align-items:baseline;gap:10px;
+  color:var(--em);font-size:var(--t-micro);letter-spacing:.14em;text-transform:uppercase}
+.serv__cat .n{padding-right:10px;border-right:1px solid var(--rule)}
+.serv__cat em{font-style:normal}
+.serv h3{margin:8px 0 0;padding:0 24px;font-size:var(--d6);letter-spacing:-.015em;line-height:1.1}
+.serv__lede{margin:12px 0 0;padding:0 24px;color:var(--text);line-height:1.6}
+
+/* Le quattro domande si devono vedere separate: sono quattro risposte
+   diverse, e impastarle in un paragrafo solo era il difetto della prima
+   versione delle schede degli strumenti. */
+.serv__eti{margin:22px 0 8px;padding:0 24px;color:var(--muted);
+  font-size:var(--t-micro);letter-spacing:.14em;text-transform:uppercase}
+.serv__lista,.serv__passi{margin:0;padding:0 24px 0 42px;display:grid;gap:7px;
+  color:var(--text);font-size:var(--t-corpo);line-height:1.55}
+.serv__lista{list-style:none;padding-left:24px}
+.serv__lista li{position:relative;padding-left:18px}
+.serv__lista li::before{content:"";position:absolute;left:0;top:.62em;
+  width:7px;height:2px;border-radius:2px;background:var(--em)}
+.serv__passi li::marker{color:var(--em);font-family:var(--mono);font-size:var(--t-mini)}
+.serv__con{margin:0;padding:0 24px;color:var(--ink);font-family:var(--mono);
+  font-size:var(--t-mini);letter-spacing:.04em;line-height:1.9}
+
+/* "Dove si vede" e' la parte che rende verificabile tutto il resto:
+   sono collegamenti ai lavori veri, nella stessa pagina. Hanno peso di
+   bottone, non di nota. */
+.serv__dove{margin:0;padding:0 24px;list-style:none;display:grid;gap:6px}
+.serv__dove a{display:grid;gap:1px;padding:10px 12px;border:1px solid var(--rule);
+  border-radius:var(--r-min);background:var(--panel-2);
+  transition:border-color .2s,background .2s}
+.serv__dove a:hover{border-color:var(--em);background:var(--em-dim)}
+.serv__dove b{color:var(--ink);font-size:var(--t-corpo);font-weight:600}
+.serv__dove span{color:var(--muted);font-size:var(--t-mini);line-height:1.4}
+
+.serv__piede{margin-top:24px;padding:16px 24px 20px;border-top:1px solid var(--rule);
+  display:flex;flex-wrap:wrap;align-items:center;gap:10px;
+  position:sticky;bottom:0;background:#0b0f16}
+
+/* Il bottone che apre. Copre tutta la scheda con un ::after — cosi' il
+   clic funziona ovunque — ma resta un <button> vero, visibile e
+   raggiungibile col tasto Tab. La scheda non contiene piu' nessun altro
+   comando: un collegamento dentro una scheda cliccabile e' una trappola,
+   e per questo l'invito al brief e' finito dentro la finestra. */
+.offerta__card{position:relative}
+.offerta__apri{margin-top:8px;justify-self:start;
+  display:inline-flex;align-items:center;gap:8px;min-height:44px;
+  padding:0;border:0;background:none;color:var(--em);
+  font-family:var(--mono);font-size:var(--t-micro);font-weight:600;
+  letter-spacing:.12em;text-transform:uppercase;cursor:pointer;text-align:left}
+.offerta__apri::after{content:"";position:absolute;inset:0;border-radius:var(--r-card)}
+.offerta__apri i{font-style:normal;transition:transform .2s var(--ease)}
+.offerta__card:hover .offerta__apri i{transform:translateX(3px)}
+.offerta__apri:focus-visible{outline:none}
+.offerta__card:has(.offerta__apri:focus-visible){outline:2px solid var(--em-bright);
+  outline-offset:3px}
+@media (prefers-reduced-motion:reduce){
+  .offerta__apri i,.offerta__card:hover .offerta__apri i{transition:none;transform:none}
+}
+
 .offerta__nota{margin:20px 0 0;color:var(--muted);font-size:var(--t-corpo);max-width:70ch}
 
 /* ═══ breakdown dei lavori ═══ */

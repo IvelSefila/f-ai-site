@@ -11,6 +11,7 @@ import { initCest } from './cest.js?v=20260911-135324';
 import { initPalette } from './palette.js?v=20260911-135324';
 import { keyVisual, timeline, radar, MODES, rng, leggiColori} from './engine.js?v=20260911-135324';
 import { initBrief } from './brief.js?v=20260911-135324';
+import { initServizi } from './servizi.js?v=20260911-135324';
 
 const $ = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => [...r.querySelectorAll(s)];
@@ -585,16 +586,22 @@ Il modulo che il cliente compila. Il controller è quello originale,
 estratto in brief.js: i dati restano nel browser e finiscono in una
 email solo se è lui ad aprirla. */
 const brief = initBrief();
-/* Gli inviti delle quattro schede dei servizi aprono il brief con la
-   loro risposta gia' segnata. Senza JavaScript restano collegamenti a
-   #brief e portano al modulo come prima: la scorciatoia si perde, la
-   strada no. */
-$$('[data-brief]').forEach(a => a.addEventListener('click', (e) => {
-  if (!brief?.apriCon) return;        /* il modulo non c'e': vale l'ancora */
+/* Le quattro schede dei servizi si aprono in una finestra che spiega il
+   mestiere, e la finestra finisce con l'invito al brief — con la
+   risposta gia' segnata. Prima si spiega, poi si chiede. */
+initServizi((tipo) => { brief?.apriCon?.(tipo); act(); });
+
+/* Gli altri inviti col brief gia' scelto, ovunque siano. La delega sta
+   sul documento e non sui singoli collegamenti perche' adesso alcuni
+   nascono dentro una finestra che non esiste ancora quando questa riga
+   viene letta. */
+document.addEventListener('click', (e) => {
+  const a = e.target.closest?.('[data-brief]');
+  if (!a || !brief?.apriCon) return;  /* il modulo non c'e': vale l'ancora */
   e.preventDefault();
   brief.apriCon(a.dataset.brief);
   act();
-}));
+});
 $$('#brief-form input, #brief-form textarea, #brief-form select').forEach(el =>
   el.addEventListener('change', act, { once: true }));
 $('#brief-next')?.addEventListener('click', act);
