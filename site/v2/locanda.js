@@ -24,7 +24,7 @@ export const PEZZI = [
   { id: 'posto', t: 'Il posto', d: '0:23', w: 720, h: 1280,
     n: 'Il giro della casa: calice, parco, corte del castello e la scritta che chiude — dove ci si siede.' },
   { id: 'dehor', t: 'Inaugurazione del dehor', d: '0:15', w: 720, h: 1280,
-    n: 'Dall’alto fino alle luci del dehor, e sull’ultima inquadratura compare la locandina della serata di apertura.' },
+    n: 'Dall’alto alle luci del dehor: sull’ultima inquadratura compare la locandina della serata di apertura.' },
   { id: 'champagne', t: 'Serata degustazione Champagne', d: '0:10', w: 946, h: 1280,
     n: 'La locandina della serata: le bottiglie in fila, i piatti in abbinamento, la data e il prezzo.' },
   { id: 'tradition', t: 'Brut Tradition, il primo assaggio', d: '0:10', w: 946, h: 1280,

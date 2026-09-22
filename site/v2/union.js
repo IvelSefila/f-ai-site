@@ -34,7 +34,7 @@ export const PEZZI = [
   { id: 'locandina', t: 'Azzeriamola green', d: '0:07', forma: 'alto',
     n: 'La locandina animata della campagna: il payoff, i tre passaggi e l’invito a scrivere.' },
   { id: 'davide-01', t: 'Caro benzina', d: '0:04', forma: 'alto',
-    n: 'Davide il lama davanti a una pompa di benzina. Il primo dei corti che lo hanno presentato.' },
+    n: 'Davide il lama davanti a una pompa di benzina, nel primo dei corti che lo presentano.' },
   { id: 'davide-02', t: 'La bolletta di luce e gas', d: '0:08', forma: 'alto',
     n: 'Davide sulla porta di casa, con la bolletta appena arrivata.' },
   { id: 'luca-asino', t: 'Luca l’asino sommerso', d: '0:07', forma: 'alto',

@@ -23,17 +23,17 @@ import { scheda } from './scheda.js';
 
 export const PEZZI = [
   { id: 'trailer', t: 'Il trailer', d: '0:24', w: 1280, h: 720,
-    n: 'Ventiquattro secondi che fanno il giro delle tre vite del prodotto: la casa, la palestra di riabilitazione, la montagna.' },
+    n: 'Ventiquattro secondi nelle tre vite del prodotto: casa, palestra di riabilitazione, montagna.' },
   { id: 'trekking', t: 'Trekking', d: '0:16', w: 720, h: 1280,
-    n: 'Il verticale per i social: un uomo sale un crinale con l’esoscheletro addosso, e non si vede uno sforzo.' },
+    n: 'Il verticale per i social: un uomo sale un crinale con l’esoscheletro, senza sforzo visibile.' },
   { id: 'borgo', t: 'La spesa, in salita', d: '0:10', w: 1280, h: 720,
-    n: 'Un borgo italiano in pendenza, la spesa in mano. È l’inquadratura che spiega a chi serve senza dire una parola.' },
+    n: 'Un borgo in pendenza, la spesa in mano: spiega a chi serve senza dire una parola.' },
   { id: 'spot', t: 'Più forza, più libertà', d: '0:11', w: 720, h: 1280,
     n: 'Lo spot che finisce sulla scheda prodotto: il dispositivo staccato sul bianco, il claim, e basta.' },
   { id: 'e-legs', t: 'E-Legs Trek', d: '0:12', w: 720, h: 1280,
     n: 'La stessa famiglia di prodotti raccontata per chi va in montagna: un marchio diverso, un pubblico diverso.' },
   { id: 'prodotto', t: 'Il dispositivo', d: '0:10', w: 720, h: 1280,
-    n: 'Product film: solo l’oggetto, fumo e luce radente. Serve a far vedere com’è fatto quando il resto è narrazione.' },
+    n: 'Product film: solo l’oggetto, fumo e luce radente — com’è fatto, quando il resto è narrazione.' },
 ];
 
 const mio = scheda({ nome: 'eso', cartella: 'eso/', pezzi: PEZZI });
