@@ -2831,3 +2831,35 @@ body.ord-in-corso *{cursor:grabbing !important}
   .scheda__piede{flex-wrap:wrap}
   .scheda__piede .btn{min-height:46px;flex:1}
 }
+
+/* ═══════════════════════════════════════════════════════════════════
+ * L'APERTURA DEI POPUP: A DIFFUSIONE, NON DI SCATTO
+ *
+ * .serv, .scheda e .pal sono la stessa finestra del sito (vedi il
+ * commento sopra .serv): prima si materializzavano di colpo, come fa
+ * <dialog> di suo con showModal(). Adesso arrivano fuori fuoco e si
+ * risolvono a schermo — la sfocatura che si dirada e' l'idea di
+ * "diffusione", non solo una dissolvenza.
+ *
+ * Tutto CSS, senza JavaScript: @starting-style descrive lo stato di
+ * partenza appena il browser promuove il dialog in cima allo strato,
+ * la transizione lo porta allo stato definito qui sotto. display e
+ * overlay hanno bisogno di allow-discrete perche' sono proprieta' che
+ * normalmente scattano invece di transire — e' quello che permette
+ * anche alla CHIUSURA di dissolversi invece di sparire di scatto,
+ * senza un onclose in JavaScript a gestirla.
+ * ═══════════════════════════════════════════════════════════════════ */
+.serv,.scheda,.pal{
+  opacity:0;transform:scale(.96) translateY(10px);filter:blur(9px);
+  transition:opacity .32s var(--ease),transform .36s var(--ease),filter .36s var(--ease),
+    display .36s allow-discrete,overlay .36s allow-discrete}
+.serv[open],.scheda[open],.pal[open]{opacity:1;transform:none;filter:blur(0)}
+@starting-style{
+  .serv[open],.scheda[open],.pal[open]{opacity:0;transform:scale(.96) translateY(10px);filter:blur(9px)}
+}
+.serv::backdrop,.scheda::backdrop,.pal::backdrop{
+  opacity:0;transition:opacity .32s var(--ease),display .32s allow-discrete,overlay .32s allow-discrete}
+.serv[open]::backdrop,.scheda[open]::backdrop,.pal[open]::backdrop{opacity:1}
+@starting-style{
+  .serv[open]::backdrop,.scheda[open]::backdrop,.pal[open]::backdrop{opacity:0}
+}
