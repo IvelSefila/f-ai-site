@@ -2728,25 +2728,42 @@ body.ord-in-corso *{cursor:grabbing !important}
    spegne anche questa, azzerando animation-duration: non serve
    ripeterlo qui. */
 @keyframes manifesto-arriva{
-  from{opacity:0;transform:translateY(14px)}
+  from{opacity:0;transform:translateY(26px)}
   to{opacity:1;transform:translateY(0)}
 }
-/* Il ritardo di ognuna sta scritto DENTRO la stessa regola scoperta da
-   [open], non in una regola nth-child separata: la prima versione le
-   separava, e la scorciatoia "animation:" della regola qui sopra
-   azzerava ogni volta animation-delay a 0 — vince lei sulle regole
-   nth-child perche' [open] la rende piu' specifica, quindi le sei
-   card partivano tutte insieme invece che a cascata. Un difetto
-   invisibile finche' non si guarda il fotogramma giusto: a schermo
-   sembravano comunque "apparire", solo tutte nello stesso istante. */
-.manifesto[open] .istruzioni li:nth-child(1){animation:manifesto-arriva .4s var(--ease) .04s backwards}
-.manifesto[open] .istruzioni li:nth-child(2){animation:manifesto-arriva .4s var(--ease) .08s backwards}
-.manifesto[open] .istruzioni li:nth-child(3){animation:manifesto-arriva .4s var(--ease) .12s backwards}
-.manifesto[open] .istruzioni li:nth-child(4){animation:manifesto-arriva .4s var(--ease) .16s backwards}
-.manifesto[open] .istruzioni li:nth-child(5){animation:manifesto-arriva .4s var(--ease) .2s backwards}
-.manifesto[open] .istruzioni li:nth-child(6){animation:manifesto-arriva .4s var(--ease) .24s backwards}
+/* La prima taratura (14px, 40ms di scarto, 400ms di durata, curva
+   var(--ease) come il resto del sito) era corretta sul fotogramma
+   congelato e invisibile a un clic vero — l'ho verificata solo cosi',
+   ed era l'errore. Due correzioni, non una.
+
+   La prima e' il tempo: piu' escursione (26px, il doppio) e piu' scarto
+   fra una card e l'altra (90ms invece di 40) per leggere una sequenza
+   invece di un lampo.
+
+   La seconda e' la curva, ed e' quella che contava di piu'. var(--ease)
+   e' cubic-bezier(.22,.72,.18,1): al 22% del tempo e' gia' al 72% del
+   movimento. E' la curva giusta per un titolo che deve "arrivare e
+   fermarsi" subito — sbagliata per mostrare una sequenza, perche' ogni
+   card sembra "gia' arrivata" quasi appena parte, e lo scarto fra una e
+   l'altra si vede solo nei primi istanti. Qui serve una curva che tenga
+   il movimento visibile per PIU' della durata, non che lo esaurisca
+   subito: cubic-bezier(.16,.6,.3,1), che al 22% del tempo e' solo al
+   38% del movimento. Vale solo per questa cascata, non e' un secondo
+   --ease del sito.
+
+   Il ritardo di ognuna sta scritto DENTRO la stessa regola scoperta da
+   [open], non in una regola nth-child separata: la scorciatoia
+   "animation:" azzera animation-delay se lo si lascia fuori, e vince
+   lei sulle regole nth-child perche' [open] la rende piu' specifica —
+   l'ho gia' sbagliato una volta per questo. */
+.manifesto[open] .istruzioni li:nth-child(1){animation:manifesto-arriva .55s cubic-bezier(.16,.6,.3,1) .05s backwards}
+.manifesto[open] .istruzioni li:nth-child(2){animation:manifesto-arriva .55s cubic-bezier(.16,.6,.3,1) .14s backwards}
+.manifesto[open] .istruzioni li:nth-child(3){animation:manifesto-arriva .55s cubic-bezier(.16,.6,.3,1) .23s backwards}
+.manifesto[open] .istruzioni li:nth-child(4){animation:manifesto-arriva .55s cubic-bezier(.16,.6,.3,1) .32s backwards}
+.manifesto[open] .istruzioni li:nth-child(5){animation:manifesto-arriva .55s cubic-bezier(.16,.6,.3,1) .41s backwards}
+.manifesto[open] .istruzioni li:nth-child(6){animation:manifesto-arriva .55s cubic-bezier(.16,.6,.3,1) .5s backwards}
 .manifesto[open] .istruzioni__nota{
-  animation:manifesto-arriva .4s var(--ease) .28s backwards}
+  animation:manifesto-arriva .55s cubic-bezier(.16,.6,.3,1) .59s backwards}
 
 /* Il corpo NON ha nessuna regola che lega la sua altezza a [open]. Due
    tentativi (grid-template-rows: 0fr/1fr, poi max-height) aprivano
