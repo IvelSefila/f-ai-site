@@ -28,7 +28,7 @@
   --t-lede:clamp(15px,1.1vw,18px);
   --t-base:17px;      /* il corpo del sito */
   --t-grande:17px;     /* e il gradino sopra --t-corpo: sono la stessa cosa */
-  --t-corpo:15px;
+  --t-corpo:16px;
   --t-mini:13px;
   --t-micro:11px;
   --display:"Barlow Condensed","Arial Narrow",sans-serif;
