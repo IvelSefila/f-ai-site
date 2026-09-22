@@ -2669,6 +2669,20 @@ body.ord-in-corso *{cursor:grabbing !important}
  * ce l'ha gia' e la usa per i banchi: qui e' la stessa cosa, piu'
  * grande.
  * ═══════════════════════════════════════════════════════════════════ */
+
+/* Il retro della sezione era la carta piatta di .sec--chiara — giusto
+   dove il testo ci sta sopra, ma qui il testo vive tutto dentro la
+   lastra scura: il margine intorno non ha niente da proteggere e può
+   permettersi due bagliori dell'accento invece del bianco spento.
+   #come.sec--chiara pesa piu' di .sec--chiara da solo, quindi vince
+   senza toccare le altre sezioni chiare (lavori, tecnologia, contatto),
+   che restano piatte perche' li' il testo e' sulla carta davvero. */
+#come.sec--chiara{
+  background:
+    radial-gradient(56% 62% at 10% -8%, color-mix(in srgb,var(--em-vivo) 20%,transparent), transparent 68%),
+    radial-gradient(48% 58% at 102% 108%, color-mix(in srgb,var(--em-vivo) 15%,transparent), transparent 62%),
+    var(--stage)}
+
 .manifesto{border-radius:var(--r-grande);overflow:hidden;
   background:var(--panel);
   box-shadow:0 1px 2px rgba(5,7,11,.06), 0 26px 60px -30px rgba(5,7,11,.5)}
