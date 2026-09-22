@@ -2672,7 +2672,13 @@ body.ord-in-corso *{cursor:grabbing !important}
 .manifesto{border-radius:var(--r-grande);overflow:hidden;
   background:var(--panel);
   box-shadow:0 1px 2px rgba(5,7,11,.06), 0 26px 60px -30px rgba(5,7,11,.5)}
+/* <details>: solo la lastra si vede all'inizio, le istruzioni compaiono
+   cliccandoci sopra. E' <summary> che apre e chiude — funziona senza
+   JavaScript, tastiera compresa — quindi qui si toglie solo l'aspetto
+   di default (il triangolino, l'indentatura da elenco) e si lascia
+   fare al browser. */
 .manifesto__slab{position:relative;isolation:isolate;overflow:hidden;
+  display:block;list-style:none;cursor:pointer;
   padding:clamp(26px,3.4vw,54px);
   background:linear-gradient(152deg,#0e1620 0%,#05070b 100%);
   /* i colori del testo tornano quelli dei fondi scuri, come nelle
@@ -2680,13 +2686,48 @@ body.ord-in-corso *{cursor:grabbing !important}
   --ink:#f2f4f7; --text:#c3ccd6; --muted:#7f8b98;
   --em:color-mix(in srgb, var(--em-vivo) 68%, #f2f4f7);
   color:var(--ink)}
+.manifesto__slab::-webkit-details-marker{display:none}
+.manifesto__slab:hover{background:linear-gradient(152deg,#111b26 0%,#070a10 100%)}
+.manifesto__slab:focus-visible{outline:2px solid var(--em-bright);outline-offset:-4px}
 .manifesto__scena{position:absolute;inset:0;z-index:0;width:100%;height:100%;
   color:var(--em-vivo);pointer-events:none;opacity:.5}
 .manifesto__slab .sec__head{position:relative;z-index:1;margin:0}
 .manifesto__slab .sec__head h2{color:var(--ink)}
-.manifesto__corpo{padding:clamp(22px,3vw,42px)}
-.manifesto__corpo .istruzioni{margin-top:0}
-.manifesto__corpo .istruzioni__nota{margin-bottom:0}
+
+/* Il richiamo in fondo alla lastra: un'area cliccabile senza una
+   scritta che lo dice e' un indovinello, non un invito. La freccia
+   gira di 180° quando si apre — stessa idea del "+" che diventa "×"
+   nell'altro <details> del foglio (.work__break), stesso linguaggio. */
+.manifesto__cta{position:relative;z-index:1;margin-top:clamp(20px,2.6vw,30px);
+  display:inline-flex;align-items:center;gap:8px;color:var(--em-light);
+  opacity:.85;transition:opacity .2s var(--ease)}
+.manifesto__slab:hover .manifesto__cta{opacity:1}
+.manifesto__cta i{font-style:normal;display:inline-block;transition:transform .3s var(--ease)}
+.manifesto[open] .manifesto__cta i{transform:rotate(180deg)}
+.manifesto[open] .manifesto__cta{opacity:0;pointer-events:none}
+
+/* Il corpo NON ha nessuna regola che lega la sua altezza a [open]. Due
+   tentativi (grid-template-rows: 0fr/1fr, poi max-height) aprivano
+   lisci e non si richiudevano mai: un secondo clic toglieva [open] ma
+   il valore restava fermo su quello aperto. Misurato a fondo
+   (audit/manifesto.mjs): capita SOLO sul contenuto diretto di un
+   <details> — l'icona della freccia, che sta dentro <summary> e non
+   viene mai nascosta dal browser, ruota avanti e indietro senza
+   problemi con la stessa identica sintassi. E' il motore che, chiudendo
+   nativamente un <details>, congela lo stile del suo contenuto diretto
+   invece di ricalcolarlo — un limite del browser, non della regola, e
+   capita anche senza una riga di JavaScript coinvolta.
+
+   La soluzione che regge e' non combattere quel meccanismo: senza CSS
+   qui, aprire e chiudere restano istantanei e SEMPRE corretti (il
+   browser gestisce lui la visibilita', esattamente come fa gia' con
+   .work__break altrove nel foglio). L'animazione morbida arriva da
+   manifesto.js, che tocca l'attributo open solo agli estremi — mai
+   mentre il contenuto e' a meta' — e quindi non incontra mai lo stato
+   che il motore congela. */
+.manifesto__lista{padding-inline:clamp(22px,3vw,42px)}
+.manifesto__corpo .istruzioni{margin:clamp(22px,3vw,42px) 0 0}
+.manifesto__corpo .istruzioni__nota{margin-bottom:clamp(22px,3vw,42px)}
 
 /* come si comincia, scritto sotto il titolo del contatto */
 .contatto__come{margin:0 0 22px;max-width:62ch;color:var(--text);font-size:var(--t-grande);line-height:1.6}

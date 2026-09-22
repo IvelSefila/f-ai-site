@@ -198,8 +198,8 @@
 
 <!-- ══ questa pagina ══ -->
 <section class="sec sec--alt sp-m ap-larga sec--chiara t-piano" id="come" aria-labelledby="comeT">
- <div class="manifesto">
-  <div class="manifesto__slab">
+ <details class="manifesto">
+  <summary class="manifesto__slab">
    <!-- la stessa scena dei casi, qui col segno del sito: una griglia e
         una riga che la attraversa, perche' di griglie parla tutto il
         blocco -->
@@ -222,10 +222,12 @@
       browser adesso, e infatti puoi cambiarle. Tutto quello che cambi resta nel tuo browser:
       il sito non salva e non manda niente a nessuno.</p>
    </header>
-  </div>
+   <span class="manifesto__cta mono" aria-hidden="true">Vedi come funziona <i>↓</i></span>
+  </summary>
 
   <div class="manifesto__corpo">
-  <ol class="istruzioni">
+   <div class="manifesto__lista">
+   <ol class="istruzioni">
     <li><b class="mono">01</b><h3>Il colore di tutto il sito</h3>
       <p>Sette palette, dai pallini in alto a destra: ognuna calcolata perché il testo resti
         leggibile su fondo scuro e su carta.</p></li>
@@ -250,8 +252,9 @@
   <p class="istruzioni__nota">Serve a due cose. La prima: capire cosa so fare senza dover credere
     a un elenco di competenze. La seconda: se una pagina così la costruisco per me, posso
     costruirla per te.</p>
+   </div>
   </div>
- </div>
+ </details>
 </section>
 
 <!-- ══ 03 · banchi di prova ══ -->

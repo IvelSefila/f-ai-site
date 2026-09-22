@@ -728,6 +728,62 @@ document.addEventListener('palette', () => {
 });
 initPalette();
 initStrumenti();
+
+/* Il manifesto (site/v2/v2.css): un <details> che apre le istruzioni.
+   Senza JavaScript apre e chiude di scatto, e va benissimo — e'
+   corretto sempre, il browser gestisce lui la visibilita'.
+   Con JavaScript, l'apertura si anima. Il come conta piu' del perche':
+   due tecniche via CSS pura (grid-template-rows 0fr/1fr, poi
+   max-height) aprivano lisce e non si richiudevano MAI — un secondo
+   clic toglieva [open] ma il valore restava fermo su quello aperto.
+   Misurato a fondo (audit/manifesto.mjs): il motore, chiudendo
+   nativamente un <details>, congela lo stile del suo contenuto diretto
+   invece di ricalcolarlo. Non e' un difetto della regola, e' un limite
+   del browser che nessuna sintassi CSS aggira.
+
+   La via che regge: mai lasciare che sia [open] a guidare una
+   transizione. L'animazione la guida la Web Animations API — che scrive
+   l'altezza direttamente sull'elemento, frame per frame, senza passare
+   dalla cascata — e l'attributo open si tocca SOLO agli estremi: true
+   prima di aprire, false solo a chiusura gia' finita. Il motore non
+   vede mai un <details> chiuso a meta' con del CSS scomodo da
+   ricalcolare, perche' quello stato non esiste piu'. */
+(() => {
+  const blocco = document.querySelector('details.manifesto');
+  const corpo = blocco?.querySelector('.manifesto__corpo');
+  const lista = blocco?.querySelector('.manifesto__lista');
+  if (!blocco || !corpo || !lista) return;
+
+  const riduci = () => matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let inCorso = null;
+
+  function apri() {
+    inCorso?.cancel();
+    blocco.open = true;
+    const alto = lista.scrollHeight;
+    inCorso = corpo.animate(
+      [{ maxHeight: '0px' }, { maxHeight: alto + 'px' }],
+      { duration: riduci() ? 1 : 420, easing: 'cubic-bezier(.22,.72,.18,1)' });
+  }
+
+  function chiudi() {
+    inCorso?.cancel();
+    const alto = corpo.getBoundingClientRect().height;
+    inCorso = corpo.animate(
+      [{ maxHeight: alto + 'px' }, { maxHeight: '0px' }],
+      { duration: riduci() ? 1 : 320, easing: 'cubic-bezier(.22,.72,.18,1)' });
+    /* open resta true per tutta l'animazione: e' il momento in cui il
+       contenuto e' ancora quello che il motore gestisce senza problemi.
+       Si tocca solo alla fine, quando in schermo non c'e' piu' niente
+       da mostrare — e il salto e' invisibile perche' e' gia' a zero. */
+    inCorso.onfinish = () => { blocco.open = false; };
+  }
+
+  blocco.querySelector('summary').addEventListener('click', (e) => {
+    e.preventDefault();
+    blocco.open ? chiudi() : apri();
+  });
+})();
 /* I quattro casi avvisano quando qualcuno guarda davvero un pezzo: e'
    la prova "Lavori" del dossier, e vale piu' di uno scorrimento. */
 const guardato = () => { act(); proof('lavori'); };

@@ -28,6 +28,7 @@ Serve il server sulla porta 8899 (`python server.py` dalla cartella
 | `colonne-tengono.mjs` | sette gruppi per sette preset per tre larghezze |
 | `sposta-tutto.mjs` | che spostando i blocchi non si rompa niente |
 | `strumenti.mjs` | che tutte le schede degli strumenti si aprano |
+| `manifesto.mjs` | il blocco "come funziona" si apre e chiude: senza JS, con JS, da tastiera, sulle due larghezze |
 | `azzera.mjs` | il tasto "rimetti com'era": azzera davvero, regge il ricarico, e non tocca le risposte del brief |
 | `servizi.mjs` | le quattro finestre dei servizi: complete, senza collegamenti morti, e gli strumenti citati stanno davvero nell'elenco |
 | `radice.mjs` `solo-tuo.mjs` | la radice porta al sito; quello che uno cambia lo vede solo lui |
