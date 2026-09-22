@@ -28,7 +28,7 @@
  * ═══════════════════════════════════════════════════════════════════ */
 import { chromium } from 'playwright';
 
-const CROMO = 'C:/Users/fabri/AppData/Local/ms-playwright/chromium-1228/chrome-win64/chrome.exe';
+const CROMO = 'C:/Users/fabri/AppData/Local/ms-playwright/chromium-1234/chrome-win64/chrome.exe';
 const SITO = 'http://localhost:8899/v2/index.html?probe=1';
 const PRESET = ['1', '2', '3', '4', '8-4', '4-8', '6-3-3'];
 const GRUPPI = ['.deck', '.offerta__grid', '.lab', '.istruzioni', '.appmie__grid', '#formats', '#socials', '.bench'];

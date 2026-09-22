@@ -16,7 +16,7 @@ import { chromium } from 'playwright';
 import fs from 'node:fs';
 import path from 'node:path';
 
-const CROMO = 'C:/Users/fabri/AppData/Local/ms-playwright/chromium-1228/chrome-win64/chrome.exe';
+const CROMO = 'C:/Users/fabri/AppData/Local/ms-playwright/chromium-1234/chrome-win64/chrome.exe';
 const BASE = 'http://localhost:8901';
 const FUORI = 'audit/copertine';
 const COPERTINE = process.argv[2] === 'copertine';

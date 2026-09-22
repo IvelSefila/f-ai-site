@@ -47,7 +47,7 @@ const PROVE = [
   ['scheda', 'la lucerna',           270,  90, [252, 70, 36, 40], 400],
 ];
 
-const b = await chromium.launch({ executablePath: 'C:/Users/fabri/AppData/Local/ms-playwright/chromium-1228/chrome-win64/chrome.exe' });
+const b = await chromium.launch({ executablePath: 'C:/Users/fabri/AppData/Local/ms-playwright/chromium-1234/chrome-win64/chrome.exe' });
 const p = await b.newPage({ viewport: { width: 1440, height: 900 } });
 const errori = [];
 p.on('console', m => m.type() === 'error' && errori.push(m.text()));

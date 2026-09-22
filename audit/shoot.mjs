@@ -12,7 +12,7 @@ const freeze = () => {
 };
 
 async function shoot(name, width, height) {
-  const browser = await chromium.launch({ executablePath: 'C:/Users/fabri/AppData/Local/ms-playwright/chromium-1228/chrome-win64/chrome.exe' });
+  const browser = await chromium.launch({ executablePath: 'C:/Users/fabri/AppData/Local/ms-playwright/chromium-1234/chrome-win64/chrome.exe' });
   const page = await browser.newPage({ viewport: { width, height }, deviceScaleFactor: 1 });
   await page.goto(URL, { waitUntil: 'networkidle' });
   await page.waitForTimeout(1500);

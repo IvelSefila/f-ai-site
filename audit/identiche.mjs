@@ -4,7 +4,7 @@ import { chromium } from 'playwright';
 import fs from 'fs';
 import path from 'path';
 const [A, B] = process.argv.slice(2);
-const b = await chromium.launch({ executablePath: 'C:/Users/fabri/AppData/Local/ms-playwright/chromium-1228/chrome-win64/chrome.exe' });
+const b = await chromium.launch({ executablePath: 'C:/Users/fabri/AppData/Local/ms-playwright/chromium-1234/chrome-win64/chrome.exe' });
 const p = await b.newPage(); await p.goto('about:blank');
 let tutte = 0, diverse = 0;
 for (const f of fs.readdirSync(A).filter(f => f.endsWith('.png'))) {

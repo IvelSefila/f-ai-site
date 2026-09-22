@@ -3,7 +3,7 @@
 import { chromium } from 'playwright';
 
 const b = await chromium.launch({
-  executablePath: 'C:/Users/fabri/AppData/Local/ms-playwright/chromium-1228/chrome-win64/chrome.exe',
+  executablePath: 'C:/Users/fabri/AppData/Local/ms-playwright/chromium-1234/chrome-win64/chrome.exe',
   args: ['--use-gl=swiftshader', '--enable-unsafe-swiftshader', '--ignore-gpu-blocklist'] });
 
 for (const [nome, vp] of [['telefono', { width: 390, height: 844 }],

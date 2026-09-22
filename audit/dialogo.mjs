@@ -1,5 +1,5 @@
 import { chromium } from 'playwright';
-const b=await chromium.launch({executablePath:'C:/Users/fabri/AppData/Local/ms-playwright/chromium-1228/chrome-win64/chrome.exe',
+const b=await chromium.launch({executablePath:'C:/Users/fabri/AppData/Local/ms-playwright/chromium-1234/chrome-win64/chrome.exe',
   args:['--use-gl=swiftshader','--enable-unsafe-swiftshader']});
 const p=await b.newPage({viewport:{width:1400,height:900}});
 const err=[]; p.on('pageerror',e=>err.push((e.stack||e.message).split('\n')[0]));

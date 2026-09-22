@@ -1,5 +1,5 @@
 import { chromium } from 'playwright';
-const b=await chromium.launch({executablePath:'C:/Users/fabri/AppData/Local/ms-playwright/chromium-1228/chrome-win64/chrome.exe'});
+const b=await chromium.launch({executablePath:'C:/Users/fabri/AppData/Local/ms-playwright/chromium-1234/chrome-win64/chrome.exe'});
 const p=await b.newPage({viewport:{width:1440,height:900}});
 await p.goto('http://localhost:8899/portfolio.html',{waitUntil:'networkidle'});
 await p.waitForTimeout(1200);

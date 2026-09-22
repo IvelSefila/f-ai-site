@@ -1,7 +1,7 @@
 /* Le pose in colonna, per vedere che corsa fa davvero la stadera. */
 import { chromium } from 'playwright';
 import fs from 'fs';
-const b = await chromium.launch({ executablePath: 'C:/Users/fabri/AppData/Local/ms-playwright/chromium-1228/chrome-win64/chrome.exe' });
+const b = await chromium.launch({ executablePath: 'C:/Users/fabri/AppData/Local/ms-playwright/chromium-1234/chrome-win64/chrome.exe' });
 const p = await b.newPage({ viewport: { width: 1440, height: 900 } });
 p.on('pageerror', e => console.log('ERRORE', String(e)));
 await p.goto('http://localhost:8899/pixel/index.html', { waitUntil: 'networkidle' });

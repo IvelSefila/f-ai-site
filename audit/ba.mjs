@@ -1,5 +1,5 @@
 import { chromium } from 'playwright';
-const EXE='C:/Users/fabri/AppData/Local/ms-playwright/chromium-1228/chrome-win64/chrome.exe';
+const EXE='C:/Users/fabri/AppData/Local/ms-playwright/chromium-1234/chrome-win64/chrome.exe';
 const W=1280, H=800;
 const SECTIONS=['home','live-cut','lavori','servizi','metodo','ai-locale','profilo','brief','game','contact'];
 

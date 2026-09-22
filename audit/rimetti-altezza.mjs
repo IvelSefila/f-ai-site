@@ -4,7 +4,7 @@
    del tredici per cento quando la quantizzazione riporta a 960x540. */
 import { chromium } from 'playwright';
 import fs from 'fs';
-const b = await chromium.launch({ executablePath: 'C:/Users/fabri/AppData/Local/ms-playwright/chromium-1228/chrome-win64/chrome.exe' });
+const b = await chromium.launch({ executablePath: 'C:/Users/fabri/AppData/Local/ms-playwright/chromium-1234/chrome-win64/chrome.exe' });
 const p = await b.newPage(); await p.goto('about:blank');
 for (const f of process.argv.slice(2)) {
   const r = await p.evaluate(async d => {

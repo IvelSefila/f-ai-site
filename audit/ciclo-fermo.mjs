@@ -1,7 +1,7 @@
 /* Girando fra le stanze, il ciclo di disegno si ferma mai?
    Se il quadro resta identico per un secondo intero, si e' fermato. */
 import { chromium } from 'playwright';
-const b = await chromium.launch({ executablePath: 'C:/Users/fabri/AppData/Local/ms-playwright/chromium-1228/chrome-win64/chrome.exe' });
+const b = await chromium.launch({ executablePath: 'C:/Users/fabri/AppData/Local/ms-playwright/chromium-1234/chrome-win64/chrome.exe' });
 const p = await b.newPage({ viewport: { width: 1440, height: 900 } });
 p.on('pageerror', e => console.log('ERRORE', String(e)));
 await p.goto('http://localhost:8899/pixel/index.html', { waitUntil: 'networkidle' });

@@ -2,7 +2,7 @@
    versione: non basta che il server mandi i file giusti, il browser
    deve anche non ripescarli dalla cache. Guardo le richieste vere. */
 import { chromium } from 'playwright';
-const b = await chromium.launch({ executablePath: 'C:/Users/fabri/AppData/Local/ms-playwright/chromium-1228/chrome-win64/chrome.exe' });
+const b = await chromium.launch({ executablePath: 'C:/Users/fabri/AppData/Local/ms-playwright/chromium-1234/chrome-win64/chrome.exe' });
 const p = await b.newPage({ viewport: { width: 1440, height: 900 } });
 const errori = [], moduli = [];
 p.on('console', m => m.type() === 'error' && errori.push(m.text()));

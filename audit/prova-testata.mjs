@@ -1,5 +1,5 @@
 import { chromium } from 'playwright';
-const b=await chromium.launch({executablePath:'C:/Users/fabri/AppData/Local/ms-playwright/chromium-1228/chrome-win64/chrome.exe',
+const b=await chromium.launch({executablePath:'C:/Users/fabri/AppData/Local/ms-playwright/chromium-1234/chrome-win64/chrome.exe',
   args:['--use-gl=swiftshader','--enable-unsafe-swiftshader']});
 for (const w of [1280,686,390]){
   const p=await b.newPage({viewport:{width:w,height:820},isMobile:w<700,hasTouch:w<700});

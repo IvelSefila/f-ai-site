@@ -15,7 +15,7 @@
  * ═══════════════════════════════════════════════════════════════════ */
 import { chromium } from 'playwright';
 
-const CHROME = 'C:/Users/fabri/AppData/Local/ms-playwright/chromium-1228/chrome-win64/chrome.exe';
+const CHROME = 'C:/Users/fabri/AppData/Local/ms-playwright/chromium-1234/chrome-win64/chrome.exe';
 const INDIRIZZO = 'http://localhost:8899/pixel/index.html';
 
 async function misura({ larghezza, altezza, freno, nome }) {

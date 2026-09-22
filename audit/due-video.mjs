@@ -114,7 +114,7 @@ const QUANTE = 17;
 fs.rmSync(FOTOGRAMMI, { recursive: true, force: true });
 fs.mkdirSync(FOTOGRAMMI, { recursive: true });
 
-const b = await chromium.launch({ executablePath: 'C:/Users/fabri/AppData/Local/ms-playwright/chromium-1228/chrome-win64/chrome.exe' });
+const b = await chromium.launch({ executablePath: 'C:/Users/fabri/AppData/Local/ms-playwright/chromium-1234/chrome-win64/chrome.exe' });
 const p = await b.newPage();
 await p.goto('about:blank');
 

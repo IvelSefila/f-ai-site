@@ -78,7 +78,7 @@ if (process.argv[2] !== 'spezza') {
 if (!fs.existsSync(VIDEO)) { console.error('manca', VIDEO); process.exit(1); }
 fs.mkdirSync(FOTOGRAMMI, { recursive: true });
 
-const b = await chromium.launch({ executablePath: 'C:/Users/fabri/AppData/Local/ms-playwright/chromium-1228/chrome-win64/chrome.exe' });
+const b = await chromium.launch({ executablePath: 'C:/Users/fabri/AppData/Local/ms-playwright/chromium-1234/chrome-win64/chrome.exe' });
 const p = await b.newPage();
 await p.goto('about:blank');
 const dati = fs.readFileSync(VIDEO).toString('base64');

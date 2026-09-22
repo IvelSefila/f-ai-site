@@ -10,7 +10,7 @@ const nome = process.argv[2] || 'forgia';
 const forze = (process.argv[3] || '34,20,12,6').split(',').map(Number);
 const RITAGLIO = (process.argv[4] || '40,130').split(',').map(Number);
 const dati = fs.readFileSync(`site/pixel/immagini/${nome}.png`).toString('base64');
-const b = await chromium.launch({ executablePath: 'C:/Users/fabri/AppData/Local/ms-playwright/chromium-1228/chrome-win64/chrome.exe' });
+const b = await chromium.launch({ executablePath: 'C:/Users/fabri/AppData/Local/ms-playwright/chromium-1234/chrome-win64/chrome.exe' });
 const p = await b.newPage(); await p.goto('about:blank');
 for (const f of forze) {
   const ind = await rimappa(p, dati, { PIGMENTI, LARGO: 960, ALTO: 540, forza: f });

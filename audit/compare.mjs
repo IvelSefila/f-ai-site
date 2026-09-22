@@ -1,5 +1,5 @@
 import { chromium } from 'playwright';
-const EXE='C:/Users/fabri/AppData/Local/ms-playwright/chromium-1228/chrome-win64/chrome.exe';
+const EXE='C:/Users/fabri/AppData/Local/ms-playwright/chromium-1234/chrome-win64/chrome.exe';
 const b=await chromium.launch({executablePath:EXE});
 for (const [name,url] of [['prima','http://localhost:8898/public/portfolio.html'],['dopo','http://localhost:8899/portfolio.html']]) {
   const p=await b.newPage({viewport:{width:1440,height:900},deviceScaleFactor:2});

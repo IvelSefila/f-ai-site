@@ -1,5 +1,5 @@
 import { chromium } from 'playwright';
-const b=await chromium.launch({executablePath:'C:/Users/fabri/AppData/Local/ms-playwright/chromium-1228/chrome-win64/chrome.exe'});
+const b=await chromium.launch({executablePath:'C:/Users/fabri/AppData/Local/ms-playwright/chromium-1234/chrome-win64/chrome.exe'});
 const p=await b.newPage({viewport:{width:1300,height:760}});
 await p.goto('http://localhost:8899/pixel/index.html',{waitUntil:'domcontentloaded'});
 const R = await p.evaluate(async ()=>{

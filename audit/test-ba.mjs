@@ -1,5 +1,5 @@
 import { chromium } from 'playwright';
-const b=await chromium.launch({executablePath:'C:/Users/fabri/AppData/Local/ms-playwright/chromium-1228/chrome-win64/chrome.exe'});
+const b=await chromium.launch({executablePath:'C:/Users/fabri/AppData/Local/ms-playwright/chromium-1234/chrome-win64/chrome.exe'});
 const p=await b.newPage({viewport:{width:1100,height:900}});
 const errs=[]; p.on('console',m=>{if(m.type()==='error')errs.push(m.text())}); p.on('pageerror',e=>errs.push(String(e)));
 await p.goto('file:///C:/Users/fabri/AppData/Local/Temp/claude/C--Users-fabri-Documents-sito-internet-F-AI-sites/8d5506b5-d0d0-46f1-9be0-ac3b533f7113/scratchpad/prima-dopo.html');

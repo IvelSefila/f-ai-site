@@ -40,7 +40,7 @@ const file = fs.readdirSync(DENTRO).filter(f => f.endsWith('.png')).sort();
 if (!file.length) { console.error('nessun png in', DENTRO); process.exit(1); }
 
 const b = await chromium.launch({
-  executablePath: 'C:/Users/fabri/AppData/Local/ms-playwright/chromium-1228/chrome-win64/chrome.exe',
+  executablePath: 'C:/Users/fabri/AppData/Local/ms-playwright/chromium-1234/chrome-win64/chrome.exe',
 });
 const p = await b.newPage();
 await p.goto('about:blank');
