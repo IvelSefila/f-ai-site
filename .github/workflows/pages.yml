@@ -1,19 +1,8 @@
-# ═══════════════════════════════════════════════════════════════════
-# PRONTO, MA NON IN SERVIZIO.
+# IN SERVIZIO dal 22 settembre 2026, con conferma esplicita: il repo
+# resta privato, la PAGINA no — chi ha il link la vede, e l'indirizzo
+# email nel piede diventa indicizzabile. E' una decisione presa, non
+# un default.
 #
-# Sta qui e non in .github/workflows/ per due ragioni. La prima e' che
-# il sito per adesso e' privato e non si pubblica: un workflow acceso in
-# un repo dove non si vuole pubblicare e' solo un modo per farlo per
-# sbaglio. La seconda e' pratica: caricare file dentro .github/workflows
-# richiede un permesso in piu' sul token (`workflow`), e senza quello
-# GitHub rifiuta l'intero caricamento — compreso il resto del lavoro.
-#
-# Il giorno che si pubblica:
-#   1. dare il permesso:  gh auth refresh -h github.com -s workflow
-#   2. copiarlo al suo posto:  .github/workflows/pages.yml
-#   3. su GitHub: Settings -> Pages -> Source: GitHub Actions
-#   4. controllare l'indirizzo:  python audit/indirizzo.py <indirizzo>
-# ═══════════════════════════════════════════════════════════════════
 # Pubblica il sito su GitHub Pages.
 #
 # Pubblica la cartella site/ intera, non solo site/v2: la pagina chiama
@@ -28,16 +17,13 @@
 # si pubblica si decide allora se escluderle.
 name: Pubblica su Pages
 
-# SOLO A MANO, e di proposito. Il sito per adesso e' privato: si guarda
-# in locale e basta. Con il tiro su main come innesco sarebbe bastato un
-# push distratto per mandarlo online — e con lui l'indirizzo email.
-# Il giorno che si pubblica si rimette qui sotto:
-#   push:
-#     branches: [main]
-# Attenzione a una cosa, quel giorno: Pages da un repo privato pubblica
-# comunque un sito PUBBLICO. Il repo resta chiuso, la pagina no.
+# Ogni push su main pubblica da solo. Confermato il 22 settembre 2026:
+# Pages da un repo privato pubblica comunque un sito PUBBLICO — il repo
+# resta chiuso, la pagina no.
 on:
-  workflow_dispatch:      # solo dal pulsante Actions, su richiesta
+  push:
+    branches: [main]
+  workflow_dispatch:      # e a mano, dal pulsante Actions, se serve rilanciare
 
 permissions:
   contents: read
