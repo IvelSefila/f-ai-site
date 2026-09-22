@@ -22,13 +22,13 @@ const CARTELLA = 'locanda/';
 
 export const PEZZI = [
   { id: 'posto', t: 'Il posto', d: '0:23', w: 720, h: 1280,
-    n: 'Il giro della casa: il calice, il parco, la corte del castello e la scritta che chiude. Serve a far capire dove ci si siede.' },
+    n: 'Il giro della casa: calice, parco, corte del castello e la scritta che chiude — dove ci si siede.' },
   { id: 'dehor', t: 'Inaugurazione del dehor', d: '0:15', w: 720, h: 1280,
     n: 'Dall’alto fino alle luci del dehor, e sull’ultima inquadratura compare la locandina della serata di apertura.' },
   { id: 'champagne', t: 'Serata degustazione Champagne', d: '0:10', w: 946, h: 1280,
     n: 'La locandina della serata: le bottiglie in fila, i piatti in abbinamento, la data e il prezzo.' },
   { id: 'tradition', t: 'Brut Tradition, il primo assaggio', d: '0:10', w: 946, h: 1280,
-    n: 'Una scheda per ogni champagne in degustazione. Stessa impaginazione, contenuto diverso: è il pezzo che dimostra che c’è un sistema, non una grafica sola.' },
+    n: 'Una scheda per ogni champagne in degustazione: stessa impaginazione, contenuto diverso — il sistema, non una grafica sola.' },
   { id: 'fritto', t: 'Serata fritto misto', d: '0:27', w: 720, h: 1280,
     n: 'Il pezzo lungo: i piatti da vicino, la data grande, e alla fine l’indirizzo inciso in oro sulla pietra.' },
   { id: 'fritto-locandina', t: 'Fritto misto di pesce', d: '0:10', w: 946, h: 1280,
@@ -36,7 +36,7 @@ export const PEZZI = [
   { id: 'karaoke', t: 'Serata cena karaoke', d: '0:10', w: 946, h: 1280,
     n: 'Microfono, note e candele. La serata più informale della casa, e si vede dal tono.' },
   { id: 'benessere', t: 'Giornata di benessere e gusto', d: '0:13', w: 960, h: 1280,
-    n: 'Una giornata nel parco del castello fra trattamento viso e buffet: un servizio che non c’entra niente col resto e deve sembrare comunque della stessa casa.' },
+    n: 'Una giornata fra trattamento viso e buffet nel parco: un servizio fuori tema che deve sembrare comunque la stessa casa.' },
   { id: 'eventi', t: 'Il luogo dei momenti speciali', d: '0:10', w: 946, h: 1280,
     n: 'La pagina degli eventi privati: compleanni, cresime, comunioni e matrimoni, ognuno con la sua sala.' },
 ];
