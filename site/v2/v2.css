@@ -2696,15 +2696,57 @@ body.ord-in-corso *{cursor:grabbing !important}
 
 /* Il richiamo in fondo alla lastra: un'area cliccabile senza una
    scritta che lo dice e' un indovinello, non un invito. La freccia
-   gira di 180° quando si apre — stessa idea del "+" che diventa "×"
-   nell'altro <details> del foglio (.work__break), stesso linguaggio. */
+   gira con un filo di rimbalzo — non un rotate lineare, che per un
+   gesto cosi' piccolo si sente meccanico — stessa idea del "+" che
+   diventa "×" nell'altro <details> del foglio (.work__break), stesso
+   linguaggio ma con piu' carattere. */
 .manifesto__cta{position:relative;z-index:1;margin-top:clamp(20px,2.6vw,30px);
   display:inline-flex;align-items:center;gap:8px;color:var(--em-light);
   opacity:.85;transition:opacity .2s var(--ease)}
 .manifesto__slab:hover .manifesto__cta{opacity:1}
-.manifesto__cta i{font-style:normal;display:inline-block;transition:transform .3s var(--ease)}
+.manifesto__cta i{font-style:normal;display:inline-block;
+  transition:transform .4s cubic-bezier(.34,1.56,.64,1)}
 .manifesto[open] .manifesto__cta i{transform:rotate(180deg)}
 .manifesto[open] .manifesto__cta{opacity:0;pointer-events:none}
+
+/* La lastra risponde al tocco prima ancora che il contenuto cominci a
+   crescere: un piccolo affondo, la stessa cosa che fa un tasto vero.
+   Senza, il clic e il risultato erano scollegati — si vedeva la scatola
+   crescere, non si sentiva il gesto che l'aveva causata. */
+.manifesto__slab{transition:transform .15s var(--ease)}
+.manifesto__slab:active{transform:scale(.992)}
+
+/* Le sei istruzioni non compaiono in blocco: arrivano una via l'altra,
+   leggermente sollevate e sfumate, con lo scarto di un ottavo di
+   secondo l'una dall'altra. E' la differenza fra "la scatola si e'
+   aperta" e "il contenuto e' arrivato" — la prima versione faceva solo
+   crescere il contenitore, e il testo appariva tutto insieme non
+   appena c'era spazio, che si sente meccanico quanto sembra.
+   "backwards" tiene ogni riga invisibile durante il proprio ritardo,
+   se no comparirebbero tutte insieme per poi "aspettare" ferme.
+   Il reset globale di prefers-reduced-motion (piu' sopra nel foglio)
+   spegne anche questa, azzerando animation-duration: non serve
+   ripeterlo qui. */
+@keyframes manifesto-arriva{
+  from{opacity:0;transform:translateY(14px)}
+  to{opacity:1;transform:translateY(0)}
+}
+/* Il ritardo di ognuna sta scritto DENTRO la stessa regola scoperta da
+   [open], non in una regola nth-child separata: la prima versione le
+   separava, e la scorciatoia "animation:" della regola qui sopra
+   azzerava ogni volta animation-delay a 0 — vince lei sulle regole
+   nth-child perche' [open] la rende piu' specifica, quindi le sei
+   card partivano tutte insieme invece che a cascata. Un difetto
+   invisibile finche' non si guarda il fotogramma giusto: a schermo
+   sembravano comunque "apparire", solo tutte nello stesso istante. */
+.manifesto[open] .istruzioni li:nth-child(1){animation:manifesto-arriva .4s var(--ease) .04s backwards}
+.manifesto[open] .istruzioni li:nth-child(2){animation:manifesto-arriva .4s var(--ease) .08s backwards}
+.manifesto[open] .istruzioni li:nth-child(3){animation:manifesto-arriva .4s var(--ease) .12s backwards}
+.manifesto[open] .istruzioni li:nth-child(4){animation:manifesto-arriva .4s var(--ease) .16s backwards}
+.manifesto[open] .istruzioni li:nth-child(5){animation:manifesto-arriva .4s var(--ease) .2s backwards}
+.manifesto[open] .istruzioni li:nth-child(6){animation:manifesto-arriva .4s var(--ease) .24s backwards}
+.manifesto[open] .istruzioni__nota{
+  animation:manifesto-arriva .4s var(--ease) .28s backwards}
 
 /* Il corpo NON ha nessuna regola che lega la sua altezza a [open]. Due
    tentativi (grid-template-rows: 0fr/1fr, poi max-height) aprivano

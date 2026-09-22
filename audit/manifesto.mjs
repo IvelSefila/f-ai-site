@@ -85,7 +85,22 @@ for (const [nome, vp] of [['desktop', { width: 1440, height: 900 }], ['telefono'
 
   await p.evaluate(() => document.querySelector('.manifesto__slab').scrollIntoView({ block: 'start', behavior: 'instant' }));
   await p.waitForTimeout(200);
+
   await p.click('.manifesto__slab');
+  /* La cascata: sei card, ognuna col suo animation-delay via v2.css.
+     Un errore reale (settembre 2026) le faceva partire tutte insieme —
+     la scorciatoia "animation:" su una regola scoperta da [open]
+     azzerava animation-delay su ogni nth-child, perche' vinceva lei per
+     specificita'. A schermo "sembrava" comunque funzionare: le card
+     apparivano, solo tutte nello stesso istante. Qui si leggono i
+     ritardi VERI dal CSS calcolato, appena dopo il clic. */
+  await p.waitForTimeout(30);
+  const ritardi = await p.evaluate(() =>
+    [...document.querySelectorAll('.istruzioni li')].map(e => parseFloat(getComputedStyle(e).animationDelay)));
+  const crescono = ritardi.every((r, i) => i === 0 || r > ritardi[i - 1]);
+  dice(ritardi.length === 6 && crescono,
+       `le sei card partono in cascata, non insieme (${ritardi.join(', ')}s)`);
+
   await p.waitForTimeout(600); // la Web Animations API in apri() dura 420ms
   const dopo = await p.evaluate(() => ({
     aperto: document.querySelector('details.manifesto').open,
