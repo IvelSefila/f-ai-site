@@ -172,20 +172,21 @@
   </div>
 
   <aside class="read" aria-live="polite" aria-atomic="true">
-    <span class="mono">Lettura del sistema</span>
+    <span class="mono">In parole povere</span>
     <p id="heroRead"></p>
   </aside>
 
   <div class="hud">
+    <p class="hud__istruzione mono">↔ Trascina il confine: decidi chi guida, <b>tu</b> o <b>il sistema</b></p>
     <dl aria-hidden="true">
       <div><dt>Direzione umana</dt><dd id="hHuman">50%</dd></div>
       <div><dt>Sistema AI</dt><dd id="hAi" class="on">50%</dd></div>
-      <div><dt>Erosione</dt><dd id="hEr">0.00</dd></div>
-      <div><dt>Frame</dt><dd id="hFps">—</dd></div>
+      <div class="hud__extra"><dt>Erosione</dt><dd id="hEr">0.00</dd></div>
+      <div class="hud__extra"><dt>Frame</dt><dd id="hFps">—</dd></div>
       <div><dt>Scena</dt><dd id="hScene">01/03</dd></div>
     </dl>
-    <span class="hud__hint hud__hint--puntatore mono">↔ Trascina · <b>tieni premuto</b> per erodere · <b>spazio</b> cambia scena</span>
-    <span class="hud__hint hud__hint--dito mono">↔ <b>Trascina</b> il confine · <b>tieni premuto</b> per erodere</span>
+    <span class="hud__hint hud__hint--puntatore mono">↔ Trascina · <b>tieni premuto</b> per erodere il bordo · <b>spazio</b> cambia scena</span>
+    <span class="hud__hint hud__hint--dito mono">↔ <b>Trascina</b> il confine · <b>tieni premuto</b> per erodere il bordo</span>
     <div class="scene-pick" role="group" aria-label="Scena della verifica">
       <span class="mono" aria-hidden="true">Scena</span>
       <button type="button" data-scena="0" aria-pressed="true">01</button>
@@ -193,7 +194,11 @@
       <button type="button" data-scena="2" aria-pressed="false">03</button>
     </div>
   </div>
-  <div class="rail" aria-hidden="true"><i id="railFill"></i><b id="railKnob"></b></div>
+  <div class="rail" aria-hidden="true">
+    <span class="rail__capo rail__capo--tu mono">Tu</span>
+    <i id="railFill"></i><b id="railKnob"></b>
+    <span class="rail__capo rail__capo--ai mono">Sistema</span>
+  </div>
 </section>
 
 <!-- ══ questa pagina ══ -->
@@ -510,6 +515,10 @@
 
 <!-- ══ 02 · i lavori veri ══ -->
 <section class="sec sec--alt sp-s ap-numero sec--chiara t-forte" id="lavori" data-proof="lavori" aria-labelledby="lavoriT">
+  <figure class="lavori__apertura">
+    <video src="lavori/spot-apertura.mp4" poster="lavori/spot-apertura.jpg"
+           controls preload="none" playsinline aria-label="Spot di apertura"></video>
+  </figure>
   <header class="sec__head" data-num="02">
     <p class="eyebrow mono"><span class="n">Prova 02</span> Lavori</p>
     <h2 id="lavoriT">Quattro marchi.<br><em>Dall’idea alla pubblicazione.</em></h2>

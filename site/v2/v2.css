@@ -161,10 +161,21 @@ strong{color:var(--ink);font-weight:700}
 .hud{position:absolute;z-index:2;left:0;right:0;bottom:64px;padding:12px var(--gutter) 14px;
   display:flex;align-items:flex-end;gap:clamp(12px,3vw,44px);flex-wrap:wrap;
   border-top:1px solid var(--rule);background:linear-gradient(0deg,rgba(5,7,11,.92),transparent)}
+/* La riga che manca in ogni versione precedente: prima dei numeri,
+   a chiare lettere, cosa fare e cosa succede. I numeri restano —
+   provano che non e' un video — ma non sono piu' la prima cosa che
+   si legge. */
+.hud__istruzione{flex:1 1 100%;margin:0 0 2px;color:var(--ink);
+  font-family:var(--mono);font-size:var(--t-mini);font-weight:600}
+.hud__istruzione b{color:var(--em);font-weight:700}
 .hud dl{margin:0;display:flex;gap:clamp(12px,2.4vw,34px);flex-wrap:wrap}
 .hud dt{color:var(--muted);font-family:var(--mono);font-size:var(--t-micro);letter-spacing:.1em;text-transform:uppercase;margin-bottom:3px}
 .hud dd{margin:0;font-family:var(--mono);font-size:var(--t-mini);font-weight:700;font-variant-numeric:tabular-nums}
 .hud dd.on{color:var(--em)}
+/* Erosione e Frame provano che il disegno e' calcolato dal vivo, ma
+   non aiutano a capire l'idea: restano, piu' piccoli e piu' spenti,
+   invece di pesare quanto Direzione umana / Sistema AI / Scena. */
+.hud .hud__extra dt,.hud .hud__extra dd{opacity:.5;font-size:var(--t-micro)}
 .hud__hint{margin-left:auto;color:var(--muted);white-space:nowrap}
 .hud__hint b{color:var(--em)}
 @media(max-width:760px){.hud__hint{display:none}}
@@ -172,6 +183,19 @@ strong{color:var(--ink);font-weight:700}
 .rail i{position:absolute;inset:0 auto 0 0;width:50%;background:var(--em);box-shadow:0 0 12px color-mix(in srgb,var(--em) 70%,transparent)}
 .rail b{position:absolute;top:50%;left:50%;width:11px;height:11px;border-radius:var(--r-tondo);
   background:var(--em-bright);transform:translate(-50%,-50%);box-shadow:0 0 0 4px color-mix(in srgb,var(--em) 16%,transparent)}
+/* "Tu" e "Sistema" agli estremi: il bersaglio del trascinamento si
+   legge senza dover leggere niente sotto. Il resto della HUD sta su un
+   velo scuro sfumato (.hud{background:linear-gradient(...)}) che gli
+   regala il contrasto gratis; il rail sta a nudo sopra la scena WebGL
+   in movimento, dove lo stesso grigio misurava 4.35:1 — sotto la
+   soglia AA per 4,5:1. Un fondo proprio, non un colore piu' chiaro,
+   perche' deve reggere su qualunque fotogramma della scena, non solo
+   su quello misurato. */
+.rail__capo{position:absolute;bottom:8px;padding:2px 7px;border-radius:4px;
+  font-size:var(--t-micro);letter-spacing:.1em;text-transform:uppercase;
+  color:var(--ink);background:rgba(5,7,11,.62)}
+.rail__capo--tu{left:0}
+.rail__capo--ai{right:0}
 
 
 /* ═══════════════════════════════════════════════════════════════════
@@ -1266,6 +1290,7 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border:0;border-radiu
 .sec--chiara .bench__stage,
 .sec--chiara .work__visual,
 .sec--chiara .formats figure,
+.sec--chiara .lavori__apertura,
 .sec--chiara .mat-holder{
   border-radius:var(--r);overflow:hidden;
   box-shadow:0 1px 2px rgba(5,7,11,.06), 0 18px 44px -22px rgba(5,7,11,.34);
@@ -1283,6 +1308,18 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border:0;border-radiu
      undici pixel ne servono 4,5. Provato su tutte e sette le palette,
      non solo su quella di casa. */
   --em:color-mix(in srgb, var(--em-vivo) 68%, #f2f4f7)}
+
+/* Lo spot che apre "Quattro marchi": grande e centrato quanto il
+   resto del contenuto (var(--content), 1360px), non a piena pagina —
+   resta una cosa che si guarda, non uno sfondo. Il server locale non
+   sa rispondere alle richieste "Range": con preload="metadata" il
+   browser, non potendo chiedere solo l'intestazione, scaricava il
+   file intero (86MB) prima ancora del clic — misurato, non presunto:
+   l'audit del peso e' passato da 805KB a 85MB. Stessa ricetta degli
+   altri video del sito: preload="none" e un poster vero (un
+   fotogramma preso col canvas, non un fermo immagine a caso). */
+.lavori__apertura{margin:0 0 clamp(34px,5vw,64px)}
+.lavori__apertura video{display:block;width:100%;height:auto;background:#000}
 
 /* i pannelli su carta: bordo leggero invece del fondo scuro */
 .sec--chiara .bench__panel,
