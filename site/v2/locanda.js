@@ -64,7 +64,6 @@ export function initLocanda(quando) {
     for (const p of PEZZI) {
       const art = document.createElement('article');
       art.className = 'locanda__pezzo';
-      art.style.setProperty('--forma', p.w + ' / ' + p.h);
       art.dataset.id = p.id;
       art.innerHTML = `<h4>${p.t}</h4><p>${p.n}</p>`;
       art.prepend(copertina(art, p));
@@ -106,7 +105,7 @@ function copertina(art, p) {
   b.addEventListener('click', () => {
     /* apriVideo chiama soloIo, che passa da fermaLocanda e ferma un
        brano eventualmente in corso — vedi piu' sotto. */
-    apriVideo(CARTELLA + p.id + '.mp4', CARTELLA + p.id + '.jpg', p.t);
+    apriVideo({ cartella: CARTELLA, pezzi: PEZZI, index: PEZZI.indexOf(p) });
     avvisa();
   });
   return b;

@@ -40,7 +40,7 @@ export function scheda({ nome, cartella, pezzi }) {
     <span class="${nome}__play" aria-hidden="true"></span>
     <span class="${nome}__durata mono" aria-hidden="true">${p.d}</span>`;
     b.addEventListener('click', () => {
-      apriVideo(cartella + p.id + '.mp4', cartella + p.id + '.jpg', p.t);
+      apriVideo({ cartella, pezzi, index: pezzi.indexOf(p) });
       avvisa();
     });
     return b;

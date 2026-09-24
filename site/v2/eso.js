@@ -1,5 +1,5 @@
 /* ═══════════════════════════════════════════════════════════════════
- * ESOSCHELETRI — i sei pezzi del lancio
+ * ESOSCHELETRI — i quattro pezzi del lancio
  *
  * Il motore sta in scheda.js ed e' lo stesso di Studio CETS: copertina
  * piu' bottone, il video nasce al clic con preload="none", uno alla
@@ -26,12 +26,8 @@ export const PEZZI = [
     n: 'Ventiquattro secondi nelle tre vite del prodotto: casa, palestra di riabilitazione, montagna.' },
   { id: 'trekking', t: 'Trekking', d: '0:16', w: 720, h: 1280,
     n: 'Il verticale per i social: un uomo sale un crinale con l’esoscheletro, senza sforzo visibile.' },
-  { id: 'borgo', t: 'La spesa, in salita', d: '0:10', w: 1280, h: 720,
-    n: 'Un borgo in pendenza, la spesa in mano: spiega a chi serve senza dire una parola.' },
-  { id: 'spot', t: 'Più forza, più libertà', d: '0:11', w: 720, h: 1280,
+  { id: 'spot', t: 'Più forza, più libertà', d: '0:32', w: 720, h: 1280,
     n: 'Lo spot che finisce sulla scheda prodotto: il dispositivo staccato sul bianco, il claim, e basta.' },
-  { id: 'e-legs', t: 'E-Legs Trek', d: '0:12', w: 720, h: 1280,
-    n: 'La stessa famiglia di prodotti raccontata per chi va in montagna: un marchio diverso, un pubblico diverso.' },
   { id: 'prodotto', t: 'Il dispositivo', d: '0:10', w: 720, h: 1280,
     n: 'Product film: solo l’oggetto, fumo e luce radente — com’è fatto, quando il resto è narrazione.' },
 ];

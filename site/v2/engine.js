@@ -95,7 +95,7 @@ export function keyVisual(ctx, o) {
   const ai = clamp(o.ai ?? 0.3, 0, 1);
   const weight = clamp(o.weight ?? 0.55, 0, 1);
   const title = (o.title ?? 'Un’idea,\npiù formati').toUpperCase();
-  const kicker = (o.kicker ?? 'F/AI · key visual').toUpperCase();
+  const kicker = (o.kicker ?? 'MF/AI · key visual').toUpperCase();
   const r = rng(seed);
   const S = Math.min(w, h) / 700;
   const margin = Math.round(lerp(58, 34, ai) * S);

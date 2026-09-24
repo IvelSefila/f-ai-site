@@ -124,6 +124,19 @@ function segnaScena(i) {
   scenaBtn.forEach(b => b.setAttribute('aria-pressed', String(Number(b.dataset.scena) === i)));
 }
 
+/* Lo spot di apertura ha lo stesso tasto play delle copertine dei
+   lavori: parte al clic, preload="none" resta cosi' finche' non lo
+   tocchi — vedi union.js per la stessa idea. */
+(() => {
+  const figura = document.querySelector('.hero__spot');
+  const v = figura?.querySelector('video');
+  const play = figura?.querySelector('.hero__spot__play');
+  if (!figura || !v || !play) return;
+  play.addEventListener('click', () => { v.play().catch(() => {}); });
+  v.addEventListener('play', () => figura.classList.add('in-onda'));
+  v.addEventListener('pause', () => figura.classList.remove('in-onda'));
+})();
+
 /* ══════════ 01 · FORMATI ══════════ */
 const FORMATS = [['9:16', 405, 720, 'Storia'], ['4:5', 576, 720, 'Feed'], ['1:1', 640, 640, 'Quadrato'], ['3:2', 720, 480, 'Stampa'], ['16:9', 720, 405, 'Copertina'], ['21:9', 840, 360, 'Cinema']];
 function buildFormats(host, list) {
@@ -151,7 +164,7 @@ function drawFormats() {
   fmtCanvases.forEach((c, i) => {
       keyVisual(c.getContext('2d'), {
           w: c.width, h: c.height, seed: fmtSeed, ai: .3, weight: wgt,
-          title: fmtTitolo, kicker: `F/AI · ${FORMATS[i][0]}`,
+          title: fmtTitolo, kicker: `MF/AI · ${FORMATS[i][0]}`,
         });
     });
 }
@@ -233,7 +246,7 @@ WORKS.forEach((w, i) => {
     let sd = w.seed;
     const draw = () => {
       keyVisual(ctx, { w: c.width, h: c.height, seed: sd, ai: w.ai, weight: .5,
-          title: w.headline, kicker: `F/AI · ${pad(i + 1)}` });
+          title: w.headline, kicker: `MF/AI · ${pad(i + 1)}` });
       el.querySelector('.sv').textContent = sd;
     };
     el.querySelector('.work__seed button').addEventListener('click', () => {
@@ -579,10 +592,13 @@ setTimeout(() => say('Sessione aperta. Ti mostro cosa so fare, non te lo raccont
 (() => {
   if (!heroScene) return;
   const FRASI = [
-    'Zero dipendenze esterne, scritto a mano',
+    'Grafico, fotografo, video editor, AI engineering, in una persona sola',
     'Le competenze si eseguono, non si elencano',
     'Sette palette, calcolate per il contrasto',
     'Due applicazioni mie, usate ogni giorno',
+    'Trentotto strumenti, uno scelto per ogni lavoro',
+    'Dal brief al file finito, senza passare la mano',
+    'AI dove serve davvero, mai per riempire uno slide',
   ];
   let i = 0;
   heroScene.textContent = FRASI[0];

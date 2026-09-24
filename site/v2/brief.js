@@ -249,7 +249,7 @@ function createBriefController() {
         : readable("timing", timing);
       const note = fieldValue("note");
       const lines = [
-        "BRIEF PER F/AI",
+        "BRIEF PER MF/AI",
         "",
         `Tipo di progetto: ${readable("project_type", project)}`,
         `Punto di partenza: ${readableList("starting_point", checkedValues("starting_point"))}`,
@@ -289,7 +289,7 @@ function createBriefController() {
         const dove = recapito && recapito.getAttribute('href');
         if (dove) {
           posta.href = dove
-            + '?subject=' + encodeURIComponent('Brief dal sito F/AI')
+            + '?subject=' + encodeURIComponent('Brief dal sito MF/AI')
             + '&body=' + encodeURIComponent(preparedSummary);
           posta.hidden = false;
         } else {

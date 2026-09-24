@@ -66,7 +66,7 @@ function copertina(art, p) {
     <span class="union__play" aria-hidden="true"></span>
     <span class="union__durata mono" aria-hidden="true">${p.d}</span>`;
   b.addEventListener('click', () => {
-    apriVideo(CARTELLA + p.id + '.mp4', CARTELLA + p.id + '.jpg', p.t);
+    apriVideo({ cartella: CARTELLA, pezzi: PEZZI, index: PEZZI.indexOf(p) });
     avvisa();
   });
   return b;

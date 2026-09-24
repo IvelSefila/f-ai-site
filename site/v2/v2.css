@@ -154,7 +154,7 @@ strong{color:var(--ink);font-weight:700}
    in cui far scorrere background-position. */
 .hero h1 span:nth-child(3){
   animation:rise .85s var(--ease) .36s forwards, sfumatura 4s linear infinite;
-  background:linear-gradient(96deg,#f4fbf8 6%,var(--em-light) 52%,#2a9a72 100%);
+  background:linear-gradient(96deg,#f4fbf8 6%,var(--em-light) 52%,var(--em-deep) 100%);
   background-size:220% 100%;
   -webkit-background-clip:text;background-clip:text;color:transparent}
 @keyframes sfumatura{0%{background-position:220% 50%}100%{background-position:0% 50%}}
@@ -177,11 +177,12 @@ strong{color:var(--ink);font-weight:700}
 .hero__actions{margin-top:clamp(22px,3.4vh,36px);display:flex;flex-wrap:wrap;gap:10px;
   opacity:0;animation:rise .85s .62s var(--ease) forwards}
 
-.eyebrow{display:flex;align-items:center;gap:9px;color:var(--em);margin:0 0 clamp(16px,2.6vh,30px)}
-.eyebrow i{width:7px;height:7px;border-radius:var(--r-tondo);background:var(--em);flex:none;
+.eyebrow{display:flex;align-items:center;gap:9px;color:var(--em);margin:0 0 clamp(16px,2.6vh,30px);
+  font-size:var(--t-mini)}
+.eyebrow i{width:10px;height:10px;border-radius:var(--r-tondo);background:var(--em);flex:none;
   animation:ping 2.6s ease-out infinite}
 .eyebrow .n{color:var(--muted);padding-right:9px;margin-right:2px;border-right:1px solid var(--rule)}
-@keyframes ping{0%{box-shadow:0 0 0 0 color-mix(in srgb,var(--em) 50%,transparent)}70%,100%{box-shadow:0 0 0 11px transparent}}
+@keyframes ping{0%{box-shadow:0 0 0 0 color-mix(in srgb,var(--em) 50%,transparent)}70%,100%{box-shadow:0 0 0 15px transparent}}
 
 .read{position:absolute;z-index:2;right:var(--gutter);top:calc(var(--bar) + 32px);
   width:min(300px,40vw);text-align:right;pointer-events:none}
@@ -303,13 +304,25 @@ strong{color:var(--ink);font-weight:700}
 .sec__lede{margin-top:clamp(16px,2vw,24px);max-width:60ch;color:var(--text);font-size:var(--t-lede)}
 
 /* ═══ bottoni ═══ */
+/* Ogni bottone del sito respira come il CTA del manifesto: un battito
+   leggero che dice "premimi" senza dover aspettare l'hover — si ferma
+   proprio quando ci si passa sopra, perche' a quel punto il messaggio
+   e' arrivato. */
 .btn{display:inline-flex;align-items:center;gap:14px;padding:13px 20px;border:1px solid var(--rule);
   border-radius:var(--r-pill);font-family:var(--mono);font-size:var(--t-micro);letter-spacing:.1em;text-transform:uppercase;
-  font-weight:700;cursor:pointer;background:transparent;transition:border-color .2s,background .2s,color .2s,transform .15s}
-.btn:hover{border-color:var(--em);color:var(--em)}
+  font-weight:700;cursor:pointer;background:transparent;transition:border-color .2s,background .2s,color .2s,transform .15s;
+  animation:btn-respiro 2.6s ease-in-out infinite}
+@keyframes btn-respiro{
+  0%,100%{transform:scale(1);box-shadow:0 0 0 0 color-mix(in srgb,var(--em) 0%,transparent)}
+  50%{transform:scale(1.04);box-shadow:0 0 16px 4px color-mix(in srgb,var(--em) 45%,transparent)}}
+.btn:hover{border-color:var(--em);color:var(--em);animation:none}
+/* Due bottoni vicini non respirano in coro: se si gonfiano insieme
+   sembra un batticuore solo, innaturale. Sfasati di mezzo ciclo, uno
+   si allarga mentre l'altro si restringe — come due persone vere. */
+.btn:nth-child(even){animation-delay:1.3s}
 .btn:active{transform:scale(.985)}
-.btn--solid{background:var(--em);border-color:var(--em);color:var(--stage)}
-.btn--solid:hover{background:var(--em-bright);border-color:var(--em-bright);color:var(--stage)}
+.btn--solid{background:var(--em);border-color:var(--em);color:#fff}
+.btn--solid:hover{background:var(--em-bright);border-color:var(--em-bright);color:#fff}
 .btn--sm{padding:10px 15px;font-size:var(--t-micro);gap:10px}
 .btn--lg{padding:17px 26px;font-size:var(--t-mini)}
 .btn i{font-style:normal;font-size:var(--t-grande)}
@@ -328,9 +341,9 @@ strong{color:var(--ink);font-weight:700}
 .bench__panel p{color:var(--text);font-size:var(--t-corpo);line-height:1.6}
 .bench__acts{margin-top:18px;display:flex;flex-wrap:wrap;gap:8px}
 
-.ctl{display:block;margin:20px 0 0}
-.ctl>.mono{color:var(--muted);display:block;margin-bottom:10px}
-.ctl output{display:block;margin-top:8px;color:var(--em);font-variant-numeric:tabular-nums}
+.ctl{display:block;margin:12px 0 0}
+.ctl>.mono{color:var(--muted);display:block;margin-bottom:4px}
+.ctl output{display:block;margin-top:2px;color:var(--em);font-variant-numeric:tabular-nums}
 /* margin:0 e non il 2px del browser: con width:100% la leva finiva
    2px oltre il bordo destro della sua etichetta e 2px dentro a
    sinistra, quindi non era in squadro ne' con la scritta sopra ne'
@@ -559,8 +572,9 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border:0;border-radiu
 @media(max-width:620px){#main{padding-block-end:96px}}
 
 /* ═══ reveal ═══ */
-.rv{opacity:0;transform:translateY(22px)}
-.rv.in{opacity:1;transform:none;transition:opacity .7s var(--ease),transform .7s var(--ease)}
+.rv{opacity:0;transform:translateY(14px)}
+.rv.in{opacity:1;transform:none;
+  transition:opacity .9s var(--ease),transform .9s var(--ease)}
 
 /* I titoli dentro un blocco che si rivela non si limitano a salire col
    resto: si scoprono da sinistra, come una tenda che si apre — cosi' il
@@ -569,7 +583,7 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border:0;border-radiu
    schermi stretti, dove il blocco e' gia' quasi a fuoco quando entra). */
 .sec__head h2,.sec__head h3,
 .union__testa h3,.eso__testa h3,.locanda__testa h3,.cest__testa h3,.appmie__testa h3{
-  clip-path:inset(0 100% 0 0);transition:clip-path .7s var(--ease) .05s}
+  clip-path:inset(0 100% 0 0);transition:clip-path 1s var(--ease) .1s}
 .sec__head.in h2,.sec__head.in h3,
 .union__testa.in h3,.eso__testa.in h3,.locanda__testa.in h3,.cest__testa.in h3,.appmie__testa.in h3{
   clip-path:inset(0 0 0 0)}
@@ -585,6 +599,64 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border:0;border-radiu
   transition:transform .2s var(--ease)}
 .union__conti li:hover,.eso__conti li:hover,.locanda__conti li:hover,.cest__conti li:hover{
   transform:translateY(-2px)}
+
+/* ═══ numeri che contano da zero ═══
+   I quattro blocchi di conti dei casi studio: quando il piede entra
+   in vista (.rv riceve .in dall'IntersectionObserver già cablato in
+   app.js) il numero sale da 0 al valore vero. Tecnica: una custom
+   property intera registrata con @property, animata dai keyframe, e
+   un ::after che la mostra tramite counter() — counter() accetta solo
+   interi, il che dà esattamente i passi a scatti di un conteggio.
+   Il numero vero resta nel testo (per chi non vede l'animazione, per
+   il no-JS e per la stampa) ma diventa trasparente quando il blocco
+   entra, sostituito otticamente dal counter animato. La "4:09" del
+   girato di Union non è un intero: resta statica, non ha lo stesso
+   trattamento. */
+@property --conta{syntax:'<integer>';inherits:true;initial-value:0}
+
+.union__conti li:nth-child(1) b,.union__conti li:nth-child(3) b,
+.eso__conti li b,.cest__conti li b,.locanda__conti li b{
+  --conta:0; position:relative}
+.union__piede.in .union__conti li:nth-child(1) b{animation:contaUnionPezzi .9s var(--ease) forwards}
+.union__piede.in .union__conti li:nth-child(3) b{animation:contaUnionStrumenti .9s var(--ease) .08s forwards}
+.eso__piede.in .eso__conti li:nth-child(1) b{animation:contaEsoPezzi .9s var(--ease) forwards}
+.eso__piede.in .eso__conti li:nth-child(2) b{animation:contaEsoSito .7s var(--ease) .08s forwards}
+.eso__piede.in .eso__conti li:nth-child(3) b{animation:contaEsoDocumenti .9s var(--ease) .16s forwards}
+.locanda__piede.in .locanda__conti li:nth-child(1) b{animation:contaLocandaMarchio .7s var(--ease) forwards}
+.locanda__piede.in .locanda__conti li:nth-child(2) b{animation:contaLocandaLocandine .9s var(--ease) .08s forwards}
+.locanda__piede.in .locanda__conti li:nth-child(3) b{animation:contaLocandaBrani .9s var(--ease) .16s forwards}
+.cest__piede.in .cest__conti li:nth-child(1) b{animation:contaCestPezzi .9s var(--ease) forwards}
+.cest__piede.in .cest__conti li:nth-child(2) b{animation:contaCestMarchio .7s var(--ease) .08s forwards}
+.cest__piede.in .cest__conti li:nth-child(3) b{animation:contaCestFormati .8s var(--ease) .16s forwards}
+
+.union__piede.in .union__conti li:nth-child(1) b,
+.union__piede.in .union__conti li:nth-child(3) b,
+.eso__piede.in .eso__conti li b,
+.locanda__piede.in .locanda__conti li b,
+.cest__piede.in .cest__conti li b{color:transparent}
+.union__piede.in .union__conti li:nth-child(1) b::after,
+.union__piede.in .union__conti li:nth-child(3) b::after{
+  content:counter(conta);counter-reset:conta var(--conta);
+  position:absolute;inset:0;color:#0c2405}
+.eso__piede.in .eso__conti li b::after,
+.cest__piede.in .cest__conti li b::after{
+  content:counter(conta);counter-reset:conta var(--conta);
+  position:absolute;inset:0;color:var(--sk-vivo)}
+.locanda__piede.in .locanda__conti li b::after{
+  content:counter(conta);counter-reset:conta var(--conta);
+  position:absolute;inset:0;color:var(--l-oro-chiaro)}
+
+@keyframes contaUnionPezzi{to{--conta:9}}
+@keyframes contaUnionStrumenti{to{--conta:5}}
+@keyframes contaEsoPezzi{to{--conta:4}}
+@keyframes contaEsoSito{to{--conta:1}}
+@keyframes contaEsoDocumenti{to{--conta:6}}
+@keyframes contaLocandaMarchio{to{--conta:1}}
+@keyframes contaLocandaLocandine{to{--conta:9}}
+@keyframes contaLocandaBrani{to{--conta:5}}
+@keyframes contaCestPezzi{to{--conta:6}}
+@keyframes contaCestMarchio{to{--conta:1}}
+@keyframes contaCestFormati{to{--conta:2}}
 
 .bar__pal button{transition:transform .18s var(--ease)}
 .bar__pal button:hover,.bar__pal button:focus-visible{transform:scale(1.15)}
@@ -661,7 +733,7 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border:0;border-radiu
 .stack__head{display:flex;align-items:baseline;justify-content:space-between;
   gap:6px 16px;flex-wrap:wrap;padding:17px 18px 15px;
   border-bottom:1px solid var(--rule);color:var(--muted)}
-.stack__head strong{color:var(--ink);font-weight:700;font-family:var(--display);
+.stack__head strong{color:var(--ink);font-weight:600;font-family:var(--display);
   font-size:var(--d7);letter-spacing:.01em;text-transform:uppercase;
   line-height:1.05}
 .stack__head span{font-size:var(--t-mini);letter-spacing:.1em}
@@ -961,10 +1033,23 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border:0;border-radiu
    mostrarne l'inizio. Stessa cornice scura di .bench__stage, la
    vetrina degli strumenti: e' lo stesso linguaggio dell'eroe, non un
    riquadro inventato per l'occasione. */
-.hero__spot{margin:clamp(18px,3vh,28px) 0 0;max-width:66ch;
+.hero__spot{position:relative;margin:clamp(18px,3vh,28px) 0 0;max-width:66ch;
   border:1px solid var(--rule);border-radius:var(--r);overflow:hidden;background:#06090e;
   opacity:0;animation:rise .85s .6s var(--ease) forwards}
 .hero__spot video{display:block;width:100%;height:auto;background:#000}
+/* Lo stesso tasto play delle copertine dei casi cliente: un cerchio
+   bianco con un triangolo, al centro. Sparisce appena parte — i
+   comandi nativi del video restano sempre li' sotto. */
+.hero__spot__play{position:absolute;inset:0;margin:auto;width:64px;height:64px;
+  border:0;border-radius:var(--r-tondo);background:rgba(255,255,255,.94);
+  box-shadow:0 6px 20px rgba(0,0,0,.4);cursor:pointer;
+  transition:opacity .2s var(--ease),transform .2s var(--ease)}
+.hero__spot__play:hover{transform:scale(1.06)}
+.hero__spot__play i{position:absolute;inset:0;margin:auto;
+  width:0;height:0;border-left:20px solid #06090e;
+  border-top:13px solid transparent;border-bottom:13px solid transparent;
+  transform:translateX(4px)}
+.hero__spot.in-onda .hero__spot__play{opacity:0;pointer-events:none}
 /* introduzione del laboratorio */
 .lab__intro{margin-top:clamp(24px,3vw,40px);display:grid;gap:12px;max-width:70ch}
 .lab__intro > .mono{color:var(--em)}
@@ -995,7 +1080,7 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border:0;border-radiu
    (l'h2 e il banco sono spariti), quindi questa etichetta fa il lavoro
    che prima faceva l'intestazione — deve pesare come tale, non come
    un piccolo occhiello di passaggio. */
-.metodo__eti{font:700 var(--d4) var(--display);text-transform:uppercase;
+.metodo__eti{font:600 var(--d4) var(--display);text-transform:uppercase;
   letter-spacing:-.01em;color:var(--em);margin-bottom:clamp(10px,1.4vw,16px)}
 .sec.sp-m{padding-block:clamp(74px,8.4vw,122px)}
 .sec.sp-s{padding-block:clamp(50px,5.4vw,82px)}
@@ -1510,6 +1595,58 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border:0;border-radiu
 }
 
 /* ═══════════════════════════════════════════════════════════════════
+ * PARALLASSE DEI CASI STUDIO — 24.09.2026
+ * Le quattro lastre di progetto (Union, Eso/Cest, Locanda) hanno già
+ * il fade-in di .rv/.in via IntersectionObserver: qui aggiungo SOLO
+ * uno strato in più, senza toccare quel sistema.
+ *
+ * Uso `scale` e `translate` come proprietà indipendenti da `transform`
+ * (stesso trucco della sezione PARALLASSE qui sopra), così questo
+ * strato convive con la transizione di .rv.in sulla stessa lastra
+ * invece di scavalcarla — le due animazioni non si contendono mai la
+ * stessa proprietà.
+ * ═══════════════════════════════════════════════════════════════════ */
+@supports (animation-timeline: view()) {
+@media (prefers-reduced-motion: no-preference) {
+
+  /* 1 · la scena SVG di sfondo (foglie, scia, marchio) deriva un filo
+     più lenta del testo che le sta sopra: la classica profondità da
+     parallasse, appena percettibile perché la lastra è già chiusa
+     (overflow:hidden) e la scia non tocca mai il bordo */
+  @keyframes scena-deriva{from{translate:0 -14px}to{translate:0 14px}}
+  .union__scena,
+  .eso__scena,
+  .cest__scena,
+  .locanda__scena{
+    animation:scena-deriva linear both;
+    animation-timeline:view()}
+
+  /* 2 · le foglie Union: alla loro respirazione (opacity, definita più
+     sotto insieme a @keyframes foglie-respiro) aggiungo qui solo la
+     seconda tappa, una deriva in scala minima, così sembrano
+     allontanarsi appena mentre la lastra scorre. La regola vera e
+     propria che unisce le due animazioni sta vicino a
+     @keyframes foglie-respiro (dopo, nel foglio, per vincere la
+     cascata invece di essere sovrascritta) — qui definisco solo i
+     fotogrammi perché sono lo strato "parallasse", coerente con gli
+     altri di questa sezione. */
+  @keyframes foglie-deriva{from{scale:1.04}to{scale:.98}}
+
+  /* 3 · le lastre stesse: uno zoom quasi impercettibile (.98→1) mentre
+     entrano a schermo pieno, in aggiunta al fade di .rv — non lo
+     sostituisce, perché agisce su `scale` e non su `transform` */
+  @keyframes lastra-arriva{from{scale:.98}to{scale:1}}
+  .union__slab,
+  .eso__slab,
+  .cest__slab,
+  .locanda__slab{
+    animation:lastra-arriva linear both;
+    animation-timeline:view();
+    animation-range:entry 0% entry 60%}
+}
+}
+
+/* ═══════════════════════════════════════════════════════════════════
  * LA CUCITURA FRA I BLOCCHI — 06.09.2026
  * Il salto di tono da solo è un taglio netto. Una riga verde da 2px
  * sopra non si legge (misurata: c'è, ma a pagina intera sparisce).
@@ -1535,7 +1672,13 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border:0;border-radiu
 
 /* il blocco scuro che risale su uno chiaro ha bisogno del contrario:
    l'ombra sotto una superficie chiara non si vede, serve uno stacco */
-.sec--chiara + .sec{box-shadow:0 -22px 46px -24px rgba(5,7,11,.42)}
+.sec--chiara + .sec{box-shadow:0 -22px 46px -24px rgba(5,7,11,.42);
+  /* La scheda risale gia' di 44px sopra quella chiara: il padding-top
+     pieno di .sp-m/.sp-l/.sp-s sommato a quella risalita lasciava un
+     vuoto enorme fra l'angolo arrotondato e il sopratitolo. Qui il
+     sopratitolo sta subito sotto l'angolo — il resto dello spazio lo
+     dà gia' la sovrapposizione. */
+  padding-top:clamp(28px,3.6vw,48px)}
 
 /* E soprattutto ha bisogno di un fondo PROPRIO. Le sezioni scure non ne
    avevano mai avuto uno: prendevano quello del body, e a filo non si
@@ -2049,7 +2192,7 @@ body.ord-in-corso *{cursor:grabbing !important}
  *
  * E' l'unico punto del sito che non usa la palette del sito: qui il
  * marchio e' un altro, e mescolarli sarebbe un errore da principiante —
- * il verde smeraldo di F/AI accanto al lime di Union farebbe sembrare
+ * il verde smeraldo di MF/AI accanto al lime di Union farebbe sembrare
  * che siano lo stesso marchio venuto male. Per la stessa ragione il
  * blocco NON cambia quando si cambia palette dalla testata: quella
  * comanda il sito, non il lavoro di un cliente.
@@ -2105,6 +2248,20 @@ body.ord-in-corso *{cursor:grabbing !important}
 @media (prefers-reduced-motion: no-preference){
   @keyframes foglie-respiro{0%,100%{opacity:.13}50%{opacity:.22}}
   .union__foglie{animation:foglie-respiro 8s ease-in-out infinite}
+}
+/* Sopra al respiro (opacity, sempre attivo) si aggiunge — solo dove
+   view() esiste — una seconda animazione legata allo scorrimento, su
+   `scale` invece che su `opacity`: le due convivono senza contendersi
+   la stessa proprietà. @keyframes foglie-deriva è definita nel blocco
+   "PARALLASSE DEI CASI STUDIO" qui sopra nel foglio; questa regola sta
+   dopo quella di foglie-respiro apposta, per non essere scavalcata. */
+@supports (animation-timeline: view()){
+@media (prefers-reduced-motion: no-preference){
+  .union__foglie{
+    animation:foglie-respiro 8s ease-in-out infinite,
+              foglie-deriva linear both;
+    animation-timeline:auto,view()}
+}
 }
 .union__scena{position:absolute;inset:0;z-index:0;width:100%;height:100%;
   pointer-events:none}
@@ -2181,7 +2338,7 @@ body.ord-in-corso *{cursor:grabbing !important}
 /* La riga scritta a mano della locandina. Serve a due cose: e' un segno
    del brand, e riempie l'angolo che altrimenti resta lime e basta. */
 .union__nota{margin:16px 0 0;max-width:34ch;text-wrap:balance;position:relative;padding-left:24px;
-  color:#0c2405;font-family:var(--display);font-style:italic;font-weight:500;
+  color:#0c2405;font-family:var(--display);font-style:italic;
   font-size:var(--t-lede);line-height:1.32}
 .union__nota::before{content:"";position:absolute;left:0;top:.55em;
   width:14px;height:2px;border-radius:2px;background:var(--u-verde);opacity:.6}
@@ -2244,6 +2401,12 @@ body.ord-in-corso *{cursor:grabbing !important}
 .union__via:focus-visible{outline:2px solid var(--u-verde);outline-offset:3px}
 .union__fermo{display:block;width:100%;height:auto;aspect-ratio:9/16;object-fit:cover}
 .union__pezzo[data-forma="largo"] .union__fermo{aspect-ratio:16/9}
+/* L'unico orizzontale della serie: riga intera e centrato, non
+   schiacciato nella stessa colonna stretta dei verticali — "1/-1" e
+   non uno "span" fisso perche' il numero di colonne qui cambia con
+   l'auto-fill o col preset scelto in griglia.js. */
+.union__pezzo[data-forma="largo"]{grid-column:1/-1;order:1}
+.union__pezzo[data-forma="largo"] .union__via{max-width:min(100%,620px);margin-inline:auto}
 .union__play{position:absolute;inset:0;margin:auto;width:54px;height:54px;
   border-radius:var(--r-tondo);background:rgba(255,255,255,.92);
   box-shadow:0 6px 20px rgba(0,0,0,.3);pointer-events:none}
@@ -2275,7 +2438,7 @@ body.ord-in-corso *{cursor:grabbing !important}
 }
 .union__come dt{color:var(--u-verde-chiaro);font-family:var(--mono);font-size:var(--t-micro);
   letter-spacing:.1em;text-transform:uppercase;padding-top:.25em}
-.union__come dd{margin:0;color:#40503a;font-size:var(--t-corpo);line-height:1.55}
+.union__come dd{margin:0;color:#4a5a42;font-size:var(--t-corpo);line-height:1.55}
 
 @media (prefers-reduced-motion:reduce){
   .union__via:hover{transform:none}
@@ -2296,7 +2459,7 @@ body.ord-in-corso *{cursor:grabbing !important}
  * ESOSCHELETRI — i colori sono quelli del sito che ho costruito per il
  * prodotto: notte #04070c, superficie #0e1624, ciano #00f0ff, ghiaccio
  * #c4ecff. Il verde neon #00ff8c c'e' nel loro sistema ma qui NON si usa
- * per il testo: e' a un soffio dallo smeraldo di F/AI, e due verdi quasi
+ * per il testo: e' a un soffio dallo smeraldo di MF/AI, e due verdi quasi
  * uguali uno accanto all'altro fanno sembrare che il lavoro del cliente
  * sia una parte del mio sito. Resta il ciano, che confusione non ne fa.
  *
@@ -2463,23 +2626,33 @@ body.ord-in-corso *{cursor:grabbing !important}
   .eso__lavori[data-gr] > *,.cest__lavori[data-gr] > *{grid-column:span 6}
 }
 
-/* Qui la cornice e' 16:9 per tutti, orizzontali e verticali insieme:
-   un trailer e un reel stanno nella stessa griglia e i titoli devono
-   partire alla stessa quota. I verticali ci stanno dentro interi, con
-   le due bande ai lati — che e' esattamente come si vedono quando
-   qualcuno li guarda da un computer. */
+/* Ogni copertina prende la proporzione vera del suo video: i verticali
+   in 9:16, gli orizzontali in 16:9 — non piu' una cornice 16:9 unica
+   con le bande nere ai lati per i verticali, che schiacciava esattamente
+   i pezzi pensati per lo schermo di un telefono. */
 .eso__via,.cest__via{position:relative;display:block;width:100%;padding:0;
-  aspect-ratio:16/9;
+  aspect-ratio:9/16;
   border:1px solid var(--sk-riga);border-radius:var(--r-media);overflow:hidden;
   background:var(--sk-buio);cursor:pointer;line-height:0;
   transition:border-color .2s,transform .2s}
+.eso__pezzo[data-forma="largo"] .eso__via,.cest__pezzo[data-forma="largo"] .cest__via{
+  aspect-ratio:16/9}
+/* I pezzi orizzontali restano rari in questa griglia di verticali: qui
+   prendono tutta la riga e si allargano al centro, invece di schiacciarsi
+   nella stessa colonna stretta di un verticale. "1/-1" e non "span 2":
+   con l'auto-fill delle colonne il numero di colonne cambia da schermo a
+   schermo, e uno "span" fisso puo' sforare o accavallarsi alla riga dopo
+   — la riga intera funziona sempre, a qualunque numero di colonne. */
+.eso__pezzo[data-forma="largo"],.cest__pezzo[data-forma="largo"]{grid-column:1/-1;order:1}
+.eso__pezzo[data-forma="largo"] .eso__via,.cest__pezzo[data-forma="largo"] .cest__via{
+  max-width:min(100%,620px);margin-inline:auto}
 /* il bordo acceso non puo' essere --sk-vivo per tutti e due: su CETS
    quello e' il bianco, e un bordo bianco sul corpo bianco non si vede.
    Ha una sigla sua. */
 .eso__via:hover,.cest__via:hover{border-color:var(--sk-bordo);transform:translateY(-2px)}
 .eso__via:focus-visible,.cest__via:focus-visible{outline:2px solid var(--sk-fondo);
   outline-offset:3px}
-.eso__fermo,.cest__fermo{display:block;width:100%;height:100%;object-fit:contain}
+.eso__fermo,.cest__fermo{display:block;width:100%;height:100%;object-fit:cover}
 .eso__play,.cest__play{position:absolute;inset:0;margin:auto;width:54px;height:54px;
   border-radius:var(--r-tondo);background:rgba(255,255,255,.94);
   box-shadow:0 6px 20px rgba(0,0,0,.4);pointer-events:none}
@@ -3025,11 +3198,11 @@ body.ord-in-corso *{cursor:grabbing !important}
  * ═══════════════════════════════════════════════════════════════════ */
 .video-lightbox{
   color-scheme:dark;
-  width:min(1100px,calc(100vw - 32px));max-height:calc(100dvh - 32px);
+  width:min(920px,calc(100vw - 32px));max-height:calc(100dvh - 96px);
   padding:0;border:0;border-radius:var(--r-card);background:#000;
   overflow:visible}
 .video-lightbox::backdrop{background:rgba(3,6,9,.88);backdrop-filter:blur(6px)}
-.video-lightbox__video{display:block;width:100%;max-height:calc(100dvh - 32px);
+.video-lightbox__video{display:block;width:100%;max-height:calc(100dvh - 96px);
   border-radius:var(--r-card)}
 .video-lightbox__chiudi{position:absolute;top:-44px;right:0;width:36px;height:36px;
   border-radius:var(--r-tondo);border:1px solid var(--rule);background:var(--panel-2);
@@ -3039,3 +3212,37 @@ body.ord-in-corso *{cursor:grabbing !important}
 @media (max-width:560px){
   .video-lightbox__chiudi{top:-40px;width:32px;height:32px;font-size:19px}
 }
+
+/* Le frecce per sfogliare: stessa lastra del bottone di chiusura,
+   appoggiate ai bordi del video invece che sopra — cosi' non coprono
+   mai l'ultimo fotogramma o i sottotitoli. */
+.video-lightbox__freccia{position:absolute;top:50%;translate:0 -50%;
+  width:44px;height:44px;border-radius:var(--r-tondo);
+  border:1px solid var(--rule);background:var(--panel-2);color:var(--ink);
+  font-size:26px;line-height:1;cursor:pointer;
+  transition:background-color .2s var(--ease),border-color .2s var(--ease),opacity .2s}
+.video-lightbox__freccia:hover{background:var(--panel);border-color:var(--em-light)}
+.video-lightbox__freccia[hidden]{display:none}
+.video-lightbox__freccia--prima{left:-16px}
+.video-lightbox__freccia--dopo{right:-16px}
+@media (max-width:760px){
+  /* sullo schermo stretto le frecce escono dal riquadro e finiscono
+     fuori pagina: qui restano dentro, semitrasparenti sul video */
+  .video-lightbox__freccia{width:38px;height:38px;font-size:22px;
+    background:rgba(11,15,22,.7);border-color:rgba(221,231,242,.2)}
+  .video-lightbox__freccia--prima{left:6px}
+  .video-lightbox__freccia--dopo{right:6px}
+}
+.video-lightbox__piede{position:absolute;left:0;right:0;bottom:-34px;
+  display:flex;align-items:center;justify-content:center;gap:14px}
+.video-lightbox__titolo{margin:0;color:var(--muted);font-size:var(--t-micro);
+  letter-spacing:.08em;text-transform:uppercase;text-align:center}
+.video-lightbox__loop{display:inline-flex;align-items:center;gap:5px;
+  padding:4px 10px;border-radius:var(--r-tondo);border:1px solid var(--rule);
+  background:var(--panel-2);color:var(--muted);font-size:var(--t-micro);
+  letter-spacing:.06em;text-transform:uppercase;cursor:pointer;
+  transition:color .2s var(--ease),border-color .2s var(--ease),background-color .2s var(--ease)}
+.video-lightbox__loop i{font-style:normal;font-size:13px;line-height:1}
+.video-lightbox__loop[aria-pressed="true"]{color:var(--em-light);border-color:var(--em-light)}
+.video-lightbox__loop:hover{background:var(--panel)}
+@media (max-width:560px){.video-lightbox__piede{bottom:-30px;gap:10px}}
