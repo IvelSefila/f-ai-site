@@ -67,6 +67,7 @@ export const GRUPPI = [
   ['.union__lavori', {}],
   ['.eso__lavori', {}],
   ['.locanda__lavori', {}],
+  ['.cest__lavori', {}],
   ['.stack__grid',   {}],
   ['.bench',         { specchio: true }],
 ];

@@ -17,6 +17,7 @@
  * ═══════════════════════════════════════════════════════════════════ */
 
 import { registra, soloIo } from './uno-alla-volta.js';
+import { apriVideo } from './video-lightbox.js';
 
 const CARTELLA = 'locanda/';
 
@@ -91,11 +92,7 @@ export function initLocanda(quando) {
   return PEZZI.length + BRANI.length;
 }
 
-/* ── i video, uno alla volta ──────────────────────────────────────── */
-const PER_ID = new Map(PEZZI.map(p => [p.id, p]));
-
-/* La copertina e' una funzione perche' va rifatta quando un altro video
-   prende il turno: vedi la nota in union.js. */
+/* ── i video: si aprono nel lightbox condiviso ────────────────────── */
 function copertina(art, p) {
   const b = document.createElement('button');
   b.type = 'button';
@@ -106,24 +103,13 @@ function copertina(art, p) {
          width="${p.w}" height="${p.h}" loading="lazy" decoding="async">
     <span class="locanda__play" aria-hidden="true"></span>
     <span class="locanda__durata mono" aria-hidden="true">${p.d}</span>`;
-  b.addEventListener('click', () => parte(art, p, b));
+  b.addEventListener('click', () => {
+    /* apriVideo chiama soloIo, che passa da fermaLocanda e ferma un
+       brano eventualmente in corso — vedi piu' sotto. */
+    apriVideo(CARTELLA + p.id + '.mp4', CARTELLA + p.id + '.jpg', p.t);
+    avvisa();
+  });
   return b;
-}
-
-function parte(art, p, bottone) {
-  soloIo(fermaLocanda);
-  fermaTutto(art);
-  const v = document.createElement('video');
-  v.src = CARTELLA + p.id + '.mp4';
-  v.poster = CARTELLA + p.id + '.jpg';
-  v.controls = true;
-  v.playsInline = true;
-  v.preload = 'none';
-  v.setAttribute('aria-label', p.t);
-  bottone.replaceWith(v);
-  art.classList.add('in-onda');
-  avvisa();
-  v.play().catch(() => {});
 }
 
 /* ── i brani, uno alla volta e senza far saltare la pagina ────────── */
@@ -158,14 +144,7 @@ function suona(b, bottone) {
    canzone e' lo stesso errore di due video insieme. */
 const fermaLocanda = registra(() => fermaTutto());
 
-function fermaTutto(tranne) {
-  for (const altro of document.querySelectorAll('.locanda__lavori video')) {
-    const suo = altro.closest('.locanda__pezzo');
-    if (suo === tranne) continue;
-    altro.pause();
-    altro.replaceWith(copertina(suo, PER_ID.get(suo.dataset.id)));
-    suo.classList.remove('in-onda');
-  }
+function fermaTutto() {
   if (suonando) {
     suonando.audio.pause();
     suonando.bottone.classList.remove('suona');

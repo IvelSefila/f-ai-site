@@ -53,7 +53,8 @@
 }
 
 *{box-sizing:border-box}
-html{scroll-behavior:smooth;scroll-padding-top:calc(var(--bar) + 20px);color-scheme:dark}
+html{scroll-behavior:smooth;scroll-padding-top:calc(var(--bar) + 20px);color-scheme:dark;
+  -webkit-text-size-adjust:100%;text-size-adjust:100%}
 body{margin:0;min-width:320px;overflow-x:hidden;background:var(--stage);color:var(--ink);
   font:400 var(--t-base)/1.62 var(--body);-webkit-font-smoothing:antialiased}
 img,canvas{display:block;max-width:100%}
@@ -61,7 +62,18 @@ button,input{font:inherit;color:inherit}
 a{color:inherit;text-decoration:none}
 h1,h2,h3{font-family:var(--display);font-weight:600;text-transform:uppercase;
   letter-spacing:-.028em;text-wrap:balance;margin:0;line-height:.9}
-h2 em{font-style:normal;color:var(--em)}
+/* La riga verde dei titoli respira come la terza riga dell'hero: stessa
+   sfumatura che scorre, cosi' l'accento non e' un colore fisso ma un
+   piccolo segno vivo, coerente ovunque compaia nel sito. I toni sono
+   sempre le variabili di contrasto gia' calibrate (mai un bianco quasi
+   pieno come nell'hero, li' il fondo e' sempre scuro): qui il fondo
+   cambia sezione per sezione, e questi passaggi restano leggibili su
+   entrambi perche' --em-bright/--em-light/--em-deep si aggiornano da
+   soli col contesto. */
+h2 em,.lab__intro h3 em,.appmie__testa h3 em{font-style:normal;
+  background:linear-gradient(96deg,var(--em-bright) 6%,var(--em-light) 52%,var(--em-deep) 100%);
+  background-size:220% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;
+  animation:sfumatura 4s linear infinite}
 p{margin:0 0 1em}p:last-child{margin-bottom:0}
 strong{color:var(--ink);font-weight:700}
 .mono{font-family:var(--mono);font-size:var(--t-micro);letter-spacing:.13em;text-transform:uppercase;font-weight:600}
@@ -135,12 +147,33 @@ strong{color:var(--ink);font-weight:700}
 .hero h1 span{display:block;opacity:0;transform:translateY(.2em);animation:rise .85s var(--ease) forwards}
 .hero h1 span:nth-child(1){animation-delay:.12s}
 .hero h1 span:nth-child(2){animation-delay:.24s;color:#b9c1cb}
-.hero h1 span:nth-child(3){animation-delay:.36s;
+/* La sfumatura scorre piano, in loop, oltre all'ingresso che gia'
+   aveva: due animazioni sullo stesso elemento, separate da virgola —
+   "rise" (una volta, l'entrata) e "sfumatura" (per sempre, il respiro
+   del gradiente). background-size piu' largo del testo da' lo spazio
+   in cui far scorrere background-position. */
+.hero h1 span:nth-child(3){
+  animation:rise .85s var(--ease) .36s forwards, sfumatura 4s linear infinite;
   background:linear-gradient(96deg,#f4fbf8 6%,var(--em-light) 52%,#2a9a72 100%);
+  background-size:220% 100%;
   -webkit-background-clip:text;background-clip:text;color:transparent}
+@keyframes sfumatura{0%{background-position:220% 50%}100%{background-position:0% 50%}}
 @keyframes rise{to{opacity:1;transform:none}}
-.hero__copy{margin:clamp(18px,3vh,32px) 0 0;color:var(--text);font-size:var(--t-lede);
+.hero__punti{margin:clamp(18px,3vh,32px) 0 0}
+.hero__punto{display:flex;gap:12px;align-items:flex-start}
+.hero__punto+.hero__punto{margin-top:.75em}
+.hero__punto__icona{flex:none;width:32px;height:32px;margin-top:.15em;color:var(--em-vivo)}
+/* Le scintille (l'accento "AI" su ogni icona) respirano appena: non
+   e' un effetto da notare, e' un dettaglio da sentire con la coda
+   dell'occhio. transform-origin center perche' senza, in SVG, ogni
+   forma scala dal proprio angolo in alto a sinistra invece che dal
+   centro — sembrerebbe scivolare, non pulsare. */
+@keyframes scintilla{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(.85)}}
+.icona__scintilla{transform-origin:center;animation:scintilla 2.2s ease-in-out infinite}
+.hero__copy{margin:0;color:var(--text);font-size:var(--t-lede);
+  text-transform:uppercase;line-height:1.3;
   opacity:0;animation:rise .85s .5s var(--ease) forwards}
+.hero__copy__mark{color:#fff}
 .hero__actions{margin-top:clamp(22px,3.4vh,36px);display:flex;flex-wrap:wrap;gap:10px;
   opacity:0;animation:rise .85s .62s var(--ease) forwards}
 
@@ -231,11 +264,18 @@ strong{color:var(--ink);font-weight:700}
 .vetrina__fila{display:flex;gap:clamp(8px,1vw,14px);min-width:0;
   overflow-x:auto;scrollbar-width:none;padding-bottom:2px}
 .vetrina__fila::-webkit-scrollbar{display:none}
-.vetrina__caso{flex:none;width:clamp(92px,8.4vw,124px);display:grid;gap:5px;
+.vetrina__caso{flex:none;width:clamp(92px,8.4vw,124px);display:flex;flex-direction:column;gap:5px;
   transition:transform .22s var(--ease)}
 .vetrina__caso img{width:100%;height:auto;aspect-ratio:3/4;object-fit:cover;
   border-radius:var(--r-min);border:1px solid var(--rule);
   transition:border-color .22s,filter .22s}
+/* I due marchi (loghi su fondo chiaro) non sono foto piene come le
+   altre due copertine: mostrarli a tutto riquadro con object-fit:cover
+   li faceva sembrare ritagli bianchi incollati nella stessa fila.
+   Qui il logo resta intero (contain) su un fondo scuro coerente col
+   resto della vetrina, cosi' le quattro copertine sembrano la stessa
+   famiglia invece di due linguaggi diversi. */
+.vetrina__caso--marchio img{object-fit:cover;background:var(--panel-2)}
 /* Due righe riservate al nome anche quando ne basta una: "Locanda del
    Castello" va a capo e le altre tre no, e senza questo le etichette
    sotto partivano da quattro quote diverse. */
@@ -283,7 +323,6 @@ strong{color:var(--ink);font-weight:700}
   border-top:1px solid var(--rule);color:var(--muted);font-family:var(--mono);font-size:var(--t-micro);
   letter-spacing:.12em;text-transform:uppercase;font-variant-numeric:tabular-nums}
 .bench__stage figcaption span:first-child{color:var(--em)}
-.bench__stage--graph{background:var(--panel)}
 .bench__panel{border:1px solid var(--rule);border-radius:var(--r);background:var(--panel);padding:clamp(18px,2vw,26px)}
 .bench__panel h3{font-size:var(--d6);margin-bottom:.5em}
 .bench__panel p{color:var(--text);font-size:var(--t-corpo);line-height:1.6}
@@ -314,27 +353,6 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border:0;border-radiu
   letter-spacing:.04em;line-height:1.5}
 .decis li::before{content:"▸";color:var(--em);flex:none}
 .decis li b{color:var(--em-light);font-weight:700}
-
-/* fasi */
-.phases{margin-top:22px;display:grid;gap:4px}
-.phases button{display:flex;gap:10px;align-items:center;padding:10px 12px;text-align:left;
-  border:1px solid var(--rule-2);border-radius:var(--r-min);background:transparent;color:var(--muted);cursor:pointer;
-  font-family:var(--mono);font-size:var(--t-micro);letter-spacing:.12em;text-transform:uppercase;transition:.2s}
-.phases button b{color:var(--muted)}
-.phases button:hover{border-color:var(--em-dim);color:var(--text)}
-.phases button[aria-pressed=true]{background:var(--em);border-color:var(--em);color:var(--stage)}
-.phases button[aria-pressed=true] b{color:var(--stage)}
-.phases__note{margin:12px 0 0;color:var(--muted);font-size:var(--t-corpo);min-height:2.8em}
-
-/* tab dei banchi */
-.tabs{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:24px}
-.tabs button{display:flex;gap:9px;align-items:center;padding:11px 16px;border:1px solid var(--rule);
-  border-radius:var(--r-pill);background:transparent;color:var(--muted);cursor:pointer;
-  font-family:var(--mono);font-size:var(--t-micro);letter-spacing:.12em;text-transform:uppercase;font-weight:700;transition:.2s}
-.tabs button b{color:var(--muted)}
-.tabs button:hover{border-color:var(--em);color:var(--em)}
-.tabs button[aria-selected=true]{background:var(--em);border-color:var(--em);color:var(--stage)}
-.tabs button[aria-selected=true] b{color:var(--stage)}
 
 /* formati */
 .formats{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));align-items:end}
@@ -543,6 +561,41 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border:0;border-radiu
 /* ═══ reveal ═══ */
 .rv{opacity:0;transform:translateY(22px)}
 .rv.in{opacity:1;transform:none;transition:opacity .7s var(--ease),transform .7s var(--ease)}
+
+/* I titoli dentro un blocco che si rivela non si limitano a salire col
+   resto: si scoprono da sinistra, come una tenda che si apre — cosi' il
+   titolo si nota anche quando il blocco intorno e' quasi tutto testo,
+   dove il solo salire di 22px passa inosservato (soprattutto su
+   schermi stretti, dove il blocco e' gia' quasi a fuoco quando entra). */
+.sec__head h2,.sec__head h3,
+.union__testa h3,.eso__testa h3,.locanda__testa h3,.cest__testa h3,.appmie__testa h3{
+  clip-path:inset(0 100% 0 0);transition:clip-path .7s var(--ease) .05s}
+.sec__head.in h2,.sec__head.in h3,
+.union__testa.in h3,.eso__testa.in h3,.locanda__testa.in h3,.cest__testa.in h3,.appmie__testa.in h3{
+  clip-path:inset(0 0 0 0)}
+
+/* ═══ micro-interazioni leggere · schede e riquadri senza hover ═══
+   Stessa grammatica del resto del sito: solo transform+opacity/colore,
+   niente proprietà che scatenano layout. */
+.appmie__card,.stack__group{transition:transform .22s var(--ease),box-shadow .22s var(--ease)}
+.appmie__card:hover{transform:translateY(-3px);box-shadow:0 10px 24px rgba(5,7,11,.10)}
+.stack__group:hover{transform:translateY(-2px)}
+
+.union__conti li,.eso__conti li,.locanda__conti li,.cest__conti li{
+  transition:transform .2s var(--ease)}
+.union__conti li:hover,.eso__conti li:hover,.locanda__conti li:hover,.cest__conti li:hover{
+  transform:translateY(-2px)}
+
+.bar__pal button{transition:transform .18s var(--ease)}
+.bar__pal button:hover,.bar__pal button:focus-visible{transform:scale(1.15)}
+.bar__pal__piu{transition:transform .18s var(--ease)}
+.bar__pal__piu:hover{transform:scale(1.1)}
+
+@media (hover:none){
+  .appmie__card:hover,.stack__group:hover,
+  .union__conti li:hover,.eso__conti li:hover,.locanda__conti li:hover,.cest__conti li:hover,
+  .bar__pal button:hover,.bar__pal__piu:hover{transform:none;box-shadow:none}
+}
 
 @media (prefers-reduced-motion:reduce){
   html{scroll-behavior:auto}
@@ -897,12 +950,10 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border:0;border-radiu
   color:var(--em-light)}
 .work__break dd{margin:2px 0 0;color:var(--text);font-size:var(--t-corpo);line-height:1.55}
 
-/* occhiello dello studio e nota d'uso dell'hero */
+/* occhiello dello studio */
 .hero__studio{margin:0 0 clamp(14px,2vh,24px);color:var(--muted);font-family:var(--mono);
   font-size:var(--t-micro);letter-spacing:.13em;text-transform:uppercase;line-height:1.6;
   opacity:0;animation:rise .85s .18s var(--ease) forwards}
-.hero__nota{margin:12px 0 0;max-width:66ch;color:var(--muted);font-size:var(--t-corpo);line-height:1.6;
-  opacity:0;animation:rise .85s .56s var(--ease) forwards}
 /* Lo spot fra il testo e le quattro copertine: il server locale non
    sa rispondere alle richieste "Range", quindi preload="none" e un
    poster vero (un fotogramma preso col canvas, non un fermo immagine
@@ -914,12 +965,10 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border:0;border-radiu
   border:1px solid var(--rule);border-radius:var(--r);overflow:hidden;background:#06090e;
   opacity:0;animation:rise .85s .6s var(--ease) forwards}
 .hero__spot video{display:block;width:100%;height:auto;background:#000}
-.phases__come{margin:18px 0 0;color:var(--muted)}
 /* introduzione del laboratorio */
 .lab__intro{margin-top:clamp(24px,3vw,40px);display:grid;gap:12px;max-width:70ch}
 .lab__intro > .mono{color:var(--em)}
 .lab__intro h3{font-size:var(--d5)}
-.lab__intro h3 em{font-style:normal;color:var(--em)}
 .lab__intro p{margin:0;max-width:68ch;color:var(--text);font-size:var(--t-corpo);line-height:1.65}
 
 /* ═══════════════════════════════════════════════════════════════════
@@ -932,6 +981,22 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border:0;border-radiu
 
 /* ── ritmo verticale: tre ampiezze, mai due uguali di fila ── */
 .sec.sp-l{padding-block:clamp(104px,12.5vw,182px)}
+/* Il padding-top di .sp-l era tarato sull'header + il banco che questa
+   sezione aveva prima: tolti entrambi, il primo contenuto e' il titolo
+   di .sec__sub, che ha gia' il suo margine sopra. Senza questa riga
+   restava un vuoto nero doppio, sommando i due spazi. */
+#regia{padding-top:clamp(12px,1.6vw,22px)}
+/* .sec__sub aggiunge il suo margine sopra per staccarsi da un titolo
+   di sezione che qui non esiste piu': sommato al padding qui sopra
+   faceva doppio vuoto. Qui e' la prima cosa della sezione, quindi
+   niente margine suo. */
+#regia #metodo{margin-top:0}
+/* "Metodo" da sola, grande: non c'e' piu' un titolo di sezione sopra
+   (l'h2 e il banco sono spariti), quindi questa etichetta fa il lavoro
+   che prima faceva l'intestazione — deve pesare come tale, non come
+   un piccolo occhiello di passaggio. */
+.metodo__eti{font:700 var(--d4) var(--display);text-transform:uppercase;
+  letter-spacing:-.01em;color:var(--em);margin-bottom:clamp(10px,1.4vw,16px)}
 .sec.sp-m{padding-block:clamp(74px,8.4vw,122px)}
 .sec.sp-s{padding-block:clamp(50px,5.4vw,82px)}
 
@@ -975,7 +1040,6 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border:0;border-radiu
 
 /* ── impianti: i quattro banchi non hanno più le stesse proporzioni ── */
 @media(min-width:1000px){
-  .bench--ampio{grid-template-columns:minmax(0,1.72fr) minmax(280px,.58fr)}
   .bench--stretto{grid-template-columns:minmax(0,1.06fr) minmax(300px,.94fr)}
   .bench--medio{grid-template-columns:minmax(0,1.5fr) minmax(300px,.8fr)}
   .bench--invertito{grid-template-columns:minmax(300px,.62fr) minmax(0,1.48fr)}
@@ -995,7 +1059,6 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border:0;border-radiu
        orizzontale resta al canvas. Prima, con touch-action:none su un
        canvas alto quanto lo schermo, il sito era bloccato sull'hero. */
 #gl,
-#tlCanvas,
 .mat-holder canvas{touch-action:pan-y}
 
 @media (max-width:900px){
@@ -1026,7 +1089,7 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border:0;border-radiu
 @media (max-width:760px){
   /* 3 · Nessuna area di tocco sotto i 44px: è la soglia sotto la quale
          il dito sbaglia bersaglio. */
-  .btn,.btn--sm,.tabs button,.phases button,.modes button,
+  .btn,.btn--sm,.modes button,
   .brief__nav button,.brief-summary__actions button,.brief-summary__actions a,
   .bar__cta,.brand,.work__seed button,.lab__cta .btn{min-height:44px}
   .brand{min-width:44px;display:inline-flex;align-items:center}
@@ -1063,11 +1126,6 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border:0;border-radiu
      l'ultimo. E' la riga che dice che i dati non escono dal browser:
      e' proprio quella che deve leggersi. */
   .work__break dd,.decis li,.brief-options label{font-size:var(--t-corpo)}
-  /* la nota dell'apertura sta a 15 come il resto: e' la prima
-     istruzione che uno legge, e a 14px su un telefono si strizza
-     gli occhi proprio dove serve capire cosa si puo' toccare */
-  .hero__nota{font-size:var(--t-corpo)}
-  .phases__note{font-size:var(--t-corpo)}
   .hud dd{font-size:var(--t-mini)}
   .hud dt,.formats figcaption,.dossier__grid dt,.metrics dt{font-size:var(--t-micro)}
 }
@@ -1081,7 +1139,6 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border:0;border-radiu
     linear-gradient(90deg,rgba(5,7,11,.7) 0%,rgba(5,7,11,.35) 60%,transparent 100%)}
   .hero h1 span:nth-child(2){color:#cfd5dd}
   .hero__copy{color:#dfe5ec}
-  .hero__nota{color:#aeb7c1}
 }
 
 /* ═══════════════════════════════════════════════════════════════════
@@ -1116,7 +1173,7 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border:0;border-radiu
 }
 
 /* ── 3 · la pressione lunga non deve selezionare né aprire menù ── */
-#gl,#tlCanvas,#radar,.mat-holder canvas{
+#gl,#radar,.mat-holder canvas{
   -webkit-touch-callout:none;-webkit-user-select:none;user-select:none}
 
 /* ── 4 · sul telefono la coda dell'hero smette di essere sovrapposta
@@ -1164,7 +1221,7 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border:0;border-radiu
 @media (hover:none){
   .lab__card:hover,.offerta__card:hover{transform:none}
   .lab__card:active,.offerta__card:active{border-color:var(--em);transform:scale(.985)}
-  .btn:active,.tabs button:active,.phases button:active,.modes button:active,
+  .btn:active,.modes button:active,
   .bar__nav a:active,.brief__nav button:active,.scene-pick button:active,
   .brief-summary__actions button:active,.work__break summary:active{
     border-color:var(--em);color:var(--em)}
@@ -1187,7 +1244,7 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border:0;border-radiu
         La soglia giusta la dà il puntatore, non lo schermo. 46px invece
         di 44 perché l'impaginazione frazionaria scendeva a 43,9. ── */
 @media (pointer:coarse){
-  .btn,.btn--sm,.tabs button,.phases button,.modes button,
+  .btn,.btn--sm,.modes button,
   .brief__nav button,.brief-summary__actions button,.brief-summary__actions a,
   .bar__cta,.brand,.work__seed button,.lab__cta .btn,.lab__card,
   .work__break summary,.scene-pick button{min-height:46px}
@@ -1227,12 +1284,6 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border:0;border-radiu
   .graph .node{padding:10px 10px 11px}
   .graph .node b{font-size:var(--t-grande)}
   .graph .node:last-child{grid-column:1 / -1}
-
-  /* ── le cinque fasi: 246px di bottoni sopra un visuale da 218px non
-        entravano insieme. Due colonne, tre righe, 146px. ── */
-  .phases{grid-template-columns:1fr 1fr;gap:6px}
-  .phases button{padding:10px}
-  .phases button:last-child{grid-column:1 / -1}
 }
 
 @media (max-width:900px){
@@ -1244,16 +1295,11 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border:0;border-radiu
   .bench__panel{display:flex;flex-direction:column}
   .bench__panel > h3       {order:-5}
   .bench__panel > .ctl     {order:-4;margin-top:12px}
-  .bench__panel > .phases__come,
-  .bench__panel > .phases,
   .bench__panel > .modes   {order:-3;margin-top:12px}
-  .bench__panel > .phases__come{margin-bottom:0}
   /* quindici pixel del visuale restavano sotto la barra: li recupero
      stringendo lo spazio fra scena e pannello, non tagliando niente */
   .bench{gap:16px}
   .bench__panel > .bench__acts{order:-2;margin:16px 0 0}
-  /* la nota segue la fase scelta: è il suo risultato, non un a parte */
-  .bench__panel > .phases__note{order:-3}
   .bench__panel > .mat__hint,
   .bench__panel > .decis   {order:-1}
   /* la spiegazione scende sotto lo strumento: si legge dopo aver
@@ -1299,7 +1345,6 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border:0;border-radiu
    sulla carta diventano strumenti incassati. Li incornicio perché si
    leggano come tali invece che come buchi neri nella pagina. */
 .sec--chiara .bench__stage,
-.sec--chiara .work__visual,
 .sec--chiara .formats figure,
 .sec--chiara .mat-holder{
   border-radius:var(--r);overflow:hidden;
@@ -1397,7 +1442,6 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border:0;border-radiu
   .bench__stage,
   .mat-holder,
   .formats,
-  .work__visual,
   .deck .work canvas{
     --dv:26px;
     animation:deriva linear both;
@@ -1457,7 +1501,7 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border:0;border-radiu
   /* sul telefono l'ampiezza si dimezza: schermo corto, escursione corta,
      altrimenti la deriva diventa un sobbalzo invece che profondità */
   @media (max-width:900px){
-    .bench__stage,.mat-holder,.formats,.work__visual,.deck .work canvas{--dv:12px}
+    .bench__stage,.mat-holder,.formats,.deck .work canvas{--dv:12px}
     .ap-numero .sec__head::before{--dv:26px}
     .profilo__mark{--dv:-18px}
     @keyframes allontana{to{opacity:.4;scale:.985;translate:0 -18px}}
@@ -1899,7 +1943,6 @@ body.ord-in-corso *{cursor:grabbing !important}
 .appmie__testa .eyebrow .n{color:var(--em);border-right-color:var(--rule)}
 .appmie__testa h3{margin:10px 0 0;font-size:var(--d5);
   letter-spacing:-.02em;line-height:1.06}
-.appmie__testa h3 em{font-style:normal;color:var(--em)}
 .appmie__lede{margin:14px 0 0;color:var(--text);font-size:var(--t-grande);line-height:1.6}
 
 .appmie__card{display:grid;gap:10px;align-content:start;
@@ -1919,19 +1962,48 @@ body.ord-in-corso *{cursor:grabbing !important}
    ventisette pixel. Misurato su tutte le impaginazioni. Il min(100%,...)
    e' quello che evita l'overflow quando la carta e' piu' stretta del
    minimo. */
-.appmie__capacita{margin-top:6px;display:grid;gap:clamp(16px,2vw,26px);
-  /* 250 e non 215: a 215 su un monitor largo entravano cinque colonne
-     e ogni voce andava a capo tre volte. A 250 ne entrano quattro e la
-     quinta va sotto, che si legge molto meglio. */
-  grid-template-columns:repeat(auto-fit,minmax(min(100%,250px),1fr))}
-.appmie__capacita section{display:grid;gap:8px;align-content:start}
+.appmie__capacita{margin-top:6px;display:grid;gap:clamp(12px,1.6vw,18px);
+  grid-template-columns:repeat(auto-fit,minmax(min(100%,168px),1fr))}
+.appmie__tile{border:1px solid var(--rule-2);border-radius:var(--r-media);
+  background:var(--carta-2,rgba(255,255,255,.02));transition:border-color .2s var(--ease)}
+.appmie__tile:hover{border-color:var(--em-light)}
+.appmie__tile summary{display:grid;gap:8px;align-content:start;justify-items:start;
+  padding:16px;cursor:pointer;list-style:none;position:relative}
+.appmie__tile summary::-webkit-details-marker{display:none}
+.appmie__icona{flex:none;width:28px;height:28px;color:var(--em-vivo);
+  animation:appmie-respiro 2.8s ease-in-out infinite}
+/* Ogni riquadro pulsa fuori fase: altrimenti tutte le icone lampeggiano
+   in coro e sembra un allarme, non un dettaglio elegante. */
+.appmie__tile:nth-child(2) .appmie__icona{animation-delay:.35s}
+.appmie__tile:nth-child(3) .appmie__icona{animation-delay:.7s}
+.appmie__tile:nth-child(4) .appmie__icona{animation-delay:1.05s}
+.appmie__tile:nth-child(5) .appmie__icona{animation-delay:1.4s}
+@keyframes appmie-respiro{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.55;transform:scale(1.12)}}
 .appmie__capacita b{color:var(--em);font-size:var(--t-micro);letter-spacing:.13em;text-transform:uppercase}
-.appmie__capacita ul{margin:0;padding:0;list-style:none;display:grid;gap:7px}
-.appmie__capacita li{position:relative;padding-left:16px;color:var(--text);
-  font-size:var(--t-corpo);line-height:1.5}
-.appmie__capacita li::before{content:"";position:absolute;left:1px;top:.58em;
-  width:5px;height:5px;border-radius:var(--r-tondo);background:var(--em-light)}
-.appmie__capacita em{font-style:normal;font-weight:600;color:var(--ink)}
+.appmie__capacita p{margin:0;color:var(--text);font-size:var(--t-corpo);line-height:1.5}
+.appmie__piu{position:absolute;top:16px;right:16px;width:18px;height:18px;color:var(--muted);
+  transition:transform .3s var(--ease);
+  animation:piu-gira 3.2s var(--ease) infinite alternate}
+.appmie__piu::before,.appmie__piu::after{content:"";position:absolute;background:currentColor;
+  top:50%;left:50%;transform:translate(-50%,-50%)}
+.appmie__piu::before{width:12px;height:1.6px}
+.appmie__piu::after{width:1.6px;height:12px}
+/* Gira e diventa verde, poi la STESSA animazione gira all'indietro e
+   torna grigia — "alternate" inverte il verso a ogni ciclo, non serve
+   un secondo keyframe scritto al contrario. */
+@keyframes piu-gira{
+  0%{transform:rotate(0deg);color:var(--muted)}
+  100%{transform:rotate(180deg);color:var(--em)}
+}
+.appmie__tile[open] .appmie__piu{animation:none;transform:rotate(45deg);color:var(--em)}
+/* Il dettaglio non si limita ad apparire: si "diffonde" — sfuoca meno,
+   si allarga leggermente e schiarisce, come una nota che prende forma. */
+.appmie__dettaglio{margin:0 16px 16px;padding-top:12px;border-top:1px solid var(--rule-2);
+  display:grid;gap:8px;animation:appmie-diffonde .45s var(--ease) backwards}
+.appmie__dettaglio p{margin:0;color:var(--text);font-size:var(--t-corpo);line-height:1.55}
+.appmie__dettaglio em{font-style:normal;font-weight:600;color:var(--ink)}
+@keyframes appmie-diffonde{from{opacity:0;transform:scale(.94);filter:blur(3px)}
+  to{opacity:1;transform:scale(1);filter:blur(0)}}
 
 /* Le due carte affiancate devono cominciare a scrivere alla stessa
    altezza: "01 / Assistente editoriale" va a capo dove "02 / Produzione
@@ -2027,6 +2099,13 @@ body.ord-in-corso *{cursor:grabbing !important}
    sotto a tutto (z-index 0 contro l'1 del testo) e non prende clic.
    preserveAspectRatio="slice" la fa comportare come un fondo: riempie
    sempre, e su una lastra stretta taglia invece di schiacciare. */
+/* Le foglie della scena Union respirano appena: un'idea di vita dietro
+   il testo, così lenta (8s) che si nota solo con la coda dell'occhio,
+   mai come un "loop" che distrae. Solo opacity: zero layout, zero costo. */
+@media (prefers-reduced-motion: no-preference){
+  @keyframes foglie-respiro{0%,100%{opacity:.13}50%{opacity:.22}}
+  .union__foglie{animation:foglie-respiro 8s ease-in-out infinite}
+}
 .union__scena{position:absolute;inset:0;z-index:0;width:100%;height:100%;
   pointer-events:none}
 .union__scena--stretto{display:none}
@@ -2055,12 +2134,6 @@ body.ord-in-corso *{cursor:grabbing !important}
 .union__sotto span{color:var(--u-verde);font-family:var(--mono);font-weight:400;
   font-size:var(--t-mini);letter-spacing:.12em;text-transform:uppercase}
 .union__lede{margin:16px 0 0;color:var(--u-verde);font-size:var(--t-grande);line-height:1.62}
-
-/* Il seguito: la campagna non e' un lavoro chiuso e consegnato, e dirlo
-   cambia cosa vede un cliente — non un caso finito ma una cosa viva. */
-.union__seguito{margin:12px 0 0;max-width:62ch;color:var(--u-verde);
-  font-size:var(--t-corpo);line-height:1.58}
-.union__seguito b{color:#0c2405;font-weight:700}
 .union__lede b{color:#0c2405;font-weight:700}
 /* Il payoff e' montato come sulla locandina: "UNITI" chiaro sopra,
    "SI VINCE" sotto in lime con la riga, e due trattini ai lati. Il lime
@@ -2069,7 +2142,8 @@ body.ord-in-corso *{cursor:grabbing !important}
    sta. */
 .union__claim{margin:20px 0 0;display:inline-grid;justify-items:start;
   position:relative;gap:1px;padding:11px 22px 13px;border-radius:var(--r-media);
-  background:var(--u-verde);
+  background:color-mix(in srgb,var(--u-verde) 78%,transparent);
+  border:1px solid color-mix(in srgb,var(--u-verde) 90%,var(--u-lime) 25%);
   font-family:var(--display);text-transform:uppercase;line-height:1}
 .union__claim span{color:var(--u-carta);font-size:var(--t-lede);
   font-weight:600;letter-spacing:.16em}
@@ -2305,9 +2379,6 @@ body.ord-in-corso *{cursor:grabbing !important}
 .eso__lede,.cest__lede{margin:16px 0 0;font-size:var(--t-grande);line-height:1.62;
   color:color-mix(in srgb, var(--sk-chiaro) 92%, transparent)}
 .eso__lede b,.cest__lede b{color:var(--sk-carta);font-weight:700}
-.eso__seguito,.cest__seguito{margin:12px 0 0;max-width:62ch;
-  color:color-mix(in srgb, var(--sk-chiaro) 78%, transparent);
-  font-size:var(--t-corpo);line-height:1.58}
 
 /* La targa del payoff: e' la frase dell'endcard del marchio. */
 .eso__claim,.cest__claim{margin:20px 0 0;display:inline-grid;justify-items:start;
@@ -2317,7 +2388,13 @@ body.ord-in-corso *{cursor:grabbing !important}
 .eso__claim span,.cest__claim span{color:var(--sk-tenue);font-size:var(--t-micro);
   font-weight:600;letter-spacing:.18em;text-transform:uppercase}
 .eso__claim b,.cest__claim b{color:var(--sk-carta);font-size:var(--d7);
-  font-weight:600;letter-spacing:-.01em}
+  font-weight:600;letter-spacing:-.01em;
+  border-bottom:3px solid var(--sk-vivo);padding-bottom:3px}
+.eso__claim::before,.eso__claim::after,.cest__claim::before,.cest__claim::after{
+  content:"";position:absolute;top:50%;width:14px;height:3px;border-radius:2px;
+  background:var(--sk-targa-riga);opacity:.85}
+.eso__claim::before,.cest__claim::before{right:calc(100% + 10px)}
+.eso__claim::after,.cest__claim::after{left:calc(100% + 10px)}
 
 .eso__conti,.cest__conti{margin:0;padding:0;list-style:none;
   display:grid;grid-template-columns:repeat(3,minmax(0,1fr));max-width:400px}
@@ -2514,8 +2591,6 @@ body.ord-in-corso *{cursor:grabbing !important}
   font-size:var(--t-mini);letter-spacing:.12em;text-transform:uppercase}
 .locanda__lede{margin:16px 0 0;color:rgba(245,236,221,.92);font-size:var(--t-grande);line-height:1.62}
 .locanda__lede b{color:var(--l-carta);font-weight:700}
-.locanda__seguito{margin:12px 0 0;max-width:62ch;color:rgba(245,236,221,.8);
-  font-size:var(--t-corpo);line-height:1.58}
 
 /* La targa del payoff: crema su bordeaux, con l'oro intorno. E' la
    frase che sta sulle loro locandine vere. */
@@ -2526,7 +2601,13 @@ body.ord-in-corso *{cursor:grabbing !important}
 .locanda__claim span{color:var(--l-oro-chiaro);font-size:var(--t-micro);
   font-weight:600;letter-spacing:.16em;text-transform:uppercase}
 .locanda__claim b{color:var(--l-carta);font-size:var(--d7);
-  font-weight:600;font-style:italic;letter-spacing:-.01em}
+  font-weight:600;font-style:italic;letter-spacing:-.01em;
+  border-bottom:3px solid var(--l-oro-chiaro);padding-bottom:3px}
+.locanda__claim::before,.locanda__claim::after{content:"";position:absolute;
+  top:50%;width:14px;height:3px;border-radius:2px;background:var(--l-oro-chiaro);
+  opacity:.6}
+.locanda__claim::before{right:calc(100% + 10px)}
+.locanda__claim::after{left:calc(100% + 10px)}
 
 .locanda__conti{margin:0;padding:0;list-style:none;
   display:grid;grid-template-columns:repeat(3,minmax(0,1fr));max-width:400px}
@@ -2773,13 +2854,16 @@ body.ord-in-corso *{cursor:grabbing !important}
    diventa "×" nell'altro <details> del foglio (.work__break), stesso
    linguaggio ma con piu' carattere. */
 .manifesto__cta{position:relative;z-index:1;margin-top:clamp(20px,2.6vw,30px);
-  display:inline-flex;align-items:center;gap:8px;color:var(--em-light);
-  opacity:.85;transition:opacity .2s var(--ease)}
-.manifesto__slab:hover .manifesto__cta{opacity:1}
-.manifesto__cta i{font-style:normal;display:inline-block;
-  transition:transform .4s cubic-bezier(.34,1.56,.64,1)}
-.manifesto[open] .manifesto__cta i{transform:rotate(180deg)}
-.manifesto[open] .manifesto__cta{opacity:0;pointer-events:none}
+  display:inline-flex;align-items:center;gap:8px;color:#fff;
+  padding:10px 18px;border-radius:999px;border:1px solid var(--em-light);
+  background:var(--em-light);
+  opacity:.92;transition:opacity .2s var(--ease),background-color .2s var(--ease);
+  animation:cta-respiro 2.6s ease-in-out infinite}
+@keyframes cta-respiro{
+  0%,100%{transform:scale(1);box-shadow:0 0 0 0 color-mix(in srgb,var(--em-light) 0%,transparent)}
+  50%{transform:scale(1.05);box-shadow:0 0 16px 4px color-mix(in srgb,var(--em-light) 50%,transparent)}}
+.manifesto__slab:hover .manifesto__cta{opacity:1;animation:none}
+.manifesto__cta i{font-style:normal;display:inline-block}
 
 /* La lastra risponde al tocco prima ancora che il contenuto cominci a
    crescere: un piccolo affondo, la stessa cosa che fa un tasto vero.
@@ -2921,17 +3005,37 @@ body.ord-in-corso *{cursor:grabbing !important}
  * anche alla CHIUSURA di dissolversi invece di sparire di scatto,
  * senza un onclose in JavaScript a gestirla.
  * ═══════════════════════════════════════════════════════════════════ */
-.serv,.scheda,.pal{
+.serv,.scheda,.pal,.video-lightbox{
   opacity:0;transform:scale(.96) translateY(10px);filter:blur(9px);
   transition:opacity .32s var(--ease),transform .36s var(--ease),filter .36s var(--ease),
     display .36s allow-discrete,overlay .36s allow-discrete}
-.serv[open],.scheda[open],.pal[open]{opacity:1;transform:none;filter:blur(0)}
+.serv[open],.scheda[open],.pal[open],.video-lightbox[open]{opacity:1;transform:none;filter:blur(0)}
 @starting-style{
-  .serv[open],.scheda[open],.pal[open]{opacity:0;transform:scale(.96) translateY(10px);filter:blur(9px)}
+  .serv[open],.scheda[open],.pal[open],.video-lightbox[open]{opacity:0;transform:scale(.96) translateY(10px);filter:blur(9px)}
 }
-.serv::backdrop,.scheda::backdrop,.pal::backdrop{
+.serv::backdrop,.scheda::backdrop,.pal::backdrop,.video-lightbox::backdrop{
   opacity:0;transition:opacity .32s var(--ease),display .32s allow-discrete,overlay .32s allow-discrete}
-.serv[open]::backdrop,.scheda[open]::backdrop,.pal[open]::backdrop{opacity:1}
+.serv[open]::backdrop,.scheda[open]::backdrop,.pal[open]::backdrop,.video-lightbox[open]::backdrop{opacity:1}
 @starting-style{
-  .serv[open]::backdrop,.scheda[open]::backdrop,.pal[open]::backdrop{opacity:0}
+  .serv[open]::backdrop,.scheda[open]::backdrop,.pal[open]::backdrop,.video-lightbox[open]::backdrop{opacity:0}
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+ * IL LIGHTBOX DEI VIDEO — un solo posto, per tutti i casi
+ * ═══════════════════════════════════════════════════════════════════ */
+.video-lightbox{
+  color-scheme:dark;
+  width:min(1100px,calc(100vw - 32px));max-height:calc(100dvh - 32px);
+  padding:0;border:0;border-radius:var(--r-card);background:#000;
+  overflow:visible}
+.video-lightbox::backdrop{background:rgba(3,6,9,.88);backdrop-filter:blur(6px)}
+.video-lightbox__video{display:block;width:100%;max-height:calc(100dvh - 32px);
+  border-radius:var(--r-card)}
+.video-lightbox__chiudi{position:absolute;top:-44px;right:0;width:36px;height:36px;
+  border-radius:var(--r-tondo);border:1px solid var(--rule);background:var(--panel-2);
+  color:var(--ink);font-size:22px;line-height:1;cursor:pointer;
+  transition:background-color .2s var(--ease),border-color .2s var(--ease)}
+.video-lightbox__chiudi:hover{background:var(--panel);border-color:var(--em-light)}
+@media (max-width:560px){
+  .video-lightbox__chiudi{top:-40px;width:32px;height:32px;font-size:19px}
 }

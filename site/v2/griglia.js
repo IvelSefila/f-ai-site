@@ -35,6 +35,7 @@ export const CONTENITORI = [
   ['.union__lavori',  '4', 'I pezzi di Union Energia'],
   ['.eso__lavori',     '4', 'I pezzi del lancio esoscheletri'],
   ['.locanda__lavori', '4', 'Le locandine della Locanda'],
+  ['.cest__lavori',    '4', 'I pezzi di Studio CETS'],
   ['.bench',         '',  'Banco: visuale e pannello'],   /* '' = proporzioni originali */
 ];
 

@@ -9,7 +9,7 @@ import { initEso } from './eso.js?v=20260911-135324';
 import { initLocanda } from './locanda.js?v=20260911-135324';
 import { initCest } from './cest.js?v=20260911-135324';
 import { initPalette } from './palette.js?v=20260911-135324';
-import { keyVisual, timeline, radar, MODES, rng, leggiColori} from './engine.js?v=20260911-135324';
+import { keyVisual, radar, MODES, rng, leggiColori} from './engine.js?v=20260911-135324';
 import { initBrief } from './brief.js?v=20260911-135324';
 import { initServizi } from './servizi.js?v=20260911-135324';
 
@@ -22,12 +22,11 @@ const mmss = ms => `${pad(Math.floor(ms / 60000))}:${pad(Math.floor(ms / 1000) %
 /* nell'ordine in cui si incontrano scendendo, che da oggi comincia dai
    servizi: e' la prima cosa che un cliente deve trovare */
 const PROOFS = [
-  ['banchi', 'Servizi — hai manovrato uno degli strumenti'],
+  ['banchi', 'Servizi — hai rigenerato i formati'],
   /* "Lavori" adesso vuol dire i lavori veri: prima era il mazzo di
      immagini generative, che si chiamava cosi' senza esserlo. Quelle
      hanno la loro riga, sotto la control room, dove sono finite. */
   ['lavori', 'Lavori — hai aperto un lavoro fatto per un cliente'],
-  ['regia', 'Control room — hai deciso dove entra la macchina'],
   ['immagini', 'Immagini — hai rigenerato un sistema visivo'],
   ['metodo', 'Metodo — hai percorso la pipeline'],
   ['tecnologia', 'Tecnologia — hai confrontato le modalità'],
@@ -38,7 +37,6 @@ const S = {
   t0: performance.now(),
   proofs: new Set(),
   actions: 0,
-  mix: 0.3,
   fps: [],
   seen: new Set(),
 };
@@ -64,9 +62,9 @@ function say(text, sticky = false) {
    diceva "Prova 01". Adesso sono gli stessi dell'HTML, e sono cinque
    perche' due sezioni sono diventate blocchi dentro altre due. */
 const VOICE = {
-  banchi: 'Prova 01. Quattro strumenti veri, uno per servizio.',
+  banchi: 'Prova 01. Quattro servizi. Apri ognuno per il dettaglio.',
   lavori: 'Prova 02. Tre lavori veri. I video partono solo se li apri.',
-  regia: 'Prova 03. Sposta la testina: cambia l’artefatto, non una barra.',
+  regia: 'Prova 03. Cinque fasi, in fila: guarda l’input attraversarle.',
   tecnologia: 'Prova 04. Locale, cloud o ibrido: stime dichiarate, non promesse.',
   laboratorio: 'Prova 05. Quattro motori di gioco scritti da zero.',
   /* il brief non e' piu' una sezione: sta dentro il contatto */
@@ -92,7 +90,6 @@ const hero = initHero($('#gl'), (st, kind) => {
     if (kind === 'grab') { act(); }
     if (kind === 'scene') {
       hScene.textContent = `${pad(st.scene + 1)}/0${3}`;
-      heroScene.textContent = `Sistema di verifica · ${st.sceneName}`;
       segnaScena(st.scene);
       act();
       return;
@@ -127,50 +124,55 @@ function segnaScena(i) {
   scenaBtn.forEach(b => b.setAttribute('aria-pressed', String(Number(b.dataset.scena) === i)));
 }
 
-/* ══════════ 01 · CONTROL ROOM ══════════ */
-const kv = $('#kvCanvas'), kvCtx = kv.getContext('2d');
-const mix = $('#mix'), mixOut = $('#mixOut'), kvLabel = $('#kvLabel'), kvSeed = $('#kvSeed'),
-kvDecisions = $('#kvDecisions'), phaseNote = $('#phaseNote');
-const PHASES = [
-  ['Brief', 'Definisco obiettivo, pubblico, canali e vincoli. L’AI non parte ancora.', 0.05, 'Un’idea,\nun vincolo'],
-  ['Direzione', 'Costruisco concept, riferimenti, tono e ritmo. Decido quali parti richiedono lavoro tradizionale e quali possono beneficiare dell’AI.', 0.2, 'Una direzione,\nnon un’opzione'],
-  ['Produzione', 'Creo, monto e genero solo ciò che serve. Ogni output entra in una sequenza progettata, non in una raccolta casuale di prove.', 0.72, 'Molte varianti,\nuna voce'],
-  ['Controllo', 'Seleziono, correggo e confronto. Coerenza, ritmo, leggibilità e qualità finale restano sotto supervisione umana.', 0.45, 'Scelgo io\nquale resta'],
-  ['Consegna', 'Preparo versioni, formati e indicazioni d’uso: il risultato deve funzionare davvero nei canali previsti.', 0.15, 'Pronto\nper la stampa'],
-];
-let kvSeedV = 4821, phase = 0;
-
-function drawKv() {
-  const ai = +mix.value / 100;
-  S.mix = ai;
-  mix.style.setProperty('--v', `${mix.value}%`);
-  const d = keyVisual(kvCtx, {
-      w: kv.width, h: kv.height, seed: kvSeedV, ai,
-      weight: 0.55, title: PHASES[phase][3], kicker: `F/AI · ${PHASES[phase][0]}`,
+/* ══════════ 01 · FORMATI ══════════ */
+const FORMATS = [['9:16', 405, 720, 'Storia'], ['4:5', 576, 720, 'Feed'], ['1:1', 640, 640, 'Quadrato'], ['3:2', 720, 480, 'Stampa'], ['16:9', 720, 405, 'Copertina'], ['21:9', 840, 360, 'Cinema']];
+function buildFormats(host, list) {
+  host.innerHTML = '';
+  return list.map(([name, w, h, use]) => {
+      const f = document.createElement('figure');
+      f.innerHTML = `<canvas width="${w}" height="${h}"></canvas><figcaption><span>${use}</span><b>${name}</b></figcaption>`;
+      host.append(f);
+      return f.querySelector('canvas');
     });
-  mixOut.textContent = `${mix.value}% sistema`;
-  kvLabel.textContent = ai < .25 ? 'Regia umana' : ai < .6 ? 'Regia condivisa' : 'Guida del sistema';
-  kvSeed.textContent = `seed ${kvSeedV}`;
-  kvDecisions.innerHTML = d.map(x => `<li>${x}</li>`).join('');
 }
-mix.addEventListener('input', () => { drawKv(); act(); proof('regia'); });
-$$('.phases button').forEach(b => b.addEventListener('click', () => {
-      $$('.phases button').forEach(x => x.setAttribute('aria-pressed', 'false'));
-      b.setAttribute('aria-pressed', 'true');
-      phase = +b.dataset.phase;
-      phaseNote.textContent = PHASES[phase][1];
-      mix.value = Math.round(PHASES[phase][2] * 100);
-      drawKv(); act(); proof('regia');
-      say(`Fase ${pad(phase + 1)} — ${PHASES[phase][0]}. ${PHASES[phase][1]}`);
-    }));
-$('#kvNew').addEventListener('click', () => { kvSeedV = (Math.random() * 9999) | 0; drawKv(); act(); proof('regia'); });
-$('#kvPng').addEventListener('click', () => {
-    const a = document.createElement('a');
-    a.download = `fai-keyvisual-${kvSeedV}.png`;
-    a.href = kv.toDataURL('image/png');
-    a.click(); act();
-    say('Esportato. Lo stesso seed rigenera esattamente questa immagine.');
-  });
+const fmtCanvases = buildFormats($('#formats'), FORMATS);
+const fmtIdea = $('#fmtIdea'), fmtOut = $('#fmtOut'), fmtSeedV = $('#fmtSeedV');
+let fmtSeed = 1908;
+const FMT_TITOLI = [
+  'Un’idea,\npiù formati', 'Stessa idea,\nsei tagli', 'Una regia,\nogni schermo',
+  'Un concept,\nmille misure', 'Stesso messaggio,\naltra griglia', 'Un formato\nnon basta mai',
+];
+let fmtTitolo = FMT_TITOLI[0];
+function drawFormats() {
+  const wgt = +fmtIdea.value / 100;
+  fmtIdea.style.setProperty('--v', `${fmtIdea.value}%`);
+  fmtOut.textContent = fmtIdea.value;
+  fmtSeedV.textContent = fmtSeed;
+  fmtCanvases.forEach((c, i) => {
+      keyVisual(c.getContext('2d'), {
+          w: c.width, h: c.height, seed: fmtSeed, ai: .3, weight: wgt,
+          title: fmtTitolo, kicker: `F/AI · ${FORMATS[i][0]}`,
+        });
+    });
+}
+/* Lo slider spara 'input' molto piu' spesso di un frame durante il
+   trascinamento (misurato: fino a decine di eventi al secondo), e ogni
+   volta ridisegna sei canvas col motore key visual — grana inclusa.
+   Il valore intermedio non e' percepibile a quella frequenza: si
+   raggruppano gli eventi nello stesso frame con requestAnimationFrame,
+   che resta comunque "dal vivo" (un ridisegno per frame, non uno ogni
+   200ms) ma smette di ridisegnare piu' volte nello stesso frame. */
+let fmtRaf = 0;
+fmtIdea.addEventListener('input', () => {
+  act(); proof('banchi');
+  if (fmtRaf) return;
+  fmtRaf = requestAnimationFrame(() => { fmtRaf = 0; drawFormats(); });
+});
+$('#fmtNew').addEventListener('click', () => {
+  fmtSeed = (Math.random() * 9999) | 0;
+  fmtTitolo = FMT_TITOLI[(Math.random() * FMT_TITOLI.length) | 0];
+  drawFormats(); act(); proof('banchi');
+});
 
 /* ══════════ 02 · LAVORI GENERATIVI ══════════ */
 const WORKS = [
@@ -241,155 +243,6 @@ WORKS.forEach((w, i) => {
     el.querySelector('details').addEventListener('toggle', e => { if (e.target.open) { act(); proof('immagini'); } });
     RIDISEGNI.push(draw);
     queueMicrotask(draw);
-  });
-
-/* ══════════ 03 · BANCHI ══════════ */
-$$('.tabs button').forEach(b => b.addEventListener('click', () => {
-      $$('.tabs button').forEach(x => { x.setAttribute('aria-selected', 'false'); $('#' + x.getAttribute('aria-controls')).hidden = true; });
-      b.setAttribute('aria-selected', 'true');
-      const panel = $('#' + b.getAttribute('aria-controls'));
-      panel.hidden = false;
-      act(); proof('banchi');
-      if (panel.id === 'b-video') drawTl();
-      if (panel.id === 'b-grafica') drawFormats();
-      if (panel.id === 'b-social') drawSocial();
-    }));
-
-/* — grafica: un’idea, tre proporzioni — */
-const FORMATS = [['9:16', 405, 720, 'Storia'], ['4:5', 576, 720, 'Feed'], ['1:1', 640, 640, 'Quadrato']];
-function buildFormats(host, list) {
-  host.innerHTML = '';
-  return list.map(([name, w, h, use]) => {
-      const f = document.createElement('figure');
-      f.innerHTML = `<canvas width="${w}" height="${h}"></canvas><figcaption><span>${use}</span><b>${name}</b></figcaption>`;
-      host.append(f);
-      return f.querySelector('canvas');
-    });
-}
-const fmtCanvases = buildFormats($('#formats'), FORMATS);
-const fmtIdea = $('#fmtIdea'), fmtOut = $('#fmtOut'), fmtDecisions = $('#fmtDecisions');
-function drawFormats() {
-  const wgt = +fmtIdea.value / 100;
-  fmtIdea.style.setProperty('--v', `${fmtIdea.value}%`);
-  fmtOut.textContent = fmtIdea.value;
-  let last = [];
-  fmtCanvases.forEach((c, i) => {
-      last = keyVisual(c.getContext('2d'), {
-          w: c.width, h: c.height, seed: 1908 + i, ai: .3, weight: wgt,
-          title: 'Un’idea,\npiù formati', kicker: `F/AI · ${FORMATS[i][0]}`,
-        });
-    });
-  const cut = Math.round(lerpPct(wgt));
-  fmtDecisions.innerHTML = [
-    `titolo su <b>${(1 + wgt * 2).toFixed(1)}×</b> il corpo`,
-    `zona sicura verticale <b>${Math.round(8 + wgt * 10)}%</b>`,
-    `elementi tagliati in 9:16: <b>${cut}</b>`,
-    `stessa griglia su <b>3</b> proporzioni`,
-    ...last.slice(0, 1),
-  ].map(x => `<li>${x}</li>`).join('');
-}
-const lerpPct = w => 1 + w * 5;
-fmtIdea.addEventListener('input', () => { drawFormats(); act(); proof('banchi'); });
-
-/* — video: il ritmo si vede — */
-const tl = $('#tlCanvas'), tlCtx = tl.getContext('2d');
-const tlPace = $('#tlPace'), tlOut = $('#tlOut'), tlTc = $('#tlTc'), tlRhythm = $('#tlRhythm'), tlDecisions = $('#tlDecisions');
-let tlHead = .35;
-function drawTl() {
-  tlPace.style.setProperty('--v', `${tlPace.value}%`);
-  const res = timeline(tlCtx, { w: tl.width, h: tl.height, pace: +tlPace.value / 100, head: tlHead, seed: 91 });
-  tlTc.textContent = res.tc;
-  tlRhythm.textContent = `Taglio ${pad(res.cut)}/${pad(res.n)}`;
-  tlOut.textContent = res.label;
-  tlDecisions.innerHTML = res.decisions.map(x => `<li>${x}</li>`).join('');
-}
-tlPace.addEventListener('input', () => { drawTl(); act(); proof('banchi'); });
-let tlDrag = false;
-const tlFrom = e => {
-  const r = tl.getBoundingClientRect();
-  tlHead = Math.min(1, Math.max(0, (e.clientX - r.left) / r.width));
-  drawTl();
-};
-tl.addEventListener('pointerdown', e => { tl.setPointerCapture(e.pointerId); tlDrag = true; tlFrom(e); act(); proof('banchi'); });
-tl.addEventListener('pointermove', e => { if (tlDrag) tlFrom(e); });
-tl.addEventListener('pointerup', () => { tlDrag = false; });
-
-/* — social: stesso concetto, tre piazze — */
-const SOCIALS = [['Reel', 405, 720, 'TikTok / Reels'], ['Post', 576, 720, 'Instagram'], ['Cover', 720, 405, 'YouTube']];
-const socCanvases = buildFormats($('#socials'), SOCIALS);
-const socDens = $('#socDens'), socOut = $('#socOut'), socDecisions = $('#socDecisions');
-function drawSocial() {
-  const d = +socDens.value / 100;
-  socDens.style.setProperty('--v', `${socDens.value}%`);
-  socOut.textContent = socDens.value;
-  socCanvases.forEach((c, i) => keyVisual(c.getContext('2d'), {
-        w: c.width, h: c.height, seed: 640 + i * 31, ai: .25 + d * .5, weight: .4 + d * .4,
-        title: 'Un format,\nogni piazza', kicker: `F/AI · ${SOCIALS[i][3]}`,
-      }));
-  socDecisions.innerHTML = [
-    `zona sicura alta <b>${Math.round(12 + d * 8)}%</b> per la UI`,
-    `titolo leggibile a <b>${Math.round(320 - d * 90)}px</b> di larghezza`,
-    `elementi per frame: <b>${Math.round(3 + d * 9)}</b>`,
-    `stessa palette su <b>3</b> piattaforme`,
-  ].map(x => `<li>${x}</li>`).join('');
-}
-socDens.addEventListener('input', () => { drawSocial(); act(); proof('banchi'); });
-
-/* — flussi: un grafo che gira davvero — */
-const NODES = [
-  ['Brief', 'ingresso', 'obiettivo + vincoli'],
-  ['Materiali', 'raccolta', '18 asset indicizzati'],
-  ['Generazione', 'modello', '12 varianti prodotte'],
-  ['Revisione umana', 'controllo', '3 tenute, 9 scartate'],
-  ['Consegna', 'uscita', 'pacchetto pronto'],
-];
-const graph = $('#graph'), grLog = $('#grLog'), grState = $('#grState'), grTime = $('#grTime');
-NODES.forEach(([name, kind], i) => {
-    const n = document.createElement('div');
-    n.className = 'node' + (i === 3 ? ' human' : '');
-    n.innerHTML = `<span class="mono">${pad(i + 1)} · ${kind}</span><b>${name}</b><span class="out"></span>`;
-    graph.append(n);
-  });
-let running = false;
-$('#grRun').addEventListener('click', async () => {
-    if (running) return;
-    running = true; act(); proof('banchi');
-    const nodes = $$('.node', graph);
-    nodes.forEach(n => { n.className = n.className.replace(/ (run|ok)/g, ''); n.querySelector('.out').textContent = ''; });
-    grLog.innerHTML = ''; grState.textContent = 'In esecuzione';
-    const t0 = performance.now();
-    for (let i = 0; i < nodes.length; i++) {
-      nodes[i].classList.add('run');
-      grState.textContent = `Nodo ${pad(i + 1)} · ${NODES[i][0]}`;
-      await new Promise(r => setTimeout(r, 520));
-      nodes[i].classList.remove('run'); nodes[i].classList.add('ok');
-      nodes[i].querySelector('.out').textContent = NODES[i][2];
-      grLog.insertAdjacentHTML('beforeend', `<li>${pad(i + 1)} <b>${NODES[i][0]}</b> — ${NODES[i][2]}</li>`);
-      grTime.textContent = `${Math.round(performance.now() - t0)} ms`;
-    }
-    grState.textContent = 'Completato';
-    say('Il flusso è passato dalla revisione umana prima di uscire. È il punto che non tolgo mai.');
-    running = false;
-  });
-$('#grReset').addEventListener('click', () => {
-    $$('.node', graph).forEach(n => { n.className = n.className.replace(/ (run|ok)/g, ''); n.querySelector('.out').textContent = ''; });
-    grLog.innerHTML = ''; grState.textContent = 'Fermo'; grTime.textContent = '—'; act();
-  });
-
-/* i banchi sono tab veri: tabindex mobile e frecce, come da pattern ARIA */
-const benchTabs = $$('.tabs button');
-function focusTab(i) {
-  const t = benchTabs[(i + benchTabs.length) % benchTabs.length];
-  benchTabs.forEach(x => x.tabIndex = -1);
-  t.tabIndex = 0; t.focus(); t.click();
-}
-benchTabs.forEach((t, i) => {
-    t.addEventListener('click', () => benchTabs.forEach((x, k) => x.tabIndex = k === i ? 0 : -1));
-    t.addEventListener('keydown', e => {
-        const map = { ArrowRight: i + 1, ArrowLeft: i - 1, Home: 0, End: benchTabs.length - 1 };
-        if (!(e.key in map)) return;
-        e.preventDefault(); focusTab(map[e.key]);
-      });
   });
 
 /* ══════════ 04 · PIPELINE ══════════ */
@@ -561,7 +414,6 @@ function renderDossier() {
   $('#dsTime').textContent = mmss(el);
   $('#dsProofs').textContent = `${S.proofs.size} / ${PROOFS.length}`;
   $('#dsActions').textContent = S.actions;
-  $('#dsMix').textContent = `${Math.round(S.mix * 100)}% AI`;
   const avg = S.fps.length ? Math.round(S.fps.reduce((a, b) => a + b, 0) / S.fps.length) : 0;
   $('#dsFps').textContent = avg ? `${avg} fps` : '—';
   $('#dsDate').textContent = new Date().toLocaleDateString('it-IT', { day: '2-digit', month: '2-digit', year: 'numeric' });
@@ -661,7 +513,22 @@ function metrics() {
 const refreshMetrics = metrics();
 
 /* ══════════ REVEAL · NAV · VOCE ══════════ */
-$$('.sec__head, .bench, .deck, .pipe, .lab, .dossier, .metrics').forEach(el => el.classList.add('rv'));
+$$(`.sec__head, .bench, .deck, .pipe, .lab, .dossier, .metrics,
+    .offerta__card, .appmie__card, .stack__group,
+    .union__piede, .eso__piede, .locanda__piede, .cest__piede,
+    .union__come, .eso__come, .locanda__come, .cest__come,
+    .union__testa, .eso__testa, .locanda__testa, .cest__testa, .appmie__testa,
+    .profilo__testo, .brief__capo`).forEach(el => el.classList.add('rv'));
+/* Le schede dentro una griglia entrano una dopo l'altra, non tutte
+   insieme: un piccolo ritardo per posizione, letto dall'indice fra i
+   fratelli dello stesso genitore — leggero, non un motion designer a
+   parte per ogni griglia. */
+$$('.offerta__grid, .appmie__grid, .stack__grid').forEach(grid => {
+    [...grid.children].forEach((el, i) => {
+        el.classList.add('rv');
+        el.style.transitionDelay = `${Math.min(i, 5) * 70}ms`;
+      });
+  });
 const rvIO = new IntersectionObserver(es => es.forEach(e => {
       if (e.isIntersecting) { e.target.classList.add('in'); rvIO.unobserve(e.target); }
     }), { threshold: .12, rootMargin: '0px 0px -8% 0px' });
@@ -701,13 +568,37 @@ setInterval(() => {
 
 /* ══════════ AVVIO ══════════ */
 await document.fonts?.ready;
-drawKv();
 drawFormats();
-drawTl();
-drawSocial();
 drawRadar(0);
 renderDossier();
 setTimeout(() => say('Sessione aperta. Ti mostro cosa so fare, non te lo racconto.'), 900);
+
+/* ══════════ ETICHETTA HERO: frasi a rotazione ══════════
+   Sotto il titolo, invece di un'unica etichetta statica, ruotano
+   poche frasi in prima persona — misurabili, non promesse. */
+(() => {
+  if (!heroScene) return;
+  const FRASI = [
+    'Zero dipendenze esterne, scritto a mano',
+    'Le competenze si eseguono, non si elencano',
+    'Sette palette, calcolate per il contrasto',
+    'Due applicazioni mie, usate ogni giorno',
+  ];
+  let i = 0;
+  heroScene.textContent = FRASI[0];
+  const riduci = () => matchMedia('(prefers-reduced-motion: reduce)').matches;
+  setInterval(() => {
+    i = (i + 1) % FRASI.length;
+    if (riduci()) { heroScene.textContent = FRASI[i]; return; }
+    heroScene.animate(
+      [{ opacity: 1 }, { opacity: 0 }],
+      { duration: 260, easing: 'ease' }
+    ).onfinish = () => {
+      heroScene.textContent = FRASI[i];
+      heroScene.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 260, easing: 'ease' });
+    };
+  }, 4200);
+})();
 
 /* ══════════ COLORE DEL SITO ══════════
    Pressione lunga su un riquadro (o tasto destro col mouse) per
@@ -719,10 +610,7 @@ setTimeout(() => say('Sessione aperta. Ti mostro cosa so fare, non te lo raccont
 document.addEventListener('palette', () => {
   leggiColori();
   const modo = $$('.modes button[data-mode]').findIndex(b => b.getAttribute('aria-pressed') === 'true');
-  try { drawKv(); } catch {}
   try { drawFormats(); } catch {}
-  try { drawTl(); } catch {}
-  try { drawSocial(); } catch {}
   try { drawRadar(Math.max(0, modo)); } catch {}
   RIDISEGNI.forEach(f => { try { f(); } catch {} });
 });
@@ -755,11 +643,13 @@ initStrumenti();
   if (!blocco || !corpo || !lista) return;
 
   const riduci = () => matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const cta = blocco.querySelector('.manifesto__cta');
   let inCorso = null;
 
   function apri() {
     inCorso?.cancel();
     blocco.open = true;
+    if (cta) cta.innerHTML = 'Chiudi <i>↑</i>';
     const alto = lista.scrollHeight;
     inCorso = corpo.animate(
       [{ maxHeight: '0px' }, { maxHeight: alto + 'px' }],
@@ -768,6 +658,7 @@ initStrumenti();
 
   function chiudi() {
     inCorso?.cancel();
+    if (cta) cta.innerHTML = 'Vedi come funziona <i>↓</i>';
     const alto = corpo.getBoundingClientRect().height;
     inCorso = corpo.animate(
       [{ maxHeight: alto + 'px' }, { maxHeight: '0px' }],

@@ -28,7 +28,7 @@
    dove viene tutto, poi i pezzi lunghi, e in fondo l'unico orizzontale.
    Chi arriva qui non conosce il mondo: se il primo video che apre e'
    quello da un minuto e venti non capisce chi sono questi animali. */
-import { registra, soloIo } from './uno-alla-volta.js';
+import { apriVideo } from './video-lightbox.js';
 
 export const PEZZI = [
   { id: 'locandina', t: 'Azzeriamola green', d: '0:07', forma: 'alto',
@@ -53,11 +53,8 @@ export const PEZZI = [
 
 const CARTELLA = 'lavori/';
 
-/* La copertina e' una funzione perche' va rifatta: quando un altro
-   video prende il turno, questa scheda deve tornare com'era. Prima
-   veniva scritta una volta sola dentro il ciclo, il video la sostituiva
-   e non tornava piu' nessuno — la scheda restava un titolo e due righe
-   di testo, e la griglia si disallineava tutta. */
+/* Il video si apre nel lightbox condiviso (video-lightbox.js): la
+   copertina qui non cambia mai forma, e' sempre lo stesso bottone. */
 function copertina(art, p) {
   const b = document.createElement('button');
   b.type = 'button';
@@ -68,24 +65,12 @@ function copertina(art, p) {
          loading="lazy" decoding="async">
     <span class="union__play" aria-hidden="true"></span>
     <span class="union__durata mono" aria-hidden="true">${p.d}</span>`;
-  b.addEventListener('click', () => parte(art, p, b));
+  b.addEventListener('click', () => {
+    apriVideo(CARTELLA + p.id + '.mp4', CARTELLA + p.id + '.jpg', p.t);
+    avvisa();
+  });
   return b;
 }
-
-/* come si ferma questo blocco, detto agli altri due */
-const fermaUnion = registra(() => rimetti());
-
-function rimetti(tranne) {
-  for (const v of document.querySelectorAll('.union__lavori video')) {
-    const art = v.closest('.union__pezzo');
-    if (art === tranne) continue;
-    v.pause();
-    v.replaceWith(copertina(art, PER_ID.get(art.dataset.id)));
-    art.classList.remove('in-onda');
-  }
-}
-
-const PER_ID = new Map(PEZZI.map(p => [p.id, p]));
 
 /* avvisa() lo passa app.js: serve a segnare nel dossier che
    qualcuno ha guardato un lavoro vero, non solo scorso la pagina. */
@@ -107,24 +92,4 @@ export function initUnion(quando) {
     griglia.appendChild(art);
   }
   return PEZZI.length;
-}
-
-function parte(art, p, bottone) {
-  soloIo(fermaUnion);                 /* gli altri casi si fermano */
-  rimetti(art);                       /* e dentro questo, uno alla volta */
-
-  const v = document.createElement('video');
-  v.src = CARTELLA + p.id + '.mp4';
-  v.poster = CARTELLA + p.id + '.jpg';
-  v.controls = true;
-  v.playsInline = true;
-  v.preload = 'none';                 /* niente byte prima del clic */
-  v.setAttribute('aria-label', p.t);
-  bottone.replaceWith(v);
-  art.classList.add('in-onda');
-  avvisa();
-  v.play().catch(() => {
-    /* se il browser rifiuta di partire da solo, restano i comandi:
-       meglio un video fermo con il tasto play che un errore muto */
-  });
 }

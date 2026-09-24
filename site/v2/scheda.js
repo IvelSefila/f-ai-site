@@ -10,17 +10,14 @@
  * Qui c'e' una volta sola. Ogni caso passa il suo prefisso di classe
  * (".eso__", ".cest__"), la sua cartella e il suo elenco di pezzi.
  *
- * Le due regole che questo motore fa rispettare:
- *  · aprendo la pagina non si scarica nemmeno un byte di video — c'e'
- *    solo un'immagine ferma e un bottone, e l'elemento <video> nasce
- *    al clic con preload="none";
- *  · un video alla volta in tutta la pagina — uno-alla-volta.js tiene
- *    il registro, e quando un altro blocco prende il turno qui la
- *    copertina va RIFATTA, non solo rimessa: l'elemento vecchio e' stato
- *    sostituito dal <video>, e riattaccarlo lascerebbe una scheda morta.
+ * La regola che questo motore fa rispettare: aprendo la pagina non si
+ * scarica nemmeno un byte di video — c'e' solo un'immagine ferma e un
+ * bottone. Il clic apre il video nel lightbox condiviso
+ * (video-lightbox.js), che tiene anche lui il conto di un video alla
+ * volta in tutta la pagina.
  * ═══════════════════════════════════════════════════════════════════ */
 
-import { registra, soloIo } from './uno-alla-volta.js';
+import { apriVideo } from './video-lightbox.js';
 
 /**
  * @param {object} c  { nome, cartella, pezzi }
@@ -30,7 +27,6 @@ import { registra, soloIo } from './uno-alla-volta.js';
  * @returns {{ monta: (avvisa?: () => void) => number }}
  */
 export function scheda({ nome, cartella, pezzi }) {
-  const perId = new Map(pezzi.map(p => [p.id, p]));
   let avvisa = () => {};
 
   function copertina(art, p) {
@@ -43,37 +39,11 @@ export function scheda({ nome, cartella, pezzi }) {
          width="${p.w}" height="${p.h}" loading="lazy" decoding="async">
     <span class="${nome}__play" aria-hidden="true"></span>
     <span class="${nome}__durata mono" aria-hidden="true">${p.d}</span>`;
-    b.addEventListener('click', () => parte(art, p, b));
+    b.addEventListener('click', () => {
+      apriVideo(cartella + p.id + '.mp4', cartella + p.id + '.jpg', p.t);
+      avvisa();
+    });
     return b;
-  }
-
-  function rimetti(tranne) {
-    for (const v of document.querySelectorAll(`.${nome}__lavori video`)) {
-      const art = v.closest(`.${nome}__pezzo`);
-      if (art === tranne) continue;
-      v.pause();
-      v.replaceWith(copertina(art, perId.get(art.dataset.id)));
-      art.classList.remove('in-onda');
-    }
-  }
-
-  const fermami = registra(() => rimetti());
-
-  function parte(art, p, bottone) {
-    soloIo(fermami);
-    rimetti(art);
-
-    const v = document.createElement('video');
-    v.src = cartella + p.id + '.mp4';
-    v.poster = cartella + p.id + '.jpg';
-    v.controls = true;
-    v.playsInline = true;
-    v.preload = 'none';
-    v.setAttribute('aria-label', p.t);
-    bottone.replaceWith(v);
-    art.classList.add('in-onda');
-    avvisa();
-    v.play().catch(() => {});
   }
 
   /* avvisa() lo passa app.js: serve a segnare nel dossier che qualcuno
