@@ -4300,3 +4300,24 @@ body.mirino-on, body.mirino-on * { cursor: none !important; }
 
 /* Mobile: la riga di voci in testata si nasconde (resta la barra in basso) */
 @media (max-width: 900px) { .bar__nav { display: none !important; } .bar__cta { margin-left: auto; } }
+
+/* ── Telefono: in testata i colori e il tasto Contatti ── */
+.bar__contatti { display: none; }
+@media (max-width: 900px) {
+  .bar__contatti {
+    display: inline-flex; align-items: center; order: 4; flex: none; min-height: 40px; padding: 0 12px;
+    border: 1px solid var(--em); border-radius: var(--r-min); color: var(--em);
+    font-size: var(--t-micro); letter-spacing: .1em; text-transform: uppercase; text-decoration: none;
+  }
+  .bar__contatti:active { background: var(--em); color: var(--stage); }
+  .bar__contatti { margin-left: 8px; }
+}
+@media (max-width: 560px) {
+  .bar__pal { gap: 0; margin-right: 0; }
+  .bar__pal button[data-pal-veloce] { display: inline-grid; width: 30px; height: 44px; }
+  .bar__pal__piu { width: 30px; height: 44px; font-size: var(--t-grande); }
+  .bar__pal__piu::before { content: none; }
+}
+
+/* Tolti su richiesta: tasto Verdetto in testata e cursore a mirino */
+.bar__cta { display: none !important; }
