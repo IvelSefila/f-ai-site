@@ -1,8 +1,8 @@
-import { htmlSezioneTipo, armaSezioneTipo, azzeraTipo } from './tipografia.js?v=20260928-128';
+import { htmlSezioneTipo, armaSezioneTipo, azzeraTipo } from './tipografia.js?v=20260928-130';
 import { PRESET, applicaGriglia, contenitoreDi, nomeContenitore,
-         mostraGriglia, grigliaVisibile, initGriglia, azzeraGriglia } from './griglia.js?v=20260928-128';
+         mostraGriglia, grigliaVisibile, initGriglia, azzeraGriglia } from './griglia.js?v=20260928-130';
 import { initOrdine, bersaglioDi, spostaDi, puoAndare, rimetti, ordineCambiato,
-         iniziaTrascino, traTrascinando, azzeraOrdine } from './sposta.js?v=20260928-128';
+         iniziaTrascino, traTrascinando, azzeraOrdine } from './sposta.js?v=20260928-130';
 
 /* ═══════════════════════════════════════════════════════════════════
  * PALETTE — tieni premuto su un riquadro e scegli il colore del sito

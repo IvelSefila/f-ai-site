@@ -4321,3 +4321,20 @@ body.mirino-on, body.mirino-on * { cursor: none !important; }
 
 /* Tolti su richiesta: tasto Verdetto in testata e cursore a mirino */
 .bar__cta { display: none !important; }
+
+/* ── Piu' colori in testata; Contatti a filo con il margine destro ── */
+.bar__pal [data-pal-veloce="corallo"] { --campione: #ff6b57; }
+.bar__pal [data-pal-veloce="lime"]    { --campione: #a6e22e; }
+.bar__pal [data-pal-veloce="indaco"]  { --campione: #6c5ae6; }
+@media (max-width: 560px) {
+  .bar { gap: 4px; }
+  .bar__pal { margin-left: auto; margin-right: 0; }
+  .bar__pal button[data-pal-veloce] { width: 25px; }
+  .bar__pal__piu { width: 25px; }
+  .bar__pal button[data-pal-veloce]::before { width: 18px; height: 18px; }
+  .bar__contatti { margin-left: 6px; margin-right: 0; padding: 0 10px; }
+}
+@media (max-width: 900px) {
+  .bar__pal, .bar__pal__eti + .bar__pal { margin-left: 8px; }
+  .bar__contatti { margin-left: auto; }
+}
