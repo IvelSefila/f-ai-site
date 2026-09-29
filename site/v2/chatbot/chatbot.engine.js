@@ -5,7 +5,7 @@
  * 2. WebGPU Locale (WebLLM Qwen3-1.7B via Web Worker)
  * 3. Motore A Deterministico (Zero rete, offline, instant fallback)
  */
-import { CONFIG } from './chatbot.config.js?v=20260928-97';
+import { CONFIG } from './chatbot.config.js?v=20260928-124';
 
 /* ───────────────────────── RAG lessicale (BM25, zero librerie) ─────────────────────────
    I chunk si costruiscono a runtime dalla knowledge.json; retrieve() e' una funzione pura. */
@@ -244,6 +244,9 @@ export class ChatEngine {
     this.isWebGPULoaded = false;
     this.isWebGPULoading = false;
     this._cloudCtrl = null;   // AbortController dello stream cloud in corso
+    this.cloudDownUntil = 0;  // finche' e' nel futuro Groq e' considerato non disponibile
+    this.cloudDownInfo = null;
+    this.onCloudDown = null;  // callback dell'interfaccia quando Groq smette di rispondere
     this._gpuReqId = 0;       // id progressivo delle richieste al worker
     this._gpuActive = null;   // { id, cancel } della generazione WebGPU in corso
     this._userAborted = false;
@@ -273,7 +276,7 @@ export class ChatEngine {
   }
 
   static async create() {
-    const res = await fetch(new URL('./knowledge.json?v=20260928-97', import.meta.url));
+    const res = await fetch(new URL('./knowledge.json?v=20260928-124', import.meta.url));
     const kb = await res.json();
     return new ChatEngine(kb);
   }
@@ -284,6 +287,26 @@ export class ChatEngine {
 
   getMode() {
     return this.currentMode;
+  }
+
+  /* Motore che risponde davvero adesso. Se Groq e' in pausa: prima Qwen locale (se installato), poi Istantaneo. */
+  getEffectiveMode() {
+    if (this.currentMode === 'cloud' && Date.now() < this.cloudDownUntil) {
+      return (this.isWebGPULoaded && this.worker) ? 'webgpu' : 'deterministic';
+    }
+    return this.currentMode;
+  }
+
+  /* Groq non ha risposto (chiamate finite, servizio occupato, rete): pausa e poi si riprova da soli. */
+  _markCloudDown(err) {
+    const msg = String((err && err.message) || err || '');
+    const limite = /HTTP 429/.test(msg);
+    const primaVolta = Date.now() >= this.cloudDownUntil;
+    this.cloudDownUntil = Date.now() + (limite ? 90000 : 300000);
+    this.cloudDownInfo = { limite, msg, fino: this.cloudDownUntil };
+    if (primaVolta && typeof this.onCloudDown === 'function') {
+      try { this.onCloudDown(this.cloudDownInfo); } catch (e) {}
+    }
   }
 
   /** Cerca nei contenuti del sito. Con domande brevissime si usa anche l'ultima domanda dell'utente. */
@@ -375,7 +398,7 @@ REGOLE DI RISPOSTA:
       };
       try {
         const initId = ++this._gpuReqId;
-        this.worker = new Worker(new URL('./chatbot.worker.js?v=20260928-97', import.meta.url), { type: 'module' });
+        this.worker = new Worker(new URL('./chatbot.worker.js?v=20260928-124', import.meta.url), { type: 'module' });
 
         this.worker.onmessage = (e) => {
           const { type, progress, text, error, id } = e.data || {};
@@ -432,8 +455,9 @@ REGOLE DI RISPOSTA:
     const isContact = /preventiv|cost|prezz|tariff|collabor|brief|ingagg|lavorare insieme|nuovo progetto|contatt/i.test(cleanQuery);
 
     // 1b. Recupero lessicale (RAG) e guardrail di soglia: senza contesto pertinente il modello non parte
-    const wantsModel = (this.currentMode === 'cloud' && !!CONFIG.cloudProxyUrl) ||
-      (this.currentMode === 'webgpu' && this.isWebGPULoaded && !!this.worker);
+    let mode = this.getEffectiveMode();
+    const wantsModel = (mode === 'cloud' && !!CONFIG.cloudProxyUrl) ||
+      (mode === 'webgpu' && this.isWebGPULoaded && !!this.worker);
     let hits = [];
     let context = null;
     if (wantsModel) {
@@ -459,7 +483,7 @@ REGOLE DI RISPOSTA:
     const trackChunk = (d) => { streamed += d; onChunk(d); };
 
     // 2. Tentativo Cloud Proxy (se configurato e attivo)
-    if (this.currentMode === 'cloud' && CONFIG.cloudProxyUrl) {
+    if (mode === 'cloud' && CONFIG.cloudProxyUrl) {
       try {
         const streamOk = await this._replyCloudStream(query, history, trackChunk, context);
         if (streamOk) return { mode: 'cloud', leadCapture: isContact, action: sourceOf(streamed) };
@@ -469,11 +493,13 @@ REGOLE DI RISPOSTA:
         onReset();
         streamed = '';
         console.warn("[Nous] Cloud proxy non disponibile, fallback a motore locale:", err.message);
+        this._markCloudDown(err);
+        mode = this.getEffectiveMode();
       }
     }
 
     // 3. Tentativo WebGPU Locale
-    if (this.currentMode === 'webgpu' && this.isWebGPULoaded && this.worker) {
+    if (mode === 'webgpu' && this.isWebGPULoaded && this.worker) {
       try {
         await this._replyWebGPUStream(query, history, trackChunk, context);
         return { mode: 'webgpu', action: sourceOf(streamed) };
@@ -804,7 +830,7 @@ REGOLE DI RISPOSTA:
           'camminare', 'cammino', 'bionic*', 'trekking', 'vista 360', '360', 'dispositivo', 'lancio di prodotto', 'lancio prodotto', 'robot'
         ],
         replies: [
-          `**Human Robots** — *un prodotto che si vede prima di poterlo fotografare.*\n\nEsoscheletri attivi per chi fatica a camminare e per chi va in montagna. Il lancio italiano è costruito tutto a monte: ricerca di mercato, immagini del dispositivo, spot, sito. Niente set, niente attori, niente prodotto in mano.\n\n• **10 pezzi**, **1 sito**, **6 documenti**\n• **Strumenti:** GPT Image, Photoshop, Adobe Premiere Pro`,
+          `**Human Robots** — *un prodotto che si vede prima di poterlo fotografare.*\n\nEsoscheletri attivi per chi fatica a camminare e per chi va in montagna. Il lancio italiano è costruito tutto a monte: ricerca di mercato, immagini del dispositivo, spot, sito. Niente set, niente attori, niente prodotto in mano.\n\n• **9 pezzi**, **1 sito**, **6 documenti**\n• **Strumenti:** GPT Image, Photoshop, Adobe Premiere Pro`,
           `La parte difficile di Human Robots è che il dispositivo sia lo **stesso** in ogni inquadratura, e che il tono regga sia in una palestra di riabilitazione sia su un crinale a duemila metri.\n\nPer questo c'è una tavola con quattro viste master, e sul sito il dispositivo si ruota a 360 gradi trascinando.`,
           `Le scene nascono come immagini con **GPT Image**, si sistemano in **Photoshop** e si montano in **Premiere Pro**: sono inquadrature generate una per una, e di una cinquantina di spezzoni ne entra meno della metà.\n\nIl resto: sei documenti di analisi del mercato italiano e un sito scritto su misura, con schede tecniche, configuratore, dati di mercato e modulo di pre-ordine.`
         ],
@@ -836,8 +862,8 @@ REGOLE DI RISPOSTA:
           /(quali|che|avete|hai).*(ristorant\w*|locali)/
         ],
         replies: [
-          `Al momento il ristorante è uno solo: **La Locanda del Castello**, a Rocca de' Baldi. Ho fatto il marchio, quattordici locandine animate per le serate e cinque brani con Lyria. Vuoi vederli?`,
-          `Un ristorante per ora: **La Locanda del Castello**. Dal marchio alle locandine animate (sono quattordici) fino ai cinque brani musicali. Ti mostro la scheda?`
+          `Al momento il ristorante è uno solo: **La Locanda del Castello**, a Rocca de' Baldi. Ho fatto il marchio, dodici locandine animate per le serate e cinque brani con Lyria. Vuoi vederli?`,
+          `Un ristorante per ora: **La Locanda del Castello**. Dal marchio alle locandine animate (sono dodici) fino ai cinque brani musicali. Ti mostro la scheda?`
         ],
         action: { type: 'audio_locanda', target: '#caso-locanda', label: 'Vedi la Locanda' }
       },
@@ -849,9 +875,9 @@ REGOLE DI RISPOSTA:
           'fritto', 'pio vii', 'brani', 'the shared table'
         ],
         replies: [
-          `**La Locanda del Castello** (Rocca de' Baldi) — *dal marchio alla locandina di sabato sera.*\n\nUn ristorante nel parco di un castello, senza un'identità sua: prima il marchio, poi una locandina animata per ogni serata, e cinque brani scritti su misura.\n\n• **1 marchio**, **14 pezzi**, **5 brani**\n• **Strumenti:** GPT Image, Photoshop, Grok Video, Adobe Premiere Pro, Lyria`,
+          `**La Locanda del Castello** (Rocca de' Baldi) — *dal marchio alla locandina di sabato sera.*\n\nUn ristorante nel parco di un castello, senza un'identità sua: prima il marchio, poi una locandina animata per ogni serata, e cinque brani scritti su misura.\n\n• **1 marchio**, **12 pezzi**, **5 brani**\n• **Strumenti:** GPT Image, Photoshop, Grok Video, Adobe Premiere Pro, Lyria`,
           `Alla Locanda serate diverse hanno un tono diverso — dalla degustazione di champagne al fritto misto — ma in due secondi su un telefono si deve capire che è sempre la stessa casa.\n\nLe locandine nascono con **GPT Image**, si sistemano in **Photoshop**, si muovono con **Grok Video** e si montano in **Premiere Pro**, che aggiunge testi, prezzo e marchio di chiusura.`,
-          `Il marchio della Locanda è disegnato e chiuso in vettoriale: monogramma, lettering e tre versioni (intera, tonda, solo simbolo). Poi ci sono quattordici pezzi animati e cinque brani da trenta secondi, generati con **Lyria** e scritti per il posto.`
+          `Il marchio della Locanda è disegnato e chiuso in vettoriale: monogramma, lettering e tre versioni (intera, tonda, solo simbolo). Poi ci sono dodici pezzi animati e cinque brani da trenta secondi, generati con **Lyria** e scritti per il posto.`
         ],
         action: { type: 'audio_locanda', target: '#caso-locanda', label: 'Vedi la Locanda' }
       },
@@ -878,7 +904,7 @@ REGOLE DI RISPOSTA:
           'portfolio', 'referenze', 'esempi', 'casi', 'cosa hai fatto', 'cosa ha fatto', 'esperienze', 'che lavori hai fatto', 'lavori fatti'
         ],
         replies: [
-          `Sul sito ci sono **cinque marchi**, dall'idea alla pubblicazione:\n\n• **Union Energia** — campagna (9 pezzi)\n• **Human Robots** — lancio di prodotto (10 pezzi, 1 sito, 6 documenti)\n• **Studio CETS** — marchio e campagna (6 pezzi)\n• **La Locanda del Castello** — marchio, 14 locandine animate, 5 brani\n• **CDI Infissi** — sito internet (51 prodotti)`,
+          `Sul sito ci sono **cinque marchi**, dall'idea alla pubblicazione:\n\n• **Union Energia** — campagna (9 pezzi)\n• **Human Robots** — lancio di prodotto (9 pezzi, 1 sito, 6 documenti)\n• **Studio CETS** — marchio e campagna (6 pezzi)\n• **La Locanda del Castello** — marchio, 12 locandine animate, 5 brani\n• **CDI Infissi** — sito internet (51 prodotti)`,
           `Cinque lavori, ognuno con un tipo di sfida diverso: un mondo inventato (Union Energia), il lancio di un prodotto che non si poteva fotografare (Human Robots), un'attività già avviata ma poco conosciuta (Studio CETS), l'identità di una locanda in un castello (La Locanda) e un sito con un catalogo grande (CDI Infissi).`
         ],
         action: { type: 'scroll', target: '#lavori', label: 'Vedi i lavori' }
@@ -893,7 +919,7 @@ REGOLE DI RISPOSTA:
         ],
         replies: [
           `Sul sito non c'è una classifica. Ogni lavoro ha la sua difficoltà:\n\n• **Union Energia** — costruire un mondo e farlo crescere\n• **Human Robots** — un prodotto identico in ogni inquadratura, prima che esista\n• **Studio CETS** — parlare a un pubblico stretto che compra ore, non sogni\n• **La Locanda** — serate diverse, una sola casa\n• **CDI Infissi** — un catalogo di 51 prodotti da rendere consultabile`,
-          `Difficile dirlo, e il sito non lo dice. Se cerchi il più difficile da tenere in piedi, Human Robots: l'oggetto doveva essere lo stesso in ogni inquadratura anche se non esisteva ancora. Se cerchi il più ricco di pezzi, la Locanda: 14 locandine animate e 5 brani.`
+          `Difficile dirlo, e il sito non lo dice. Se cerchi il più difficile da tenere in piedi, Human Robots: l'oggetto doveva essere lo stesso in ogni inquadratura anche se non esisteva ancora. Se cerchi il più ricco di pezzi, la Locanda: 12 locandine animate e 5 brani.`
         ],
         action: { type: 'scroll', target: '#lavori', label: 'Vedi i lavori' }
       },

@@ -105,7 +105,7 @@ export function keyVisual(ctx, o) {
   const kicker = (o.kicker ?? 'MF/AI · key visual').toUpperCase();
   const pos = o.pos || 'basso';   /* dove va il blocco titolo: basso, alto, centro, sinistra, destra, diagonale */
   const fontTitolo = o.font || '"Barlow Condensed","Arial Narrow",sans-serif';
-  const pesoFont = o.grassetto ? 800 : 600;   /* normale o grassetto, sul font del titolo */
+  const pesoFont = o.grassetto ? 800 : (o.peso || 600);   /* normale o grassetto, sul font del titolo */
   const corsivoFont = o.corsivo ? 'italic ' : '';
   /* il "grassetto" richiesto al font non basta: i font caricati (sia
      quelli in dotazione al sito sia quelli di Google) portano un solo

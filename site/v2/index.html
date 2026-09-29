@@ -28,7 +28,7 @@
 <meta name="twitter:title" content="MF/AI — Un portfolio che esegue le competenze" />
 <meta name="twitter:description" content="Cinque marchi veri e otto prove che si manovrano, non una lista di competenze." />
 <meta name="twitter:image" content="https://ivelsefila.github.io/f-ai-site/assets/og-fai.jpg" />
-<link rel="stylesheet" href="v2.css?v=20260928-97" />
+<link rel="stylesheet" href="v2.css?v=20260928-124" />
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -95,10 +95,11 @@
 <header class="bar" aria-label="Testata">
   <a class="brand" href="#top" aria-label="MF/AI, torna all'inizio">MF<span>/</span>AI</a>
   <span class="bar__sess mono" aria-hidden="true">Sessione <b id="barTime">00:00</b></span>
-  <nav class="bar__nav mono" aria-label="Prove">
-    <a href="#banchi" data-solo-largo><span class="n">01</span>Servizi</a
-    ><a href="#lavori"><span class="n">02</span>Lavori</a
-    ><a href="#profilo" data-solo-largo><span class="n">P</span>Profilo</a
+  <nav class="bar__nav mono" aria-label="Sezioni">
+    <a href="#banchi">Servizi</a
+    ><a href="#lavori">Clienti</a
+    ><a href="#strumenti">Skill</a
+    ><a href="#profilo">Profilo</a
     ><a href="#contatto">Contatto</a>
   </nav>
   <span class="bar__pal__eti mono" aria-hidden="true">Colore del sito</span>
@@ -116,7 +117,7 @@
 
 <!-- ══ 00 · calibrazione ══ -->
 <section class="hero" id="top" aria-labelledby="heroTitle">
-  <canvas id="gl" aria-label="Confine interattivo fra direzione umana e sistema AI. Trascina per spostarlo, tieni premuto per erodere il bordo, barra spaziatrice per cambiare scena."></canvas>
+  <div class="hero__fondo"><canvas id="gl" aria-label="Confine interattivo fra direzione umana e sistema AI. Trascina per spostarlo, tieni premuto per erodere il bordo, barra spaziatrice per cambiare scena."></canvas></div>
   <p class="hero__fallback">Questa scena richiede WebGL2. Il resto del sito funziona comunque.</p>
   <div class="hero__scrim" aria-hidden="true"></div>
   <div class="hero__scan" aria-hidden="true"></div>
@@ -190,7 +191,7 @@
       </a>
       <a class="vetrina__caso" href="#caso-eso">
         <span class="vetrina__foto vetrina__foto--acciaio"><img src="eroe/eso.webp" width="264" height="352" alt="Human Robots — Lancio di prodotto" loading="eager" decoding="async"><em class="vetrina__scritta vetrina__scritta--acciaio" aria-hidden="true">Human<br>Robots</em></span>
-        <b class="sr-solo">Human Robots</b><span class="mono">Lancio di prodotto</span>
+        <b>Human Robots</b><span class="mono">Lancio di prodotto</span>
       </a>
       <a class="vetrina__caso vetrina__caso--marchio" href="#caso-cest">
         <img src="eroe/cest.webp" width="264" height="352" alt="Studio CETS — Campagna marketing"
@@ -198,9 +199,9 @@
         <b>Studio CETS</b><span class="mono">Campagna marketing</span>
       </a>
       <a class="vetrina__caso vetrina__caso--marchio" href="#caso-locanda">
-        <img src="eroe/locanda.webp" width="264" height="352" alt="La Locanda — Identità e marketing"
+        <img src="eroe/locanda.webp" width="264" height="352" alt="La Locanda del Castello — Identità e marketing"
              loading="eager" decoding="async">
-        <b>La Locanda</b><span class="mono">Identità e marketing</span>
+        <b>La Locanda del Castello</b><span class="mono">Identità e marketing</span>
       </a>
       <a class="vetrina__caso vetrina__caso--marchio" href="#caso-cdi">
         <span class="vetrina__foto">
@@ -219,12 +220,12 @@
     </div>
   </div>
 
-  <aside class="read" aria-live="polite" aria-atomic="true" hidden>
+  <aside class="read" aria-live="polite" aria-atomic="true">
     <span class="mono">In parole povere</span>
     <p id="heroRead"></p>
   </aside>
 
-  <div class="hud" hidden>
+  <div class="hud">
     <p class="hud__istruzione mono">↔ Trascina il confine: decidi chi guida, <b>tu</b> o <b>il sistema</b></p>
     <dl aria-hidden="true">
       <div><dt>Direzione umana</dt><dd id="hHuman">50%</dd></div>
@@ -242,7 +243,7 @@
       <button type="button" data-scena="2" aria-pressed="false">03</button>
     </div>
   </div>
-  <div class="rail" aria-hidden="true" hidden>
+  <div class="rail" aria-hidden="true">
     <span class="rail__capo rail__capo--tu mono">Tu</span>
     <i id="railFill"></i><b id="railKnob"></b>
     <span class="rail__capo rail__capo--ai mono">Sistema</span>
@@ -917,7 +918,7 @@
 
       <div class="eso__piede">
         <ul class="eso__conti">
-          <li><b>10</b><span>pezzi</span></li>
+          <li><b>9</b><span>pezzi</span></li>
           <li><b>1</b><span>sito</span></li>
           <li><b>6</b><span>documenti</span></li>
         </ul>
@@ -936,7 +937,7 @@
     </div>
 
     <div class="eso__corpo">
-      <p class="eso__intro mono">Dieci pezzi · dal trailer alle riprese di studio</p>
+      <p class="eso__intro mono">Nove pezzi · dal trailer alle riprese di studio</p>
       <div class="eso__lavori">
       <!-- La scaletta si vede solo a JavaScript spento: initXxx la
            sostituisce con le schede vere. Serve perche' senza JS qui
@@ -949,7 +950,6 @@
         <li>Il dispositivo</li>
         <li>Vista frontale, studio</li>
         <li>Vista frontale, controluce</li>
-        <li>Controluce, versione lunga</li>
         <li>Modulo centrale, dettaglio</li>
         <li>Dettaglio, macro</li>
         <li>Dettaglio, texture carbonio</li>
@@ -1235,7 +1235,7 @@
       <div class="locanda__piede">
         <ul class="locanda__conti">
           <li><b>1</b><span>marchio</span></li>
-          <li><b>14</b><span>pezzi</span></li>
+          <li><b>12</b><span>pezzi</span></li>
           <li><b>5</b><span>brani</span></li>
         </ul>
         <p class="locanda__nota">Rocca de’ Baldi, Piazza Pio VII</p>
@@ -1249,7 +1249,7 @@
     </div>
 
     <div class="locanda__corpo">
-      <p class="locanda__intro mono">Quattordici pezzi animati · locandine e video della casa</p>
+      <p class="locanda__intro mono">Dodici pezzi animati · locandine e video della casa</p>
       <div class="locanda__lavori">
       <!-- La scaletta si vede solo a JavaScript spento: initXxx la
            sostituisce con le schede vere. Serve perche' senza JS qui
@@ -1263,7 +1263,6 @@
         <li>Brut Tradition, il primo assaggio</li>
         <li>Fritto misto di pesce</li>
         <li>Giornata di benessere e gusto</li>
-        <li>Il luogo dei momenti speciali</li>
       </ul>
     </div>
       <p class="caso-firma">Le locandine nascono come immagini con <b>GPT Image</b>, si sistemano
@@ -1981,12 +1980,14 @@
     </svg>
     <span>Contatto</span>
   </a>
+  <button type="button" class="navdock__chiudi" aria-label="Nascondi la barra di navigazione" aria-expanded="true"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m9 6 6 6-6 6"/></svg></button>
 </nav>
+<button type="button" class="navdock-apri" aria-label="Mostra la barra di navigazione" aria-expanded="false"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="3" y="3" width="7.5" height="7.5" rx="1.6"/><rect x="13.5" y="3" width="7.5" height="7.5" rx="1.6"/><rect x="3" y="13.5" width="7.5" height="7.5" rx="1.6"/><rect x="13.5" y="13.5" width="7.5" height="7.5" rx="1.6"/></svg><span>Menu</span></button>
 
-<script type="module" src="app.js?v=20260928-97"></script>
+<script type="module" src="app.js?v=20260928-124"></script>
 
 <!-- Widget Chatbot Nodo (F/AI) -->
-<link rel="stylesheet" href="chatbot/chatbot.css?v=20260928-97">
-<script type="module" src="chatbot/chatbot.js?v=20260928-97"></script>
+<link rel="stylesheet" href="chatbot/chatbot.css?v=20260928-124">
+<script type="module" src="chatbot/chatbot.js?v=20260928-124"></script>
 </body>
 </html>

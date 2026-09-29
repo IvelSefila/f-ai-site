@@ -26,21 +26,21 @@
   /* LA SCALA. Sette gradini per i titoli, quattro per il testo. Fuori
      da questi non si inventano altre misure: erano cinquantacinque
      dichiarazioni diverse e sullo schermo facevano trentotto corpi. */
-  --d1:clamp(64px,11vw,150px);
-  --d2:clamp(40px,5.1vw,84px);
-  --d3:clamp(34px,4.6vw,72px);
-  --d4:clamp(30px,3.9vw,52px);
-  --d5:clamp(24px,2.8vw,38px);
-  --d6:clamp(22px,2.4vw,30px);
-  --d7:clamp(19px,2vw,25px);
-  --t-lede:clamp(15px,1.1vw,18px);
-  --t-base:17px;      /* il corpo del sito */
-  --t-grande:17px;     /* e il gradino sopra --t-corpo: sono la stessa cosa */
-  --t-corpo:16px;
-  --t-mini:13px;
-  --t-micro:11px;
-  --display:"Barlow Condensed","Arial Narrow",sans-serif;
-  --body:"Manrope",system-ui,Arial,sans-serif;
+  --d1:calc(clamp(64px,11vw,150px) * var(--sc-titoli,1));
+  --d2:calc(clamp(40px,5.1vw,84px) * var(--sc-titoli,1));
+  --d3:calc(clamp(34px,4.6vw,72px) * var(--sc-titoli,1));
+  --d4:calc(clamp(30px,3.9vw,52px) * var(--sc-titoli,1));
+  --d5:calc(clamp(24px,2.8vw,38px) * var(--sc-titoli,1));
+  --d6:calc(clamp(22px,2.4vw,30px) * var(--sc-titoli,1));
+  --d7:calc(clamp(19px,2vw,25px) * var(--sc-titoli,1));
+  --t-lede:calc(clamp(15px,1.1vw,18px) * var(--sc-testi,1));
+  --t-base:calc(17px * var(--sc-testi,1));      /* il corpo del sito */
+  --t-grande:calc(17px * var(--sc-testi,1));     /* e il gradino sopra --t-corpo: sono la stessa cosa */
+  --t-corpo:calc(16px * var(--sc-testi,1));
+  --t-mini:calc(13px * var(--sc-testi,1));
+  --t-micro:calc(11px * var(--sc-testi,1));
+  --display:var(--f-titoli,"Barlow Condensed"),"Arial Narrow",sans-serif;
+  --body:var(--f-testi,"Manrope"),system-ui,Arial,sans-serif;
   --mono:ui-monospace,"SFMono-Regular",Consolas,monospace;
   --gutter:clamp(20px,4.6vw,64px);
   --content:1360px;
@@ -4018,3 +4018,259 @@ body.ord-in-corso *{cursor:grabbing !important}
   -webkit-text-stroke:.6px rgba(10,14,20,.9);text-shadow:none;
   filter:drop-shadow(0 1px 0 rgba(255,255,255,.35)) drop-shadow(0 3px 5px rgba(0,0,0,.85))}
 .sr-solo{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+/* Sfondo dell'eroe: un contenitore grande quanto tutto il blocco, con dentro il canvas alto
+   quanto la finestra, fermo (sticky) mentre scorri. Lo sfondo arriva fino in fondo all'eroe
+   senza stacchi e senza margini negativi. overflow:clip non crea un contenitore di scorrimento,
+   quindi sticky resta agganciato alla finestra. */
+.hero { overflow: clip; }
+.hero__fondo { position: absolute; inset: 0; z-index: 0; pointer-events: none; }
+.hero__fondo > #gl {
+  position: sticky; inset: 0 auto auto 0; display: block;   /* inset prima di top: altrimenti lo annulla */
+  width: 100%; max-width: none; height: 100svh; pointer-events: auto;
+}
+@media (pointer: coarse) { .hero__fondo > #gl { touch-action: pan-y; } }
+
+/* Eroe su desktop: tutto centrato e il video in scala con lo schermo.
+   Il video e' verticale (9:16): prima misurava 684x1216 e su un monitor da 1080 di altezza
+   usciva dallo schermo. Ora la sua altezza non supera lo schermo meno lo spazio per la
+   barra in alto e un po' d'aria; la larghezza ne segue le proporzioni. */
+@media (min-width: 901px) {
+  .hero__content { display: flex; flex-direction: column; align-items: center; text-align: center; }
+  .hero__content > * { max-width: min(100%, 980px); }
+  /* Sigla, riga sotto e titolo a sinistra; la lista, il video, i marchi e i pulsanti restano centrati */
+  .hero__content > .eyebrow,
+  .hero__content > .hero__studio,
+  .hero__content > h1 { align-self: flex-start; text-align: left; max-width: min(100%, 980px); }
+  .hero__punti { align-self: flex-start; width: 100%; max-width: none; text-align: left; }   /* a filo con il titolo, su tutta la larghezza */
+  /* la lista e' piu' grande: testo e icone crescono con lo schermo */
+  .hero__punti .hero__copy { font-size: calc(clamp(20px, 1.6vw, 32px) * var(--sc-testi, 1)); }
+  .hero__punto { gap: clamp(14px, 1.2vw, 22px); align-items: center; }
+  .hero__punto__icona { width: calc(clamp(38px, 2.8vw, 54px) * var(--sc-testi, 1)); height: calc(clamp(38px, 2.8vw, 54px) * var(--sc-testi, 1)); margin-top: 0; }
+  .hero__punto + .hero__punto { margin-top: 1em; }
+  .hero__spot {
+    width: max(260px, min(100%, calc((100svh - 176px) * 9 / 16)));
+    max-width: none;
+    margin-inline: auto;
+  }
+  .hero__spot video { max-height: calc(100svh - 176px); object-fit: contain; }
+  .vetrina { width: min(100%, 980px); }
+  .hero__actions { justify-content: center; }
+  .hero__scrim {
+    background:
+      linear-gradient(90deg, rgba(5,7,11,.2) 0%, rgba(5,7,11,.5) 22%, rgba(5,7,11,.66) 50%, rgba(5,7,11,.5) 78%, rgba(5,7,11,.2) 100%),
+      linear-gradient(0deg, rgba(5,7,11,.85) 0%, transparent 10%);
+  }
+}
+
+
+/* ── Eroe su desktop: dati, confine e cursore ───────────────────────────
+   La barra dei dati e la linea del confine erano nascoste con l'attributo hidden:
+   ora ci sono, fisse in basso, solo nella prima schermata. Il testo e le zone vuote
+   lasciano passare il mouse, cosi' il trascinamento funziona su tutto lo sfondo. */
+@media (max-width: 900px) {
+  .read, .hud, .rail { display: none; }
+}
+@media (min-width: 901px) {
+  .hud, .rail { position: fixed; opacity: 0; pointer-events: none; transition: opacity .25s cubic-bezier(.23, 1, .32, 1); }
+  .hud { bottom: 100px; }
+  .rail { bottom: 178px; }
+  body.hero-vivo .hud { opacity: 1; pointer-events: auto; }
+  body.hero-vivo .rail { opacity: 1; }
+  .hero__content { pointer-events: none; }
+  .hero__content > * { pointer-events: auto; }
+  .hero__content > .eyebrow,
+  .hero__content > .hero__studio,
+  .hero__content > h1,
+  .hero__content > .hero__punti { pointer-events: none; }
+  .hero h1 { text-shadow: 0 2px 26px rgba(0, 0, 0, .55); }
+}
+
+/* Cursore a mirino sopra lo sfondo, con scia di scintille (solo mouse) */
+.hero-cursore {
+  position: fixed; left: 0; top: 0; z-index: 60;
+  width: 96px; height: 96px; margin: -48px 0 0 -48px;
+  pointer-events: none; opacity: 0;
+  color: var(--em-vivo);
+  transition: opacity .18s cubic-bezier(.23, 1, .32, 1);
+  will-change: transform;
+}
+.hero-cursore.on { opacity: 1; }
+.hero-cursore svg { display: block; overflow: visible; filter: drop-shadow(0 0 7px color-mix(in srgb, currentColor 65%, transparent)); }
+.hero-cursore svg * { fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: round; vector-effect: non-scaling-stroke; }
+.hero-cursore .c-punto { fill: currentColor; stroke: none; }
+.hero-cursore.is-hold { color: #fff; }
+.hero-cursore__dati {
+  position: absolute; left: 60px; top: 62px; white-space: nowrap;
+  font: 600 12px/1 var(--mono); letter-spacing: .08em; color: #fff;
+  text-shadow: 0 0 8px rgba(0, 0, 0, .85);
+  opacity: 0; transform: translateY(4px);
+  transition: opacity .15s cubic-bezier(.23, 1, .32, 1), transform .15s cubic-bezier(.23, 1, .32, 1);
+}
+.hero-cursore.is-drag .hero-cursore__dati { opacity: 1; transform: none; }
+.hero-scia { position: fixed; inset: 0; width: 100vw; height: 100vh; z-index: 59; pointer-events: none; }
+body.hero-cursore-on #gl { cursor: none; }
+@media (pointer: coarse) { .hero-cursore, .hero-scia { display: none; } }
+
+
+/* ── Testata: 5 voci, le stesse della barra in basso (senza i numeri) ── */
+.bar__nav a[data-solo-largo] { display: inline-flex; }
+
+/* ── Barra in basso su desktop: si chiude verso destra e si rimette dal pulsante ──
+   Movimento sullo schermo = ease-in-out forte; comparsa = ease-out. Solo transform e opacity. */
+.navdock__chiudi, .navdock-apri { display: none; }
+@media (min-width: 901px) {
+  .navdock {
+    transition: transform .5s cubic-bezier(.77, 0, .175, 1), opacity .35s cubic-bezier(.23, 1, .32, 1), visibility 0s;
+  }
+  .navdock__chiudi {
+    display: grid; place-items: center; position: relative; z-index: 2; align-self: center;
+    width: 34px; height: 34px; margin: 0 -10px 0 6px; padding: 0; border-radius: 50%;
+    border: 1px solid transparent; background: transparent; color: var(--muted); cursor: pointer;
+    transition: color .2s var(--ease), background-color .2s var(--ease), border-color .2s var(--ease);
+  }
+  .navdock__chiudi:hover, .navdock__chiudi:focus-visible {
+    color: var(--em-light); border-color: var(--em-dim);
+    background: color-mix(in srgb, var(--em) 12%, transparent);
+  }
+  .navdock__chiudi:focus-visible { outline: 2px solid var(--em-bright); outline-offset: 2px; }
+  .navdock__chiudi svg, .navdock-apri svg {
+    width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 1.8;
+    stroke-linecap: round; stroke-linejoin: round;
+  }
+  /* chiusa: scivola a destra, si rimpicciolisce e sparisce verso il pulsante */
+  .navdock.chiuso {
+    transform: translateX(calc(-50% + 50vw - 160px)) scale(.2);
+    opacity: 0; pointer-events: none; visibility: hidden;
+    transition: transform .5s cubic-bezier(.77, 0, .175, 1), opacity .3s cubic-bezier(.23, 1, .32, 1) .1s, visibility 0s .5s;
+  }
+  .navdock-apri {
+    display: flex; align-items: center; gap: 8px; position: fixed; z-index: 290;
+    right: 96px; bottom: 24px; height: 46px; padding: 0 16px 0 14px; border-radius: var(--r-pill);
+    background: rgba(8, 12, 18, .88); backdrop-filter: blur(14px);
+    border: 1px solid var(--em-dim); color: var(--em-light);
+    font: 600 11px/1 var(--mono); letter-spacing: .08em; text-transform: uppercase; cursor: pointer;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, .45);
+    opacity: 0; transform: translateX(28px) scale(.85); pointer-events: none; visibility: hidden;
+    transition: transform .45s cubic-bezier(.23, 1, .32, 1) .1s, opacity .3s cubic-bezier(.23, 1, .32, 1) .1s, visibility 0s .5s;
+  }
+  .navdock.chiuso + .navdock-apri { opacity: 1; transform: none; pointer-events: auto; visibility: visible; transition-delay: .18s, .18s, 0s; }
+  .navdock-apri:hover, .navdock-apri:focus-visible { border-color: var(--em); color: #fff; }
+  .navdock-apri:focus-visible { outline: 2px solid var(--em-bright); outline-offset: 2px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .navdock, .navdock.chiuso, .navdock-apri { transition-duration: .01s !important; transition-delay: 0s !important; }
+  .navdock.chiuso { transform: translateX(-50%); }
+}
+
+/* ── CDI: l'etichetta dell'indirizzo e la finestra in scala con lo schermo ── */
+@media (min-width: 901px) {
+  .cdi__url { width: clamp(220px, 22vw, 340px); padding: 7px 18px; font-size: clamp(13px, 1vw, 16px); border-radius: 26px; }
+  /* la finestra non supera lo schermo: barra e anteprima 16:10 stanno insieme nell'altezza disponibile */
+  .cdi__finestra { width: min(100%, calc((100svh - 170px) * 1.6)); margin-inline: auto; }
+}
+
+/* ── Formati: su desktop una griglia regolare, tre per riga, anteprime della stessa misura ──
+   Le schede hanno proporzioni diverse (9:16, 4:5, 1:1, 3:2, 16:9, 21:9): lo si vede dentro
+   l'anteprima, che sta in una scatola 4:3 uguale per tutte, cosi' righe e bordi si allineano. */
+@media (min-width: 901px) {
+  .formats { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); columns: auto; gap: 14px; align-items: stretch; }
+  .formats > *, .formats[data-gr] > *:nth-child(n) { margin: 0; grid-column: auto; break-inside: auto; }
+  .formats figure { display: flex; flex-direction: column; }
+  .formats canvas { width: 100%; height: auto; aspect-ratio: 4 / 3; object-fit: contain; background: #06090e; flex: 1 1 auto; }
+}
+
+
+/* ── Lavori: niente cifra grande, titolo e testo a filo con il margine ── */
+.ap-numero .sec__head { padding-left: 0; }
+.ap-numero .sec__head::before { display: none; }
+
+/* ── Colore della scena: barra dei dati, linea del confine e cursore lo seguono ── */
+.rail i { background: var(--scena-em, var(--em)); box-shadow: 0 0 12px color-mix(in srgb, var(--scena-em, var(--em)) 70%, transparent); transition: background-color .6s ease, box-shadow .6s ease; }
+.rail b { background: var(--scena-em, var(--em-bright)); transition: background-color .6s ease; }
+.hud dd.on, .hud__istruzione b { color: var(--scena-em, var(--em)); transition: color .6s ease; }
+.scene-pick button[aria-pressed="true"] { border-color: var(--scena-em, var(--em)); }
+.hero-cursore { color: var(--scena-em, var(--em-vivo)); transition: opacity .18s cubic-bezier(.23, 1, .32, 1), color .6s ease; }
+
+/* ── Barra dei dati su desktop: ferma sotto l'intestazione, su una riga sola ──
+   Prima stava in basso e si sovrapponeva alla lista e al video. Il contenuto dell'eroe
+   parte piu' in basso di quanto serve alla barra, cosi' non si toccano. */
+@media (min-width: 901px) {
+  :root { --hud-h: 50px; }
+  .hero { --hero-pt: calc(var(--bar) + 40px + var(--hud-h) + 14px); padding-top: var(--hero-pt); }
+  .hud {
+    top: var(--bar); bottom: auto; height: var(--hud-h);
+    padding: 0 var(--gutter); align-items: center; flex-wrap: nowrap;
+    gap: clamp(14px, 2.2vw, 36px);
+    border-top: 1px solid var(--rule);
+    background: linear-gradient(180deg, rgba(5, 7, 11, .86), rgba(5, 7, 11, .55));
+  }
+  .hud__istruzione { flex: 1 1 auto; margin: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .hud dl { flex: none; flex-wrap: nowrap; }
+  .hud .hud__extra, .hud .hud__hint { display: none; }
+  .hud .scene-pick { flex: none; }
+  .rail { top: calc(var(--bar) + var(--hud-h)); bottom: auto; }
+  .rail__capo { display: none; }
+  .read { top: calc(var(--bar) + var(--hud-h) + 26px); }
+}
+
+
+/* Il video sta nel blocco sotto l'intestazione: se ti fermi vicino, la pagina lo allinea sotto
+   l'header (il distacco viene da scroll-padding-top: 20px) e non arriva fino al bordo alto.
+   Aggancio morbido (proximity), solo su desktop; il video entra intero fra header e barra in basso. */
+@media (min-width: 901px) {
+  html { scroll-snap-type: y proximity; }
+  .hero__spot { scroll-snap-align: start; }
+}
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-snap-type: none; }
+}
+
+
+/* ── Pannello colori: sezione dei caratteri ── */
+.pal__tipo { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 14px; margin: 10px 0 12px; }
+.pal__tipo-gruppo { margin: 0; padding: 12px 14px 14px; border: 1px solid var(--rule); border-radius: var(--r-media); min-width: 0; }
+.pal__tipo-gruppo legend { padding: 0 6px; color: var(--em); }
+.pal__tipo-riga { display: grid; grid-template-columns: 78px minmax(0, 1fr) auto; align-items: center; gap: 10px; margin-top: 8px; font-size: var(--t-mini); color: var(--text); }
+.pal__tipo-riga select { grid-column: 2 / 4; min-width: 0; padding: 7px 10px; border-radius: var(--r-min); border: 1px solid var(--rule); background: var(--panel-2); color: var(--ink); font: inherit; }
+.pal__tipo-riga input[type="range"] { min-width: 0; accent-color: var(--em); }
+.pal__tipo-riga output { font-family: var(--mono); font-size: var(--t-micro); color: var(--muted); min-width: 3.4ch; text-align: right; }
+
+
+/* ── Pannello colori: su desktop e' quasi a tutta pagina, in due colonne ── */
+@media (min-width: 901px) {
+  .pal { width: min(1180px, calc(100vw - 64px)); max-height: calc(100dvh - 48px); }
+  .pal__colonne { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); align-items: start; }
+  .pal__col { min-width: 0; padding-bottom: 8px; }
+  .pal__col + .pal__col { border-left: 1px solid rgba(221, 231, 242, .08); }
+  .pal__tipo { grid-template-columns: 1fr; }
+}
+@media (max-width: 900px) {
+  .pal__colonne, .pal__col { display: block; }
+}
+
+/* ── Carosello dei lavori, piu' grande su desktop ── */
+@media (min-width: 901px) {
+  .vetrina { width: min(100%, 1360px); }
+  .vetrina__caso { width: clamp(150px, 13vw, 230px); }
+  .vetrina__caso b { font-size: clamp(15px, 1.15vw, 20px); }
+  .vetrina__caso span { font-size: clamp(11px, .85vw, 13px); }
+}
+
+/* ── Il mirino in tutto il sito: il cursore del browser sparisce, tranne dove serve ──
+   La classe mirino-on la toglie mirino.js sopra campi di testo, video, finestre e iframe. */
+body.mirino-on, body.mirino-on * { cursor: none !important; }
+.hero-cursore.is-link svg { filter: drop-shadow(0 0 10px color-mix(in srgb, currentColor 85%, transparent)); }
+
+/* ── Barra in basso: il pulsante che la chiude pulsa piano, come un invito ── */
+@keyframes navdock-onda { 0% { transform: scale(1); opacity: .65; } 100% { transform: scale(1.9); opacity: 0; } }
+@keyframes navdock-freccia { 0%, 100% { transform: translateX(0); } 50% { transform: translateX(3px); } }
+@media (min-width: 901px) and (prefers-reduced-motion: no-preference) {
+  .navdock__chiudi::after, .navdock-apri::after {
+    content: ""; position: absolute; inset: 0; border-radius: inherit; pointer-events: none;
+    border: 1px solid var(--em-bright); opacity: 0;
+    animation: navdock-onda 2.6s cubic-bezier(.23, 1, .32, 1) infinite;
+  }
+  .navdock__chiudi svg { animation: navdock-freccia 2.6s ease-in-out infinite; }
+  .navdock:not(.chiuso) .navdock__chiudi:hover::after, .navdock-apri:hover::after { animation-play-state: paused; }
+}

@@ -2,16 +2,20 @@
 * app.js — la sessione. Tiene il filo fra le prove, parla, misura,
 * e alla fine scrive il dossier. Nessuna libreria.
 * ═══════════════════════════════════════════════════════════════════ */
-import { initHero } from './hero.js?v=20260928-97';
-import { initStrumenti } from './strumenti.js?v=20260928-97';
-import { initUnion } from './union.js?v=20260928-97';
-import { initEso } from './eso.js?v=20260928-97';
-import { initLocanda } from './locanda.js?v=20260928-97';
-import { initCest } from './cest.js?v=20260928-97';
-import { initPalette } from './palette.js?v=20260928-97';
-import { keyVisual, radar, MODES, rng, leggiColori} from './engine.js?v=20260928-97';
-import { initBrief } from './brief.js?v=20260928-97';
-import { initServizi } from './servizi.js?v=20260928-97';
+import { initTipografia } from './tipografia.js?v=20260928-124';
+initTipografia();
+import { initMirino } from './mirino.js?v=20260928-124';
+initMirino();
+import { initHero } from './hero.js?v=20260928-124';
+import { initStrumenti } from './strumenti.js?v=20260928-124';
+import { initUnion } from './union.js?v=20260928-124';
+import { initEso } from './eso.js?v=20260928-124';
+import { initLocanda } from './locanda.js?v=20260928-124';
+import { initCest } from './cest.js?v=20260928-124';
+import { initPalette } from './palette.js?v=20260928-124';
+import { keyVisual, radar, MODES, rng, leggiColori} from './engine.js?v=20260928-124';
+import { initBrief } from './brief.js?v=20260928-124';
+import { initServizi } from './servizi.js?v=20260928-124';
 
 const $ = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => [...r.querySelectorAll(s)];
@@ -165,7 +169,7 @@ const FMT_TITOLI = [
   'Un concept,\nmille misure', 'Stesso messaggio,\naltra griglia', 'Un formato\nnon basta mai',
 ];
 let fmtTitolo = FMT_TITOLI[0];
-let fmtPos = 'basso', fmtAllinea = 'sinistra', fmtFont = null, fmtColore = null;
+let fmtPos = 'basso', fmtAllinea = 'sinistra', fmtFont = null, fmtColore = null, fmtPeso = null;
 function drawFormats() {
   const wgt = +fmtIdea.value / 100;
   fmtIdea.style.setProperty('--v', `${fmtIdea.value}%`);
@@ -175,7 +179,7 @@ function drawFormats() {
       keyVisual(c.getContext('2d'), {
           w: c.width, h: c.height, seed: fmtSeed, ai: .3, weight: wgt,
           title: fmtTitolo, kicker: `MF/AI · ${FORMATS[i][0]}`,
-          pos: fmtPos, align: fmtAllinea, font: fmtFont, color: fmtColore,
+          pos: fmtPos, align: fmtAllinea, font: fmtFont, color: fmtColore, peso: fmtPeso || undefined,
         });
     });
 }
@@ -199,8 +203,9 @@ $('#fmtNew').addEventListener('click', async () => {
   fmtTitolo = FMT_TITOLI[(Math.random() * FMT_TITOLI.length) | 0];
   fmtPos = scegli(EDITOR_POSIZIONI)[0];
   fmtAllinea = scegli(EDITOR_ALLINEI)[0];
-  const f = scegli(EDITOR_FONT);
+  const f = scegli(FONT_CASUALI);
   fmtFont = f.css;
+  fmtPeso = PESO_CASUALE;
   fmtColore = scegli(EDITOR_COLORI);
   drawFormats(); act(); proof('banchi');
   await caricaGoogleFont(f);
@@ -231,13 +236,17 @@ const EDITOR_FONT = [
   { nome: 'Manrope', css: '"Manrope",system-ui,Arial,sans-serif', google: null },
   { nome: 'Bebas Neue', css: '"Bebas Neue",sans-serif', google: 'Bebas+Neue' },
   { nome: 'Anton', css: '"Anton",sans-serif', google: 'Anton' },
-  { nome: 'Oswald', css: '"Oswald",sans-serif', google: 'Oswald:wght@600' },
+  { nome: 'Oswald', css: '"Oswald",sans-serif', google: 'Oswald:wght@400;600' },
   { nome: 'Archivo Black', css: '"Archivo Black",sans-serif', google: 'Archivo+Black' },
-  { nome: 'Poppins', css: '"Poppins",sans-serif', google: 'Poppins:wght@700' },
-  { nome: 'Playfair Display', css: '"Playfair Display",serif', google: 'Playfair+Display:wght@700' },
-  { nome: 'Space Mono', css: '"Space Mono",monospace', google: 'Space+Mono:wght@700' },
-  { nome: 'JetBrains Mono', css: '"JetBrains Mono",monospace', google: 'JetBrains+Mono:wght@700' },
+  { nome: 'Poppins', css: '"Poppins",sans-serif', google: 'Poppins:wght@400;700' },
+  { nome: 'Playfair Display', css: '"Playfair Display",serif', google: 'Playfair+Display:wght@400;700' },
+  { nome: 'Space Mono', css: '"Space Mono",monospace', google: 'Space+Mono:wght@400;700' },
+  { nome: 'JetBrains Mono', css: '"JetBrains Mono",monospace', google: 'JetBrains+Mono:wght@400;700' },
 ];
+/* Le generazioni casuali non devono mai uscire in grassetto: si escludono i font che sono
+   grassi di natura (un solo peso, pesante) e si disegna in peso normale (400). */
+const FONT_CASUALI = EDITOR_FONT.filter(f => !['Anton', 'Archivo Black', 'Bebas Neue'].includes(f.nome));
+const PESO_CASUALE = 400;
 const fontGoogleCaricati = new Set();
 function caricaGoogleFont(f) {
   if (!f.google || fontGoogleCaricati.has(f.google)) return Promise.resolve();
@@ -247,7 +256,7 @@ function caricaGoogleFont(f) {
   link.href = `https://fonts.googleapis.com/css2?family=${f.google}&display=swap`;
   document.head.appendChild(link);
   return new Promise(risolvi => {
-    const fine = () => document.fonts.load(`700 40px "${f.nome}"`).catch(() => {}).then(risolvi);
+    const fine = () => Promise.all([document.fonts.load(`400 40px "${f.nome}"`), document.fonts.load(`700 40px "${f.nome}"`)]).catch(() => {}).then(risolvi);
     link.addEventListener('load', fine);
     link.addEventListener('error', risolvi);
     setTimeout(risolvi, 1500);
@@ -553,7 +562,7 @@ function costruisciEditor() {
       w, h, seed: seedEditor, ai: +aiRange.value / 100, weight: +pesoRange.value / 100,
       title: (txt.value || fmtTitolo), kicker: (kick.value || `MF/AI · ${d.formato[0]}`),
       pos: d.pos, align: d.allinea, font: d.font, color: d.colore, grafica: d.grafica,
-      grassetto: d.grassetto, corsivo: d.corsivo, maiuscolo: d.maiuscolo,
+      grassetto: d.grassetto, peso: d.peso || undefined, corsivo: d.corsivo, maiuscolo: d.maiuscolo,
       fontScale: +dimRange.value / 100, letterSpacing: +spazioRange.value,
       lineHeight: +interlineaRange.value / 100, textColor: colTesto.value, bgColor: colSfondo.value,
     });
@@ -570,9 +579,12 @@ function costruisciEditor() {
     seedEditor = semeInfinito();
     d.pos = EDITOR_POSIZIONI[(Math.random() * EDITOR_POSIZIONI.length) | 0][0];
     d.allinea = EDITOR_ALLINEI[(Math.random() * EDITOR_ALLINEI.length) | 0][0];
-    const fIdx = (Math.random() * EDITOR_FONT.length) | 0;
-    const f = EDITOR_FONT[fIdx];
+    const f = scegli(FONT_CASUALI);
+    const fIdx = EDITOR_FONT.indexOf(f);
     d.font = f.css;
+    d.grassetto = false;
+    d.peso = PESO_CASUALE;
+    d.querySelector('[data-stile="grassetto"]')?.setAttribute('aria-pressed', 'false');
     fontSel.value = String(fIdx);
     d.colore = scegli(EDITOR_COLORI);
     d.grafica = scegli(EDITOR_COLORI);
@@ -607,6 +619,7 @@ function apriEditorFormati(indice) {
   d.pos = 'basso';
   d.allinea = 'sinistra';
   d.grassetto = false;
+  d.peso = null;
   d.corsivo = false;
   d.maiuscolo = true;
   d.querySelectorAll('.fmtEdit__stile [data-stile]').forEach(b => {
@@ -1602,3 +1615,36 @@ if (macchinaSpan && !window.matchMedia('(prefers-reduced-motion: reduce)').match
   }, { threshold: .8 });
   macchinaIO.observe(macchinaSpan);
 }
+
+
+/* La barra dei dati e il confine dell'eroe stanno in basso, fissi, solo nella prima
+   schermata: dopo, lascerebbero il video e la lista sotto una fascia. */
+(() => {
+  const aggiorna = () => document.body.classList.toggle('hero-vivo', scrollY < innerHeight * .6);
+  aggiorna();
+  addEventListener('scroll', aggiorna, { passive: true });
+  addEventListener('resize', aggiorna);
+})();
+
+
+/* Barra di navigazione in basso, su desktop: si chiude, scivola a destra e si rimette dal
+   pulsante "Menu". Il pulsante di chiusura esiste solo sopra i 900 px. La scelta si ricorda. */
+(() => {
+  const dock = document.querySelector('.navdock');
+  const chiudi = dock?.querySelector('.navdock__chiudi');
+  const apri = document.querySelector('.navdock-apri');
+  if (!dock || !chiudi || !apri) return;
+  const chiave = 'navdock_chiuso';
+  const imposta = (chiuso, dalUtente) => {
+    dock.classList.toggle('chiuso', chiuso);
+    chiudi.setAttribute('aria-expanded', String(!chiuso));
+    apri.setAttribute('aria-expanded', String(!chiuso));
+    try { localStorage.setItem(chiave, chiuso ? '1' : '0'); } catch (e) {}
+    if (dalUtente) (chiuso ? apri : chiudi).focus({ preventScroll: true });
+  };
+  chiudi.addEventListener('click', () => imposta(true, true));
+  apri.addEventListener('click', () => imposta(false, true));
+  let ricordato = false;
+  try { ricordato = localStorage.getItem(chiave) === '1'; } catch (e) {}
+  if (ricordato) imposta(true, false);
+})();

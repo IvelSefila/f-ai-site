@@ -1857,3 +1857,65 @@
     padding-bottom: calc(10px + env(safe-area-inset-bottom, 0px));
   }
 }
+
+/* ── Pannello "Cosa sta girando" (si apre dal badge in alto) ── */
+.nodo-header { position: relative; z-index: 5; }
+.nodo-mode-info {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 10px;
+  right: 10px;
+  z-index: 6;
+  max-height: min(68vh, 460px);
+  overflow-y: auto;
+  padding: 14px 16px 12px;
+  border-radius: 14px;
+  background: rgba(7, 10, 15, 0.985);
+  border: 1px solid var(--nodo-border);
+  box-shadow: 0 18px 44px rgba(0, 0, 0, 0.65);
+  font-family: var(--nodo-font-body);
+  font-size: 14px;
+  line-height: 1.55;
+  color: var(--nodo-text);
+  text-align: left;
+}
+.nodo-mode-info[hidden] { display: none; }
+.nodo-mode-info p { margin: 0 0 8px; }
+.nodo-mode-info-kicker {
+  font-family: var(--nodo-font-mono);
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--nodo-muted);
+}
+.nodo-mode-info-now { display: flex; flex-direction: column; gap: 2px; }
+.nodo-mode-info-now strong { font-size: 16px; color: var(--nodo-title); }
+.nodo-mode-info-now span { font-size: 13px; color: var(--nodo-em-bright); }
+.nodo-mode-info-switch { display: flex; flex-wrap: wrap; gap: 8px; margin: 10px 0 6px; }
+.nodo-mode-info-btn {
+  font-family: var(--nodo-font-mono);
+  font-size: 13px;
+  padding: 7px 12px;
+  border-radius: var(--nodo-radius-pill);
+  border: 1px solid var(--nodo-border);
+  background: color-mix(in srgb, var(--nodo-em) 10%, transparent);
+  color: var(--nodo-em-bright);
+  cursor: pointer;
+}
+.nodo-mode-info-btn:hover,
+.nodo-mode-info-btn:focus-visible { background: color-mix(in srgb, var(--nodo-em) 24%, transparent); outline: none; }
+.nodo-mode-info-gloss { margin-top: 8px; border-top: 1px solid var(--nodo-border); padding-top: 8px; }
+.nodo-mode-info-gloss summary { cursor: pointer; font-size: 13px; color: var(--nodo-em-bright); }
+.nodo-mode-info-gloss dl { margin: 8px 0 0; }
+.nodo-mode-info-gloss dt { margin-top: 8px; font-weight: 700; color: var(--nodo-title); font-size: 14px; }
+.nodo-mode-info-gloss dd { margin: 2px 0 0; font-size: 13.5px; }
+.nodo-mode-badge[aria-expanded="true"] { background: color-mix(in srgb, var(--nodo-em) 22%, transparent); border-color: var(--nodo-em-bright); }
+
+.nodo-mode-info-note {
+  padding: 8px 10px;
+  border-radius: 10px;
+  background: color-mix(in srgb, #f0b429 12%, transparent);
+  border: 1px solid color-mix(in srgb, #f0b429 40%, transparent);
+  color: #f3d38a;
+  font-size: 13px;
+}

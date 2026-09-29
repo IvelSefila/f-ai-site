@@ -1,7 +1,8 @@
+import { htmlSezioneTipo, armaSezioneTipo, azzeraTipo } from './tipografia.js?v=20260928-124';
 import { PRESET, applicaGriglia, contenitoreDi, nomeContenitore,
-         mostraGriglia, grigliaVisibile, initGriglia, azzeraGriglia } from './griglia.js?v=20260928-97';
+         mostraGriglia, grigliaVisibile, initGriglia, azzeraGriglia } from './griglia.js?v=20260928-124';
 import { initOrdine, bersaglioDi, spostaDi, puoAndare, rimetti, ordineCambiato,
-         iniziaTrascino, traTrascinando, azzeraOrdine } from './sposta.js?v=20260928-97';
+         iniziaTrascino, traTrascinando, azzeraOrdine } from './sposta.js?v=20260928-124';
 
 /* ═══════════════════════════════════════════════════════════════════
  * PALETTE — tieni premuto su un riquadro e scegli il colore del sito
@@ -102,6 +103,7 @@ function costruisciPannello() {
   d.id = 'palPanel';
   d.setAttribute('aria-label', 'Colore del sito');
   d.innerHTML = `
+    <div class="pal__colonne"><div class="pal__col">
     <p class="pal__tit mono">Colore del sito</p>
     <p class="pal__sub">Nove palette. Ognuna è calcolata perché ogni testo
       resti leggibile sia sul fondo scuro sia sui blocchi su carta.</p>
@@ -114,6 +116,8 @@ function costruisciPannello() {
           <span>${p.nota}</span>
         </button>`).join('')}
     </div>
+    ${htmlSezioneTipo()}
+    </div><div class="pal__col">
     <div class="pal__sez pal__sez--pos">
       <p class="pal__tit mono" data-pos-tit>Posizione</p>
       <p class="pal__sub" style="margin-inline:0" data-pos-nota></p>
@@ -145,11 +149,13 @@ function costruisciPannello() {
         Rimetti tutto come all'inizio</button>
       <p class="pal__fatto mono" role="status" aria-live="polite"></p>
     </div>
+    </div></div>
     <div class="pal__piede">
       <span class="mono">Tieni premuto su un riquadro: trascina, o lascia per riaprire</span>
       <button type="button" class="btn btn--sm" data-pal-chiudi>Chiudi</button>
     </div>`;
   document.body.appendChild(d);
+  armaSezioneTipo(d);
 
   /* ── il tasto che rimette tutto com'era ──────────────────────────
      Chiede due volte. Non e' distruttivo — non si perde niente che non
@@ -178,6 +184,8 @@ function costruisciPannello() {
     calma();
     azzeraOrdine();
     azzeraGriglia();
+    azzeraTipo();
+    d.tipoSincronizza?.();
     applica('smeraldo');
     try { localStorage.removeItem(CHIAVE); } catch {}
     d.querySelectorAll('[data-gr-set]').forEach(b => b.setAttribute('aria-checked', 'false'));
@@ -213,7 +221,7 @@ function costruisciPannello() {
     grBottoni.forEach(b => b.setAttribute('aria-checked',
       String(!!c && b.dataset.grSet === (c.dataset.gr || ''))));
     d.querySelector('[data-gr-nome]').textContent = c ? nomeContenitore(c) : 'nessun gruppo';
-    d.querySelector('.pal__sez').hidden = !c;
+    d.querySelector('.pal__sez--griglia').hidden = !c;
   };
   grBottoni.forEach(b => b.addEventListener('click', () => {
     if (!d.contenitore) return;
@@ -265,10 +273,26 @@ function costruisciPannello() {
   return d;
 }
 
+/* Aperto dalla testata non c'e' un riquadro toccato: la griglia si applica al gruppo
+   che occupa piu' spazio sullo schermo in quel momento. */
+function contenitorePiuVisibile() {
+  let meglio = null, punti = 0, vicino = null, distanza = Infinity;
+  const centro = innerHeight / 2;
+  for (const el of document.querySelectorAll('[data-gr]')) {
+    const r = el.getBoundingClientRect();
+    if (!r.width || !r.height) continue;   // i gruppi nascosti non contano
+    const visibile = Math.max(0, Math.min(r.bottom, innerHeight) - Math.max(r.top, 0));
+    if (visibile > punti) { punti = visibile; meglio = el; }
+    const d = Math.abs((r.top + r.bottom) / 2 - centro);
+    if (d < distanza) { distanza = d; vicino = el; }
+  }
+  return meglio || vicino;   // se nessuno e' sullo schermo, il piu' vicino al centro
+}
+
 let pannello = null;
 export function apriPannello(box = null) {
   pannello ||= costruisciPannello();
-  pannello.contenitore = contenitoreDi(box);
+  pannello.contenitore = contenitoreDi(box) || contenitorePiuVisibile();
   pannello.bersaglio = bersaglioDi(box);
   pannello.segna();
   pannello.segnaGr();

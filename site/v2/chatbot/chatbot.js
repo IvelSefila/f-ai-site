@@ -2,8 +2,34 @@
  * Widget Controller "Nous" — F/AI Portfolio
  * Versione 1.0 (Settembre 2026)
  */
-import { CONFIG } from './chatbot.config.js?v=20260928-97';
-import { ChatEngine } from './chatbot.engine.js?v=20260928-97';
+import { CONFIG } from './chatbot.config.js?v=20260928-124';
+import { ChatEngine } from './chatbot.engine.js?v=20260928-124';
+
+/* Cosa sta girando: testi mostrati in alto e nel pannello dettagli (italiano semplice) */
+const ENGINE_INFO = {
+  deterministic: {
+    icona: '🛡️', etichetta: 'ISTANTANEO', nome: 'Istantaneo',
+    breve: 'risposte scritte sul sito, nel tuo browser',
+    cosa: "Le risposte sono testi preparati a partire dal sito e scelti dal tuo browser con delle regole. Non c'è un modello di intelligenza artificiale e non esce nessun dato dal tuo dispositivo. È velocissimo, ma risponde solo a ciò che è previsto."
+  },
+  cloud: {
+    icona: '☁️', etichetta: 'CLOUD · GROQ', nome: 'Cloud (Groq)',
+    breve: 'modello AI su Groq, tramite Cloudflare',
+    cosa: 'La tua domanda parte dal browser, passa da un piccolo server su Cloudflare e arriva a Groq, che fa girare il modello gpt-oss-120b. Il modello risponde usando i passaggi del sito più adatti alla domanda. Le domande escono dal tuo dispositivo e vengono elaborate da Cloudflare e da Groq; il nostro server non le registra.'
+  },
+  webgpu: {
+    icona: '⚡', etichetta: 'LOCALE · QWEN3', nome: 'Locale (Qwen3)',
+    breve: 'modello AI sulla tua scheda video',
+    cosa: 'Il modello Qwen3 1.7B è stato scaricato nel tuo browser e gira sulla tua scheda video (tecnologia WebGPU). Nessun dato esce dal tuo dispositivo. Il primo download pesa circa 1 GB.'
+  }
+};
+
+const GLOSSARIO = [
+  ['Cloudflare', 'Servizio online che ospita il piccolo server intermediario (il "Worker"). Custodisce la chiave di accesso a Groq, così non è mai visibile nel sito.'],
+  ['Groq', 'Azienda che fa girare modelli di intelligenza artificiale su hardware molto veloce: riceve la domanda e restituisce la risposta.'],
+  ['gpt-oss-120b', 'Il modello di intelligenza artificiale usato su Groq: un modello aperto di OpenAI con 120 miliardi di parametri.'],
+  ['WebGPU e Qwen3', 'WebGPU è la tecnologia che permette al browser di usare la scheda video. Qwen3 1.7B è il piccolo modello che può girare così, senza inviare dati fuori dal dispositivo.']
+];
 
 class NodoWidget {
   constructor() {
@@ -47,6 +73,7 @@ class NodoWidget {
 
     try {
       this.engine = await ChatEngine.create();
+      this.engine.onCloudDown = (info) => this.handleCloudDown(info);
       this.updateModeBadge();
     } catch (err) {
       console.warn("[Nous] Errore inizializzazione ChatEngine:", err);
@@ -107,7 +134,7 @@ class NodoWidget {
             <svg class="icon-voice-off" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/></svg>
             <svg class="icon-voice-on" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="display:none;"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg>
           </button>
-          <button class="nodo-mode-badge" type="button" title="Selettore modalità motore (Istantaneo / GPU Locale / Cloud)" aria-label="Modalità motore">
+          <button class="nodo-mode-badge" type="button" title="Cosa sta girando: tocca per i dettagli" aria-label="Cosa sta girando: tocca per i dettagli" aria-expanded="false" aria-controls="nodo-mode-info">
             [ 🛡️ ISTANTANEO ]
           </button>
           <button class="nodo-icon-btn" type="button" data-action="reset" title="Azzera conversazione" aria-label="Azzera conversazione">
@@ -117,6 +144,7 @@ class NodoWidget {
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
           </button>
         </div>
+        <div class="nodo-mode-info" id="nodo-mode-info" role="region" aria-label="Cosa sta girando" hidden></div>
       </header>
 
       <div class="nodo-progress-bar" style="display: none;" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" aria-hidden="true">
@@ -170,6 +198,7 @@ class NodoWidget {
       header: win.querySelector('.nodo-header'),
       voiceBtn: win.querySelector('.nodo-voice-btn'),
       modeBadge: win.querySelector('.nodo-mode-badge'),
+      modeInfo: win.querySelector('.nodo-mode-info'),
       progressBar: win.querySelector('.nodo-progress-bar'),
       progressFill: win.querySelector('.nodo-progress-fill'),
       progressText: win.querySelector('.nodo-progress-text'),
@@ -204,7 +233,28 @@ class NodoWidget {
       }
     });
 
-    modeBadge.addEventListener('click', () => this.handleModeToggle());
+    modeBadge.addEventListener('click', (e) => { e.stopPropagation(); this.toggleModeInfo(); });
+    this.elements.modeInfo.addEventListener('click', (e) => {
+      const b = e.target.closest('[data-engine]');
+      if (!b) return;
+      const target = b.dataset.engine;
+      if (target === 'webgpu' && this.engine && !this.engine.isWebGPULoaded) {
+        this.closeModeInfo();
+        this.activateLocalQwen({ passa: true });
+      } else {
+        this.switchEngine(target);
+      }
+    });
+    win.addEventListener('click', (e) => {
+      if (!e.target.closest('.nodo-mode-info, .nodo-mode-badge')) this.closeModeInfo();
+    });
+    win.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && !this.elements.modeInfo.hidden) {
+        e.stopPropagation();
+        this.closeModeInfo();
+        modeBadge.focus();
+      }
+    }, true);
     resetBtn.addEventListener('click', () => this.resetChat());
 
     if (voiceBtn) {
@@ -546,45 +596,20 @@ class NodoWidget {
       if (activeSec) {
         welcome = `📍 **Sala attiva: ${activeSec.name}**\n\nCiao! Sono **Nous**, l'intelligenza di regia del portfolio di Fabrizio. ${activeSec.prompt}`;
       }
+      welcome = `${welcome}\n\n${this.rigaMotore()}`;
       this.appendBotMessage(welcome);
       if (this.voiceEnabled) {
         this.speakText(welcome);
       }
 
-      // Auto-Detection WebGPU: proponi una volta sola se supportato
-      if (navigator.gpu && !localStorage.getItem('nodo_webgpu_asked')) {
-        setTimeout(() => {
-          const offerMsg = document.createElement('div');
-          offerMsg.className = 'nodo-msg nodo-msg--bot';
-          offerMsg.innerHTML = `
-            <div class="nodo-msg-text">⚡ Il tuo browser supporta l'AI locale (WebGPU). Vuoi risposte più libere e contestuali con il modello neurale Qwen3 1.7B, che gira sul tuo dispositivo?</div>
-            <div class="nodo-msg-action nodo-webgpu-offer-actions">
-              <button class="nodo-webgpu-offer" data-choice="yes">Sì, attiva</button>
-              <button class="nodo-webgpu-offer" data-choice="no">No grazie</button>
-            </div>
-          `;
-
-          // Handler pulsanti
-          offerMsg.querySelector('[data-choice="yes"]').addEventListener('click', () => {
-            localStorage.setItem('nodo_webgpu_asked', '1');
-            offerMsg.remove();
-            this.handleModeToggle();
-          });
-          offerMsg.querySelector('[data-choice="no"]').addEventListener('click', () => {
-            localStorage.setItem('nodo_webgpu_asked', '1');
-            offerMsg.remove();
-            this.appendBotMessage('Ok, rimango in modalità Istantanea/Cloud. Puoi attivarla quando vuoi dal badge in alto.');
-          });
-
-          this.elements.messages.appendChild(offerMsg);
-          this.scrollToBottom();
-        }, 1500);
-      }
+      // Modello locale: una domanda all'apertura (una volta per browser)
+      setTimeout(() => this.offerLocalQwen('open'), 1500);
     }
     setTimeout(() => this.elements.input.focus(), 150);
   }
 
   close(options = {}) {
+    this.closeModeInfo();
     this.isOpen = false;
     this.elements.fab.setAttribute('aria-expanded', 'false');
     this.elements.win.classList.remove('is-open');
@@ -616,12 +641,83 @@ class NodoWidget {
       console.warn("[Nodo] Impossibile rimuovere da sessionStorage:", e);
     }
     this.elements.messages.innerHTML = '';
-    this.appendBotMessage(CONFIG.welcomeMessage);
+    this.appendBotMessage(`${CONFIG.welcomeMessage}\n\n${this.rigaMotore()}`);
   }
 
-  async handleModeToggle() {
+  /* Riga di benvenuto: dice quale motore sta rispondendo in questo momento. */
+  rigaMotore() {
+    const mode = this.engine ? this.engine.getEffectiveMode() : (CONFIG.cloudProxyUrl ? 'cloud' : 'deterministic');
+    if (mode === 'cloud') {
+      return "Al momento sto usando **gpt-oss-120b** tramite **Groq** e **Cloudflare**. Tocca il badge in alto per i dettagli.";
+    }
+    if (mode === 'webgpu') {
+      return "Al momento sto usando **Qwen3 1.7B**, un modello che gira sul tuo dispositivo. Tocca il badge in alto per i dettagli.";
+    }
+    return "Al momento rispondo con testi scritti sul sito, senza intelligenza artificiale (modalità **Istantaneo**). Tocca il badge in alto per i dettagli.";
+  }
+
+  /* Groq non risponde piu': si passa da solo ai motori di riserva e si propone il modello locale. */
+  handleCloudDown(info) {
+    this.updateModeBadge();
+    const rest = Math.max(1000, info.fino - Date.now());
+    setTimeout(() => this.updateModeBadge(), rest + 500);
+    setTimeout(() => {
+      if (!this.offerLocalQwen('fallback')) {
+        const nome = ENGINE_INFO[this.engine.getEffectiveMode()].nome;
+        this.appendBotMessage(info.limite
+          ? `Le chiamate a Groq per ora sono finite: rispondo con ${nome} e riprovo da solo tra poco.`
+          : `Groq per ora non risponde: rispondo con ${nome} e riprovo da solo tra poco.`);
+      }
+    }, 900);
+  }
+
+  /* Propone di installare Qwen3 sul dispositivo. Ritorna true se ha mostrato la domanda. */
+  offerLocalQwen(reason) {
+    if (!navigator.gpu || !this.engine || this.engine.isWebGPULoaded || this.engine.isWebGPULoading) return false;
+    let asked = false;
+    try { asked = !!localStorage.getItem('nodo_webgpu_asked'); } catch (e) {}
+    if (reason === 'open' && asked) return false;
+    if (reason === 'fallback') {
+      if (this._qwenOfferedFallback) return false;
+      this._qwenOfferedFallback = true;
+    }
+    const eff = this.engine.getEffectiveMode();
+    const inPausa = this.engine.getMode() === 'cloud' && eff !== 'cloud';
+    let testo;
+    if (eff === 'cloud') {
+      testo = "Al momento le risposte le dà <strong>Groq</strong> (modello gpt-oss-120b) tramite <strong>Cloudflare</strong>. Vuoi installare sul tuo dispositivo <strong>Qwen3 1.7B</strong>? Risponde da solo, senza mandare le domande in rete, e resta come riserva se Groq non risponde. Si scarica una volta sola (circa 1 GB).";
+    } else if (inPausa) {
+      testo = "Groq per ora non risponde (chiamate finite o servizio occupato): uso le risposte <strong>Istantanee</strong>, scritte sul sito, e riprovo da solo tra poco. Vuoi installare sul tuo dispositivo <strong>Qwen3 1.7B</strong>, un piccolo modello AI che risponde senza rete? Si scarica una volta sola (circa 1 GB).";
+    } else {
+      testo = "Al momento rispondo con testi scritti sul sito, senza intelligenza artificiale. Vuoi installare sul tuo dispositivo <strong>Qwen3 1.7B</strong>, un piccolo modello AI che risponde senza rete? Si scarica una volta sola (circa 1 GB).";
+    }
+    const offerMsg = document.createElement('div');
+    offerMsg.className = 'nodo-msg nodo-msg--bot';
+    offerMsg.innerHTML = `
+      <div class="nodo-msg-text">⚡ ${testo}</div>
+      <div class="nodo-msg-action nodo-webgpu-offer-actions">
+        <button class="nodo-webgpu-offer" data-choice="yes">Sì, installa</button>
+        <button class="nodo-webgpu-offer" data-choice="no">No grazie</button>
+      </div>`;
+    const memorizza = () => { try { localStorage.setItem('nodo_webgpu_asked', '1'); } catch (e) {} };
+    offerMsg.querySelector('[data-choice="yes"]').addEventListener('click', () => {
+      memorizza();
+      offerMsg.remove();
+      this.activateLocalQwen();
+    });
+    offerMsg.querySelector('[data-choice="no"]').addEventListener('click', () => {
+      memorizza();
+      offerMsg.remove();
+      this.appendBotMessage(`Va bene, continuo con ${ENGINE_INFO[this.engine.getEffectiveMode()].nome}.`);
+    });
+    this.elements.messages.appendChild(offerMsg);
+    this.scrollToBottom();
+    return true;
+  }
+
+  /* Attiva il modello locale (Qwen3 nel browser). Si chiama solo dalla domanda in chat. */
+  async activateLocalQwen(opts = {}) {
     if (this.engine && this.engine.isWebGPULoading) return;
-    // Cambio modalità durante una risposta: annulla lo stream in corso
     if (this.isGenerating) this.stopGeneration(true);
 
     if (!this.engine) {
@@ -633,87 +729,128 @@ class NodoWidget {
       }
     }
 
-    const currentMode = this.engine ? this.engine.getMode() : 'deterministic';
+    const prevMode = this.engine.getMode();
+    if (!navigator.gpu) {
+      this.showToast("Il tuo browser non supporta WebGPU: resto sul motore attuale.");
+      return;
+    }
 
-    if (currentMode === 'deterministic') {
-      // Passa a GPU LOCALE
-      if (!navigator.gpu) {
-        this.showToast("WebGPU non supportata dal tuo browser o dispositivo. Rimango in modalità Istantanea.");
-        this.engine.setMode('deterministic');
-        this.updateModeBadge();
-        return;
-      }
+    if (this.engine.isWebGPULoaded) {
+      this.engine.setMode('webgpu');
+      this.updateModeBadge();
+      this.showToast("⚡ Modello locale (Qwen3 1.7B) attivato.", false, 2000);
+      return;
+    }
 
-      if (this.engine.isWebGPULoaded) {
-        this.engine.setMode('webgpu');
-        this.updateModeBadge();
-        this.showToast("⚡ GPU Locale (Qwen3 1.7B) attivata.", false, 2000);
-        return;
-      }
+    this.showProgressBar();
+    this.elements.modeBadge.classList.add('nodo-mode-badge--loading');
 
-      this.showProgressBar();
-      this.elements.modeBadge.classList.add('nodo-mode-badge--loading');
+    try {
+      await this.engine.loadWebGPU((progress, text) => {
+        this.updateProgress(progress, text);
+      });
 
-      try {
-        await this.engine.loadWebGPU((progress, text) => {
-          this.updateProgress(progress, text);
-        });
+      this.updateProgress(1.0, "Modello Qwen3 1.7B pronto (100%)");
+      const restaSuGroq = prevMode === 'cloud' && !opts.passa;
+      if (!restaSuGroq) this.engine.setMode('webgpu');
+      this.updateModeBadge();
 
-        this.updateProgress(1.0, "Pesi Qwen3 1.7B pronti (100%)");
-        this.engine.setMode('webgpu');
-        this.updateModeBadge();
-
-        setTimeout(() => {
-          this.hideProgressBar();
-          this.showToast("WebGPU caricata con successo! Modello neurale attivo.", false, 2500);
-        }, 1500);
-      } catch (err) {
-        console.warn("[Nodo] Errore caricamento WebGPU:", err);
+      setTimeout(() => {
         this.hideProgressBar();
-        this.engine.setMode('deterministic');
-        this.updateModeBadge();
-        this.showToast(`WebGPU non disponibile: ${err.message || 'Errore nei pesi'}. Ritorno a Istantaneo.`);
-      } finally {
-        this.elements.modeBadge.classList.remove('nodo-mode-badge--loading');
-      }
-    } else if (currentMode === 'webgpu') {
-      // Da WebGPU passa a Cloud se configurato, altrimenti a Istantaneo
-      const nextMode = CONFIG.cloudProxyUrl ? 'cloud' : 'deterministic';
-      this.engine.setMode(nextMode);
+        this.showToast(restaSuGroq
+          ? "Qwen3 installato: resta come riserva se Groq non risponde. Dal badge puoi passarci quando vuoi."
+          : "Modello locale caricato: adesso risponde Qwen3 sul tuo dispositivo.", false, 3200);
+      }, 1500);
+    } catch (err) {
+      console.warn("[Nous] Errore caricamento WebGPU:", err);
+      this.hideProgressBar();
+      this.engine.setMode(prevMode);
       this.updateModeBadge();
-      this.showToast(`Modalità impostata su: ${nextMode === 'cloud' ? 'Cloud' : 'Istantaneo'}`, false, 2000);
-    } else if (currentMode === 'cloud') {
-      this.engine.setMode('deterministic');
-      this.updateModeBadge();
-      this.showToast("Modalità impostata su: Istantaneo", false, 2000);
+      this.showToast(`Modello locale non disponibile: ${err.message || 'errore nel download'}. Resto su ${ENGINE_INFO[prevMode].nome}.`);
+    } finally {
+      this.elements.modeBadge.classList.remove('nodo-mode-badge--loading');
     }
   }
 
+  /* Passa da un motore all'altro fra quelli gia' pronti (niente download da qui). */
+  switchEngine(target) {
+    if (!this.engine || this.engine.isWebGPULoading || !ENGINE_INFO[target]) return;
+    if (target === 'cloud' && !CONFIG.cloudProxyUrl) return;
+    if (target === 'webgpu' && !this.engine.isWebGPULoaded) return;
+    if (this.isGenerating) this.stopGeneration(true);
+    if (target === 'cloud') this.engine.cloudDownUntil = 0;
+    this.engine.setMode(target);
+    this.updateModeBadge();
+    this.showToast(`Adesso risponde: ${ENGINE_INFO[target].nome}`, false, 2000);
+  }
+
+  toggleModeInfo() {
+    const box = this.elements.modeInfo;
+    if (!box) return;
+    if (box.hidden) {
+      this.renderModeInfo();
+      box.hidden = false;
+      this.elements.modeBadge.setAttribute('aria-expanded', 'true');
+    } else {
+      this.closeModeInfo();
+    }
+  }
+
+  closeModeInfo() {
+    const box = this.elements.modeInfo;
+    if (!box || box.hidden) return;
+    box.hidden = true;
+    this.elements.modeBadge.setAttribute('aria-expanded', 'false');
+  }
+
+  renderModeInfo() {
+    const box = this.elements.modeInfo;
+    if (!box) return;
+    const mode = this.engine ? this.engine.getEffectiveMode() : 'deterministic';
+    const inPausa = !!this.engine && this.engine.getMode() === 'cloud' && mode !== 'cloud';
+    const now = ENGINE_INFO[mode] || ENGINE_INFO.deterministic;
+    const qwenPronto = !!(this.engine && this.engine.isWebGPULoaded);
+    const qwenInCorso = !!(this.engine && this.engine.isWebGPULoading);
+    const altri = ['deterministic', 'cloud', 'webgpu'].filter(m => m !== mode && (
+      (m === 'deterministic') ||
+      (m === 'cloud' && !!CONFIG.cloudProxyUrl) ||
+      (m === 'webgpu' && !!navigator.gpu && !qwenInCorso)
+    ));
+    const etichetta = (m) => (m === 'webgpu' && !qwenPronto)
+      ? 'Installa e passa a WebGPU · Qwen3 (circa 1 GB)'
+      : (m === 'webgpu' ? 'Passa a WebGPU · Qwen3' : `Passa a ${ENGINE_INFO[m].nome}`);
+    const cambia = altri.length
+      ? `<div class="nodo-mode-info-switch">${altri.map(m => `<button type="button" class="nodo-mode-info-btn" data-engine="${m}">${etichetta(m)}</button>`).join('')}</div>`
+      : '';
+    const glossario = GLOSSARIO.map(([t, d]) => `<dt>${t}</dt><dd>${d}</dd>`).join('');
+    box.innerHTML = `
+      <p class="nodo-mode-info-kicker">Cosa sta girando adesso</p>
+      <p class="nodo-mode-info-now"><strong>${now.icona} ${now.nome}</strong><span>${now.breve}</span></p>
+      <p class="nodo-mode-info-text">${now.cosa}</p>
+      ${inPausa ? '<p class="nodo-mode-info-note">Groq per ora non risponde (chiamate finite o servizio occupato). Riprovo da solo fra qualche minuto, oppure puoi riprovare subito con il pulsante qui sotto.</p>' : ''}
+      ${cambia}
+      <details class="nodo-mode-info-gloss">
+        <summary>Cosa sono Cloudflare, Groq e gli altri</summary>
+        <dl>${glossario}</dl>
+      </details>`;
+  }
+
   updateModeBadge() {
-    const mode = this.engine ? this.engine.getMode() : 'deterministic';
+    const mode = this.engine ? this.engine.getEffectiveMode() : 'deterministic';
     const badge = this.elements.modeBadge;
     if (!badge) return;
+    const info = ENGINE_INFO[mode] || ENGINE_INFO.deterministic;
+    const inPausa = !!this.engine && this.engine.getMode() === 'cloud' && mode !== 'cloud';
 
     badge.className = 'nodo-mode-badge';
     if (this.elements.privacyNote) {
       this.elements.privacyNote.style.display = mode === 'cloud' ? 'block' : 'none';
     }
-    if (mode === 'webgpu') {
-      badge.classList.add('nodo-mode-badge--webgpu');
-      badge.innerHTML = `[ ⚡ GPU LOCALE ]`;
-      badge.setAttribute('title', 'Modalità attiva: GPU Locale (Qwen3 1.7B in-browser). Clicca per passare a Istantaneo.');
-      badge.setAttribute('aria-label', 'Modalità attiva: GPU Locale. Clicca per cambiare.');
-    } else if (mode === 'cloud') {
-      badge.classList.add('nodo-mode-badge--cloud');
-      badge.innerHTML = `[ ☁️ CLOUD ]`;
-      badge.setAttribute('title', 'Modalità attiva: Cloud Worker. Clicca per cambiare.');
-      badge.setAttribute('aria-label', 'Modalità attiva: Cloud. Clicca per cambiare.');
-    } else {
-      badge.classList.add('nodo-mode-badge--instant');
-      badge.innerHTML = `[ 🛡️ ISTANTANEO ]`;
-      badge.setAttribute('title', 'Modalità attiva: Istantaneo (deterministico offline). Clicca per attivare GPU Locale.');
-      badge.setAttribute('aria-label', 'Modalità attiva: Istantaneo. Clicca per attivare GPU Locale.');
-    }
+    badge.classList.add(mode === 'webgpu' ? 'nodo-mode-badge--webgpu' : mode === 'cloud' ? 'nodo-mode-badge--cloud' : 'nodo-mode-badge--instant');
+    badge.innerHTML = `[ ${info.icona} ${info.etichetta} ]`;
+    badge.setAttribute('title', `Sta girando: ${info.nome}. ${info.breve}.${inPausa ? ' Groq per ora non risponde.' : ''} Tocca per i dettagli.`);
+    badge.setAttribute('aria-label', `Sta girando: ${info.nome}. Tocca per i dettagli.`);
+    if (this.elements.modeInfo && !this.elements.modeInfo.hidden) this.renderModeInfo();
   }
 
   showProgressBar() {
