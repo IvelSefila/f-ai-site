@@ -94,12 +94,35 @@ export function initTipografia() {
   applicaStato();
   caricaFont(trova('titoli', stato.titoli.font));
   caricaFont(trova('testi', stato.testi.font));
+  document.querySelector('[data-tipo-meno]')?.addEventListener('click', () => cambiaScalaGenerale(-10));
+  document.querySelector('[data-tipo-piu]')?.addEventListener('click', () => cambiaScalaGenerale(10));
+  segnaComandiTestata();
+}
+
+/* i comandi rapidi in testata: A− / A+ cambiano insieme titoli e testi di 10 punti */
+export function cambiaScalaGenerale(delta) {
+  for (const ruolo of ['titoli', 'testi']) {
+    stato[ruolo].scala = Math.min(SCALA_MAX, Math.max(SCALA_MIN, stato[ruolo].scala + delta));
+  }
+  salva();
+  applicaStato();
+  document.dispatchEvent(new Event('caratteri'));
+  segnaComandiTestata();
+}
+
+function segnaComandiTestata() {
+  const meno = document.querySelector('[data-tipo-meno]'), piu = document.querySelector('[data-tipo-piu]');
+  if (!meno || !piu) return;
+  const min = Math.min(stato.titoli.scala, stato.testi.scala), max = Math.max(stato.titoli.scala, stato.testi.scala);
+  meno.disabled = min <= SCALA_MIN;
+  piu.disabled = max >= SCALA_MAX;
 }
 
 export function azzeraTipo() {
   stato = iniziale();
   try { localStorage.removeItem(CHIAVE); } catch { /* niente */ }
   applicaStato();
+  segnaComandiTestata();
 }
 
 /* ── la sezione dentro il pannello dei colori ── */
@@ -156,5 +179,6 @@ export function armaSezioneTipo(d) {
   }
   d.querySelector('[data-tipo-reset]').addEventListener('click', () => { azzeraTipo(); sincronizza(); });
   d.tipoSincronizza = sincronizza;
+  document.addEventListener('caratteri', sincronizza);
   sincronizza();
 }

@@ -4274,3 +4274,29 @@ body.mirino-on, body.mirino-on * { cursor: none !important; }
   .navdock__chiudi svg { animation: navdock-freccia 2.6s ease-in-out infinite; }
   .navdock:not(.chiuso) .navdock__chiudi:hover::after, .navdock-apri:hover::after { animation-play-state: paused; }
 }
+
+
+/* ── Testata: comandi rapidi per grandezza e carattere, accanto al colore ── */
+.bar__tipo { display: flex; align-items: center; gap: 6px; }
+.bar__tipo button {
+  min-width: 32px; height: 32px; padding: 0 8px; border-radius: var(--r-min);
+  border: 1px solid var(--rule); background: transparent; color: var(--text);
+  font: 600 12px/1 var(--mono); letter-spacing: .04em; cursor: pointer;
+  transition: color .2s var(--ease), border-color .2s var(--ease), background-color .2s var(--ease);
+}
+.bar__tipo button:hover:not(:disabled), .bar__tipo button:focus-visible {
+  color: var(--em); border-color: var(--em-dim); background: color-mix(in srgb, var(--em) 10%, transparent);
+}
+.bar__tipo button:focus-visible { outline: 2px solid var(--em-bright); outline-offset: 2px; }
+.bar__tipo button:disabled { opacity: .35; cursor: default; }
+@media (max-width: 1240px) { .bar__tipo { display: none; } }
+
+/* ── Eroe su desktop: piu' aria fra le parti, cosi' si staccano ── */
+@media (min-width: 901px) {
+  .hero__spot { margin-top: clamp(56px, 8vh, 96px); }
+  .vetrina { margin-top: clamp(40px, 5.5vh, 64px); }
+  .hero__actions { margin-top: clamp(44px, 6.5vh, 76px); }
+}
+
+/* Mobile: la riga di voci in testata si nasconde (resta la barra in basso) */
+@media (max-width: 900px) { .bar__nav { display: none !important; } .bar__cta { margin-left: auto; } }

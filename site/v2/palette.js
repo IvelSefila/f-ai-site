@@ -1,8 +1,8 @@
-import { htmlSezioneTipo, armaSezioneTipo, azzeraTipo } from './tipografia.js?v=20260928-124';
+import { htmlSezioneTipo, armaSezioneTipo, azzeraTipo } from './tipografia.js?v=20260928-126';
 import { PRESET, applicaGriglia, contenitoreDi, nomeContenitore,
-         mostraGriglia, grigliaVisibile, initGriglia, azzeraGriglia } from './griglia.js?v=20260928-124';
+         mostraGriglia, grigliaVisibile, initGriglia, azzeraGriglia } from './griglia.js?v=20260928-126';
 import { initOrdine, bersaglioDi, spostaDi, puoAndare, rimetti, ordineCambiato,
-         iniziaTrascino, traTrascinando, azzeraOrdine } from './sposta.js?v=20260928-124';
+         iniziaTrascino, traTrascinando, azzeraOrdine } from './sposta.js?v=20260928-126';
 
 /* ═══════════════════════════════════════════════════════════════════
  * PALETTE — tieni premuto su un riquadro e scegli il colore del sito
@@ -426,6 +426,10 @@ function armaTestata() {
     b.addEventListener('click', () => { applica(b.dataset.palVeloce); segna(); });
   });
   document.querySelector('[data-pal-apri]')?.addEventListener('click', () => apriPannello());
+  document.querySelector('[data-tipo-apri]')?.addEventListener('click', () => {
+    apriPannello();
+    requestAnimationFrame(() => pannello?.querySelector('.pal__sez--tipo')?.scrollIntoView({ block: 'start' }));
+  });
   document.addEventListener('palette', segna);
   segna();
 }
