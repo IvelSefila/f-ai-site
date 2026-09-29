@@ -2,16 +2,16 @@
 * app.js — la sessione. Tiene il filo fra le prove, parla, misura,
 * e alla fine scrive il dossier. Nessuna libreria.
 * ═══════════════════════════════════════════════════════════════════ */
-import { initHero } from './hero.js?v=20260911-135324';
-import { initStrumenti } from './strumenti.js?v=20260911-135324';
-import { initUnion } from './union.js?v=20260911-135324';
-import { initEso } from './eso.js?v=20260911-135324';
-import { initLocanda } from './locanda.js?v=20260911-135324';
-import { initCest } from './cest.js?v=20260911-135324';
-import { initPalette } from './palette.js?v=20260911-135324';
-import { keyVisual, radar, MODES, rng, leggiColori} from './engine.js?v=20260911-135324';
-import { initBrief } from './brief.js?v=20260911-135324';
-import { initServizi } from './servizi.js?v=20260911-135324';
+import { initHero } from './hero.js?v=20260928-69';
+import { initStrumenti } from './strumenti.js?v=20260928-69';
+import { initUnion } from './union.js?v=20260928-69';
+import { initEso } from './eso.js?v=20260928-69';
+import { initLocanda } from './locanda.js?v=20260928-69';
+import { initCest } from './cest.js?v=20260928-69';
+import { initPalette } from './palette.js?v=20260928-69';
+import { keyVisual, radar, MODES, rng, leggiColori} from './engine.js?v=20260928-69';
+import { initBrief } from './brief.js?v=20260928-69';
+import { initServizi } from './servizi.js?v=20260928-69';
 
 const $ = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => [...r.querySelectorAll(s)];
@@ -62,8 +62,8 @@ function say(text, sticky = false) {
    diceva "Prova 01". Adesso sono gli stessi dell'HTML, e sono cinque
    perche' due sezioni sono diventate blocchi dentro altre due. */
 const VOICE = {
-  banchi: 'Prova 01. Quattro servizi. Apri ognuno per il dettaglio.',
-  lavori: 'Prova 02. Tre lavori veri. I video partono solo se li apri.',
+  banchi: 'Prova 01. Otto servizi. Apri ognuno per il dettaglio.',
+  lavori: 'Prova 02. Cinque lavori veri. I video partono solo se li apri.',
   regia: 'Prova 03. Cinque fasi, in fila: guarda l’input attraversarle.',
   tecnologia: 'Prova 04. Locale, cloud o ibrido: stime dichiarate, non promesse.',
   laboratorio: 'Prova 05. Quattro motori di gioco scritti da zero.',
@@ -141,11 +141,20 @@ function segnaScena(i) {
 const FORMATS = [['9:16', 405, 720, 'Storia'], ['4:5', 576, 720, 'Feed'], ['1:1', 640, 640, 'Quadrato'], ['3:2', 720, 480, 'Stampa'], ['16:9', 720, 405, 'Copertina'], ['21:9', 840, 360, 'Cinema']];
 function buildFormats(host, list) {
   host.innerHTML = '';
-  return list.map(([name, w, h, use]) => {
-      const f = document.createElement('figure');
-      f.innerHTML = `<canvas width="${w}" height="${h}"></canvas><figcaption><span>${use}</span><b>${name}</b></figcaption>`;
-      host.append(f);
-      return f.querySelector('canvas');
+  return list.map(([name, w, h, use], i) => {
+      const b = document.createElement('button');
+      b.type = 'button';
+      b.className = 'fmt__tasto';
+      b.setAttribute('aria-label', `Scrivi il tuo testo per il formato ${use}, ${name}`);
+      b.innerHTML = `
+        <figure>
+          <canvas width="${w}" height="${h}"></canvas>
+          <figcaption><span>${use}</span><b>${name}</b></figcaption>
+        </figure>
+        <span class="fmt__hint"><i aria-hidden="true">✎</i> Scrivi il tuo testo</span>`;
+      b.addEventListener('click', () => apriEditorFormati(i));
+      host.append(b);
+      return b.querySelector('canvas');
     });
 }
 const fmtCanvases = buildFormats($('#formats'), FORMATS);
@@ -156,15 +165,17 @@ const FMT_TITOLI = [
   'Un concept,\nmille misure', 'Stesso messaggio,\naltra griglia', 'Un formato\nnon basta mai',
 ];
 let fmtTitolo = FMT_TITOLI[0];
+let fmtPos = 'basso', fmtAllinea = 'sinistra', fmtFont = null, fmtColore = null;
 function drawFormats() {
   const wgt = +fmtIdea.value / 100;
   fmtIdea.style.setProperty('--v', `${fmtIdea.value}%`);
-  fmtOut.textContent = fmtIdea.value;
+  if (fmtOut) fmtOut.textContent = fmtIdea.value;
   fmtSeedV.textContent = fmtSeed;
   fmtCanvases.forEach((c, i) => {
       keyVisual(c.getContext('2d'), {
           w: c.width, h: c.height, seed: fmtSeed, ai: .3, weight: wgt,
           title: fmtTitolo, kicker: `MF/AI · ${FORMATS[i][0]}`,
+          pos: fmtPos, align: fmtAllinea, font: fmtFont, color: fmtColore,
         });
     });
 }
@@ -186,6 +197,432 @@ $('#fmtNew').addEventListener('click', () => {
   fmtTitolo = FMT_TITOLI[(Math.random() * FMT_TITOLI.length) | 0];
   drawFormats(); act(); proof('banchi');
 });
+
+/* ── l'editor: scrivi il tuo testo, scegli dove va e con che carica ──
+   Le sei miniature restano la vetrina; qui dentro si lavora davvero,
+   su un'anteprima grande e sola. Non serve un'altra scelta di formato
+   — quella si fa cliccando la miniatura giusta — serve poter decidere
+   DOVE va il titolo dentro quel formato, non solo cosa dice. */
+const EDITOR_POSIZIONI = [
+  ['basso', 'In basso', 'il taglio classico, sotto lo sguardo'],
+  ['alto', 'In alto', 'per lasciare il soggetto scoperto sotto'],
+  ['centro', 'A metà', 'una fascia che taglia il centro'],
+  ['sinistra', 'A sinistra', 'colonna stretta sul lato sinistro'],
+  ['destra', 'A destra', 'colonna stretta sul lato destro'],
+  ['diagonale', 'In diagonale', 'ruotato sull’asse della composizione'],
+];
+const EDITOR_ALLINEI = [
+  ['sinistra', '<svg viewBox="0 0 20 14" width="18" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="1" y1="2" x2="19" y2="2"/><line x1="1" y1="7" x2="13" y2="7"/><line x1="1" y1="12" x2="17" y2="12"/></svg>'],
+  ['centro', '<svg viewBox="0 0 20 14" width="18" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="1" y1="2" x2="19" y2="2"/><line x1="4" y1="7" x2="16" y2="7"/><line x1="2" y1="12" x2="18" y2="12"/></svg>'],
+  ['destra', '<svg viewBox="0 0 20 14" width="18" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="1" y1="2" x2="19" y2="2"/><line x1="7" y1="7" x2="19" y2="7"/><line x1="3" y1="12" x2="19" y2="12"/></svg>'],
+];
+/* font veri, presi da Google Fonts e caricati solo quando servono */
+const EDITOR_FONT = [
+  { nome: 'Condensato', css: '"Barlow Condensed","Arial Narrow",sans-serif', google: null },
+  { nome: 'Manrope', css: '"Manrope",system-ui,Arial,sans-serif', google: null },
+  { nome: 'Bebas Neue', css: '"Bebas Neue",sans-serif', google: 'Bebas+Neue' },
+  { nome: 'Anton', css: '"Anton",sans-serif', google: 'Anton' },
+  { nome: 'Oswald', css: '"Oswald",sans-serif', google: 'Oswald:wght@600' },
+  { nome: 'Archivo Black', css: '"Archivo Black",sans-serif', google: 'Archivo+Black' },
+  { nome: 'Poppins', css: '"Poppins",sans-serif', google: 'Poppins:wght@700' },
+  { nome: 'Playfair Display', css: '"Playfair Display",serif', google: 'Playfair+Display:wght@700' },
+  { nome: 'Space Mono', css: '"Space Mono",monospace', google: 'Space+Mono:wght@700' },
+  { nome: 'JetBrains Mono', css: '"JetBrains Mono",monospace', google: 'JetBrains+Mono:wght@700' },
+];
+const fontGoogleCaricati = new Set();
+function caricaGoogleFont(f) {
+  if (!f.google || fontGoogleCaricati.has(f.google)) return Promise.resolve();
+  fontGoogleCaricati.add(f.google);
+  const link = document.createElement('link');
+  link.rel = 'stylesheet';
+  link.href = `https://fonts.googleapis.com/css2?family=${f.google}&display=swap`;
+  document.head.appendChild(link);
+  return new Promise(risolvi => {
+    const fine = () => document.fonts.load(`700 40px "${f.nome}"`).catch(() => {}).then(risolvi);
+    link.addEventListener('load', fine);
+    link.addEventListener('error', risolvi);
+    setTimeout(risolvi, 1500);
+  });
+}
+const EDITOR_COLORI = ['#14c08a', '#109fb5', '#9183ec', '#e95cb5', '#eb6a49', '#cc800d', '#6ca014', '#3f8cff', '#f0506e'];
+const EDITOR_TESTO_CASUALE = ['#f2f4f7', '#ffffff', '#ffe9a8', '#d7f5e8', '#e8e1ff', '#ffd6e8'];
+const EDITOR_SFONDO_CASUALE = ['#040708', '#0b0f16', '#160b22', '#001018', '#1a0b2e', '#06120c', '#12060a', '#081018'];
+const scegli = arr => arr[(Math.random() * arr.length) | 0];
+/* "infinito" nel senso che conta: non un numero fisso di varianti che
+   prima o poi si ripetono, ma l'intero spazio di un intero a 32 bit —
+   a occhio, non si vede mai due volte la stessa combinazione */
+const semeInfinito = () => Math.floor(Math.random() * 4294967296);
+/* zoom a due dita sull'anteprima: pizzica per ingrandire proprio nel
+   punto toccato, trascina con un dito quando sei ingrandito, doppio
+   tap per tornare a schermo intero. Zoom solo visivo (CSS transform
+   sul canvas), il PNG scaricato resta sempre alla risoluzione piena. */
+function installaPinchZoom(box, canvas) {
+  let scala = 1, tx = 0, ty = 0;
+  const puntatori = new Map();
+  let distanzaPrec = 0, centroPrec = null;
+
+  function applica() {
+    canvas.style.transform = `translate(${tx}px,${ty}px) scale(${scala})`;
+    box.dataset.zoomed = String(scala > 1.02);
+    box.style.cursor = scala > 1.02 ? 'grab' : 'zoom-in';
+  }
+  function reset() { scala = 1; tx = 0; ty = 0; applica(); }
+  box._resetZoom = reset;
+
+  function limita() {
+    /* il bordo vero e' quello del canvas, non del riquadro che lo
+       contiene: se l'immagine e' piu' stretta o piu' bassa del box
+       (lettera-box), calcolare il margine sul box la bloccava prima
+       di arrivare davvero al bordo dell'immagine */
+    const maxTx = (canvas.offsetWidth * (scala - 1)) / 2;
+    const maxTy = (canvas.offsetHeight * (scala - 1)) / 2;
+    tx = Math.min(maxTx, Math.max(-maxTx, tx));
+    ty = Math.min(maxTy, Math.max(-maxTy, ty));
+  }
+  function zoomIntorno(px, py, fattore) {
+    const r = box.getBoundingClientRect();
+    const cx = px - r.left - r.width / 2, cy = py - r.top - r.height / 2;
+    const nuova = Math.min(4, Math.max(1, scala * fattore));
+    const rapporto = nuova / scala;
+    tx = cx - (cx - tx) * rapporto;
+    ty = cy - (cy - ty) * rapporto;
+    scala = nuova;
+    if (scala <= 1.001) { tx = 0; ty = 0; }
+    limita();
+    applica();
+  }
+
+  box.addEventListener('pointerdown', e => {
+    try { box.setPointerCapture(e.pointerId); } catch {}
+    puntatori.set(e.pointerId, { x: e.clientX, y: e.clientY });
+    if (puntatori.size === 2) {
+      const [a, b] = [...puntatori.values()];
+      distanzaPrec = Math.hypot(a.x - b.x, a.y - b.y);
+      centroPrec = { x: (a.x + b.x) / 2, y: (a.y + b.y) / 2 };
+    } else if (puntatori.size === 1) {
+      /* la base per il trascinamento va fissata SUBITO al clic, non al
+         primo movimento: altrimenti un trascinamento corto e deciso
+         (un solo evento pointermove prima del rilascio, frequente col
+         mouse) non spostava nulla — sembrava che il trascinamento non
+         funzionasse affatto. */
+      centroPrec = { x: e.clientX, y: e.clientY };
+    }
+  });
+  box.addEventListener('pointermove', e => {
+    if (!puntatori.has(e.pointerId)) return;
+    puntatori.set(e.pointerId, { x: e.clientX, y: e.clientY });
+    if (puntatori.size === 2) {
+      const [a, b] = [...puntatori.values()];
+      const distanza = Math.hypot(a.x - b.x, a.y - b.y);
+      const centro = { x: (a.x + b.x) / 2, y: (a.y + b.y) / 2 };
+      if (distanzaPrec) zoomIntorno(centro.x, centro.y, distanza / distanzaPrec);
+      distanzaPrec = distanza; centroPrec = centro;
+    } else if (puntatori.size === 1 && scala > 1.02) {
+      const p = [...puntatori.values()][0];
+      if (centroPrec) { tx += p.x - centroPrec.x; ty += p.y - centroPrec.y; limita(); applica(); }
+      centroPrec = p;
+    }
+  });
+  function fine(e) {
+    puntatori.delete(e.pointerId);
+    if (puntatori.size < 2) distanzaPrec = 0;
+    if (puntatori.size === 1) centroPrec = [...puntatori.values()][0];
+    if (puntatori.size === 0) centroPrec = null;
+  }
+  box.addEventListener('pointerup', fine);
+  box.addEventListener('pointercancel', fine);
+  box.addEventListener('pointerleave', e => { if (puntatori.size <= 1) fine(e); });
+  /* la rotella del mouse zooma da sola, senza bisogno di ctrl: qui
+     dentro non c'e' nient'altro da scorrere, quindi la rotella puo'
+     fare solo questo */
+  box.addEventListener('wheel', e => {
+    e.preventDefault();
+    const fattore = e.ctrlKey ? (e.deltaY < 0 ? 1.12 : 0.89) : (e.deltaY < 0 ? 1.08 : 0.92);
+    zoomIntorno(e.clientX, e.clientY, fattore);
+  }, { passive: false });
+  box.addEventListener('dblclick', () => reset());
+  reset();
+}
+let editorDialog = null;
+function costruisciEditor() {
+  const d = document.createElement('dialog');
+  d.className = 'fmtEdit';
+  d.setAttribute('aria-labelledby', 'fmtEditTit');
+  d.innerHTML = `
+    <button type="button" class="fmtEdit__chiudiX" data-fmt-chiudi aria-label="Chiudi">×</button>
+    <p class="fmtEdit__cat mono">Editor · key visual</p>
+    <h3 id="fmtEditTit">Scrivi il tuo titolo</h3>
+    <div class="fmtEdit__corpo">
+      <div class="fmtEdit__anteprima">
+        <div class="fmtEdit__zoomBox">
+          <canvas width="720" height="720"></canvas>
+          <span class="fmtEdit__zoomHint">Doppio tap per tornare a schermo intero</span>
+        </div>
+        <p class="fmtEdit__formatoNome mono"></p>
+      </div>
+      <div class="fmtEdit__lato">
+        <div class="fmtEdit__campo">
+          <label for="fmtEditTxt">Il tuo titolo</label>
+          <textarea id="fmtEditTxt" maxlength="80"></textarea>
+        </div>
+        <div class="fmtEdit__campo">
+          <label for="fmtEditKick">Sopratitolo</label>
+          <input id="fmtEditKick" type="text" maxlength="40" class="fmtEdit__input" />
+        </div>
+        <div class="fmtEdit__campo">
+          <label>Dove va il titolo</label>
+          <div class="fmtEdit__formati" role="radiogroup" aria-label="Posizione del titolo"></div>
+        </div>
+        <div class="fmtEdit__riga2 fmtEdit__riga2--stile">
+          <div class="fmtEdit__campo">
+            <label>Allineamento del testo</label>
+            <div class="fmtEdit__allinei" role="radiogroup" aria-label="Allineamento del testo"></div>
+          </div>
+          <div class="fmtEdit__campo">
+            <label>Stile del testo</label>
+            <div class="fmtEdit__stile">
+              <button type="button" class="fmtEdit__pillo" data-stile="grassetto" aria-pressed="false" aria-label="Grassetto"><b>B</b></button>
+              <button type="button" class="fmtEdit__pillo" data-stile="corsivo" aria-pressed="false" aria-label="Corsivo"><i>I</i></button>
+              <button type="button" class="fmtEdit__pillo" data-stile="maiuscolo" aria-pressed="true" aria-label="Maiuscolo/minuscolo">Aa</button>
+            </div>
+          </div>
+        </div>
+        <div class="fmtEdit__campo">
+          <label for="fmtEditFont">Font del titolo · Google Fonts</label>
+          <select id="fmtEditFont" class="fmtEdit__input fmtEdit__select"></select>
+        </div>
+        <div class="fmtEdit__campo">
+          <label>Colore dell'accento</label>
+          <div class="fmtEdit__colori" role="radiogroup" aria-label="Colore dell'accento"></div>
+        </div>
+        <div class="fmtEdit__riga2">
+          <div class="fmtEdit__campo">
+            <label for="fmtEditColTesto">Colore testo</label>
+            <input id="fmtEditColTesto" type="color" class="fmtEdit__pickerColore" value="#f2f4f7" />
+          </div>
+          <div class="fmtEdit__campo">
+            <label for="fmtEditColSfondo">Colore sfondo</label>
+            <input id="fmtEditColSfondo" type="color" class="fmtEdit__pickerColore" value="#040708" />
+          </div>
+          <div class="fmtEdit__campo">
+            <label for="fmtEditColAccento">Colore grafica</label>
+            <input id="fmtEditColAccento" type="color" class="fmtEdit__pickerColore" value="#14c08a" />
+          </div>
+        </div>
+        <div class="fmtEdit__campo">
+          <label for="fmtEditDim">Grandezza testo · <output id="fmtEditDimV">100%</output></label>
+          <input id="fmtEditDim" type="range" min="50" max="160" value="100" />
+        </div>
+        <div class="fmtEdit__campo">
+          <label for="fmtEditSpazio">Spaziatura lettere · <output id="fmtEditSpazioV">0px</output></label>
+          <input id="fmtEditSpazio" type="range" min="0" max="16" value="0" />
+        </div>
+        <div class="fmtEdit__campo">
+          <label for="fmtEditInterlinea">Spaziatura righe · <output id="fmtEditInterlineaV">100%</output></label>
+          <input id="fmtEditInterlinea" type="range" min="80" max="170" value="100" />
+        </div>
+        <div class="fmtEdit__campo">
+          <label for="fmtEditAi">Rumore generativo · <output id="fmtEditAiV">30%</output></label>
+          <input id="fmtEditAi" type="range" min="0" max="100" value="30" />
+        </div>
+        <div class="fmtEdit__campo">
+          <label for="fmtEditPeso">Peso del titolo · <output id="fmtEditPesoV">55%</output></label>
+          <input id="fmtEditPeso" type="range" min="0" max="100" value="55" />
+        </div>
+        <button type="button" class="btn btn--sm fmtEdit__rigenera" data-fmt-rigenera>Rigenera composizione infinita <i aria-hidden="true">∞</i></button>
+      </div>
+    </div>
+    <div class="fmtEdit__piede">
+      <button type="button" class="btn btn--sm" data-fmt-chiudi>Chiudi</button>
+      <button type="button" class="btn btn--sm" data-fmt-scarica>Scarica PNG <i aria-hidden="true">↓</i></button>
+    </div>`;
+  document.body.appendChild(d);
+
+  const canvas = d.querySelector('.fmtEdit__anteprima canvas');
+  const zoomBox = d.querySelector('.fmtEdit__zoomBox');
+  installaPinchZoom(zoomBox, canvas);
+  const nomeFormato = d.querySelector('.fmtEdit__formatoNome');
+  const txt = d.querySelector('#fmtEditTxt');
+  const kick = d.querySelector('#fmtEditKick');
+  const aiRange = d.querySelector('#fmtEditAi'), aiOut = d.querySelector('#fmtEditAiV');
+  const pesoRange = d.querySelector('#fmtEditPeso'), pesoOut = d.querySelector('#fmtEditPesoV');
+  const dimRange = d.querySelector('#fmtEditDim'), dimOut = d.querySelector('#fmtEditDimV');
+  const spazioRange = d.querySelector('#fmtEditSpazio'), spazioOut = d.querySelector('#fmtEditSpazioV');
+  const interlineaRange = d.querySelector('#fmtEditInterlinea'), interlineaOut = d.querySelector('#fmtEditInterlineaV');
+  const colTesto = d.querySelector('#fmtEditColTesto');
+  const colSfondo = d.querySelector('#fmtEditColSfondo');
+  const colAccento = d.querySelector('#fmtEditColAccento');
+  const formatiHost = d.querySelector('.fmtEdit__formati');
+  const alliineiHost = d.querySelector('.fmtEdit__allinei');
+  const fontSel = d.querySelector('#fmtEditFont');
+  const coloriHost = d.querySelector('.fmtEdit__colori');
+  let seedEditor = fmtSeed;
+  const bottoniPos = EDITOR_POSIZIONI.map(([id, nome, nota]) => {
+    const b = document.createElement('button');
+    b.type = 'button';
+    b.setAttribute('role', 'radio');
+    b.setAttribute('aria-checked', 'false');
+    b.innerHTML = `<b>${nome}</b><span>${nota}</span>`;
+    b.addEventListener('click', () => { d.pos = id; ridisegna(); });
+    formatiHost.appendChild(b);
+    return b;
+  });
+  const bottoniAllinei = EDITOR_ALLINEI.map(([id, segno]) => {
+    const b = document.createElement('button');
+    b.type = 'button';
+    b.className = 'fmtEdit__pillo';
+    b.setAttribute('role', 'radio');
+    b.setAttribute('aria-checked', 'false');
+    b.setAttribute('aria-label', 'Allinea ' + id);
+    b.innerHTML = segno;
+    b.addEventListener('click', () => { d.allinea = id; ridisegna(); });
+    alliineiHost.appendChild(b);
+    return b;
+  });
+  d.querySelectorAll('.fmtEdit__stile [data-stile]').forEach(b => {
+    b.addEventListener('click', () => {
+      const chiave = b.dataset.stile;
+      const nuovo = b.getAttribute('aria-pressed') !== 'true';
+      b.setAttribute('aria-pressed', String(nuovo));
+      d[chiave] = nuovo;
+      ridisegna();
+    });
+  });
+  EDITOR_FONT.forEach((f, i) => {
+    const o = document.createElement('option');
+    o.value = String(i);
+    o.textContent = f.nome;
+    o.style.fontFamily = f.css;
+    fontSel.appendChild(o);
+  });
+  fontSel.addEventListener('change', async () => {
+    const f = EDITOR_FONT[+fontSel.value];
+    d.font = f.css;
+    ridisegna();
+    await caricaGoogleFont(f);
+    ridisegna();
+  });
+  const bottoniColori = EDITOR_COLORI.map(hex => {
+    const b = document.createElement('button');
+    b.type = 'button';
+    b.className = 'fmtEdit__tinta';
+    b.setAttribute('role', 'radio');
+    b.setAttribute('aria-checked', 'false');
+    b.setAttribute('aria-label', 'Colore ' + hex);
+    b.style.setProperty('--tinta', hex);
+    b.addEventListener('click', () => { d.colore = hex; ridisegna(); });
+    coloriHost.appendChild(b);
+    return b;
+  });
+  colAccento.addEventListener('input', () => { d.grafica = colAccento.value; ridisegna(); });
+
+  function ridisegna() {
+    const [, w, h, use] = d.formato;
+    canvas.width = w; canvas.height = h;
+    nomeFormato.textContent = `${use} · ${d.formato[0]}`;
+    bottoniPos.forEach((b, i) => {
+      const attivo = EDITOR_POSIZIONI[i][0] === d.pos;
+      b.setAttribute('aria-pressed', String(attivo));
+      b.setAttribute('aria-checked', String(attivo));
+    });
+    bottoniAllinei.forEach((b, i) => {
+      const attivo = EDITOR_ALLINEI[i][0] === d.allinea;
+      b.setAttribute('aria-pressed', String(attivo));
+      b.setAttribute('aria-checked', String(attivo));
+    });
+    bottoniColori.forEach((b, i) => {
+      const attivo = EDITOR_COLORI[i] === d.colore;
+      b.setAttribute('aria-pressed', String(attivo));
+      b.setAttribute('aria-checked', String(attivo));
+    });
+    aiOut.textContent = `${aiRange.value}%`;
+    pesoOut.textContent = `${pesoRange.value}%`;
+    dimOut.textContent = `${dimRange.value}%`;
+    spazioOut.textContent = `${spazioRange.value}px`;
+    interlineaOut.textContent = `${interlineaRange.value}%`;
+    keyVisual(canvas.getContext('2d'), {
+      w, h, seed: seedEditor, ai: +aiRange.value / 100, weight: +pesoRange.value / 100,
+      title: (txt.value || fmtTitolo), kicker: (kick.value || `MF/AI · ${d.formato[0]}`),
+      pos: d.pos, align: d.allinea, font: d.font, color: d.colore, grafica: d.grafica,
+      grassetto: d.grassetto, corsivo: d.corsivo, maiuscolo: d.maiuscolo,
+      fontScale: +dimRange.value / 100, letterSpacing: +spazioRange.value,
+      lineHeight: +interlineaRange.value / 100, textColor: colTesto.value, bgColor: colSfondo.value,
+    });
+  }
+  [txt, kick].forEach(el => el.addEventListener('input', ridisegna));
+  [aiRange, pesoRange, dimRange, spazioRange, interlineaRange].forEach(el => el.addEventListener('input', ridisegna));
+  [colTesto, colSfondo].forEach(el => el.addEventListener('input', ridisegna));
+  d.ridisegna = ridisegna;
+
+  d.querySelector('[data-fmt-rigenera]').addEventListener('click', async () => {
+    /* rigenera tutto da sola: non solo la texture, anche dove va il
+       titolo, cosa dice, che font e che colori — una proposta nuova
+       intera, come se l'avesse scelta un art director e non un dado */
+    seedEditor = semeInfinito();
+    d.pos = EDITOR_POSIZIONI[(Math.random() * EDITOR_POSIZIONI.length) | 0][0];
+    d.allinea = EDITOR_ALLINEI[(Math.random() * EDITOR_ALLINEI.length) | 0][0];
+    const fIdx = (Math.random() * EDITOR_FONT.length) | 0;
+    const f = EDITOR_FONT[fIdx];
+    d.font = f.css;
+    fontSel.value = String(fIdx);
+    d.colore = scegli(EDITOR_COLORI);
+    d.grafica = scegli(EDITOR_COLORI);
+    colAccento.value = d.grafica;
+    txt.value = scegli(FMT_TITOLI);
+    kick.value = '';
+    aiRange.value = Math.round(Math.random() * 100);
+    pesoRange.value = Math.round(Math.random() * 100);
+    dimRange.value = Math.round(75 + Math.random() * 55);
+    spazioRange.value = Math.round(Math.random() * 10);
+    interlineaRange.value = Math.round(90 + Math.random() * 45);
+    colTesto.value = scegli(EDITOR_TESTO_CASUALE);
+    colSfondo.value = scegli(EDITOR_SFONDO_CASUALE);
+    ridisegna();
+    await caricaGoogleFont(f);
+    ridisegna();
+  });
+  d.querySelector('[data-fmt-scarica]').addEventListener('click', () => {
+    const a = document.createElement('a');
+    a.href = canvas.toDataURL('image/png');
+    a.download = `mf-ai-key-visual-${d.formato[0].replace(':', 'x')}.png`;
+    a.click();
+  });
+  d.querySelectorAll('[data-fmt-chiudi]').forEach(b => b.addEventListener('click', () => d.close()));
+  d.addEventListener('click', e => { if (e.target === d) d.close(); });
+  return d;
+}
+function apriEditorFormati(indice) {
+  editorDialog ||= costruisciEditor();
+  const d = editorDialog;
+  d.formato = FORMATS[indice];
+  d.pos = 'basso';
+  d.allinea = 'sinistra';
+  d.grassetto = false;
+  d.corsivo = false;
+  d.maiuscolo = true;
+  d.querySelectorAll('.fmtEdit__stile [data-stile]').forEach(b => {
+    b.setAttribute('aria-pressed', String(b.dataset.stile === 'maiuscolo'));
+  });
+  d.font = EDITOR_FONT[0].css;
+  d.querySelector('#fmtEditFont').value = '0';
+  d.colore = null;
+  d.grafica = null;
+  d.querySelector('#fmtEditColAccento').value = '#14c08a';
+  d.querySelector('#fmtEditTxt').value = fmtTitolo;
+  d.querySelector('#fmtEditKick').value = '';
+  d.querySelector('#fmtEditAi').value = 30;
+  d.querySelector('#fmtEditPeso').value = fmtIdea.value;
+  d.querySelector('#fmtEditDim').value = 100;
+  d.querySelector('#fmtEditSpazio').value = 0;
+  d.querySelector('#fmtEditInterlinea').value = 100;
+  d.querySelector('#fmtEditColTesto').value = '#f2f4f7';
+  d.querySelector('#fmtEditColSfondo').value = '#040708';
+  d.querySelector('.fmtEdit__zoomBox')._resetZoom();
+  d.ridisegna();
+  if (!d.open) d.showModal();
+  d.querySelector('.fmtEdit__lato').scrollTop = 0;
+  d.querySelector('#fmtEditTxt').focus();
+}
 
 /* ══════════ 02 · LAVORI GENERATIVI ══════════ */
 const WORKS = [
@@ -573,6 +1010,33 @@ const secIO = new IntersectionObserver(es => {
     }, { threshold: .3 });
 $$('main > section[id]').forEach(s => secIO.observe(s));
 
+/* Il dock in basso segue la stessa idea: si accende la voce del blocco
+   che si sta guardando adesso, non solo al passaggio del dito. Osserva
+   elementi suoi propri e non le sezioni di sopra, perche' "Profilo" e
+   "Contatto" oggi stanno nella STESSA <section> (unita in un blocco
+   solo) e quell'osservatore li tratterebbe come un unico blocco enorme
+   sempre acceso insieme — qui invece ognuno guarda solo il pezzo di
+   contenuto che gli appartiene davvero. */
+const navdockBersagli = [
+      ['#banchi', '#banchi'], ['#lavori', '#lavori'], ['#strumenti', '#strumenti'],
+      ['.profilo', '#profilo'], ['#contatto', '#contatto'],
+    ].map(([sel, href]) => [$(sel), href]).filter(([el]) => el);
+if (navdockBersagli.length) {
+  const navdockLinks = $$('.navdock a');
+  const navdockVisti = new Map();
+  const navdockIO = new IntersectionObserver(es => {
+        for (const e of es) navdockVisti.set(e.target, e.isIntersecting);
+        /* Le voci sono sezioni una dopo l'altra: se piu' di una e' nella
+           fascia, vince l'ultima della lista. */
+        let sopra = null;
+        for (const [el, href] of navdockBersagli)
+          if (navdockVisti.get(el)) sopra = href;
+        navdockLinks.forEach(a => a.classList.toggle('qui', !!sopra &&
+          a.getAttribute('href') === sopra));
+      }, { threshold: 0, rootMargin: '-35% 0px -55% 0px' });
+  navdockBersagli.forEach(([el]) => navdockIO.observe(el));
+}
+
 /* orologio di sessione */
 setInterval(() => {
     barTime.textContent = mmss(performance.now() - S.t0);
@@ -594,9 +1058,9 @@ setTimeout(() => say('Sessione aperta. Ti mostro cosa so fare, non te lo raccont
   const FRASI = [
     'Grafico, fotografo, video editor, AI engineering, in una persona sola',
     'Le competenze si eseguono, non si elencano',
-    'Sette palette, calcolate per il contrasto',
+    'Nove palette, calcolate per il contrasto',
     'Due applicazioni mie, usate ogni giorno',
-    'Trentotto strumenti, uno scelto per ogni lavoro',
+    'Quarantaquattro strumenti, uno scelto per ogni lavoro',
     'Dal brief al file finito, senza passare la mano',
     'AI dove serve davvero, mai per riempire uno slide',
   ];
@@ -688,6 +1152,8 @@ initStrumenti();
 
   blocco.querySelector('summary').addEventListener('click', (e) => {
     e.preventDefault();
+    /* sul telefono le istruzioni non servono: la scheda resta chiusa */
+    if (matchMedia('(max-width:640px)').matches) return;
     blocco.open ? chiudi() : apri();
   });
 })();
@@ -698,3 +1164,401 @@ initUnion(guardato);
 initEso(guardato);
 initLocanda(guardato);
 initCest(guardato);
+
+/* l'iframe del caso CDI resta spento finché non lo attivi tu: prima del
+   clic il dito o la rotella sopra la finestra scorrono il portfolio,
+   non il sito incorporato. Il tasto nella barra fa la stessa cosa del
+   velo, nei due sensi — attiva e RIdisattiva — cosi' chi ha finito di
+   guardare puo' tornare a scorrere il portfolio senza uscire dal caso. */
+const cdiFrame = $('.cdi__frame');
+const cdiOverlay = $('[data-cdi-attiva]');
+const cdiToggle = $('[data-cdi-toggle]');
+if (cdiFrame && cdiOverlay && cdiToggle) {
+  const stato = attivo => {
+    cdiOverlay.classList.toggle('cdi__attiva--via', attivo);
+    cdiToggle.setAttribute('aria-pressed', String(attivo));
+    cdiToggle.innerHTML = attivo
+      ? '<i aria-hidden="true">⏻</i> Navigazione ON'
+      : '<i aria-hidden="true">⏻</i> Navigazione OFF';
+  };
+  cdiOverlay.addEventListener('click', () => stato(true));
+  cdiToggle.addEventListener('click', () => stato(cdiToggle.getAttribute('aria-pressed') !== 'true'));
+
+  /* indietro/avanti sulla cronologia dell'iframe restano permessi anche
+     dal browser cross-origin — solo LEGGERE l'indirizzo dentro non lo è.
+     La ricarica invece va rifatta a mano: location.reload() dall'esterno
+     è bloccato, riassegnare la src no. */
+  /* Avanti e indietro. Il browser non lascia toccare la cronologia di un
+     sito di un altro dominio (contentWindow.history lancia un errore),
+     ma le navigazioni dell'iframe finiscono nella cronologia della
+     pagina: history.back() della pagina le ripercorre. Si conta quante
+     volte l'iframe ha cambiato pagina per sapere fin dove si puo' andare;
+     un caricamento causato da noi (indietro, avanti, ricarica) non conta. */
+  const tastoIndietro = $('[data-cdi-back]');
+  const tastoAvanti = $('[data-cdi-avanti]');
+  let posizione = 0, massimo = 0, primoCaricamento = true, atteso = 0;
+  const aggiornaTasti = () => {
+    if (tastoIndietro) tastoIndietro.disabled = posizione <= 0;
+    if (tastoAvanti) tastoAvanti.disabled = posizione >= massimo;
+  };
+  cdiFrame.addEventListener('load', () => {
+    if (primoCaricamento) { primoCaricamento = false; return; }
+    if (atteso > 0) { atteso--; return; }
+    posizione++; massimo = posizione; aggiornaTasti();
+  });
+  tastoIndietro?.addEventListener('click', () => {
+    if (posizione <= 0) return;
+    posizione--; atteso++; aggiornaTasti(); history.back();
+  });
+  tastoAvanti?.addEventListener('click', () => {
+    if (posizione >= massimo) return;
+    posizione++; atteso++; aggiornaTasti(); history.forward();
+  });
+  aggiornaTasti();
+  $('[data-cdi-ricarica]')?.addEventListener('click', () => { atteso++; cdiFrame.src = cdiFrame.src; });
+}
+
+/* la tavola di riferimento del prodotto (eso) si legge da vicino:
+   un click e si apre ingrandita, stessa lastra degli altri popup */
+const tavolaImg = $('.eso__tavola img');
+if (tavolaImg) {
+  let tavolaDialog = null;
+  function apriTavola() {
+    if (!tavolaDialog) {
+      tavolaDialog = document.createElement('dialog');
+      tavolaDialog.className = 'img-lightbox';
+      tavolaDialog.innerHTML = `
+        <button type="button" class="img-lightbox__chiudi" aria-label="Chiudi">×</button>
+        <img src="${tavolaImg.src}" alt="${tavolaImg.alt}">`;
+      document.body.append(tavolaDialog);
+      tavolaDialog.querySelector('.img-lightbox__chiudi').addEventListener('click', () => tavolaDialog.close());
+      tavolaDialog.addEventListener('click', e => { if (e.target === tavolaDialog) tavolaDialog.close(); });
+    }
+    tavolaDialog.showModal();
+  }
+  tavolaImg.setAttribute('role', 'button');
+  tavolaImg.setAttribute('tabindex', '0');
+  tavolaImg.setAttribute('aria-label', 'Ingrandisci la tavola di riferimento del prodotto');
+  tavolaImg.addEventListener('click', apriTavola);
+  tavolaImg.addEventListener('keydown', e => {
+    if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); apriTavola(); }
+  });
+}
+
+/* la copertina "Il dispositivo" nella griglia eso e' una vista a 360°
+   che si trascina per girarla: i 120 fotogrammi si scaricano solo
+   quando la scheda entra in vista, mai prima. Per non fare "scatti
+   bianchi" mentre gira, ogni fotogramma resta decodificato in memoria
+   (niente rete a metà trascinamento) e lo sfondo della lastra e' scuro
+   come le altre copertine, non bianco. */
+$$('.eso__360-stage').forEach(stage360 => {
+  const img360 = stage360.querySelector('.eso__360-img');
+  const TOT = Number(stage360.dataset.frame360) || 120;
+  const cartella360 = stage360.dataset.cartella360 || '';
+  const PX_PER_FRAME = 5;
+  const src360 = i => `${cartella360}frame_${String(i).padStart(3, '0')}.webp`;
+  const cache360 = new Array(TOT);
+  const pronti = new Array(TOT).fill(false);
+  let pronto = false, frame = 0, mostrato = 0, trascinando = false, xInizio = 0, frameInizio = 0;
+  let velocita = 0, inerziaId = 0, campioni = [];
+  /* il fotogramma 0 è già scaricato (è quello scritto nell'HTML): un
+     oggetto a parte, non l'immagine visibile, che cambia src mentre gira */
+  cache360[0] = new Image(); cache360[0].src = img360.src; pronti[0] = true;
+
+  /* "completo" (evento load) non basta: un'immagine puo' essere
+     scaricata e non ancora decodificata, e assegnarla comunque a
+     .src forza il browser a decodificarla li' per li' — un istante di
+     vuoto bianco proprio mentre si trascina. decode() risolve solo
+     quando il bitmap e' davvero pronto da disegnare, senza scatti. */
+  function precarica360() {
+    if (pronto) return;
+    pronto = true;
+    for (let i = 1; i < TOT; i++) {
+      const im = new Image();
+      im.src = src360(i);
+      cache360[i] = im;
+      const segnaPronto = () => {
+        pronti[i] = true;
+        if (frame === i && mostrato !== i) { img360.src = im.src; mostrato = i; }
+      };
+      if (im.decode) im.decode().then(segnaPronto).catch(segnaPronto);
+      else im.addEventListener('load', segnaPronto);
+    }
+  }
+  const io360 = new IntersectionObserver(es => {
+    es.forEach(e => { if (e.isIntersecting) { precarica360(); io360.disconnect(); } });
+  }, { rootMargin: '600px' });
+  io360.observe(stage360);
+
+  /* mai passare a un fotogramma non ancora decodificato: si resta
+     fermi sull'ultimo buono, e si aggiorna da solo appena e' pronto
+     (dentro segnaPronto, se nel frattempo il dito e' rimasto li'). */
+  function vaAFrame(i) {
+    frame = ((i % TOT) + TOT) % TOT;
+    if (pronti[frame] && mostrato !== frame) { img360.src = cache360[frame].src; mostrato = frame; }
+  }
+  stage360.setAttribute('role', 'slider');
+  stage360.setAttribute('tabindex', '0');
+  stage360.setAttribute('aria-label', 'Vista a 360 gradi del dispositivo, trascina o usa le frecce per ruotarlo');
+  stage360.setAttribute('aria-valuemin', '0');
+  stage360.setAttribute('aria-valuemax', String(TOT - 1));
+  stage360.addEventListener('pointerdown', e => {
+    cancelAnimationFrame(inerziaId); /* un nuovo tocco ferma il giro libero */
+    precarica360();
+    trascinando = true; xInizio = e.clientX; frameInizio = frame;
+    campioni = [{ x: e.clientX, t: performance.now() }];
+    stage360.setPointerCapture(e.pointerId);
+    stage360.classList.add('eso__360-stage--via');
+  });
+  stage360.addEventListener('pointermove', e => {
+    if (!trascinando) return;
+    const dx = e.clientX - xInizio;
+    vaAFrame(frameInizio - Math.round(dx / PX_PER_FRAME));
+    stage360.setAttribute('aria-valuenow', String(frame));
+    /* una finestra di campioni, non solo l'ultimo movimento: un gesto
+       che rallenta un attimo proprio alla fine (capita spesso quando
+       si arriva a fondo corsa da un lato) non deve azzerare la
+       velocita' — conta la media su un decimo di secondo, non l'ultimo
+       istante */
+    const ora = performance.now();
+    campioni.push({ x: e.clientX, t: ora });
+    while (campioni.length > 1 && ora - campioni[0].t > 100) campioni.shift();
+  });
+  /* se il dito o il mouse escono veloci, il dispositivo continua a
+     girare e rallenta da solo — un attrito che dimezza la velocita'
+     ogni frame finche' non scende sotto la soglia che si nota */
+  function giroLibero() {
+    vaAFrame(frame - Math.round(velocita * 16 / PX_PER_FRAME));
+    stage360.setAttribute('aria-valuenow', String(frame));
+    velocita *= 0.94;
+    if (Math.abs(velocita) > 0.02) inerziaId = requestAnimationFrame(giroLibero);
+  }
+  const fine360 = () => {
+    if (!trascinando) return;
+    trascinando = false;
+    const primo = campioni[0], ultimo = campioni[campioni.length - 1];
+    const dt = ultimo ? ultimo.t - primo.t : 0;
+    velocita = dt > 0 ? (ultimo.x - primo.x) / dt : 0;
+    if (Math.abs(velocita) > 0.05) inerziaId = requestAnimationFrame(giroLibero);
+  };
+  stage360.addEventListener('pointerup', fine360);
+  stage360.addEventListener('pointercancel', fine360);
+  stage360.addEventListener('keydown', e => {
+    if (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight') return;
+    e.preventDefault(); precarica360();
+    vaAFrame(frame + (e.key === 'ArrowLeft' ? -3 : 3));
+    stage360.setAttribute('aria-valuenow', String(frame));
+  });
+});
+
+/* Luce sul bordo delle schede che segue il mouse (solo dove c'e' un
+   mouse). Un solo ascoltatore, al massimo un aggiornamento per frame, e
+   scrive due variabili su UNA scheda: quella sotto il puntatore. */
+if (matchMedia('(hover:hover)').matches) {
+  let scheda = null, px = 0, py = 0, attesa = false;
+  document.addEventListener('pointermove', e => {
+    scheda = e.target.closest?.('.offerta__card, .bench__panel') || null;
+    if (!scheda || attesa) return;
+    px = e.clientX; py = e.clientY; attesa = true;
+    requestAnimationFrame(() => {
+      attesa = false;
+      if (!scheda) return;
+      const r = scheda.getBoundingClientRect();
+      scheda.style.setProperty('--mx', px - r.left + 'px');
+      scheda.style.setProperty('--my', py - r.top + 'px');
+    });
+  }, { passive: true });
+}
+
+/* Sezione delle skill: agli incroci della griglia compaiono e spariscono
+   dei punti, ognuno col suo ritmo, come una luce che si accende a caso.
+   Ne bastano una novantina fra i circa cinquecento incroci: di piu'
+   sarebbe rumore, e ogni punto e' un'animazione in piu' da tenere
+   accesa. Si animano solo mentre la sezione e' in vista. */
+(() => {
+  const sez = $('#strumenti');
+  const gruppo = sez?.querySelector('.strumenti__punti');
+  if (!sez || !gruppo) return;
+  const PASSO = 52, COL = 25, RIGHE = 20, QUANTI = 90;
+  const incroci = [];
+  for (let r = 1; r < RIGHE; r++) for (let c = 1; c < COL; c++) incroci.push([c * PASSO, r * PASSO]);
+  for (let i = incroci.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [incroci[i], incroci[j]] = [incroci[j], incroci[i]];
+  }
+  const NS = 'http://www.w3.org/2000/svg';
+  for (const [x, y] of incroci.slice(0, QUANTI)) {
+    const p = document.createElementNS(NS, 'circle');
+    p.setAttribute('cx', x); p.setAttribute('cy', y); p.setAttribute('r', 2.4);
+    p.style.setProperty('--dur', (3.6 + Math.random() * 4.4).toFixed(2) + 's');
+    p.style.setProperty('--rit', (-Math.random() * 8).toFixed(2) + 's');
+    gruppo.append(p);
+  }
+  new IntersectionObserver(es => {
+    sez.classList.toggle('strumenti--attivi', es[0].isIntersecting);
+  }, { rootMargin: '80px' }).observe(sez);
+})();
+
+/* La striscia dei cinque marchi gira in tondo: finita da un lato
+   ricomincia dall'altro, va da sola piano e si trascina col dito o col
+   mouse, con la stessa inerzia della vista a 360°. Prima scorreva solo
+   con lo scroll nativo: col mouse non si trascinava e su uno schermo
+   stretto l'ultima copertina restava tagliata, irraggiungibile. */
+const filaVetrina = $('.vetrina__fila');
+if (filaVetrina) {
+  const originali = [...filaVetrina.children];
+  const binario = document.createElement('div');
+  binario.className = 'vetrina__binario';
+  binario.append(...originali);
+  filaVetrina.append(binario);
+  filaVetrina.classList.add('vetrina__fila--giro');
+
+  const calmo = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const AUTO = calmo ? 0 : 0.03; /* px al millisecondo, circa 30px al secondo */
+  let giro = 0, larghezzaSet = 1, verso = 1, velocita = AUTO, inerzia = false;
+  let tenuto = false, sopra = false, fuoco = false, visibile = false;
+  let xPrec = 0, mosso = 0, campioni = [], ultimo = 0, rafId = 0;
+
+  const copia = el => {
+    const c = el.cloneNode(true);
+    c.dataset.copia = '';
+    c.setAttribute('aria-hidden', 'true');
+    c.tabIndex = -1;
+    return c;
+  };
+  /* tante copie quante ne servono a riempire la fila piu' un giro intero,
+     cosi' mentre scorre non si vede mai il vuoto in fondo */
+  function costruisciCopie() {
+    binario.querySelectorAll('[data-copia]').forEach(c => c.remove());
+    originali.forEach(o => binario.append(copia(o)));
+    const primaCopia = binario.querySelector('[data-copia]');
+    larghezzaSet = (primaCopia.offsetLeft - originali[0].offsetLeft) || 1;
+    const servono = Math.ceil(filaVetrina.clientWidth / larghezzaSet);
+    for (let n = 0; n < servono; n++) originali.forEach(o => binario.append(copia(o)));
+  }
+  function disegna() {
+    const x = ((giro % larghezzaSet) + larghezzaSet) % larghezzaSet;
+    binario.style.transform = `translate3d(${-x}px,0,0)`;
+  }
+  /* la velocita' tende sempre a un bersaglio: il giro automatico nel
+     verso dell'ultima spinta, oppure zero se il mouse ci sta sopra o una
+     copertina ha il fuoco. Dopo una spinta ci arriva piano (inerzia),
+     altrimenti in fretta: ferma e riparte senza scatti. */
+  function passo(ora) {
+    const dt = Math.min(50, ora - (ultimo || ora));
+    ultimo = ora;
+    if (!tenuto) {
+      const bersaglio = (sopra || fuoco) ? 0 : verso * AUTO;
+      const attrito = inerzia ? 0.94 : 0.88;
+      velocita = bersaglio + (velocita - bersaglio) * Math.pow(attrito, dt / 16.7);
+      if (inerzia && Math.abs(velocita - bersaglio) < 0.004) inerzia = false;
+      giro += velocita * dt;
+      disegna();
+    }
+    rafId = visibile ? requestAnimationFrame(passo) : 0;
+  }
+
+  filaVetrina.addEventListener('pointerdown', e => {
+    if (e.button) return;
+    tenuto = true; mosso = 0; xPrec = e.clientX; inerzia = false; velocita = 0;
+    campioni = [{ x: e.clientX, t: performance.now() }];
+  });
+  filaVetrina.addEventListener('pointermove', e => {
+    if (!tenuto) return;
+    const dx = e.clientX - xPrec;
+    xPrec = e.clientX;
+    mosso += Math.abs(dx);
+    /* la cattura solo oltre qualche pixel: un tocco fermo resta un clic
+       sulla copertina e porta al suo caso */
+    if (mosso > 6 && !filaVetrina.classList.contains('vetrina__fila--tira')) {
+      try { filaVetrina.setPointerCapture(e.pointerId); } catch {}
+      filaVetrina.classList.add('vetrina__fila--tira');
+    }
+    giro -= dx;
+    disegna();
+    const ora = performance.now();
+    campioni.push({ x: e.clientX, t: ora });
+    while (campioni.length > 1 && ora - campioni[0].t > 100) campioni.shift();
+  });
+  const lascia = e => {
+    if (!tenuto) return;
+    tenuto = false;
+    filaVetrina.classList.remove('vetrina__fila--tira');
+    const a = campioni[0], b = campioni[campioni.length - 1];
+    const dt = b.t - a.t;
+    /* tetto a 3 px/ms: uno strattone brusco non deve lanciare la fila
+       per migliaia di pixel */
+    const v = (e.type === 'pointerup' && dt > 0)
+      ? Math.max(-3, Math.min(3, -(b.x - a.x) / dt)) : 0;
+    if (Math.abs(v) > 0.05) verso = Math.sign(v);
+    velocita = calmo ? 0 : v;
+    inerzia = !calmo;
+    /* il clic del rilascio arriva subito dopo: il contatore va tenuto
+       finche' non e' passato, altrimenti il trascinamento apre un caso */
+    setTimeout(() => { mosso = 0; }, 80);
+  };
+  filaVetrina.addEventListener('pointerup', lascia);
+  filaVetrina.addEventListener('pointercancel', lascia);
+  /* dopo un trascinamento il clic non deve aprire il caso sotto il dito */
+  filaVetrina.addEventListener('click', e => {
+    if (mosso > 6 && e.detail > 0) { e.preventDefault(); e.stopPropagation(); }
+  }, true);
+  filaVetrina.addEventListener('dragstart', e => e.preventDefault());
+  filaVetrina.addEventListener('pointerenter', e => { if (e.pointerType === 'mouse') sopra = true; });
+  filaVetrina.addEventListener('pointerleave', e => { if (e.pointerType === 'mouse') sopra = false; });
+  /* con la tastiera la copertina che prende il fuoco viene portata in
+     vista, e il giro si ferma finche' il fuoco resta nella fila */
+  filaVetrina.addEventListener('focusin', e => {
+    fuoco = true;
+    const el = e.target.closest('.vetrina__caso');
+    if (!el) return;
+    const pos = el.offsetLeft - originali[0].offsetLeft;
+    const x = ((giro % larghezzaSet) + larghezzaSet) % larghezzaSet;
+    const inVista = pos - x;
+    if (inVista < 0 || inVista + el.offsetWidth > filaVetrina.clientWidth) {
+      giro = pos - 8;
+      velocita = 0;
+      disegna();
+    }
+  });
+  filaVetrina.addEventListener('focusout', e => { fuoco = filaVetrina.contains(e.relatedTarget); });
+
+  costruisciCopie();
+  disegna();
+  new IntersectionObserver(es => {
+    visibile = es[0].isIntersecting;
+    if (visibile && !rafId) { ultimo = 0; rafId = requestAnimationFrame(passo); }
+  }).observe(filaVetrina);
+  let attesaResize = 0;
+  window.addEventListener('resize', () => {
+    clearTimeout(attesaResize);
+    attesaResize = setTimeout(() => { costruisciCopie(); disegna(); }, 150);
+  });
+}
+
+/* "Un po' di più su di me" si scrive e si cancella a macchina, in
+   loop, da quando entra in vista la prima volta — il cursore resta
+   sempre acceso, non solo mentre batte. */
+const macchinaSpan = $('.profilo__extra summary span');
+if (macchinaSpan && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+  const testoIntero = macchinaSpan.textContent;
+  macchinaSpan.textContent = '';
+  macchinaSpan.classList.add('macchina-cursore');
+  const macchinaIO = new IntersectionObserver(es => {
+    es.forEach(e => {
+      if (!e.isIntersecting) return;
+      macchinaIO.disconnect();
+      let i = 0, cancella = false;
+      const battuta = () => {
+        i += cancella ? -1 : 1;
+        macchinaSpan.textContent = testoIntero.slice(0, i);
+        let attesa = 38 + Math.random() * 42;
+        if (!cancella && i >= testoIntero.length) { cancella = true; attesa = 1800; }
+        else if (cancella && i <= 0) { cancella = false; attesa = 500; }
+        setTimeout(battuta, attesa);
+      };
+      battuta();
+    });
+  }, { threshold: .8 });
+  macchinaIO.observe(macchinaSpan);
+}

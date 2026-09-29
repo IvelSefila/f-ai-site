@@ -1,0 +1,1794 @@
+/* ═════════════════════════════════════════════════════════════════
+   WIDGET CHATBOT "NODO" — F/AI PORTFOLIO
+   Design System: Sala di montaggio, Smeraldo (#14c08a), Dark Stage
+   Zero interferenze con .navdock mobile
+   ═════════════════════════════════════════════════════════════════ */
+
+:root {
+  --nodo-em: #14c08a;
+  --nodo-em-bright: #4fe3b0;
+  --nodo-em-light: #7fe3bd;
+  --nodo-em-deep: #0a8f63;
+  --nodo-em-dim: rgba(20, 192, 138, 0.22);
+  --nodo-bg: #070a0f;
+  --nodo-panel: rgba(9, 13, 20, 0.94);
+  --nodo-text: #c3ccd6;
+  --nodo-title: #f2f4f7;
+  --nodo-muted: #7f8c9b;
+  --nodo-border: rgba(20, 192, 138, 0.28);
+  --nodo-radius-card: 16px;
+  --nodo-radius-pill: 999px;
+  --nodo-font-title: 'Barlow Condensed', ui-sans-serif, sans-serif;
+  --nodo-font-body: 'Manrope', system-ui, sans-serif;
+  --nodo-font-mono: ui-monospace, 'JetBrains Mono', monospace;
+}
+
+/* ── FAB (Floating Action Button) ────────────────────────────────── */
+.nodo-fab {
+  position: fixed;
+  z-index: 350;
+  right: 28px;
+  bottom: 24px;
+  width: 54px;
+  height: 54px;
+  padding: 0;
+  border-radius: var(--nodo-radius-pill);
+  background: var(--nodo-panel);
+  border: 1.5px solid var(--nodo-border);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6), 0 0 16px rgba(20, 192, 138, 0.22);
+  backdrop-filter: blur(16px);
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  transition: transform 0.2s cubic-bezier(0.2, 0.7, 0.2, 1), box-shadow 0.2s, border-color 0.2s;
+}
+
+.nodo-fab:hover {
+  transform: scale(1.06);
+  border-color: var(--nodo-em-bright);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7), 0 0 24px rgba(20, 192, 138, 0.4);
+}
+
+.nodo-fab:focus-visible {
+  outline: 2px solid var(--nodo-em-bright);
+  outline-offset: 3px;
+}
+
+/* ── Posizionamento Mobile Anti-Collisione con .navdock ─────────── */
+@media (max-width: 640px) {
+  .nodo-fab {
+    right: 16px;
+    /* Eleva con clearance perfetta sopra la dock fissa (navdock top a ~81px dal fondo) */
+    bottom: calc(96px + env(safe-area-inset-bottom, 16px));
+    width: 48px;
+    height: 48px;
+  }
+}
+
+/* ── Avatar Vettoriale SVG ("Nodo" Reticolo Ottico) ──────────────── */
+.nodo-avatar-svg {
+  width: 32px;
+  height: 32px;
+  overflow: visible;
+  pointer-events: none;
+}
+
+.nodo-ring {
+  transform-origin: center;
+  animation: nodo-spin 12s linear infinite;
+  stroke: var(--nodo-em);
+}
+
+.nodo-core {
+  transform-origin: center;
+  fill: var(--nodo-em-bright);
+  filter: drop-shadow(0 0 5px var(--nodo-em));
+  animation: nodo-pulse 2.2s ease-in-out infinite alternate;
+}
+
+.nodo-cross {
+  stroke: var(--nodo-em-light);
+  opacity: 0.65;
+}
+
+@keyframes nodo-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes nodo-pulse {
+  0% { transform: scale(0.85); opacity: 0.75; }
+  100% { transform: scale(1.15); opacity: 1; filter: drop-shadow(0 0 8px var(--nodo-em-bright)); }
+}
+
+/* Stato talking (emissione testo) */
+.nodo-fab.is-talking .nodo-core,
+.nodo-header.is-talking .nodo-core {
+  animation: nodo-talk 0.18s ease-in-out infinite alternate;
+}
+
+@keyframes nodo-talk {
+  from { transform: scale(0.9); }
+  to { transform: scale(1.3); filter: drop-shadow(0 0 10px #ffffff); }
+}
+
+/* Stato deflection / guardrail error */
+.nodo-fab.is-deflection,
+.nodo-window.is-deflection {
+  animation: nodo-shake 0.3s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+}
+
+@keyframes nodo-shake {
+  10%, 90% { transform: translate3d(-1px, 0, 0); }
+  20%, 80% { transform: translate3d(2px, 0, 0); }
+  30%, 50%, 70% { transform: translate3d(-3px, 0, 0); }
+  40%, 60% { transform: translate3d(3px, 0, 0); }
+}
+
+/* ── Finestra di Dialogo Chat ────────────────────────────────────── */
+.nodo-window {
+  position: fixed;
+  z-index: 360;
+  right: 28px;
+  bottom: 88px;
+  width: min(390px, calc(100vw - 32px));
+  height: min(580px, calc(100dvh - 120px));
+  background: var(--nodo-panel);
+  border: 1px solid var(--nodo-border);
+  border-radius: var(--nodo-radius-card);
+  box-shadow: 0 18px 45px rgba(0, 0, 0, 0.75), 0 0 0 1px rgba(255, 255, 255, 0.04) inset;
+  backdrop-filter: blur(20px);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  opacity: 0;
+  transform: translateY(16px) scale(0.97);
+  pointer-events: none;
+  transition: opacity 0.24s cubic-bezier(0.2, 0.7, 0.2, 1), transform 0.24s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+.nodo-window.is-open {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  pointer-events: auto;
+}
+
+@media (max-width: 640px) {
+  .nodo-window {
+    right: 12px;
+    left: 12px;
+    width: auto;
+    bottom: calc(96px + env(safe-area-inset-bottom, 16px));
+    height: calc(100dvh - 190px);
+  }
+
+  .nodo-header {
+    padding: 10px 12px;
+    gap: 8px;
+  }
+
+  .nodo-mode-badge {
+    padding: 3px 7px;
+    font-size: 9px;
+  }
+}
+
+/* ── Header Tecnico di Regia ─────────────────────────────────────── */
+.nodo-header {
+  padding: 12px 16px;
+  background: rgba(12, 18, 27, 0.55);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--nodo-border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.nodo-header-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.nodo-header-title h3 {
+  margin: 0;
+  font-family: var(--nodo-font-title);
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--nodo-title);
+  letter-spacing: -0.01em;
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+}
+
+.nodo-header-title h3 span {
+  font-family: var(--nodo-font-mono);
+  font-size: 11px;
+  color: var(--nodo-em-bright);
+  font-weight: 400;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.nodo-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* ── Mode Badge (Selettore di Modalità Istantaneo / GPU / Cloud) ─── */
+.nodo-mode-badge {
+  font-family: var(--nodo-font-mono);
+  font-size: 10px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  padding: 4px 9px;
+  border-radius: var(--nodo-radius-pill);
+  background: rgba(20, 192, 138, 0.08);
+  border: 1px solid var(--nodo-border);
+  color: var(--nodo-em-bright);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  white-space: nowrap;
+  line-height: 1;
+  transition: background 0.18s, border-color 0.18s, color 0.18s, transform 0.15s, box-shadow 0.18s;
+  user-select: none;
+}
+
+.nodo-mode-badge:hover {
+  background: rgba(20, 192, 138, 0.2);
+  border-color: var(--nodo-em-bright);
+  color: #ffffff;
+  box-shadow: 0 0 10px rgba(20, 192, 138, 0.35);
+  transform: translateY(-1px);
+}
+
+.nodo-mode-badge:active {
+  transform: translateY(0) scale(0.97);
+}
+
+.nodo-mode-badge:focus-visible {
+  outline: 2px solid var(--nodo-em-bright);
+  outline-offset: 2px;
+}
+
+.nodo-mode-badge--instant {
+  color: var(--nodo-em-light);
+  border-color: rgba(20, 192, 138, 0.3);
+}
+
+.nodo-mode-badge--webgpu {
+  background: rgba(79, 227, 176, 0.16);
+  border-color: var(--nodo-em-bright);
+  color: #ffffff;
+  box-shadow: 0 0 8px rgba(79, 227, 176, 0.3);
+}
+
+.nodo-mode-badge--cloud {
+  background: rgba(64, 156, 255, 0.12);
+  border-color: rgba(64, 156, 255, 0.4);
+  color: #a5d2ff;
+}
+
+.nodo-mode-badge--loading {
+  opacity: 0.8;
+  cursor: wait;
+}
+
+/* ── Progress Bar di Caricamento WebGPU ──────────────────────────── */
+.nodo-progress-bar {
+  background: rgba(11, 16, 25, 0.98);
+  border-bottom: 1px solid var(--nodo-border);
+  padding: 6px 14px 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  animation: nodo-progress-slide 0.2s cubic-bezier(0.2, 0.7, 0.2, 1);
+  flex-shrink: 0;
+}
+
+@keyframes nodo-progress-slide {
+  from { opacity: 0; transform: translateY(-4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.nodo-progress-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: var(--nodo-font-mono);
+  font-size: 10px;
+  color: var(--nodo-em-light);
+  letter-spacing: 0.02em;
+}
+
+.nodo-progress-text {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 82%;
+}
+
+.nodo-progress-pct {
+  font-weight: 600;
+  color: var(--nodo-em-bright);
+}
+
+.nodo-progress-track {
+  width: 100%;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: var(--nodo-radius-pill);
+  overflow: hidden;
+}
+
+.nodo-progress-fill {
+  height: 100%;
+  width: 0%;
+  background: var(--nodo-em-bright);
+  border-radius: var(--nodo-radius-pill);
+  box-shadow: 0 0 8px var(--nodo-em-bright);
+  transition: width 0.18s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+/* ── Toast Informativo / Avviso Discreto ─────────────────────────── */
+.nodo-toast {
+  padding: 6px 14px;
+  font-family: var(--nodo-font-mono);
+  font-size: 11px;
+  line-height: 1.4;
+  border-bottom: 1px solid rgba(255, 85, 85, 0.35);
+  background: rgba(28, 14, 16, 0.96);
+  color: #ff9d9d;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  animation: nodo-toast-slide 0.2s cubic-bezier(0.2, 0.7, 0.2, 1);
+  flex-shrink: 0;
+}
+
+.nodo-toast--info {
+  border-bottom-color: var(--nodo-border);
+  background: rgba(9, 24, 18, 0.96);
+  color: var(--nodo-em-light);
+}
+
+@keyframes nodo-toast-slide {
+  from { opacity: 0; transform: translateY(-4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.nodo-icon-btn {
+  background: transparent;
+  border: none;
+  color: var(--nodo-muted);
+  width: 32px;
+  height: 32px;
+  border-radius: var(--nodo-radius-pill);
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  transition: color 0.15s, background 0.15s;
+}
+
+.nodo-icon-btn:hover {
+  color: var(--nodo-title);
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.nodo-icon-btn:focus-visible {
+  outline: 2px solid var(--nodo-em-bright);
+}
+
+/* ── Area Messaggi ───────────────────────────────────────────────── */
+.nodo-messages {
+  flex: 1;
+  overflow-y: auto;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  font-family: var(--nodo-font-body);
+  font-size: 14px;
+  line-height: 1.52;
+  scroll-behavior: smooth;
+}
+
+.nodo-msg {
+  display: flex;
+  flex-direction: column;
+  max-width: 88%;
+  animation: nodo-msg-in 0.2s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+@keyframes nodo-msg-in {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.nodo-msg--bot {
+  align-self: flex-start;
+  color: var(--nodo-text);
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  padding: 4px 2px;
+  max-width: 96%;
+}
+
+.nodo-msg--bot strong, .nodo-msg--bot b {
+  color: var(--nodo-title);
+  font-weight: 600;
+}
+
+.nodo-msg-text {
+  word-break: break-word;
+}
+
+/* ── Cursore di Digitazione in Streaming ─────────────────────────── */
+.nodo-cursor {
+  display: inline-block;
+  color: var(--nodo-em-bright);
+  font-family: var(--nodo-font-mono);
+  font-size: 13px;
+  line-height: 1;
+  margin-left: 2px;
+  vertical-align: -1px;
+  text-shadow: 0 0 8px var(--nodo-em-bright);
+  animation: nodo-blink 0.75s infinite step-start;
+}
+
+.nodo-cursor::after {
+  content: '▌';
+}
+
+@keyframes nodo-blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+.nodo-msg--user {
+  align-self: flex-end;
+  background: rgba(20, 192, 138, 0.14);
+  border: 1px solid rgba(20, 192, 138, 0.38);
+  color: #ffffff;
+  border-radius: var(--nodo-radius-card);
+  border-bottom-right-radius: 4px;
+  padding: 8px 14px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(8px);
+}
+
+.nodo-msg-action {
+  margin-top: 10px;
+  padding-top: 8px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  display: flex;
+  justify-content: flex-end;
+}
+
+.nodo-action-link {
+  font-family: var(--nodo-font-mono);
+  font-size: 11px;
+  color: var(--nodo-em-bright);
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 8px;
+  background: rgba(20, 192, 138, 0.12);
+  border-radius: var(--nodo-radius-pill);
+  transition: background 0.15s, color 0.15s;
+}
+
+.nodo-action-link:hover {
+  background: var(--nodo-em);
+  color: #070a0f;
+}
+
+/* ── Chip Rapide (Sfoglia con il dito / Drag to scroll) ──────────── */
+.nodo-chips {
+  padding: 8px 16px;
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scrollbar-width: none;
+  background: rgba(7, 10, 15, 0.85);
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  touch-action: pan-x;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-x: contain;
+  scroll-behavior: smooth;
+  cursor: grab;
+  user-select: none;
+  -webkit-user-select: none;
+  position: relative;
+  /* Maschera di sfumatura iniziale a destra per indicare contenuto sfogliabile */
+  mask-image: linear-gradient(to right, black calc(100% - 28px), transparent 100%);
+  -webkit-mask-image: linear-gradient(to right, black calc(100% - 28px), transparent 100%);
+}
+
+.nodo-chips.is-dragging {
+  cursor: grabbing;
+  scroll-behavior: auto;
+}
+
+.nodo-chips::-webkit-scrollbar { display: none; }
+
+.nodo-chip {
+  flex-shrink: 0;
+  font-family: var(--nodo-font-mono);
+  font-size: 11px;
+  white-space: nowrap;
+  background: rgba(20, 192, 138, 0.08);
+  border: 1px solid var(--nodo-em-dim);
+  color: var(--nodo-em-light);
+  padding: 6px 14px;
+  border-radius: var(--nodo-radius-pill);
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s, border-color 0.15s, transform 0.15s;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.nodo-chip:hover {
+  background: var(--nodo-em);
+  color: #070a0f;
+  border-color: var(--nodo-em);
+  transform: translateY(-1px);
+}
+
+/* ── Input Bar ───────────────────────────────────────────────────── */
+.nodo-input-bar {
+  padding: 10px 14px;
+  background: rgba(11, 16, 25, 0.98);
+  border-top: 1px solid var(--nodo-border);
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.nodo-input {
+  flex: 1;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: var(--nodo-radius-pill);
+  padding: 9px 14px;
+  color: var(--nodo-title);
+  font-family: var(--nodo-font-body);
+  font-size: 14px;
+  outline: none;
+  transition: border-color 0.15s, background 0.15s;
+}
+
+.nodo-input:focus {
+  border-color: var(--nodo-em);
+  background: rgba(20, 192, 138, 0.04);
+}
+
+.nodo-input:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.nodo-send-btn {
+  background: var(--nodo-em);
+  border: none;
+  color: #070a0f;
+  width: 36px;
+  height: 36px;
+  border-radius: var(--nodo-radius-pill);
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  transition: transform 0.15s, background 0.15s;
+  flex-shrink: 0;
+}
+
+.nodo-send-btn:hover {
+  background: var(--nodo-em-bright);
+  transform: scale(1.05);
+}
+
+.nodo-send-btn:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+/* ── Micro-Hint Popover (Appare una volta dopo 8s) ────────────────── */
+.nodo-hint {
+  position: fixed;
+  z-index: 349;
+  right: 90px;
+  bottom: 30px;
+  background: var(--nodo-panel);
+  border: 1px solid var(--nodo-em);
+  border-radius: var(--nodo-radius-card);
+  padding: 10px 14px;
+  font-family: var(--nodo-font-body);
+  font-size: 13px;
+  color: var(--nodo-title);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5), 0 0 12px rgba(20, 192, 138, 0.25);
+  max-width: 230px;
+  opacity: 0;
+  transform: translateY(8px);
+  pointer-events: none;
+  transition: opacity 0.3s, transform 0.3s;
+}
+
+.nodo-hint.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+@media (max-width: 640px) {
+  .nodo-hint {
+    right: 72px;
+    bottom: calc(100px + env(safe-area-inset-bottom, 16px));
+    max-width: 190px;
+    font-size: 12px;
+  }
+}
+
+.nodo-hint-close {
+  position: absolute;
+  top: 4px;
+  right: 6px;
+  background: transparent;
+  border: none;
+  color: var(--nodo-muted);
+  cursor: pointer;
+  font-size: 12px;
+}
+
+/* ── Typing Indicator (3 puntini animati) ────────────────────────── */
+.nodo-msg--typing { padding: 10px 16px; }
+
+.nodo-typing-dots {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+}
+
+.nodo-typing-dots span {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--nodo-em);
+  animation: nodo-dot 1.2s ease-in-out infinite;
+}
+
+.nodo-typing-dots span:nth-child(2) { animation-delay: 0.2s; }
+.nodo-typing-dots span:nth-child(3) { animation-delay: 0.4s; }
+
+@keyframes nodo-dot {
+  0%, 60%, 100% { transform: scale(0.6); opacity: 0.4; }
+  30% { transform: scale(1); opacity: 1; }
+}
+
+/* ── WebGPU Offer Buttons ─────────────────────────────────────────── */
+.nodo-webgpu-offer-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.nodo-webgpu-offer {
+  font-family: var(--nodo-font-mono);
+  font-size: 11px;
+  padding: 5px 12px;
+  border-radius: var(--nodo-radius-pill);
+  border: 1px solid var(--nodo-border);
+  background: rgba(20, 192, 138, 0.1);
+  color: var(--nodo-em-bright);
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s, border-color 0.15s;
+}
+
+.nodo-webgpu-offer:hover {
+  background: var(--nodo-em);
+  color: #070a0f;
+  border-color: var(--nodo-em);
+}
+
+/* ── Lead Capture Message ─────────────────────────────────────────── */
+.nodo-msg--lead {
+  border-color: var(--nodo-em) !important;
+  border-width: 1.5px !important;
+  background: rgba(20, 192, 138, 0.06) !important;
+}
+
+.nodo-lead-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 10px;
+  padding: 8px 16px;
+  background: var(--nodo-em);
+  color: #070a0f;
+  border: none;
+  border-radius: var(--nodo-radius-pill);
+  font-family: var(--nodo-font-mono);
+  font-size: 12px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background 0.15s, transform 0.15s;
+}
+
+.nodo-lead-cta:hover {
+  background: var(--nodo-em-bright);
+  transform: scale(1.03);
+}
+
+/* ── Conversational Brief Wizard ─────────────────────────────────── */
+.nodo-msg--brief-wizard {
+  border-left: 2px solid var(--nodo-em) !important;
+}
+
+.nodo-wizard-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 10px;
+}
+
+.nodo-wiz-btn {
+  font-family: var(--nodo-font-mono);
+  font-size: 11px;
+  padding: 6px 12px;
+  border-radius: var(--nodo-radius-pill);
+  border: 1px solid var(--nodo-border);
+  background: rgba(255, 255, 255, 0.03);
+  color: var(--nodo-body);
+  cursor: pointer;
+  transition: all 0.15s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.nodo-wiz-btn:hover:not(:disabled) {
+  border-color: var(--nodo-em);
+  color: var(--nodo-em-bright);
+  background: rgba(20, 192, 138, 0.1);
+  transform: translateY(-1px);
+}
+
+.nodo-wiz-btn.is-selected {
+  background: var(--nodo-em);
+  color: #070a0f;
+  border-color: var(--nodo-em-bright);
+  font-weight: 700;
+}
+
+.nodo-wiz-btn:disabled:not(.is-selected) {
+  opacity: 0.35;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* ── Scheda Brief Preparato ───────────────────────────────────────── */
+.nodo-brief-card {
+  background: linear-gradient(135deg, rgba(20, 192, 138, 0.08) 0%, rgba(7, 10, 15, 0.95) 100%);
+  border: 1.5px solid var(--nodo-em);
+  border-radius: var(--nodo-radius-card);
+  padding: 14px;
+  margin-top: 4px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4), inset 0 0 16px rgba(20, 192, 138, 0.1);
+}
+
+.nodo-brief-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--nodo-font-mono);
+  font-size: 12px;
+  letter-spacing: 0.05em;
+  color: var(--nodo-em-bright);
+  border-bottom: 1px solid rgba(20, 192, 138, 0.2);
+  padding-bottom: 8px;
+  margin-bottom: 10px;
+}
+
+.nodo-brief-rows {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 12px;
+  font-family: var(--nodo-font-body);
+  margin-bottom: 12px;
+}
+
+.nodo-brief-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.nodo-brief-row .lbl {
+  color: var(--nodo-muted);
+}
+
+.nodo-brief-row .val {
+  color: #ffffff;
+  font-weight: 600;
+}
+
+.nodo-brief-submit-cta {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 14px;
+  background: var(--nodo-em);
+  color: #070a0f;
+  border: none;
+  border-radius: var(--nodo-radius-pill);
+  font-family: var(--nodo-font-mono);
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 4px 12px rgba(20, 192, 138, 0.3);
+}
+
+.nodo-brief-submit-cta:hover {
+  background: var(--nodo-em-bright);
+  transform: translateY(-1px) scale(1.01);
+  box-shadow: 0 6px 18px rgba(20, 192, 138, 0.45);
+}
+
+/* ── 1. Voice Controls (STT & TTS) ────────────────────────────────── */
+.nodo-voice-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: var(--nodo-radius-pill);
+  color: var(--nodo-muted);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.nodo-voice-btn:hover {
+  color: var(--nodo-text);
+  border-color: rgba(20, 192, 138, 0.4);
+}
+
+.nodo-voice-btn.is-active {
+  color: var(--nodo-em);
+  border-color: var(--nodo-em);
+  background: rgba(20, 192, 138, 0.12);
+  box-shadow: 0 0 10px rgba(20, 192, 138, 0.25);
+}
+
+.nodo-voice-btn.is-active .icon-voice-off { display: none !important; }
+.nodo-voice-btn.is-active .icon-voice-on { display: inline-block !important; }
+
+/* ── Equalizzatore Vocale Neurale Nous ───────────────────────────── */
+.nodo-equalizer {
+  display: inline-flex;
+  align-items: flex-end;
+  gap: 2.5px;
+  height: 14px;
+  margin-left: 6px;
+  padding: 0 4px;
+  vertical-align: middle;
+}
+
+.nodo-header.is-speaking .nodo-equalizer {
+  display: inline-flex !important;
+}
+
+.nodo-equalizer .eq-bar {
+  width: 2.5px;
+  background: var(--nodo-em-bright);
+  border-radius: 1px;
+  height: 3px;
+  transition: height 0.1s ease;
+}
+
+.nodo-header.is-speaking .nodo-equalizer .eq-bar:nth-child(1) {
+  animation: nodo-eq-anim 0.75s ease-in-out infinite alternate;
+}
+.nodo-header.is-speaking .nodo-equalizer .eq-bar:nth-child(2) {
+  animation: nodo-eq-anim 0.55s ease-in-out infinite alternate 0.15s;
+}
+.nodo-header.is-speaking .nodo-equalizer .eq-bar:nth-child(3) {
+  animation: nodo-eq-anim 0.85s ease-in-out infinite alternate 0.3s;
+}
+.nodo-header.is-speaking .nodo-equalizer .eq-bar:nth-child(4) {
+  animation: nodo-eq-anim 0.65s ease-in-out infinite alternate 0.45s;
+}
+
+@keyframes nodo-eq-anim {
+  0% { height: 3px; opacity: 0.5; }
+  50% { height: 13px; opacity: 1; }
+  100% { height: 6px; opacity: 0.8; }
+}
+
+/* Glow e pulsazione audio del FAB quando Nous parla ad alta voce */
+.nodo-fab.is-speaking {
+  box-shadow: 0 0 0 3px rgba(20, 192, 138, 0.45), 0 0 24px rgba(79, 227, 176, 0.7) !important;
+  animation: nodo-pulse-speaking 1.4s ease-in-out infinite alternate;
+}
+
+@keyframes nodo-pulse-speaking {
+  0% { transform: scale(1); filter: drop-shadow(0 0 4px var(--nodo-em)); }
+  100% { transform: scale(1.06); filter: drop-shadow(0 0 14px var(--nodo-em-bright)); }
+}
+
+.nodo-mic-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  background: transparent;
+  border: none;
+  border-radius: 50%;
+  color: var(--nodo-muted);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin-right: 4px;
+}
+
+.nodo-mic-btn:hover {
+  color: var(--nodo-em);
+  background: rgba(20, 192, 138, 0.1);
+}
+
+.nodo-mic-btn.is-listening {
+  color: #ffffff;
+  background: #eb6a49;
+  animation: nodo-mic-pulse 1.2s infinite;
+}
+
+/* ── Pulsante Slash Commands (/) a fianco del microfono ───────────── */
+.nodo-slash-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  background: rgba(20, 192, 138, 0.08);
+  border: 1px solid rgba(20, 192, 138, 0.28);
+  border-radius: var(--nodo-radius-pill);
+  color: var(--nodo-em-bright);
+  font-family: var(--nodo-font-mono);
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  margin-right: 4px;
+  flex-shrink: 0;
+  padding: 0;
+}
+
+.nodo-slash-btn:hover,
+.nodo-slash-btn.is-active {
+  background: var(--nodo-em);
+  color: #070a0f;
+  border-color: var(--nodo-em-bright);
+  box-shadow: 0 0 12px rgba(20, 192, 138, 0.4);
+  transform: scale(1.05);
+}
+
+@keyframes nodo-mic-pulse {
+  0% { box-shadow: 0 0 0 0 rgba(235, 106, 73, 0.8); }
+  70% { box-shadow: 0 0 0 10px rgba(235, 106, 73, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(235, 106, 73, 0); }
+}
+
+/* ── 2. Rich Media Player (Audio Jingle) ───────────────────────────── */
+.nodo-audio-card {
+  margin-top: 10px;
+  padding: 12px 14px;
+  background: rgba(7, 10, 15, 0.95);
+  border: 1px solid rgba(20, 192, 138, 0.3);
+  border-radius: var(--nodo-radius-card);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.nodo-audio-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.nodo-audio-title {
+  font-family: var(--nodo-font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--nodo-em-bright);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.nodo-audio-duration {
+  font-family: var(--nodo-font-mono);
+  font-size: 10px;
+  color: var(--nodo-muted);
+}
+
+.nodo-audio-controls {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.nodo-audio-play {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  background: var(--nodo-em);
+  color: #070a0f;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: transform 0.15s ease, background 0.15s ease;
+  flex-shrink: 0;
+}
+
+.nodo-audio-play:hover {
+  background: var(--nodo-em-bright);
+  transform: scale(1.06);
+}
+
+.nodo-audio-bar-wrap {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.nodo-audio-note {
+  font-size: 11px;
+  color: var(--nodo-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.nodo-audio-track {
+  height: 4px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 2px;
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.nodo-audio-progress {
+  height: 100%;
+  background: var(--nodo-em);
+  width: 0%;
+  border-radius: 2px;
+  transition: width 0.1s linear;
+}
+
+/* ── 3. Video Spot Launcher ───────────────────────────────────────── */
+.nodo-spot-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 10px;
+}
+
+.nodo-spot-btn {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 12px;
+  background: rgba(20, 192, 138, 0.08);
+  border: 1px solid rgba(20, 192, 138, 0.25);
+  border-radius: var(--nodo-radius-pill);
+  color: #ffffff;
+  font-family: var(--nodo-font-mono);
+  font-size: 11px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: left;
+}
+
+.nodo-spot-btn:hover {
+  background: rgba(20, 192, 138, 0.18);
+  border-color: var(--nodo-em-bright);
+  transform: translateX(3px);
+  color: var(--nodo-em-bright);
+}
+
+.nodo-spot-badge {
+  font-size: 10px;
+  color: var(--nodo-muted);
+  background: rgba(0, 0, 0, 0.4);
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+/* ── 4. Slash Commands Menu ───────────────────────────────────────── */
+.nodo-slash-menu {
+  position: absolute;
+  bottom: 66px;
+  left: 12px;
+  right: 12px;
+  max-height: 250px;
+  overflow-y: auto;
+  background: rgba(9, 14, 22, 0.98);
+  border: 1px solid rgba(20, 192, 138, 0.35);
+  border-radius: var(--nodo-radius-card);
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.8), 0 0 20px rgba(20, 192, 138, 0.15);
+  backdrop-filter: blur(14px);
+  z-index: 400;
+  display: flex;
+  flex-direction: column;
+  padding: 6px;
+  gap: 3px;
+  animation: nodo-fade-up 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.nodo-slash-menu::-webkit-scrollbar {
+  width: 4px;
+}
+.nodo-slash-menu::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.2);
+}
+.nodo-slash-menu::-webkit-scrollbar-thumb {
+  background: rgba(20, 192, 138, 0.3);
+  border-radius: 4px;
+}
+.nodo-slash-menu::-webkit-scrollbar-thumb:hover {
+  background: var(--nodo-em);
+}
+
+.nodo-slash-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: none;
+  background: transparent;
+  color: var(--nodo-text);
+  cursor: pointer;
+  text-align: left;
+  transition: all 0.15s ease;
+  width: 100%;
+}
+
+.nodo-slash-item:hover,
+.nodo-slash-item.is-selected {
+  background: rgba(20, 192, 138, 0.14);
+}
+
+.nodo-slash-item:hover .nodo-slash-desc,
+.nodo-slash-item.is-selected .nodo-slash-desc {
+  color: #f1f5f9;
+}
+
+.nodo-slash-cmd {
+  font-family: var(--nodo-font-mono);
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--nodo-em-bright);
+  background: rgba(20, 192, 138, 0.14);
+  padding: 3px 8px;
+  border-radius: 6px;
+  min-width: 68px;
+  text-align: center;
+  flex-shrink: 0;
+}
+
+.nodo-slash-desc {
+  color: #94a3b8;
+  font-size: 12px;
+  font-family: var(--nodo-font-body);
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ── 5. Proactive Sentinel Badge ─────────────────────────────────── */
+.nodo-sentinel-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 8px;
+  padding: 4px 10px;
+  background: rgba(20, 192, 138, 0.1);
+  border: 1px solid rgba(20, 192, 138, 0.25);
+  border-radius: var(--nodo-radius-pill);
+  font-family: var(--nodo-font-mono);
+  font-size: 10px;
+  color: var(--nodo-em-bright);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.nodo-sentinel-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--nodo-em);
+  animation: nodo-pulse 2s infinite;
+}
+
+/* ── 6. Tour Guidato di Regia (Auto-Tour) ────────────────────────── */
+.nodo-tour-card {
+  margin-top: 10px;
+  padding: 12px 14px;
+  background: rgba(15, 23, 34, 0.96);
+  border: 1px solid rgba(20, 192, 138, 0.45);
+  border-radius: var(--nodo-radius-card);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5), 0 0 16px rgba(20, 192, 138, 0.15);
+  animation: nodo-fade-up 0.25s ease;
+}
+
+.nodo-tour-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+  font-family: var(--nodo-font-mono);
+  font-size: 11px;
+}
+
+.nodo-tour-meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.nodo-tour-step {
+  color: var(--nodo-em-bright);
+  font-weight: 700;
+  letter-spacing: 0.05em;
+}
+
+.nodo-tour-auto-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: rgba(20, 192, 138, 0.15);
+  border: 1px solid rgba(20, 192, 138, 0.3);
+  color: var(--nodo-em-bright);
+  padding: 2px 6px;
+  border-radius: var(--nodo-radius-pill);
+  font-size: 9px;
+  letter-spacing: 0.08em;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.nodo-tour-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--nodo-em-bright);
+  box-shadow: 0 0 6px var(--nodo-em-bright);
+  animation: nodo-tour-dot-pulse 1.2s infinite alternate;
+}
+
+@keyframes nodo-tour-dot-pulse {
+  0% { transform: scale(0.8); opacity: 0.6; }
+  100% { transform: scale(1.3); opacity: 1; }
+}
+
+.nodo-tour-progress-track {
+  width: 70px;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 2px;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.nodo-tour-progress-fill {
+  height: 100%;
+  background: var(--nodo-em-bright);
+  transition: width 0.3s ease;
+}
+
+.nodo-tour-title {
+  font-family: var(--nodo-font-body);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--nodo-title);
+  margin-bottom: 4px;
+}
+
+.nodo-tour-desc {
+  font-size: 12px;
+  color: var(--nodo-text);
+  line-height: 1.45;
+  margin-bottom: 8px;
+}
+
+/* Barra Countdown Auto-Advance */
+.nodo-tour-countdown-wrap {
+  margin-bottom: 10px;
+  padding: 6px 8px;
+  background: rgba(0, 0, 0, 0.35);
+  border-radius: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.nodo-tour-countdown-bar {
+  height: 3px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.nodo-tour-countdown-fill {
+  height: 100%;
+  background: var(--nodo-em-bright);
+  width: 100%;
+  box-shadow: 0 0 8px var(--nodo-em-bright);
+}
+
+.nodo-tour-countdown-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: var(--nodo-font-mono);
+  font-size: 10px;
+  color: var(--nodo-muted);
+}
+
+.nodo-tour-countdown-sec {
+  color: var(--nodo-em-bright);
+  font-weight: 700;
+}
+
+.nodo-tour-nav {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.nodo-tour-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 6px 12px;
+  border-radius: var(--nodo-radius-pill);
+  font-family: var(--nodo-font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  border: none;
+}
+
+.nodo-tour-btn--pause {
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--nodo-title);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+}
+
+.nodo-tour-btn--pause:hover {
+  background: rgba(255, 255, 255, 0.16);
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+.nodo-tour-btn--next {
+  background: var(--nodo-em);
+  color: #070a0f;
+}
+
+.nodo-tour-btn--next:hover {
+  background: var(--nodo-em-bright);
+  transform: translateY(-1px);
+}
+
+.nodo-tour-btn--stop {
+  background: transparent;
+  color: var(--nodo-muted);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.nodo-tour-btn--stop:hover {
+  color: #ff6b6b;
+  border-color: rgba(255, 107, 107, 0.3);
+}
+
+.nodo-tour-btn--action {
+  background: rgba(20, 192, 138, 0.15);
+  color: var(--nodo-em-bright);
+  border: 1px solid var(--nodo-border);
+}
+
+.nodo-tour-btn--action:hover {
+  background: rgba(20, 192, 138, 0.28);
+}
+
+/* ── Tour Bubble Fluttuante (Accanto al Pallino Nous Chiuso) ────── */
+.nodo-tour-bubble {
+  position: fixed;
+  z-index: 355;
+  right: 92px;
+  bottom: 24px;
+  width: min(390px, calc(100vw - 120px));
+  background: rgba(10, 16, 26, 0.95);
+  border: 1.5px solid rgba(20, 192, 138, 0.45);
+  border-radius: var(--nodo-radius-card);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.8), 0 0 25px rgba(20, 192, 138, 0.22);
+  backdrop-filter: blur(20px);
+  padding: 14px 16px;
+  color: var(--nodo-text);
+  font-family: var(--nodo-font-body);
+  animation: nodo-bubble-pop 0.3s cubic-bezier(0.16, 1, 0.3, 1) both;
+  transition: opacity 0.25s ease, transform 0.25s ease;
+  pointer-events: auto;
+}
+
+/* Freccia direzionale verso il pallino Nous a destra */
+.nodo-tour-bubble::after {
+  content: '';
+  position: absolute;
+  right: -7px;
+  bottom: 21px;
+  width: 12px;
+  height: 12px;
+  background: rgba(10, 16, 26, 0.95);
+  border-right: 1.5px solid rgba(20, 192, 138, 0.45);
+  border-top: 1.5px solid rgba(20, 192, 138, 0.45);
+  transform: rotate(45deg);
+  pointer-events: none;
+}
+
+@keyframes nodo-bubble-pop {
+  from {
+    opacity: 0;
+    transform: translateX(14px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+  }
+}
+
+.nodo-tour-bubble.is-hidden {
+  opacity: 0 !important;
+  pointer-events: none !important;
+  transform: scale(0.95) !important;
+}
+
+.nodo-tour-bubble.is-closing {
+  opacity: 0;
+  transform: translateX(12px) scale(0.96);
+}
+
+.nodo-tour-bubble-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.nodo-tour-bubble-meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.nodo-tour-bubble-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.nodo-tour-bubble-close {
+  background: transparent;
+  border: none;
+  color: var(--nodo-muted);
+  font-size: 14px;
+  cursor: pointer;
+  padding: 2px 4px;
+  line-height: 1;
+  border-radius: 4px;
+  transition: color 0.15s, background 0.15s;
+}
+
+.nodo-tour-bubble-close:hover {
+  color: #ff6b6b;
+  background: rgba(255, 107, 107, 0.1);
+}
+
+.nodo-tour-btn--chat {
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--nodo-title);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.nodo-tour-btn--chat:hover {
+  background: rgba(255, 255, 255, 0.14);
+  border-color: rgba(255, 255, 255, 0.25);
+}
+
+/* Stile Pallino durante il Tour */
+.nodo-fab.is-touring {
+  border-color: var(--nodo-em-bright);
+  box-shadow: 0 0 0 3px rgba(20, 192, 138, 0.35), 0 0 24px rgba(20, 192, 138, 0.5), 0 8px 24px rgba(0, 0, 0, 0.7);
+  animation: nodo-fab-touring 2s ease-in-out infinite alternate;
+}
+
+@keyframes nodo-fab-touring {
+  0% { transform: scale(1); }
+  100% { transform: scale(1.08); box-shadow: 0 0 0 5px rgba(20, 192, 138, 0.2), 0 0 32px rgba(20, 192, 138, 0.7); }
+}
+
+.nodo-fab.is-touring .nodo-ring {
+  stroke: var(--nodo-em-bright);
+  animation-duration: 4s;
+}
+
+/* Posizionamento Mobile Sopra il Pallino e la Navdock */
+@media (max-width: 640px) {
+  .nodo-tour-bubble {
+    right: 12px;
+    left: 12px;
+    bottom: calc(156px + env(safe-area-inset-bottom, 16px));
+    width: auto;
+    max-width: none;
+    padding: 12px 14px;
+    animation: nodo-bubble-pop-mob 0.3s cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+
+  .nodo-tour-bubble::after {
+    right: 22px;
+    bottom: -7px;
+    border-right: 1.5px solid rgba(20, 192, 138, 0.45);
+    border-top: none;
+    border-bottom: 1.5px solid rgba(20, 192, 138, 0.45);
+    transform: rotate(45deg);
+  }
+
+  @keyframes nodo-bubble-pop-mob {
+    from {
+      opacity: 0;
+      transform: translateY(14px) scale(0.96);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+  }
+}
+
+/* ── 7. Concept & Moodboard Lab ──────────────────────────────────── */
+.nodo-concept-card {
+  margin-top: 10px;
+  padding: 14px;
+  background: rgba(9, 14, 22, 0.96);
+  border: 1px solid rgba(20, 192, 138, 0.4);
+  border-radius: var(--nodo-radius-card);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5), 0 0 16px rgba(20, 192, 138, 0.12);
+  animation: nodo-fade-up 0.25s ease;
+}
+
+.nodo-concept-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 8px;
+  background: rgba(20, 192, 138, 0.15);
+  border-radius: 4px;
+  font-family: var(--nodo-font-mono);
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--nodo-em-bright);
+  letter-spacing: 0.06em;
+  margin-bottom: 8px;
+}
+
+.nodo-concept-title {
+  font-family: var(--nodo-font-body);
+  font-size: 14px;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 10px;
+}
+
+.nodo-concept-block {
+  margin-bottom: 10px;
+  padding: 8px 10px;
+  background: rgba(255, 255, 255, 0.03);
+  border-left: 2px solid var(--nodo-em);
+  border-radius: 0 6px 6px 0;
+}
+
+.nodo-concept-block-label {
+  font-family: var(--nodo-font-mono);
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--nodo-em-bright);
+  text-transform: uppercase;
+  margin-bottom: 3px;
+}
+
+.nodo-concept-block-text {
+  font-size: 12px;
+  color: var(--nodo-text);
+  line-height: 1.4;
+}
+
+.nodo-concept-prompt-box {
+  background: #030508;
+  border: 1px dashed rgba(20, 192, 138, 0.35);
+  border-radius: 6px;
+  padding: 8px 10px;
+  margin-bottom: 12px;
+}
+
+.nodo-concept-prompt-code {
+  font-family: var(--nodo-font-mono);
+  font-size: 11px;
+  color: #a3e7cb;
+  line-height: 1.4;
+  word-break: break-word;
+  user-select: all;
+}
+
+.nodo-concept-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  width: 100%;
+  justify-content: center;
+  padding: 9px 16px;
+  background: var(--nodo-em);
+  color: #070a0f;
+  font-family: var(--nodo-font-mono);
+  font-size: 12px;
+  font-weight: 700;
+  border-radius: var(--nodo-radius-pill);
+  border: none;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.nodo-concept-cta:hover {
+  background: var(--nodo-em-bright);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 14px rgba(20, 192, 138, 0.35);
+}
+
+/* ── 8. Dossier & Export Card ─────────────────────────────────────── */
+.nodo-dossier-card {
+  margin-top: 10px;
+  padding: 14px;
+  background: rgba(11, 17, 26, 0.98);
+  border: 1px solid rgba(20, 192, 138, 0.45);
+  border-radius: var(--nodo-radius-card);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+  animation: nodo-fade-up 0.25s ease;
+}
+
+.nodo-dossier-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid rgba(20, 192, 138, 0.2);
+  padding-bottom: 8px;
+  margin-bottom: 10px;
+}
+
+.nodo-dossier-header b {
+  font-family: var(--nodo-font-mono);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  color: var(--nodo-em-bright);
+}
+
+.nodo-dossier-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding: 4px 0;
+  font-size: 12px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.nodo-dossier-row .lbl {
+  color: var(--nodo-muted);
+  font-family: var(--nodo-font-mono);
+  font-size: 11px;
+}
+
+.nodo-dossier-row .val {
+  color: var(--nodo-title);
+  font-weight: 600;
+  text-align: right;
+  max-width: 65%;
+}
+
+.nodo-dossier-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 12px;
+  flex-wrap: wrap;
+}
+
+.nodo-dossier-btn {
+  flex: 1;
+  min-width: 120px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 8px 12px;
+  border-radius: var(--nodo-radius-pill);
+  font-family: var(--nodo-font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  text-decoration: none;
+  border: none;
+}
+
+.nodo-dossier-btn--copy {
+  background: rgba(20, 192, 138, 0.15);
+  color: var(--nodo-em-bright);
+  border: 1px solid var(--nodo-border);
+}
+
+.nodo-dossier-btn--copy:hover {
+  background: rgba(20, 192, 138, 0.3);
+  transform: translateY(-1px);
+}
+
+.nodo-dossier-btn--mail {
+  background: var(--nodo-em);
+  color: #070a0f;
+  font-weight: 700;
+}
+
+.nodo-dossier-btn--mail:hover {
+  background: var(--nodo-em-bright);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(20, 192, 138, 0.3);
+}
+
+/* ── 9. Shader Feedback Indicator ─────────────────────────────────── */
+.nodo-fx-toast {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  background: rgba(20, 192, 138, 0.15);
+  border: 1px solid var(--nodo-em);
+  border-radius: var(--nodo-radius-pill);
+  font-family: var(--nodo-font-mono);
+  font-size: 11px;
+  color: var(--nodo-em-bright);
+  margin-top: 4px;
+}
+
+

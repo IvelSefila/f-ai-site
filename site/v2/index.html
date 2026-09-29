@@ -19,16 +19,16 @@
      comparire come se fossero pagine diverse. -->
 <meta property="og:url" content="https://ivelsefila.github.io/f-ai-site/v2/index.html" />
 <meta property="og:title" content="MF/AI — Un portfolio che esegue le competenze, non le elenca" />
-<meta property="og:description" content="Quattro marchi seguiti dall’idea alla pubblicazione e otto prove che si manovrano: control room, banchi di prova, materia in WebGL, un laboratorio di giochi. Grafica pubblicitaria, video, social e sistemi AI." />
+<meta property="og:description" content="Cinque marchi seguiti dall’idea alla pubblicazione e otto prove che si manovrano: control room, banchi di prova, materia in WebGL, un laboratorio di giochi. Grafica pubblicitaria, video, social e sistemi AI." />
 <meta property="og:image" content="https://ivelsefila.github.io/f-ai-site/assets/og-fai.jpg" />
 <meta property="og:image:width" content="1200" />
 <meta property="og:image:height" content="630" />
 <meta property="og:image:alt" content="MF/AI — il confine fra direzione umana e sistema AI, calcolato fotogramma per fotogramma." />
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:title" content="MF/AI — Un portfolio che esegue le competenze" />
-<meta name="twitter:description" content="Quattro marchi veri e otto prove che si manovrano, non una lista di competenze." />
+<meta name="twitter:description" content="Cinque marchi veri e otto prove che si manovrano, non una lista di competenze." />
 <meta name="twitter:image" content="https://ivelsefila.github.io/f-ai-site/assets/og-fai.jpg" />
-<link rel="stylesheet" href="v2.css?v=20260911-135324" />
+<link rel="stylesheet" href="v2.css?v=20260928-69" />
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -98,9 +98,6 @@
   <nav class="bar__nav mono" aria-label="Prove">
     <a href="#banchi" data-solo-largo><span class="n">01</span>Servizi</a
     ><a href="#lavori"><span class="n">02</span>Lavori</a
-    ><a href="#regia" data-solo-largo><span class="n">03</span>Regia</a
-    ><a href="#tecnologia" data-solo-largo><span class="n">04</span>Tecnologia</a
-    ><a href="#laboratorio" data-solo-largo><span class="n">05</span>Laboratorio</a
     ><a href="#profilo" data-solo-largo><span class="n">P</span>Profilo</a
     ><a href="#contatto">Contatto</a>
   </nav>
@@ -183,8 +180,8 @@
          paragrafo, due bottoni e un fondo astratto. Il lavoro vero
          cominciava al 25% della pagina. Queste sono quattro copertine
          vere, una per cliente, e portano al loro caso. -->
-    <nav class="vetrina" aria-label="I quattro clienti">
-      <p class="vetrina__eti mono">Quattro marchi, dall’idea alla pubblicazione</p>
+    <nav class="vetrina" aria-label="I cinque clienti">
+      <p class="vetrina__eti mono">Cinque marchi, dall’idea alla pubblicazione</p>
       <div class="vetrina__fila">
       <a class="vetrina__caso" href="#caso-union">
         <img src="eroe/union.webp" width="264" height="352" alt="Union Energia — Campagna marketing"
@@ -196,15 +193,23 @@
              loading="eager" decoding="async">
         <b>Human Robots</b><span class="mono">Lancio di prodotto</span>
       </a>
+      <a class="vetrina__caso vetrina__caso--marchio" href="#caso-cest">
+        <img src="eroe/cest.webp" width="264" height="352" alt="Studio CETS — Campagna marketing"
+             loading="eager" decoding="async">
+        <b>Studio CETS</b><span class="mono">Campagna marketing</span>
+      </a>
       <a class="vetrina__caso vetrina__caso--marchio" href="#caso-locanda">
         <img src="eroe/locanda.webp" width="264" height="352" alt="La Locanda — Identità e marketing"
              loading="eager" decoding="async">
         <b>La Locanda</b><span class="mono">Identità e marketing</span>
       </a>
-      <a class="vetrina__caso vetrina__caso--marchio" href="#caso-cest">
-        <img src="eroe/cest.webp" width="264" height="352" alt="Studio CETS — Campagna marketing"
-             loading="eager" decoding="async">
-        <b>Studio CETS</b><span class="mono">Campagna marketing</span>
+      <a class="vetrina__caso vetrina__caso--sito" href="#caso-cdi">
+        <span class="vetrina__finto" aria-hidden="true">
+          <i></i><i></i><i></i>
+          <em>cdi-infissi.it</em>
+          <b>CDI<br>Infissi</b>
+        </span>
+        <b>CDI Infissi</b><span class="mono">Sito internet</span>
       </a>
       </div>
     </nav>
@@ -215,12 +220,12 @@
     </div>
   </div>
 
-  <aside class="read" aria-live="polite" aria-atomic="true">
+  <aside class="read" aria-live="polite" aria-atomic="true" hidden>
     <span class="mono">In parole povere</span>
     <p id="heroRead"></p>
   </aside>
 
-  <div class="hud">
+  <div class="hud" hidden>
     <p class="hud__istruzione mono">↔ Trascina il confine: decidi chi guida, <b>tu</b> o <b>il sistema</b></p>
     <dl aria-hidden="true">
       <div><dt>Direzione umana</dt><dd id="hHuman">50%</dd></div>
@@ -238,7 +243,7 @@
       <button type="button" data-scena="2" aria-pressed="false">03</button>
     </div>
   </div>
-  <div class="rail" aria-hidden="true">
+  <div class="rail" aria-hidden="true" hidden>
     <span class="rail__capo rail__capo--tu mono">Tu</span>
     <i id="railFill"></i><b id="railKnob"></b>
     <span class="rail__capo rail__capo--ai mono">Sistema</span>
@@ -273,19 +278,21 @@
    <header class="sec__head">
     <p class="eyebrow mono"><i aria-hidden="true"></i><span class="n">Questo sito</span> Istruzioni</p>
     <h2 id="comeT">Questo sito non racconta il mio lavoro.<br><em>Lo fa mentre lo guardi.</em></h2>
-    <p class="sec__lede">L'ho progettato io, e l'ho fatto scrivere riga per riga alle migliori
+    <p class="sec__lede solo-largo">L'ho progettato io, e l'ho fatto scrivere riga per riga alle migliori
       AI di frontiera: grafica, animazioni, interazioni, codice. Le immagini che vedi non sono
       file caricati — le disegna il tuo browser adesso, e infatti puoi cambiarle. Tutto quello
       che cambi resta nel tuo browser: il sito non salva e non manda niente a nessuno.</p>
+    <p class="sec__lede solo-piccolo">L'ho progettato io con le migliori AI. Dal telefono puoi
+      cambiare i colori, girare il dispositivo con il dito e creare un tuo key visual.</p>
    </header>
-   <span class="manifesto__cta mono" aria-hidden="true">Vedi come funziona <i>↓</i></span>
+   <span class="manifesto__cta manifesto__cta--largo mono" aria-hidden="true">Vedi come funziona <i>↓</i></span>
   </summary>
 
   <div class="manifesto__corpo">
    <div class="manifesto__lista">
    <ol class="istruzioni">
     <li><b class="mono">01</b><h3>Il colore di tutto il sito</h3>
-      <p>Sette palette, dai pallini in alto a destra: ognuna calcolata perché il testo resti
+      <p>Nove palette, dai pallini in alto a destra: ognuna calcolata perché il testo resti
         leggibile su fondo scuro e su carta.</p></li>
     <li><b class="mono">02</b><h3>Sposta qualsiasi riquadro</h3>
       <p>Tieni premuto mezzo secondo su una scheda e trascinala dove vuoi — lavori, servizi,
@@ -316,9 +323,9 @@
 <!-- ══ 03 · banchi di prova ══ -->
 <section class="sec sp-m ap-larga t-forte" id="banchi" data-proof="banchi" aria-labelledby="banchiT">
   <header class="sec__head">
-    <p class="eyebrow mono"><i aria-hidden="true"></i><span class="n">Le mie skills</span> Servizi</p>
-    <h2 id="banchiT">Quattro cose che faccio.<br><em>Apri ognuna per il dettaglio.</em></h2>
-    <p class="sec__lede">Qui sotto c'è cosa consegno per ognuna delle quattro: non un elenco di
+    <p class="eyebrow mono"><i aria-hidden="true"></i><span class="n">Cosa posso fare per te</span> Servizi</p>
+    <h2 id="banchiT">Di cosa mi occupo.<br><em>Apri ognuna per il dettaglio.</em></h2>
+    <p class="sec__lede">Qui sotto c'è cosa consegno per ognuna: non un elenco di
       competenze, ma cosa arriva davvero, come ci arrivo e dove puoi vederlo.</p>
   </header>
 
@@ -349,43 +356,54 @@
         <p>Collego strumenti e controlli umani per ridurre il lavoro ripetitivo e provare nuove idee in fretta.</p>
         <p class="offerta__tag mono">Automazioni · Agenti · Prototipi · Locale o cloud</p>
       </article>
+      <article class="offerta__card" data-serv="siti">
+        <span class="mono">05 / Presenza</span>
+        <h3>Siti internet</h3>
+        <p>Creo i siti in puro codice, e anche temi e plugin WordPress su misura, quando serve quella piattaforma.</p>
+        <p class="offerta__tag mono">Codice puro · Temi WordPress · Plugin · Su misura</p>
+      </article>
+      <article class="offerta__card" data-serv="webapp">
+        <span class="mono">06 / Strumenti</span>
+        <h3>Web app</h3>
+        <p>Applicazioni vere, non demo: quando lo strumento che serve non esiste ancora, lo scrivo.</p>
+        <p class="offerta__tag mono">Backend · Frontend · Automazioni · In produzione</p>
+      </article>
+      <article class="offerta__card" data-serv="marketing">
+        <span class="mono">07 / Diffusione</span>
+        <h3>Campagne media</h3>
+        <p>Creo la campagna di marketing da zero e la seguo fino alla pubblicazione, su più canali insieme — digitali e non.</p>
+        <p class="offerta__tag mono">Ideazione · Media planning · Digitale, stampa e affissioni · Pubblicazione</p>
+      </article>
+      <article class="offerta__card" data-serv="jingle">
+        <span class="mono">08 / Suono</span>
+        <h3>Jingle e canzoni pubblicitarie</h3>
+        <p>Musiche e jingle originali per spot e campagne: la firma sonora che resta in testa quanto l'idea.</p>
+        <p class="offerta__tag mono">Jingle · Canzoni pubblicitarie · Musica originale · Voce e mix</p>
+      </article>
     </div>
     <noscript><p class="offerta__nota">Con JavaScript spento le schede non si aprono:
     <a href="#brief">vai direttamente alle sei domande</a>.</p></noscript>
-  <p class="offerta__nota">Web design e prototipazione sono capacità trasversali: le uso quando il progetto richiede un’esperienza o un’applicazione.</p>
   </div>
 
-  <aside class="stack" aria-label="Strumenti che uso, divisi per tipologia">
-    <header class="stack__head mono"><strong>Strumenti che uso</strong><span>38 voci · toccane una e ti dico cosa ci faccio</span></header>
-    <div class="stack__grid">
-      <section class="stack__group stack__group--creative" aria-label="Grafica e video">
-        <b class="mono"><span>01</span> GRAFICA + VIDEO</b>
-        <div><span>Adobe Photoshop</span><span>Adobe Illustrator</span><span>Adobe Premiere Pro</span><span>Adobe Audition</span><span>Adobe InDesign</span></div>
-      </section>
-      <section class="stack__group stack__group--cloud" aria-label="Assistenti, ricerca e coding con AI">
-        <b class="mono"><span>02</span> ASSISTENTI + CODING</b>
-        <div><span>ChatGPT</span><span>Claude / Code / Design</span><span>Gemini / Antigravity</span><span>xAI Grok</span><span>Perplexity</span></div>
-      </section>
-      <section class="stack__group stack__group--video" aria-label="Generazione di immagini, video, avatar e audio con AI">
-        <b class="mono"><span>03</span> IMMAGINE + VIDEO + AUDIO AI</b>
-        <div><span>GPT Image 2.5</span><span>Nano Banana 2</span><span>Grok Image</span><span>Seedance 2.5</span><span>Gemini Omni</span><span>Grok Video</span><span>HeyGen</span><span>Higgsfield</span><span>ACE 1.5</span><span>Lyria</span><span>ElevenLabs</span><span>Avatar AI</span><span>Voice Cloning</span></div>
-      </section>
-      <section class="stack__group stack__group--local" aria-label="Workflow e intelligenza artificiale locale">
-        <b class="mono"><span>04</span> WORKFLOW + AI LOCALE</b>
-        <div><span>n8n</span><span>ComfyUI</span><span>Stable Diffusion</span><span>Ollama</span><span>LM Studio</span><span>Hooks Engineering</span></div>
-      </section>
-      <section class="stack__group stack__group--orchestration" aria-label="Competenze di AI engineering e automazione">
-        <b class="mono"><span>05</span> AI ENGINEERING + AUTOMAZIONI</b>
-        <div><span>Prompt Engineering</span><span>Prompt JSON</span><span>Skills Engineering</span><span>Memoria persistente AI / Mem0</span><span>Agenti AI</span><span>Webapp su misura</span><span>Automazioni AI</span></div>
-      </section>
-      <section class="stack__group stack__group--social" aria-label="Gestione e pubblicazione social">
-        <b class="mono"><span>06</span> SOCIAL + PUBBLICAZIONE</b>
-        <div><span>Meta Business Suite</span><span>Postiz</span></div>
-      </section>
+  <div class="bench bench--stretto" id="b-grafica">
+    <div>
+      <div class="formats" id="formats"></div>
+      <div class="work__seed"><span>seed <b class="sv" id="fmtSeedV">1908</b></span>
+        <button class="btn btn--sm" id="fmtNew" type="button">Rigenera <i aria-hidden="true">↻</i></button></div>
     </div>
-  </aside>
+    <div class="bench__panel">
+      <h3>Un'idea, ogni formato</h3>
+      <p>La stessa direzione ricomposta per sei proporzioni. Non è un ridimensionamento: <strong>cambia la griglia, la scala tipografica e cosa resta fuori</strong>. Muovi la leva e guarda i formati cambiare insieme.</p>
+      <label class="ctl" for="fmtIdea"><span class="mono">Peso del titolo</span>
+        <input id="fmtIdea" type="range" min="0" max="100" value="55" />
+      </label>
+    </div>
+  </div>
 
-  <div class="appmie">
+
+  <!-- Alfred e Max Video Downloader: nascosti, non cancellati. Si
+       rimettono togliendo hidden. -->
+  <div class="appmie" id="app" hidden>
     <header class="appmie__testa">
       <p class="eyebrow mono"><i aria-hidden="true"></i><span class="n">Miei software</span> Fiori all’occhiello</p>
       <h3>Due applicazioni che ho scritto io.<br><em>E che uso tutti i giorni.</em></h3>
@@ -404,6 +422,25 @@
           resta visibile e fermabile — non è una scatola nera.</p>
 
         <div class="appmie__capacita">
+          <details class="appmie__tile">
+            <summary>
+              <svg class="appmie__icona" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+                <circle cx="12" cy="12" r="9"/>
+                <path d="M12 11v5"/>
+                <circle cx="12" cy="7.6" r="1" fill="currentColor" stroke="none"/>
+              </svg>
+              <b class="mono">Il programma</b>
+              <p>Dall'idea al post pubblicato, in un'unica app che uso ogni giorno.</p>
+              <i class="appmie__piu" aria-hidden="true"></i>
+            </summary>
+            <div class="appmie__dettaglio">
+              <p>Alfred nasce per gestire da solo la produzione e la pubblicazione sui miei
+                canali social: legge le fonti, decide cosa vale la pena raccontare, genera il
+                video e lo mette in coda.</p>
+              <p>Io resto nel giro solo per bloccare o correggere, mai per eseguire a mano ogni
+                passaggio — non è una demo, è lo strumento con cui lavoro tutti i giorni.</p>
+            </div>
+          </details>
           <details class="appmie__tile">
             <summary>
               <svg class="appmie__icona" viewBox="0 0 24 24" fill="currentColor" fill-opacity=".16" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
@@ -514,6 +551,25 @@
           <details class="appmie__tile">
             <summary>
               <svg class="appmie__icona" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+                <circle cx="12" cy="12" r="9"/>
+                <path d="M12 11v5"/>
+                <circle cx="12" cy="7.6" r="1" fill="currentColor" stroke="none"/>
+              </svg>
+              <b class="mono">Il programma</b>
+              <p>Un'app desktop nata da un bisogno vero, non da un'idea di mercato.</p>
+              <i class="appmie__piu" aria-hidden="true"></i>
+            </summary>
+            <div class="appmie__dettaglio">
+              <p>Max Video Downloader è nato perché mi serviva scaricare video autorizzati,
+                trascriverli e ottenere sottotitoli senza pagare un servizio al minuto o
+                caricare file altrove.</p>
+              <p>Gira tutta sul computer, usa la scheda video per essere veloce, ed è la stessa
+                versione che uso ogni giorno per il mio lavoro.</p>
+            </div>
+          </details>
+          <details class="appmie__tile">
+            <summary>
+              <svg class="appmie__icona" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
                 <path d="M12 3v12m0 0-4-4m4 4 4-4"/>
                 <path d="M4 15v3a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-3"/>
               </svg>
@@ -578,32 +634,16 @@
       configuratore, un flusso che lavora da solo la notte — è esattamente questo il lavoro.</p>
   </div>
 
-  <div class="bench bench--stretto" id="b-grafica">
-    <div>
-      <div class="formats" id="formats"></div>
-      <div class="work__seed"><span>seed <b class="sv" id="fmtSeedV">1908</b></span>
-        <button class="btn btn--sm" id="fmtNew" type="button">Rigenera <i aria-hidden="true">↻</i></button></div>
-    </div>
-    <div class="bench__panel">
-      <h3>Un'idea, ogni formato</h3>
-      <p>La stessa direzione ricomposta per sei proporzioni. Non è un ridimensionamento: <strong>cambia la griglia, la scala tipografica e cosa resta fuori</strong>. Muovi la leva e guarda i formati cambiare insieme.</p>
-      <label class="ctl" for="fmtIdea"><span class="mono">Peso del titolo</span>
-        <input id="fmtIdea" type="range" min="0" max="100" value="55" />
-        <output id="fmtOut" class="mono">55</output>
-      </label>
-    </div>
-  </div>
-
 </section>
 
 <!-- ══ 02 · i lavori veri ══ -->
 <section class="sec sec--alt sp-s ap-numero sec--chiara t-forte" id="lavori" data-proof="lavori" aria-labelledby="lavoriT">
   <header class="sec__head" data-num="02">
-    <p class="eyebrow mono"><i aria-hidden="true"></i><span class="n">Prova 02</span> Lavori</p>
-    <h2 id="lavoriT">Quattro marchi.<br><em>Dall’idea alla pubblicazione.</em></h2>
+    <p class="eyebrow mono"><i aria-hidden="true"></i><span class="n">I miei clienti</span> Lavori</p>
+    <h2 id="lavoriT">Cinque marchi.<br><em>Dall’idea alla pubblicazione.</em></h2>
     <p class="sec__lede">Un mondo inventato, il lancio di un prodotto che non si poteva
-      fotografare, l’identità di una locanda in un castello, un marchio nato da zero per chi
-      amministra condomìni. Per ognuno: il marchio, i pezzi finiti da <strong>guardare qui</strong>,
+      fotografare, l’identità di una locanda in un castello, un’attività già avviata ma ancora
+      poco conosciuta fra chi amministra condomìni. Per ognuno: il marchio, i pezzi finiti da <strong>guardare qui</strong>,
       la lista di cosa c’è sotto. Nessun video parte da solo.</p>
   </header>
 
@@ -679,7 +719,7 @@
         <p class="union__sotto">Union Energia<span>per Roberto Baldizzone</span></p>
         <p class="union__lede">Brand identity dentro un marchio che esisteva già: un universo
           parallelo dove una cometa a forma di <b>0</b> azzera le bollette e trasforma gli animali
-          in bipedi che parlano — Davide il lama, Luca l’asino e gli altri, energia pulita
+          in bipedi che parlano — Davide l’alpaca, Luca l’asino e gli altri, energia pulita
           raccontata senza fare una lezione, con <b>una storia che continua a crescere</b>.</p>
         <p class="union__claim"><span>Union Energia</span> <b>Uniti si vince</b></p>
       </div>
@@ -695,8 +735,8 @@
 
       <figure class="union__davide">
         <img src="lavori/davide-lama.webp" width="481" height="1564" loading="lazy" decoding="async"
-             alt="Davide, il lama bipede di Union Energia, in maglione e pantaloni">
-        <figcaption class="mono">Davide il lama</figcaption>
+             alt="Davide, l'alpaca bipede di Union Energia, in maglione e pantaloni">
+        <figcaption class="mono">Davide l'alpaca</figcaption>
       </figure>
     </div>
 
@@ -802,7 +842,7 @@
 
       <div class="eso__piede">
         <ul class="eso__conti">
-          <li><b>4</b><span>pezzi</span></li>
+          <li><b>10</b><span>pezzi</span></li>
           <li><b>1</b><span>sito</span></li>
           <li><b>6</b><span>documenti</span></li>
         </ul>
@@ -810,14 +850,18 @@
       </div>
 
       <figure class="eso__figura">
-        <img src="eso/dispositivo.webp" width="355" height="640" loading="lazy" decoding="async"
-             alt="Render del dispositivo: esoscheletro con cintura lombare, bracci in fibra e fasce alle gambe">
+        <div class="eso__360-stage" data-frame360="120" data-cartella360="eso/360/">
+          <img class="eso__360-img" src="eso/360/frame_000.webp" width="480" height="720"
+               loading="lazy" decoding="async" draggable="false"
+               alt="Il dispositivo, vista a 360°: trascina per ruotarlo">
+          <span class="eso__360-hint" aria-hidden="true">⟲ Trascina per ruotare</span>
+        </div>
         <figcaption class="mono">Il dispositivo</figcaption>
       </figure>
     </div>
 
     <div class="eso__corpo">
-      <p class="eso__intro mono">Quattro pezzi · dal trailer al product film</p>
+      <p class="eso__intro mono">Dieci pezzi · dal trailer alle riprese di studio</p>
       <div class="eso__lavori">
       <!-- La scaletta si vede solo a JavaScript spento: initXxx la
            sostituisce con le schede vere. Serve perche' senza JS qui
@@ -828,6 +872,12 @@
         <li>Trekking</li>
         <li>Più forza, più libertà</li>
         <li>Il dispositivo</li>
+        <li>Vista frontale, studio</li>
+        <li>Vista frontale, controluce</li>
+        <li>Controluce, versione lunga</li>
+        <li>Modulo centrale, dettaglio</li>
+        <li>Dettaglio, macro</li>
+        <li>Dettaglio, texture carbonio</li>
       </ul>
     </div>
 
@@ -852,6 +902,121 @@
             identico in ogni inquadratura</dd></div>
           <div><dt>Sito</dt><dd>Codice su misura, non un tema: schede tecniche, configuratore,
             dati di mercato, modulo di pre-ordine</dd></div>
+        </dl>
+      </div>
+    </div>
+  </div>
+
+  <div class="cest" id="caso-cest">
+    <div class="cest__slab">
+      <!-- La scena: una risma di fogli che si accumula e la fascia
+           tricolore dello scudo. Sono i due segni di questo lavoro — la
+           carta che sommerge e il marchio che la toglie di mezzo —
+           disegnati qui, non ritagliati da un'immagine. Due geometrie,
+           come per gli altri casi: una larga e una stretta. -->
+      <svg class="cest__scena cest__scena--largo" viewBox="0 0 1200 700"
+           preserveAspectRatio="xMaxYMax slice" aria-hidden="true" focusable="false">
+        <defs>
+          <linearGradient id="c-banda" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stop-color="#1e9e5c" stop-opacity=".30"/>
+            <stop offset=".5" stop-color="#ffffff" stop-opacity=".16"/>
+            <stop offset="1" stop-color="#c1272d" stop-opacity=".34"/>
+          </linearGradient>
+        </defs>
+        <!-- la carta: righe di lunghezza diversa, come fogli impilati -->
+        <g fill="none" stroke="#9db8d6" stroke-opacity=".13" stroke-width="2"
+           stroke-linecap="round">
+          <path d="M60 604h330M60 634h226M60 664h402"/>
+          <path d="M60 526h268M60 556h352"/>
+          <path d="M60 448h198M60 478h300"/>
+          <path d="M60 370h330M60 400h150"/>
+          <path d="M60 292h240M60 322h180"/>
+        </g>
+        <path d="M700 -60 1060 -60 660 760 300 760Z" fill="url(#c-banda)"/>
+        <path d="M760 -60 1000 -60 700 760 460 760Z" fill="url(#c-banda)" opacity=".4"/>
+        <g fill="none" stroke="#9db8d6" stroke-opacity=".22" stroke-width="1.5">
+          <path d="M1000 96h150M1150 96v52"/>
+          <path d="M60 236H206M60 236v-46"/>
+          <path d="M980 560h130M980 560v40"/>
+        </g>
+      </svg>
+
+      <svg class="cest__scena cest__scena--stretto" viewBox="0 0 420 800"
+           preserveAspectRatio="xMidYMax slice" aria-hidden="true" focusable="false">
+        <g fill="none" stroke="#9db8d6" stroke-opacity=".13" stroke-width="2"
+           stroke-linecap="round">
+          <path d="M40 700h200M40 730h134M40 760h244"/>
+          <path d="M40 622h162M40 652h214"/>
+          <path d="M40 544h120M40 574h182"/>
+          <path d="M40 466h150"/>
+        </g>
+        <path d="M250 -60 430 -60 230 860 50 860Z" fill="url(#c-banda)"/>
+        <g fill="none" stroke="#9db8d6" stroke-opacity=".22" stroke-width="1.5">
+          <path d="M300 64h96M396 64v42"/>
+          <path d="M24 200h64M88 200v34"/>
+        </g>
+      </svg>
+
+      <div class="cest__testa">
+        <p class="eyebrow mono"><i aria-hidden="true"></i><span class="n">Caso</span> Marchio e campagna</p>
+        <h3>Il lavoro che l’amministratore<br><em>non deve più fare.</em></h3>
+        <p class="cest__sotto">Studio CETS<span>per Michele Devalle</span></p>
+        <p class="cest__lede">Un centro elaborazione dati per amministratori di condominio —
+          antincendio, GSA, rilievi con drone — che esisteva già ma era <b>ancora poco conosciuto</b>:
+          prima abbiamo rifatto il logo, poi la campagna per farlo conoscere. Il pubblico è uno stretto e non compra sogni, compra ore: ogni
+          pezzo parte da una rogna vera e arriva alla stessa promessa da una porta diversa.</p>
+        <p class="cest__claim"><span>Studio CETS</span> <b>Alleggerisci la tua burocrazia</b></p>
+      </div>
+
+      <div class="cest__piede">
+        <ul class="cest__conti">
+          <li><b>6</b><span>pezzi</span></li>
+          <li><b>1</b><span>marchio</span></li>
+          <li><b>2</b><span>formati</span></li>
+        </ul>
+        <p class="cest__nota">Un'attività già avviata, ancora da far conoscere</p>
+      </div>
+
+      <figure class="cest__figura">
+        <img src="cest/marchio.webp" width="760" height="762" loading="lazy" decoding="async"
+             alt="Il marchio Studio CETS: uno scudo tricolore con un palazzo, una gru e un drone, e sotto il nome Devalle Michele">
+        <figcaption class="mono">Il marchio</figcaption>
+      </figure>
+    </div>
+
+    <div class="cest__corpo">
+      <p class="cest__intro mono">Sei pezzi · dalla sigla del marchio alla campagna</p>
+      <div class="cest__lavori">
+      <!-- La scaletta si vede solo a JavaScript spento: initCest la
+           sostituisce con le schede vere. Serve perche' senza JS qui
+           restava un buco. audit/scalette.mjs controlla che questi
+           titoli siano gli stessi di cest.js. -->
+      <ul class="scaletta">
+        <li>La scadenza</li>
+        <li>Il servizio, per intero</li>
+        <li>Caro amministratore</li>
+        <li>Riprenditi la tua vita</li>
+        <li>Il marchio che si costruisce</li>
+        <li>Lo stesso, in verticale</li>
+      </ul>
+    </div>
+
+      <!-- La riga della catena. Diceva "nessuna ripresa dal vivo", che
+           e' vero ma e' anche esattamente la frase che sta gia' sopra le
+           copertine di Union: audit/doppioni.mjs le ha trovate uguali al
+           60%. Qui dice la stessa cosa dalla parte del mestiere. -->
+      <p class="caso-firma">Lo scudo nasce in vettoriale e solo dopo si muove. Le inquadrature sono
+        generate una per una — qui non c’è un set e non c’è un attore — e scritte, ritmo e
+        montaggio si chiudono in <b>Adobe Premiere Pro</b>.</p>
+
+      <div class="cest__come">
+        <b class="mono">Il resto del lavoro</b>
+        <dl>
+          <div><dt>Marchio</dt><dd>Scudo, tricolore, palazzo e drone: rifatto da capo, animato
+            in due formati — due montaggi, non un ritaglio</dd></div>
+          <div><dt>Campagna</dt><dd>Quattro rogne diverse dello stesso mestiere, non quattro
+            versioni dello stesso spot: la scadenza di legge, il servizio intero, la testimonianza,
+            il prima‑e‑dopo muto</dd></div>
         </dl>
       </div>
     </div>
@@ -927,7 +1092,7 @@
     </div>
 
     <div class="locanda__corpo">
-      <p class="locanda__intro mono">Nove locandine animate · una per ogni serata</p>
+      <p class="locanda__intro mono">Quindici pezzi animati · locandine e video della casa</p>
       <div class="locanda__lavori">
       <!-- La scaletta si vede solo a JavaScript spento: initXxx la
            sostituisce con le schede vere. Serve perche' senza JS qui
@@ -935,10 +1100,10 @@
            titoli siano gli stessi di locanda.js. -->
       <ul class="scaletta">
         <li>Il posto</li>
-        <li>Inaugurazione del dehor</li>
+        <li>Inaugurazione del dehors</li>
+        <li>Serata fritto misto</li>
         <li>Serata degustazione Champagne</li>
         <li>Brut Tradition, il primo assaggio</li>
-        <li>Serata fritto misto</li>
         <li>Fritto misto di pesce</li>
         <li>Serata cena karaoke</li>
         <li>Giornata di benessere e gusto</li>
@@ -973,124 +1138,60 @@
     </div>
   </div>
 
-  <div class="cest" id="caso-cest">
-    <div class="cest__slab">
-      <!-- La scena: una risma di fogli che si accumula e la fascia
-           tricolore dello scudo. Sono i due segni di questo lavoro — la
-           carta che sommerge e il marchio che la toglie di mezzo —
-           disegnati qui, non ritagliati da un'immagine. Due geometrie,
-           come per gli altri casi: una larga e una stretta. -->
-      <svg class="cest__scena cest__scena--largo" viewBox="0 0 1200 700"
-           preserveAspectRatio="xMaxYMax slice" aria-hidden="true" focusable="false">
-        <defs>
-          <linearGradient id="c-banda" x1="0" y1="0" x2="1" y2="1">
-            <stop offset="0" stop-color="#1e9e5c" stop-opacity=".30"/>
-            <stop offset=".5" stop-color="#ffffff" stop-opacity=".16"/>
-            <stop offset="1" stop-color="#c1272d" stop-opacity=".34"/>
-          </linearGradient>
-        </defs>
-        <!-- la carta: righe di lunghezza diversa, come fogli impilati -->
-        <g fill="none" stroke="#9db8d6" stroke-opacity=".13" stroke-width="2"
-           stroke-linecap="round">
-          <path d="M60 604h330M60 634h226M60 664h402"/>
-          <path d="M60 526h268M60 556h352"/>
-          <path d="M60 448h198M60 478h300"/>
-          <path d="M60 370h330M60 400h150"/>
-          <path d="M60 292h240M60 322h180"/>
-        </g>
-        <path d="M700 -60 1060 -60 660 760 300 760Z" fill="url(#c-banda)"/>
-        <path d="M760 -60 1000 -60 700 760 460 760Z" fill="url(#c-banda)" opacity=".4"/>
-        <g fill="none" stroke="#9db8d6" stroke-opacity=".22" stroke-width="1.5">
-          <path d="M1000 96h150M1150 96v52"/>
-          <path d="M60 236H206M60 236v-46"/>
-          <path d="M980 560h130M980 560v40"/>
-        </g>
-      </svg>
-
-      <svg class="cest__scena cest__scena--stretto" viewBox="0 0 420 800"
-           preserveAspectRatio="xMidYMax slice" aria-hidden="true" focusable="false">
-        <g fill="none" stroke="#9db8d6" stroke-opacity=".13" stroke-width="2"
-           stroke-linecap="round">
-          <path d="M40 700h200M40 730h134M40 760h244"/>
-          <path d="M40 622h162M40 652h214"/>
-          <path d="M40 544h120M40 574h182"/>
-          <path d="M40 466h150"/>
-        </g>
-        <path d="M250 -60 430 -60 230 860 50 860Z" fill="url(#c-banda)"/>
-        <g fill="none" stroke="#9db8d6" stroke-opacity=".22" stroke-width="1.5">
-          <path d="M300 64h96M396 64v42"/>
-          <path d="M24 200h64M88 200v34"/>
-        </g>
-      </svg>
-
-      <div class="cest__testa">
-        <p class="eyebrow mono"><i aria-hidden="true"></i><span class="n">Caso</span> Marchio e campagna</p>
-        <h3>Il lavoro che l’amministratore<br><em>non deve più fare.</em></h3>
-        <p class="cest__sotto">Studio CETS<span>per Michele Devalle</span></p>
-        <p class="cest__lede">Un centro elaborazione dati per amministratori di condominio —
-          antincendio, GSA, rilievi con drone — e <b>un marchio che non esisteva</b>: prima lo
-          scudo, poi la campagna. Il pubblico è uno stretto e non compra sogni, compra ore: ogni
-          pezzo parte da una rogna vera e arriva alla stessa promessa da una porta diversa.</p>
-        <p class="cest__claim"><span>Studio CETS</span> <b>Cambia passo anche tu</b></p>
+  <!-- ══ CDI Infissi: l'unico caso che non e' una campagna ma un sito
+       vero — la prova piu' onesta e' mostrare il sito stesso, non una
+       sua fotografia. ══ -->
+  <div class="cdi" id="caso-cdi">
+    <div class="cdi__slab">
+      <div class="cdi__testa">
+        <p class="eyebrow mono"><i aria-hidden="true"></i><span class="n">CDI Infissi</span> Sito internet</p>
+        <h3>Un sito nel sito.<br><em>Questo qui sotto è vero, non un fermo immagine.</em></h3>
+        <p class="cdi__lede">Finestre, scorrevoli, porte e sistemi ombreggianti QFORT per un
+          rivenditore piemontese: un catalogo di 51 prodotti consultabile, filtrabile e pronto
+          a portare a una richiesta di sopralluogo — scritto in puro codice, senza builder.</p>
+        <p class="cdi__claim"><span>CDI Infissi</span> <b>Qualità su misura per la tua casa</b></p>
       </div>
 
-      <div class="cest__piede">
-        <ul class="cest__conti">
-          <li><b>6</b><span>pezzi</span></li>
-          <li><b>1</b><span>marchio</span></li>
-          <li><b>2</b><span>formati</span></li>
+      <div class="cdi__piede">
+        <ul class="cdi__conti">
+          <li><b>51</b><span>prodotti</span></li>
+          <li><b>4</b><span>pagine</span></li>
+          <li><b>4</b><span>categorie</span></li>
         </ul>
-        <p class="cest__nota">Un marchio nato da zero e messo subito al lavoro</p>
+        <p class="cdi__nota">Finestre · Scorrevoli · Porte · Ombreggianti</p>
       </div>
-
-      <figure class="cest__figura">
-        <img src="cest/marchio.webp" width="760" height="762" loading="lazy" decoding="async"
-             alt="Il marchio Studio CETS: uno scudo tricolore con un palazzo, una gru e un drone, e sotto il nome Devalle Michele">
-        <figcaption class="mono">Il marchio</figcaption>
-      </figure>
     </div>
 
-    <div class="cest__corpo">
-      <p class="cest__intro mono">Sei pezzi · dalla sigla del marchio alla campagna</p>
-      <div class="cest__lavori">
-      <!-- La scaletta si vede solo a JavaScript spento: initCest la
-           sostituisce con le schede vere. Serve perche' senza JS qui
-           restava un buco. audit/scalette.mjs controlla che questi
-           titoli siano gli stessi di cest.js. -->
-      <ul class="scaletta">
-        <li>La scadenza</li>
-        <li>Il servizio, per intero</li>
-        <li>Caro amministratore</li>
-        <li>Riprenditi la tua vita</li>
-        <li>Il marchio che si costruisce</li>
-        <li>Lo stesso, in verticale</li>
-      </ul>
-    </div>
-
-      <!-- La riga della catena. Diceva "nessuna ripresa dal vivo", che
-           e' vero ma e' anche esattamente la frase che sta gia' sopra le
-           copertine di Union: audit/doppioni.mjs le ha trovate uguali al
-           60%. Qui dice la stessa cosa dalla parte del mestiere. -->
-      <p class="caso-firma">Lo scudo nasce in vettoriale e solo dopo si muove. Le inquadrature sono
-        generate una per una — qui non c’è un set e non c’è un attore — e scritte, ritmo e
-        montaggio si chiudono in <b>Adobe Premiere Pro</b>.</p>
-
-      <div class="cest__come">
-        <b class="mono">Il resto del lavoro</b>
-        <dl>
-          <div><dt>Marchio</dt><dd>Scudo, tricolore, palazzo e drone: disegnato da zero, animato
-            in due formati — due montaggi, non un ritaglio</dd></div>
-          <div><dt>Campagna</dt><dd>Quattro rogne diverse dello stesso mestiere, non quattro
-            versioni dello stesso spot: la scadenza di legge, il servizio intero, la testimonianza,
-            il prima‑e‑dopo muto</dd></div>
-        </dl>
+    <div class="cdi__corpo">
+      <p class="cdi__intro mono">Il sito vero, in diretta — non uno screenshot</p>
+      <div class="cdi__finestra">
+        <div class="cdi__barra">
+          <button type="button" class="cdi__punto cdi__punto--rosso" data-cdi-back aria-label="Pagina precedente">‹</button>
+          <button type="button" class="cdi__punto cdi__punto--giallo" data-cdi-avanti aria-label="Pagina successiva">›</button>
+          <button type="button" class="cdi__punto cdi__punto--verde" data-cdi-ricarica aria-label="Ricarica">↻</button>
+          <span class="cdi__url">cdi-infissi.it</span>
+          <button type="button" class="cdi__toggle" data-cdi-toggle aria-pressed="false"><i aria-hidden="true">⏻</i> Navigazione OFF</button>
+        </div>
+        <div class="cdi__frameBox">
+          <iframe class="cdi__frame" src="https://cdi-infissi.ivelsefila.chatgpt.site"
+                  title="Anteprima dal vivo del sito CDI Infissi" loading="lazy"
+                  referrerpolicy="no-referrer"></iframe>
+          <button type="button" class="cdi__attiva" data-cdi-attiva>
+            <span>Attiva e naviga</span>
+          </button>
+        </div>
       </div>
+      <a class="cdi__apri btn btn--sm" href="https://cdi-infissi.ivelsefila.chatgpt.site"
+         target="_blank" rel="noopener">Apri il sito a schermo intero <i aria-hidden="true">↗</i></a>
+      <p class="caso-firma">Struttura, testi e catalogo scritti da zero in HTML, CSS e
+        JavaScript: nessun tema, nessun builder, nessuna dipendenza esterna oltre ai dati del
+        produttore <b>QFORT</b>.</p>
     </div>
   </div>
 </section>
 
 <!-- ══ 01 · control room ══ -->
-<section class="sec sp-l t-piano" id="regia" data-proof="regia" aria-labelledby="metodoT">
+<section class="sec sp-l t-piano" id="regia" data-proof="regia" aria-labelledby="metodoT" hidden>
   <!-- Il metodo era una sezione a se'. Sta qui perche' il pannello di
        prima (tolto) aveva gia' queste cinque fasi: erano la stessa cosa
        detta due volte a due sezioni di distanza. Ora che il pannello
@@ -1127,165 +1228,134 @@
   <div class="deck" id="deck"></div>
 </section>
 
+<!-- ══ le mie skill: gli strumenti, prima del profilo ══ -->
+<section class="sec sp-s t-piano" id="strumenti" aria-label="Le mie skill">
+  <!-- griglia con una riga che la attraversa, come nella scheda "Questo
+       sito"; i punti che compaiono e spariscono agli incroci li mette
+       app.js (initPunti) -->
+  <svg class="strumenti__scena" viewBox="0 0 1300 1040" preserveAspectRatio="xMidYMin slice" aria-hidden="true" focusable="false">
+    <defs>
+      <pattern id="s-griglia" width="52" height="52" patternUnits="userSpaceOnUse">
+        <path d="M52 0H0v52" fill="none" stroke="currentColor" stroke-opacity=".14" stroke-width="1"/>
+      </pattern>
+    </defs>
+    <rect width="1300" height="1040" fill="url(#s-griglia)"/>
+    <path d="M-20 880C220 880 280 480 540 480s320 340 560 340 300-300 300-300"
+          fill="none" stroke="currentColor" stroke-opacity=".45" stroke-width="2"/>
+    <g class="strumenti__punti"></g>
+  </svg>
+  <aside class="stack" id="skill" aria-label="Strumenti che uso, divisi per tipologia">
+    <header class="stack__head mono"><p class="eyebrow mono stack__eti"><i aria-hidden="true"></i><span class="n">Strumenti che uso</span> Le mie skill</p><strong>Strumenti che uso</strong><span>44 voci · toccane una e ti dico cosa ci faccio</span></header>
+    <div class="stack__grid">
+      <section class="stack__group stack__group--creative" aria-label="Grafica e video">
+        <b class="mono"><span>01</span> GRAFICA + VIDEO</b>
+        <div><span>Adobe Photoshop</span><span>Adobe Illustrator</span><span>Adobe Premiere Pro</span><span>Adobe Audition</span><span>Adobe InDesign</span></div>
+      </section>
+      <section class="stack__group stack__group--cloud" aria-label="Assistenti, ricerca e coding con AI">
+        <b class="mono"><span>02</span> ASSISTENTI + CODING</b>
+        <div><span>ChatGPT</span><span>Claude / Code / Design</span><span>Gemini / Antigravity</span><span>xAI Grok</span><span>Perplexity</span><span>Hermes</span><span>Orca</span></div>
+      </section>
+      <section class="stack__group stack__group--video" aria-label="Generazione di immagini e video con AI">
+        <b class="mono"><span>03</span> IMMAGINE + VIDEO AI</b>
+        <div><span>GPT Image 2.5</span><span>Nano Banana 2</span><span>Krea 2</span><span>Qwen Image 2.1</span><span>Grok Image</span><span>Seedance 2.5</span><span>Gemini Omni</span><span>Grok Video</span><span>Higgsfield</span></div>
+      </section>
+      <section class="stack__group stack__group--audio" aria-label="Generazione audio e musica con AI">
+        <b class="mono"><span>04</span> AUDIO AI</b>
+        <div><span>ACE 1.5</span><span>Lyria/Flow Music</span><span>ElevenLabs</span></div>
+      </section>
+      <section class="stack__group stack__group--cloni" aria-label="Avatar e cloni con AI">
+        <b class="mono"><span>05</span> CLONI AI</b>
+        <div><span>HeyGen</span><span>Avatar AI</span><span>Voice Cloning</span></div>
+      </section>
+      <section class="stack__group stack__group--local" aria-label="Workflow e intelligenza artificiale locale">
+        <b class="mono"><span>06</span> WORKFLOW + AI LOCALE</b>
+        <div><span>n8n</span><span>ComfyUI</span><span>Stable Diffusion</span><span>Ollama</span><span>LM Studio</span><span>Hooks Engineering</span></div>
+      </section>
+      <section class="stack__group stack__group--orchestration" aria-label="Competenze di AI engineering e automazione">
+        <b class="mono"><span>07</span> AI ENGINEERING + AUTOMAZIONI</b>
+        <div><span>Prompt Engineering</span><span>Prompt JSON</span><span>Skills Engineering</span><span>Memoria persistente AI / Mem0</span><span>Agenti AI</span><span>Webapp su misura</span><span>Automazioni AI</span></div>
+      </section>
+      <section class="stack__group stack__group--social" aria-label="Gestione e pubblicazione social">
+        <b class="mono"><span>08</span> SOCIAL + PUBBLICAZIONE</b>
+        <div><span>Meta Business Suite</span><span>Postiz</span><span>TikTok Studio</span><span>Alfred</span></div>
+      </section>
+    </div>
+  </aside>
+</section>
+
 <!-- ══ 05 · tecnologia ══ -->
-<section class="sec sp-l ap-stretta sec--chiara t-piano" id="profilo" aria-labelledby="profT">
+<section class="sec sp-l ap-stretta sec--chiara sec--contact t-piano" id="profilo" aria-labelledby="profT">
   <header class="sec__head">
     <p class="eyebrow mono"><i aria-hidden="true"></i><span class="n">Profilo</span> Creativo + tecnico</p>
     <h2 id="profT">Un profilo visivo.<br><em>Un metodo tecnico.</em></h2>
   </header>
   <div class="profilo">
     <div class="profilo__testo">
-      <p class="profilo__lead">Vengo dalla grafica e dal montaggio, prima che esistessero questi
-        strumenti: per questo non mi impressionano — so distinguere un lavoro finito da uno che
-        sembra finito.</p>
-      <p>Il valore non è “usare l’AI”, ma sapere quale usare, quando evitarla e come dirigere il
-        risultato. Quello che vedi qui — lavori, strumenti, le due applicazioni — è tutto lavoro
-        mio: il modo più onesto che ho trovato per mostrarlo.</p>
+      <p class="profilo__lead">Che l’AI sappia scrivere, disegnare, montare, non è più una domanda.
+        Dove finisce lo strumento e comincia il giudizio — quella resta mia.</p>
+      <p>Sono la mano che decide dentro la macchina che esegue. Non inseguo il nuovo, non lo temo:
+        cerco quello che, fra un mese, resterà ancora vero.</p>
+
+      <details class="profilo__extra">
+        <summary><span>Un po’ di più su di me</span><i aria-hidden="true">+</i></summary>
+        <div class="profilo__chi">
+          <div class="chi__pill">
+            <svg viewBox="0 0 24 24" fill="currentColor" fill-opacity=".16" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4" fill="none"/></svg>
+            <b>Tecnologia</b>
+            <p>La seguo per passione, non solo per lavoro: mi piace restare sempre informato.
+              Nel mondo delle AI in particolare amo provare ogni novità che esce, prima che
+              diventi "normale", e capire come funziona davvero, non solo a cosa serve.</p>
+          </div>
+          <div class="chi__pill">
+            <svg viewBox="0 0 24 24" fill="currentColor" fill-opacity=".16" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9"/><circle cx="9" cy="10" r="1.1" fill="currentColor" stroke="none"/><circle cx="15" cy="9" r="1.1" fill="currentColor" stroke="none"/><circle cx="15" cy="15" r="1.1" fill="currentColor" stroke="none"/></svg>
+            <b>Arte</b>
+            <p>Mi piace la storia dell'arte e visitare luoghi e mostre, è soprattutto da lì
+              che ho sempre preso spunto per quello che poi creo io. La scelta di una
+              composizione, di un colore, di un'inquadratura, un'idea che ho amato in un
+              quadro cerco di reinterpretarla in un mio lavoro, sia per la bellezza che mi
+              ha suscitato sia per l'onore di poterla omaggiare.</p>
+          </div>
+          <div class="chi__pill">
+            <svg viewBox="0 0 24 24" fill="currentColor" fill-opacity=".16" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M4 19V9l8-5 8 5v10" fill="none"/><path d="M4 19h16M9 19v-6h6v6" fill="none"/></svg>
+            <b>Attualità</b>
+            <p>Mi interesso a quello che succede nel mondo perché voglio restare informato —
+              non per avere sempre un'opinione pronta, ma perché credo sia importante
+              sapere come va e come funziona il mondo intorno a noi.</p>
+          </div>
+          <div class="chi__pill">
+            <svg viewBox="0 0 24 24" fill="currentColor" fill-opacity=".16" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="3" y="6" width="18" height="12" rx="1.5"/><path d="M7 6 5 3M17 6l2-3M3 10.5h18" fill="none"/></svg>
+            <b>Cinema</b>
+            <p>Amo il cinema e in generale tutto quello che si muove per immagini: è probabilmente
+              la ragione per cui oggi passo le giornate a montare video invece che a fare
+              qualcos'altro.</p>
+          </div>
+          <div class="chi__pill">
+            <svg viewBox="0 0 24 24" fill="currentColor" fill-opacity=".16" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M12 2.6c3 3 4.6 6 4.6 9a4.6 4.6 0 1 1-9.2 0c0-3 1.6-6 4.6-9Z"/></svg>
+            <b>Spiritualità</b>
+            <p>Mi interesso anche di spiritualità, perché penso sia importante avere un lato
+              filosofico: uno spazio in cui le domande contano più delle risposte.</p>
+          </div>
+        </div>
+      </details>
     </div>
     <!-- Qui c'era ART x AI: inglese in una pagina italiana, e il motivo
          che si trova tale e quale sul sito di qualunque agenzia AI del
          2024. Adesso c'e' il marchio vero, e la barra in mezzo e' la
          stessa cucitura che si trascina nell'eroe: il segno che divide
          la mano dalla macchina e' lo stesso in tutte e due i posti. -->
-    <aside class="profilo__mark" aria-hidden="true"><span>F</span><b>/</b><span>AI</span></aside>
-  </div>
-</section>
-
-<!-- ══ 06 · laboratorio ══ -->
-<section class="sec sp-s ap-numero t-piano" id="laboratorio" data-proof="laboratorio" aria-labelledby="labT">
-  <header class="sec__head" data-num="04">
-    <p class="eyebrow mono"><i aria-hidden="true"></i><span class="n">Prova 04</span> Playlab</p>
-    <h2 id="labT">Quattro giochi,<br><em>scritti da zero.</em></h2>
-    <p class="sec__lede">Quattro giochi originali dentro questa pagina, più un costruttore che
-      ne fa uno in sedici domande. Non è un passatempo: se so scrivere un motore che risponde al
-      dito in sedici millesimi di secondo, so costruire l’applicazione che ti serve.</p>
-  </header>
-  <div class="lab">
-    <article class="lab__card"><span class="mono">01 · Campo di tensione</span><i aria-hidden="true">⌁</i><h3>Trama</h3><p class="mono">Tendi / allinea / stabilizza</p></article>
-    <article class="lab__card"><span class="mono">02 · Membrana viva</span><i aria-hidden="true">△</i><h3>Piega</h3><p class="mono">Premi / deforma / fai risuonare</p></article>
-    <article class="lab__card"><span class="mono">03 · Danza delle correnti</span><i aria-hidden="true">≈</i><h3>Flusso</h3><p class="mono">Disegna / guida / componi</p></article>
-    <article class="lab__card"><span class="mono">04 · Cerchi armonici</span><i aria-hidden="true">◎</i><h3>Coro</h3><p class="mono">Accorda / pulsa / allinea</p></article>
-  </div>
-  <div class="lab__intro">
-    <p class="mono">Trama / Piega / Flusso / Coro / Tela 2D / Gesti diretti / Sessione locale</p>
-    <h3>Nuovi gesti. Nuove forme.<br><em>Risposte chiare.</em></h3>
-    <p>Parti da uno stile pronto in pochi secondi oppure rispondi a sedici domande semplici e crea il tuo gioco.</p>
-  </div>
-  <div class="lab__cta">
-    <button class="btn btn--solid btn--lg" id="open-playlab" type="button">Apri il laboratorio <i aria-hidden="true">▶</i></button>
-    <p class="lab__note">Quattro motori, un costruttore in sedici domande e venti regole che puoi cambiare. Si carica al primo clic: <b>niente scarica finché non lo apri</b>.</p>
+    <aside class="profilo__mark" aria-hidden="true"><span>MF</span><b>/</b><span>AI</span></aside>
   </div>
 
-  <!-- La materia era una sezione a se'. Sta nel laboratorio perche' e'
-       l'altra prova che si tocca con le mani, e le due si chiamavano a
-       vicenda da due sezioni di distanza. -->
-  <div class="sec__sub" id="materia" data-proof="materia">
-    <p class="eyebrow mono"><i aria-hidden="true"></i><span class="n">Dentro la stessa prova</span> Materia</p>
-    <h3>Grafica, video e sistemi sono la stessa materia.</h3>
-    <p class="sec__lede">Dodicimila punti presi da un’immagine vera, ognuno col colore del pixel
-      da cui viene: cambia disposizione e li vedi riorganizzarsi, la stessa sostanza in un altro
-      ordine, non tre immagini in dissolvenza. Lo stesso materiale lo porto da un formato
-      all’altro senza rifarlo da capo — per questo la seconda declinazione costa meno della
-      prima.</p>
-  </div>
+  <!-- ══ contatto · unito al profilo in un blocco unico ══
+       Erano tre sezioni distinte — profilo, contatto, brief — che si
+       leggevano di fila senza uno stacco reale fra loro: la stessa
+       chiusura, non tre chiusure. Restano due ancore (#profilo e
+       #contatto) dentro un solo <section>, cosi' i link continuano a
+       funzionare com'erano. -->
+  <div class="profilo__giunzione" id="contatto" aria-labelledby="contT">
+    <p class="eyebrow mono"><i aria-hidden="true"></i>Disponibile per nuovi progetti</p>
 
-  <div class="bench bench--medio">
-    <figure class="bench__stage bench__stage--materia">
-      <div class="mat-holder"><canvas id="matCanvas" aria-label="Nuvola di punti interattiva: scegli una disposizione, muovi il puntatore per ruotare, tieni premuto per disperdere la materia."></canvas></div>
-      <figcaption class="mono"><span id="matName">Griglia · grafica</span><span id="matMeta">— punti</span></figcaption>
-    </figure>
-    <div class="bench__panel">
-      <div class="modes mono" role="group" aria-label="Disposizioni della materia">
-        <button type="button" aria-pressed="true" data-mat="0">Griglia</button>
-        <button type="button" aria-pressed="false" data-mat="1">Nastro</button>
-        <button type="button" aria-pressed="false" data-mat="2">Rete</button>
-      </div>
-      <h3 id="matTitle">Il piano editoriale</h3>
-      <p id="matCopy">Tutto su un asse, niente profondità: è così che si legge una pagina. La griglia è la disposizione che decide dove va l'occhio.</p>
-      <p class="mat__hint mat__hint--puntatore mono">↔ Muovi il puntatore per ruotare · <b>tieni premuto</b> per disperdere</p>
-      <p class="mat__hint mat__hint--dito mono">↔ <b>Trascina</b> per ruotare · <b>tieni premuto</b> per disperdere</p>
-      <div class="decis"><span class="mono">Come è fatta</span><ul id="matDecisions"></ul></div>
-    </div>
-  </div>
-  <!-- Le 38 pastiglie sono passate al laboratorio e adesso sono tornate
-       vicine ai servizi: qui sono la prova concreta di cosa c'e' dietro
-       le quattro competenze appena elencate, prima di mostrare il
-       software scritto da zero. Stessa sezione scura, nessuno stacco
-       di colore da gestire. -->
-</section>
-
-<!-- ══ profilo ══ -->
-<section class="sec sec--alt sp-m sec--chiara t-piano" id="tecnologia" data-proof="tecnologia" aria-labelledby="tecT">
-  <header class="sec__head">
-    <p class="eyebrow mono"><i aria-hidden="true"></i><span class="n">Prova 05</span> Tecnologia</p>
-    <h2 id="tecT">La tecnologia giusta.<br><em>Non quella di moda.</em></h2>
-    <p class="sec__lede">Installo, confronto e integro modelli su una workstation mia. Scelgo fra locale, cloud e ibrido su assi vere — i numeri sotto sono <strong>stime dalla mia esperienza</strong>, non misure di laboratorio.</p>
-  </header>
-  <div class="bench bench--invertito">
-    <figure class="bench__stage">
-      <canvas id="radar" width="900" height="700" aria-label="Confronto fra lavorazione locale, cloud e ibrida su cinque assi."></canvas>
-      <figcaption class="mono"><span id="radarMode">Locale</span><span>stime dichiarate</span></figcaption>
-    </figure>
-    <div class="bench__panel">
-      <div class="modes mono" role="group" aria-label="Modalità di lavorazione">
-        <button type="button" aria-pressed="true" data-mode="0">Locale</button>
-        <button type="button" aria-pressed="false" data-mode="1">Cloud</button>
-        <button type="button" aria-pressed="false" data-mode="2">Ibrido</button>
-      </div>
-      <h3 id="modeTitle">Più controllo sul flusso</h3>
-      <p id="modeCopy">Il lavoro locale offre più controllo su file, configurazioni e iterazioni; richiede capacità hardware e gestione tecnica.</p>
-    </div>
-  </div>
-
-</section>
-
-<!-- ══ 08 · verdetto ══ -->
-<section class="sec sec--verdict sp-l t-forte" id="verdetto" aria-labelledby="verdT">
-  <header class="sec__head">
-    <p class="eyebrow mono"><i aria-hidden="true"></i><span class="n">Chiusura</span> Verdetto</p>
-    <h2 id="verdT">La sessione si chiude.<br><em>Il dossier lo hai scritto tu.</em></h2>
-    <p class="sec__lede">Questo non è un CV preparato: è il resoconto di cosa hai manovrato in questa visita. Cambia per ogni persona che passa di qui.</p>
-  </header>
-
-  <div class="dossier" id="dossier">
-    <div class="dossier__head mono"><span>MF/AI · dossier di sessione</span><span id="dsDate">—</span></div>
-    <dl class="dossier__grid">
-      <div><dt>Durata</dt><dd id="dsTime">00:00</dd></div>
-      <div><dt>Prove aperte</dt><dd id="dsProofs">0 / 7</dd></div>
-      <div><dt>Manovre</dt><dd id="dsActions">0</dd></div>
-      <div><dt>Fluidità media</dt><dd id="dsFps">—</dd></div>
-      <div><dt>Dipendenze del sito</dt><dd id="dsDeps">0</dd></div>
-    </dl>
-    <p class="dossier__verdict" id="dsVerdict">Sessione in corso.</p>
-    <ul class="dossier__list" id="dsList"></ul>
-    <div class="bench__acts">
-      <button class="btn btn--sm btn--solid" id="dsPrint" type="button">Salva il dossier <i aria-hidden="true">↓</i></button>
-      <a class="btn btn--sm" href="#contatto">Passa al brief <i aria-hidden="true">↗</i></a>
-    </div>
-  </div>
-
-  <div class="metrics" id="metrics">
-    <span class="mono">Metriche reali di questa pagina</span>
-    <dl>
-      <div><dt>LCP</dt><dd id="mLcp">—</dd></div>
-      <div><dt>CLS</dt><dd id="mCls">—</dd></div>
-      <div><dt>INP</dt><dd id="mInp">—</dd></div>
-      <div><dt>Trasferito</dt><dd id="mKb">—</dd></div>
-      <div><dt>Richieste</dt><dd id="mReq">—</dd></div>
-      <div><dt>Librerie al 1° carico</dt><dd id="mLib">0</dd></div>
-    </dl>
-    <p class="metrics__note">Lette dal browser mentre guardi, non dichiarate. Un sito che espone le proprie misure è l'unico modo onesto di dimostrare che so farli.</p>
-  </div>
-</section>
-
-<!-- ══ contatto · e qui dentro anche il brief ══
-     Erano due sezioni attaccate che dicevano la stessa cosa: il
-     contatto spiegava il brief e ci rimandava con un bottone, e il
-     brief stava subito sopra. Adesso e' una chiusura sola. -->
-<section class="sec sec--alt sec--contact sp-m ap-larga sec--chiara" id="contatto" aria-labelledby="contT">
-  <p class="eyebrow mono"><i aria-hidden="true"></i>Disponibile per nuovi progetti</p>
-
-  <h2 id="contT">Hai un'idea da far vedere, muovere o scalare?<br><em>Diamole una direzione.</em></h2>
+    <h2 id="contT">Hai un'idea da far vedere, muovere o scalare?<br><em>Diamole una direzione.</em></h2>
   <p class="contatto__come">Rispondi a quello che sai già, salta il resto: un testo pronto da
     copiare e mandarmi, compilato <strong>nel tuo browser</strong> — il sito non lo salva né lo
     invia.</p>
@@ -1302,10 +1372,30 @@
           <fieldset class="brief-step active" data-step="1">
             <legend><span>01</span> CHE COSA VUOI OTTENERE?</legend>
             <div class="brief-options">
-              <label><input type="radio" name="project_type" value="grafica" required /><span>Una campagna o identità</span></label>
-              <label><input type="radio" name="project_type" value="video" /><span>Un video</span></label>
-              <label><input type="radio" name="project_type" value="social" /><span>Un sistema social</span></label>
-              <label><input type="radio" name="project_type" value="ai" /><span>Un flusso o prototipo AI</span></label>
+              <label><input type="radio" name="project_type" value="grafica" required />
+                <svg class="opt-ico" viewBox="0 0 24 24" fill="currentColor" fill-opacity=".16" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="8.5"/><circle cx="9" cy="10" r="1.1" fill="currentColor" stroke="none"/><circle cx="14.5" cy="9" r="1.1" fill="currentColor" stroke="none"/><circle cx="15.5" cy="14" r="1.1" fill="currentColor" stroke="none"/><path d="M12 3.5a8.5 8.5 0 0 0 0 17c1 0 1.6-.7 1.6-1.6 0-.5-.2-.9-.5-1.2-.3-.3-.5-.7-.5-1.2 0-.9.7-1.6 1.6-1.6h1.9a3.9 3.9 0 0 0 3.9-3.9C19.9 6.9 16.4 3.5 12 3.5Z" fill="none"/></svg>
+                <span>Una campagna o identità</span></label>
+              <label><input type="radio" name="project_type" value="video" />
+                <svg class="opt-ico" viewBox="0 0 24 24" fill="currentColor" fill-opacity=".16" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="3" y="6.5" width="13" height="11" rx="2"/><path d="m16 10.5 4.4-2.7a.8.8 0 0 1 1.1.7v7l-4.4-2.7" fill="none"/></svg>
+                <span>Un video</span></label>
+              <label><input type="radio" name="project_type" value="social" />
+                <svg class="opt-ico" viewBox="0 0 24 24" fill="currentColor" fill-opacity=".16" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="6" cy="12" r="2.6"/><circle cx="18" cy="5.5" r="2.6"/><circle cx="18" cy="18.5" r="2.6"/><path d="m8.3 10.8 7.4-4.3M8.3 13.2l7.4 4.3" fill="none"/></svg>
+                <span>Un sistema social</span></label>
+              <label><input type="radio" name="project_type" value="ai" />
+                <svg class="opt-ico" viewBox="0 0 24 24" fill="currentColor" fill-opacity=".16" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M12 3.4 13.6 8l4.9.4-3.7 3.2 1.1 4.8L12 13.9l-4 2.5 1.1-4.8-3.7-3.2L10.4 8Z"/></svg>
+                <span>Un flusso o prototipo AI</span></label>
+              <label><input type="radio" name="project_type" value="siti" />
+                <svg class="opt-ico" viewBox="0 0 24 24" fill="currentColor" fill-opacity=".16" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="3" y="4.5" width="18" height="15" rx="2"/><path d="M3 8.5h18" fill="none"/><circle cx="6" cy="6.5" r=".6" fill="currentColor" stroke="none"/><circle cx="8.2" cy="6.5" r=".6" fill="currentColor" stroke="none"/></svg>
+                <span>Un sito internet</span></label>
+              <label><input type="radio" name="project_type" value="webapp" />
+                <svg class="opt-ico" viewBox="0 0 24 24" fill="currentColor" fill-opacity=".16" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="m8.5 8-4 4 4 4M15.5 8l4 4-4 4M13.5 5.5l-3 13" fill="none"/></svg>
+                <span>Una web app</span></label>
+              <label><input type="radio" name="project_type" value="marketing" />
+                <svg class="opt-ico" viewBox="0 0 24 24" fill="currentColor" fill-opacity=".16" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M3 11.5v2a1.3 1.3 0 0 0 1.3 1.3h1.4l10.6 3.7a.7.7 0 0 0 .93-.66V8.16a.7.7 0 0 0-.93-.66L5.7 11.2v-.9a1.3 1.3 0 0 1 1.3-1.3" fill="none"/><path d="M3 11.5a1.3 1.3 0 0 1 1.3-1.3h1.4l3-1.05v6.1l-3-1.05H4.3A1.3 1.3 0 0 1 3 12.8Z"/><path d="M9 17.5c.3 1.2 1 2 2 2M18.5 9.5a3 3 0 0 1 0 5" fill="none"/></svg>
+                <span>Una campagna media multicanale</span></label>
+              <label><input type="radio" name="project_type" value="jingle" />
+                <svg class="opt-ico" viewBox="0 0 24 24" fill="currentColor" fill-opacity=".16" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M9 17V6.4a1 1 0 0 1 .8-1L18 4v10.6" fill="none"/><circle cx="7" cy="18" r="2.2"/><circle cx="16" cy="16.6" r="2.2"/></svg>
+                <span>Un jingle o una canzone pubblicitaria</span></label>
               <label><input type="radio" name="project_type" value="da-definire" /><span>Non lo so ancora</span></label>
             </div>
           </fieldset>
@@ -1316,7 +1406,7 @@
             <div class="brief-options">
               <label><input type="checkbox" name="starting_point" value="brief" /><span>Ho un brief</span></label>
               <label><input type="checkbox" name="starting_point" value="brand" /><span>Ho un’identità o linee guida</span></label>
-              <label><input type="checkbox" name="starting_point" value="materials" /><span>Ho girato o materiali</span></label>
+              <label><input type="checkbox" name="starting_point" value="materials" /><span>Ho il materiale</span></label>
               <label><input type="checkbox" name="starting_point" value="zero" /><span>Partiamo da zero</span></label>
               <label><input type="checkbox" name="starting_point" value="other" /><span>Altro</span></label>
             </div>
@@ -1392,6 +1482,7 @@
         </section>
       </div><!-- /.brief__shell -->
   </section>
+  </div><!-- /.profilo__giunzione -->
 
   <!-- L'INDIRIZZO STA QUI E SOLO QUI. brief.js lo legge da questo
        collegamento per il tasto della posta: cambiarlo qui lo cambia
@@ -1400,6 +1491,134 @@
     <a class="foot__posta" id="recapito" href="mailto:fabriziomana@gmail.com">fabriziomana@gmail.com</a>
     <span>Grafica / Video / Social / AI</span><span>MF/AI &middot; &copy; 2026</span>
   </footer>
+</section>
+
+<!-- ══ 06 · laboratorio · 07 · tecnologia · 08 · verdetto ══
+     Spostate qui, dopo la chiusura, perche' profilo e contatto sono
+     diventati un blocco unico senza piu' spazio in mezzo per queste tre
+     — restano nel documento (nascoste) per quando serviranno di nuovo. -->
+<section class="sec sp-s ap-numero t-piano" id="laboratorio" data-proof="laboratorio" aria-labelledby="labT" hidden>
+  <header class="sec__head" data-num="04" hidden>
+    <p class="eyebrow mono"><i aria-hidden="true"></i><span class="n">Prova 04</span> Playlab</p>
+    <h2 id="labT">Quattro giochi,<br><em>scritti da zero.</em></h2>
+    <p class="sec__lede">Quattro giochi originali dentro questa pagina, più un costruttore che
+      ne fa uno in sedici domande. Non è un passatempo: se so scrivere un motore che risponde al
+      dito in sedici millesimi di secondo, so costruire l’applicazione che ti serve.</p>
+  </header>
+  <div class="lab" hidden>
+    <article class="lab__card"><span class="mono">01 · Campo di tensione</span><i aria-hidden="true">⌁</i><h3>Trama</h3><p class="mono">Tendi / allinea / stabilizza</p></article>
+    <article class="lab__card"><span class="mono">02 · Membrana viva</span><i aria-hidden="true">△</i><h3>Piega</h3><p class="mono">Premi / deforma / fai risuonare</p></article>
+    <article class="lab__card"><span class="mono">03 · Danza delle correnti</span><i aria-hidden="true">≈</i><h3>Flusso</h3><p class="mono">Disegna / guida / componi</p></article>
+    <article class="lab__card"><span class="mono">04 · Cerchi armonici</span><i aria-hidden="true">◎</i><h3>Coro</h3><p class="mono">Accorda / pulsa / allinea</p></article>
+  </div>
+  <div class="lab__intro" hidden>
+    <p class="mono">Trama / Piega / Flusso / Coro / Tela 2D / Gesti diretti / Sessione locale</p>
+    <h3>Nuovi gesti. Nuove forme.<br><em>Risposte chiare.</em></h3>
+    <p>Parti da uno stile pronto in pochi secondi oppure rispondi a sedici domande semplici e crea il tuo gioco.</p>
+  </div>
+  <div class="lab__cta" hidden>
+    <button class="btn btn--solid btn--lg" id="open-playlab" type="button">Apri il laboratorio <i aria-hidden="true">▶</i></button>
+    <p class="lab__note">Quattro motori, un costruttore in sedici domande e venti regole che puoi cambiare. Si carica al primo clic: <b>niente scarica finché non lo apri</b>.</p>
+  </div>
+
+  <!-- La materia era una sezione a se'. Sta nel laboratorio perche' e'
+       l'altra prova che si tocca con le mani, e le due si chiamavano a
+       vicenda da due sezioni di distanza. -->
+  <div class="sec__sub" id="materia" data-proof="materia">
+    <p class="eyebrow mono"><i aria-hidden="true"></i><span class="n">Dentro la stessa prova</span> Materia</p>
+    <h3>Grafica, video e sistemi sono la stessa materia.</h3>
+    <p class="sec__lede">Dodicimila punti presi da un’immagine vera, ognuno col colore del pixel
+      da cui viene: cambia disposizione e li vedi riorganizzarsi, la stessa sostanza in un altro
+      ordine, non tre immagini in dissolvenza. Lo stesso materiale lo porto da un formato
+      all’altro senza rifarlo da capo — per questo la seconda declinazione costa meno della
+      prima.</p>
+  </div>
+
+  <div class="bench bench--medio">
+    <figure class="bench__stage bench__stage--materia">
+      <div class="mat-holder"><canvas id="matCanvas" aria-label="Nuvola di punti interattiva: scegli una disposizione, muovi il puntatore per ruotare, tieni premuto per disperdere la materia."></canvas></div>
+      <figcaption class="mono"><span id="matName">Griglia · grafica</span><span id="matMeta">— punti</span></figcaption>
+    </figure>
+    <div class="bench__panel">
+      <div class="modes mono" role="group" aria-label="Disposizioni della materia">
+        <button type="button" aria-pressed="true" data-mat="0">Griglia</button>
+        <button type="button" aria-pressed="false" data-mat="1">Nastro</button>
+        <button type="button" aria-pressed="false" data-mat="2">Rete</button>
+      </div>
+      <h3 id="matTitle">Il piano editoriale</h3>
+      <p id="matCopy">Tutto su un asse, niente profondità: è così che si legge una pagina. La griglia è la disposizione che decide dove va l'occhio.</p>
+      <p class="mat__hint mat__hint--puntatore mono">↔ Muovi il puntatore per ruotare · <b>tieni premuto</b> per disperdere</p>
+      <p class="mat__hint mat__hint--dito mono">↔ <b>Trascina</b> per ruotare · <b>tieni premuto</b> per disperdere</p>
+      <div class="decis"><span class="mono">Come è fatta</span><ul id="matDecisions"></ul></div>
+    </div>
+  </div>
+  <!-- Le 38 pastiglie sono passate al laboratorio e adesso sono tornate
+       vicine ai servizi: qui sono la prova concreta di cosa c'e' dietro
+       le quattro competenze appena elencate, prima di mostrare il
+       software scritto da zero. Stessa sezione scura, nessuno stacco
+       di colore da gestire. -->
+</section>
+
+<section class="sec sec--alt sp-m sec--chiara t-piano" id="tecnologia" data-proof="tecnologia" aria-labelledby="tecT" hidden>
+  <header class="sec__head">
+    <p class="eyebrow mono"><i aria-hidden="true"></i><span class="n">Prova 05</span> Tecnologia</p>
+    <h2 id="tecT">La tecnologia giusta.<br><em>Non quella di moda.</em></h2>
+    <p class="sec__lede">Installo, confronto e integro modelli su una workstation mia. Scelgo fra locale, cloud e ibrido su assi vere — i numeri sotto sono <strong>stime dalla mia esperienza</strong>, non misure di laboratorio.</p>
+  </header>
+  <div class="bench bench--invertito">
+    <figure class="bench__stage">
+      <canvas id="radar" width="900" height="700" aria-label="Confronto fra lavorazione locale, cloud e ibrida su cinque assi."></canvas>
+      <figcaption class="mono"><span id="radarMode">Locale</span><span>stime dichiarate</span></figcaption>
+    </figure>
+    <div class="bench__panel">
+      <div class="modes mono" role="group" aria-label="Modalità di lavorazione">
+        <button type="button" aria-pressed="true" data-mode="0">Locale</button>
+        <button type="button" aria-pressed="false" data-mode="1">Cloud</button>
+        <button type="button" aria-pressed="false" data-mode="2">Ibrido</button>
+      </div>
+      <h3 id="modeTitle">Più controllo sul flusso</h3>
+      <p id="modeCopy">Il lavoro locale offre più controllo su file, configurazioni e iterazioni; richiede capacità hardware e gestione tecnica.</p>
+    </div>
+  </div>
+
+</section>
+
+<section class="sec sec--verdict sp-l t-forte" id="verdetto" aria-labelledby="verdT" hidden>
+  <header class="sec__head">
+    <p class="eyebrow mono"><i aria-hidden="true"></i><span class="n">Chiusura</span> Verdetto</p>
+    <h2 id="verdT">La sessione si chiude.<br><em>Il dossier lo hai scritto tu.</em></h2>
+    <p class="sec__lede">Questo non è un CV preparato: è il resoconto di cosa hai manovrato in questa visita. Cambia per ogni persona che passa di qui.</p>
+  </header>
+
+  <div class="dossier" id="dossier">
+    <div class="dossier__head mono"><span>MF/AI · dossier di sessione</span><span id="dsDate">—</span></div>
+    <dl class="dossier__grid">
+      <div><dt>Durata</dt><dd id="dsTime">00:00</dd></div>
+      <div><dt>Prove aperte</dt><dd id="dsProofs">0 / 7</dd></div>
+      <div><dt>Manovre</dt><dd id="dsActions">0</dd></div>
+      <div><dt>Fluidità media</dt><dd id="dsFps">—</dd></div>
+      <div><dt>Dipendenze del sito</dt><dd id="dsDeps">0</dd></div>
+    </dl>
+    <p class="dossier__verdict" id="dsVerdict">Sessione in corso.</p>
+    <ul class="dossier__list" id="dsList"></ul>
+    <div class="bench__acts">
+      <button class="btn btn--sm btn--solid" id="dsPrint" type="button">Salva il dossier <i aria-hidden="true">↓</i></button>
+      <a class="btn btn--sm" href="#contatto">Passa al brief <i aria-hidden="true">↗</i></a>
+    </div>
+  </div>
+
+  <div class="metrics" id="metrics">
+    <span class="mono">Metriche reali di questa pagina</span>
+    <dl>
+      <div><dt>LCP</dt><dd id="mLcp">—</dd></div>
+      <div><dt>CLS</dt><dd id="mCls">—</dd></div>
+      <div><dt>INP</dt><dd id="mInp">—</dd></div>
+      <div><dt>Trasferito</dt><dd id="mKb">—</dd></div>
+      <div><dt>Richieste</dt><dd id="mReq">—</dd></div>
+      <div><dt>Librerie al 1° carico</dt><dd id="mLib">0</dd></div>
+    </dl>
+    <p class="metrics__note">Lette dal browser mentre guardi, non dichiarate. Un sito che espone le proprie misure è l'unico modo onesto di dimostrare che so farli.</p>
+  </div>
 </section>
 
 </main>
@@ -1456,13 +1675,63 @@
     </div>
   </dialog>
 
-<!-- ══ voce di sistema ══ -->
+<!-- ══ voce di sistema — solo per chi usa uno screen reader ══ -->
 <div class="voice" id="voice" role="status" aria-live="polite">
   <span class="voice__dot" aria-hidden="true"></span>
   <p id="voiceText">Sessione aperta. Ti mostro cosa so fare, non te lo racconto.</p>
   <span class="voice__prog mono"><b id="voiceCount">0</b>/<b id="voiceTot">7</b></span>
 </div>
 
-<script type="module" src="app.js?v=20260911-135324"></script>
+<!-- ══ dock di navigazione ══ -->
+<nav class="navdock" aria-label="Naviga il sito">
+  <a href="#banchi">
+    <svg viewBox="0 0 24 24" fill="currentColor" fill-opacity=".16" stroke="currentColor"
+         stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+      <rect x="3" y="3" width="7.5" height="7.5" rx="1.6"/>
+      <rect x="13.5" y="3" width="7.5" height="7.5" rx="1.6"/>
+      <rect x="3" y="13.5" width="7.5" height="7.5" rx="1.6"/>
+      <rect x="13.5" y="13.5" width="7.5" height="7.5" rx="1.6"/>
+    </svg>
+    <span>Servizi</span>
+  </a>
+  <a href="#lavori">
+    <svg viewBox="0 0 24 24" fill="currentColor" fill-opacity=".16" stroke="currentColor"
+         stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+      <rect x="3" y="7.5" width="18" height="12.5" rx="2"/>
+      <path d="M8.5 7.5V5.3A2 2 0 0 1 10.5 3.3h3A2 2 0 0 1 15.5 5.3V7.5" fill="none"/>
+      <path d="M3 13h18" fill="none"/>
+    </svg>
+    <span>Clienti</span>
+  </a>
+  <a href="#strumenti">
+    <svg viewBox="0 0 24 24" fill="currentColor" fill-opacity=".16" stroke="currentColor"
+         stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+      <path d="M12 2.6 14 8l5.7.5-4.3 3.7 1.3 5.6L12 14.9 6.9 17.8l1.3-5.6-4.3-3.7L9.6 8Z"/>
+    </svg>
+    <span>Skill</span>
+  </a>
+  <a href="#profilo">
+    <svg viewBox="0 0 24 24" fill="currentColor" fill-opacity=".16" stroke="currentColor"
+         stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+      <circle cx="12" cy="8" r="4"/>
+      <path d="M4 20.2c0-4 3.6-6 8-6s8 2 8 6" fill="none"/>
+    </svg>
+    <span>Profilo</span>
+  </a>
+  <a href="#contatto">
+    <svg viewBox="0 0 24 24" fill="currentColor" fill-opacity=".16" stroke="currentColor"
+         stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+      <rect x="3" y="5" width="18" height="14" rx="2"/>
+      <path d="m4 7 8 6 8-6" fill="none"/>
+    </svg>
+    <span>Contatto</span>
+  </a>
+</nav>
+
+<script type="module" src="app.js?v=20260928-69"></script>
+
+<!-- Widget Chatbot Nodo (F/AI) -->
+<link rel="stylesheet" href="chatbot/chatbot.css">
+<script type="module" src="chatbot/chatbot.js"></script>
 </body>
 </html>

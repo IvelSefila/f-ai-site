@@ -30,6 +30,18 @@ export const PEZZI = [
     n: 'Lo spot che finisce sulla scheda prodotto: il dispositivo staccato sul bianco, il claim, e basta.' },
   { id: 'prodotto', t: 'Il dispositivo', d: '0:10', w: 720, h: 1280,
     n: 'Product film: solo l’oggetto, fumo e luce radente — com’è fatto, quando il resto è narrazione.' },
+  { id: 'prova0', t: 'Vista frontale, studio', d: '0:10', w: 720, h: 1280,
+    n: 'Il dispositivo intero su fondale neutro: la vista che spiega la forma prima di ogni dettaglio.' },
+  { id: 'prova5', t: 'Vista frontale, controluce', d: '0:06', w: 720, h: 1302,
+    n: 'Stessa inquadratura, luce radente su pavimento riflettente: il taglio più drammatico dello studio.' },
+  { id: 'prova5b', t: 'Controluce, versione lunga', d: '0:15', w: 720, h: 1302,
+    n: 'La stessa luce, un giro più lento: la versione da usare quando il dettaglio deve restare in campo più a lungo.' },
+  { id: 'prova3', t: 'Modulo centrale, dettaglio', d: '0:10', w: 720, h: 1302,
+    n: 'Il blocco degli aggangi rossi visto da vicino: dove il dispositivo si apre e si chiude sul corpo.' },
+  { id: 'prova1', t: 'Dettaglio, macro', d: '0:05', w: 720, h: 1280,
+    n: 'Il profilo del bracciolo, a un centimetro dall’obiettivo: la striscia rossa che identifica il marchio.' },
+  { id: 'prova6', t: 'Dettaglio, texture carbonio', d: '0:08', w: 720, h: 1254,
+    n: 'La trama della fibra di carbonio in macro: la finitura che nelle riprese larghe non si legge.' },
 ];
 
 const mio = scheda({ nome: 'eso', cartella: 'eso/', pezzi: PEZZI });

@@ -11,7 +11,7 @@
  * di locandina, cioe' proprio la parte con scritto quando e' la serata.
  * Ogni scheda porta quindi le sue misure e la sua proporzione.
  *
- * La scelta dei nove pezzi e' spiegata in audit/porta-la-locanda.py:
+ * La scelta dei primi nove pezzi e' spiegata in audit/porta-la-locanda.py:
  * la cartella ne aveva una ventina di finiti, diversi dei quali erano
  * lo stesso video esportato due volte.
  * ═══════════════════════════════════════════════════════════════════ */
@@ -24,14 +24,16 @@ const CARTELLA = 'locanda/';
 export const PEZZI = [
   { id: 'posto', t: 'Il posto', d: '0:23', w: 720, h: 1280,
     n: 'Il giro della casa: calice, parco, corte del castello e la scritta che chiude — dove ci si siede.' },
-  { id: 'dehor', t: 'Inaugurazione del dehor', d: '0:15', w: 720, h: 1280,
-    n: 'Dall’alto alle luci del dehor: sull’ultima inquadratura compare la locandina della serata di apertura.' },
+  { id: 'dehor', t: 'Inaugurazione del dehors', d: '0:15', w: 720, h: 1280,
+    n: 'Dall’alto alle luci del dehors: sull’ultima inquadratura compare la locandina della serata di apertura.' },
+  { id: 'fritto', t: 'Serata fritto misto', d: '0:27', w: 720, h: 1280,
+    n: 'Il pezzo lungo: i piatti da vicino, la data grande, e alla fine l’indirizzo inciso in oro sulla pietra.' },
+  { id: 'fritto-nuovo', t: 'Serata fritto misto, versione nuova', d: '0:27', w: 720, h: 1280,
+    n: 'La stessa serata rifatta: gocce, gamberi e calamari da vicino, e alla fine la locandina con data e indirizzo.' },
   { id: 'champagne', t: 'Serata degustazione Champagne', d: '0:10', w: 946, h: 1280,
     n: 'La locandina della serata: le bottiglie in fila, i piatti in abbinamento, la data e il prezzo.' },
   { id: 'tradition', t: 'Brut Tradition, il primo assaggio', d: '0:10', w: 946, h: 1280,
     n: 'Una scheda per ogni champagne in degustazione: stessa impaginazione, contenuto diverso — il sistema, non una grafica sola.' },
-  { id: 'fritto', t: 'Serata fritto misto', d: '0:27', w: 720, h: 1280,
-    n: 'Il pezzo lungo: i piatti da vicino, la data grande, e alla fine l’indirizzo inciso in oro sulla pietra.' },
   { id: 'fritto-locandina', t: 'Fritto misto di pesce', d: '0:10', w: 946, h: 1280,
     n: 'La stessa serata in una locandina che si muove appena: prezzo, data e cosa è compreso, leggibili in due secondi.' },
   { id: 'karaoke', t: 'Serata cena karaoke', d: '0:10', w: 946, h: 1280,
@@ -40,6 +42,16 @@ export const PEZZI = [
     n: 'Una giornata fra trattamento viso e buffet nel parco: un servizio fuori tema che deve sembrare comunque la stessa casa.' },
   { id: 'eventi', t: 'Il luogo dei momenti speciali', d: '0:10', w: 946, h: 1280,
     n: 'La pagina degli eventi privati: compleanni, cresime, comunioni e matrimoni, ognuno con la sua sala.' },
+  { id: 'tavola', t: 'Ogni occasione merita una tavola', d: '0:10', w: 946, h: 1280,
+    n: 'La locandina generica della casa: una tavola apparecchiata e la promessa di sapere accogliere.' },
+  { id: 'luogo-ideale', t: 'Il luogo ideale per i momenti speciali', d: '0:10', w: 946, h: 1280,
+    n: 'Comunioni, cresime, compleanni e matrimoni: le sale della casa in una sola locandina che si muove.' },
+  { id: 'eventi-generica', t: 'Gli eventi, in versione generica', d: '0:10', w: 842, h: 1280,
+    n: 'La pagina degli eventi privati senza una data: quella da riusare per ogni richiesta.' },
+  { id: 'pausa', t: 'Concedetevi una pausa', d: '0:12', w: 946, h: 1280,
+    n: 'All’ombra del castello: una tavola in giardino, il vino e un invito a fermarsi.' },
+  { id: 'buon-cibo', t: 'Il buon cibo piemontese', d: '0:10', w: 946, h: 1280,
+    n: 'Il sapore delle cose fatte bene: la locandina di carattere per chi cerca la cucina della casa.' },
 ];
 
 /* Cinque brani generati con Lyria, trenta secondi ciascuno. Non sono

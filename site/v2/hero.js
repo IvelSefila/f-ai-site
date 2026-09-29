@@ -1,4 +1,4 @@
-import { accentoGL } from './palette.js?v=20260911-135324';
+import { accentoGL } from './palette.js?v=20260928-69';
 /* ═══════════════════════════════════════════════════════════════════
  * hero.js — il confine fra mano e macchina, calcolato a ogni frame.
  * WebGL2, nessuna libreria. Se manca, la pagina resta intera.
@@ -211,18 +211,46 @@ export function initHero(canvas, onState) {
     if (e.key === ' ' && scrollY < innerHeight * .9) { setScene(sceneIx + 1); e.preventDefault(); }
   });
 
+  let glitchUntil = 0;
+  let speedMult = 1.0;
+
+  document.addEventListener('hero:glitch', e => {
+    glitchUntil = performance.now() + (e.detail?.duration || 2000);
+    holding = true;
+  });
+  document.addEventListener('hero:scene', e => {
+    if (typeof e.detail?.index === 'number') setScene(e.detail.index);
+    else setScene(sceneIx + 1);
+  });
+  document.addEventListener('hero:speed', e => {
+    if (typeof e.detail?.multiplier === 'number') speedMult = e.detail.multiplier;
+  });
+  document.addEventListener('hero:set-split', e => {
+    if (typeof e.detail?.split === 'number') {
+      target = Math.min(.94, Math.max(.06, e.detail.split));
+      state.touched = true;
+    }
+  });
+
   function frame(now) {
     raf = requestAnimationFrame(frame);
     const dt = Math.min((now - last) / 1000, .05); last = now;
-    if (!dragging && !reduce.matches) target += Math.sin(now * .00016) * .00035;
-    split += (target - split) * Math.min(1, dt * 6);
+    const isGlitch = now < glitchUntil;
+    if (isGlitch) {
+      target = 0.5 + Math.sin(now * 0.08) * 0.32 + (Math.random() - 0.5) * 0.2;
+      holding = true;
+    } else {
+      if (holding && !dragging) holding = false;
+      if (!dragging && !reduce.matches) target += Math.sin(now * .00016) * .00035;
+    }
+    split += (target - split) * Math.min(1, dt * (isGlitch ? 18 : 6));
     erode += ((holding ? 1 : 0) - erode) * Math.min(1, dt * (holding ? 3.2 : 1.8));
 
     resize();
     gl.uniform2f(uRes, canvas.width, canvas.height);
     gl.uniform2f(uTexA, size.a[0], size.a[1]);
     gl.uniform2f(uTexB, size.b[0], size.b[1]);
-    gl.uniform1f(uT, reduce.matches ? 12 : (now - startedAt) / 1000);
+    gl.uniform1f(uT, reduce.matches ? 12 : ((now - startedAt) * speedMult) / 1000);
     gl.uniform1f(uSplit, split);
     gl.uniform1f(uErode, erode);
     gl.uniform3fv(uEm, accento);
@@ -242,5 +270,14 @@ export function initHero(canvas, onState) {
   document.addEventListener('visibilitychange', () => document.hidden ? stop() : start());
 
   setScene(0).then(start);
-  return { state, nextScene: () => setScene(sceneIx + 1), vaiAScena: i => setScene(i) };
+  const controls = {
+    state,
+    nextScene: () => setScene(sceneIx + 1),
+    vaiAScena: i => setScene(i),
+    glitch: (duration = 2000) => { glitchUntil = performance.now() + duration; holding = true; },
+    setSpeed: (m = 1.0) => { speedMult = m; },
+    setSplit: (s) => { target = Math.min(.94, Math.max(.06, s)); state.touched = true; }
+  };
+  if (typeof window !== 'undefined') window.__fai_hero = controls;
+  return controls;
 }

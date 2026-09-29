@@ -46,6 +46,10 @@ function createBriefController() {
         video: "Video",
         social: "Sistema social",
         ai: "Flusso o prototipo AI",
+        siti: "Sito internet",
+        webapp: "Web app",
+        marketing: "Campagna media multicanale",
+        jingle: "Jingle o canzone pubblicitaria",
         "da-definire": "Da definire",
       },
       starting_point: {
@@ -88,11 +92,11 @@ function createBriefController() {
     let preparedSummary = "";
     const briefSessionKey = "fai-brief-session-v1";
     const nextStepLabels = [
-      "AVANTI: MATERIALI",
-      "AVANTI: CANALI",
-      "AVANTI: TEMPI",
-      "AVANTI: SUPPORTO",
-      "AVANTI: CONTATTI",
+      "AVANTI",
+      "AVANTI",
+      "AVANTI",
+      "AVANTI",
+      "AVANTI",
       "PREPARA IL RIEPILOGO",
     ];
 
@@ -409,6 +413,87 @@ function createBriefController() {
        Serve agli inviti delle quattro schede dei servizi: prima
        promettevano quattro cose diverse e portavano tutti e quattro
        alla stessa domanda vuota. */
+    function compilaEApri(dati = {}) {
+      if (!dati || typeof dati !== 'object') return;
+      if (dati.project_type) {
+        const el = $(`input[name="project_type"][value="${dati.project_type}"]`, form);
+        if (el) {
+          el.checked = true;
+          el.dispatchEvent(new Event('change', { bubbles: true }));
+        }
+      }
+      if (dati.starting_point) {
+        const el = $(`input[name="starting_point"][value="${dati.starting_point}"]`, form);
+        if (el) {
+          el.checked = true;
+          el.dispatchEvent(new Event('change', { bubbles: true }));
+        }
+      }
+      if (dati.channels) {
+        const arr = Array.isArray(dati.channels) ? dati.channels : [dati.channels];
+        arr.forEach(val => {
+          const el = $(`input[name="channels"][value="${val}"]`, form);
+          if (el) {
+            el.checked = true;
+            el.dispatchEvent(new Event('change', { bubbles: true }));
+          }
+        });
+      }
+      if (dati.timing) {
+        const el = $(`input[name="timing"][value="${dati.timing}"]`, form);
+        if (el) {
+          el.checked = true;
+          el.dispatchEvent(new Event('change', { bubbles: true }));
+        }
+      }
+      if (dati.budget) {
+        const el = $(`select[name="budget"]`, form) || $(`input[name="budget"][value="${dati.budget}"]`, form);
+        if (el) {
+          el.value = dati.budget;
+          el.dispatchEvent(new Event('change', { bubbles: true }));
+        }
+      }
+      if (dati.note) {
+        const el = $(`textarea[name="note"]`, form);
+        if (el) {
+          el.value = (el.value ? el.value + "\n" : "") + dati.note;
+          el.dispatchEvent(new Event('input', { bubbles: true }));
+        }
+      }
+      if (dati.name) {
+        const el = $(`input[name="name"]`, form);
+        if (el) {
+          el.value = dati.name;
+          el.dispatchEvent(new Event('input', { bubbles: true }));
+        }
+      }
+      if (dati.email) {
+        const el = $(`input[name="email"]`, form);
+        if (el) {
+          el.value = dati.email;
+          el.dispatchEvent(new Event('input', { bubbles: true }));
+        }
+      }
+      saveBriefSession();
+      let targetStep = 0;
+      if (dati.project_type) targetStep = 1;
+      if (dati.channels) targetStep = 3;
+      if (dati.timing) targetStep = 4;
+      if (dati.budget) targetStep = 5;
+      open(targetStep, true);
+    }
+
+    document.addEventListener('nous:fill-brief', (e) => {
+      compilaEApri(e.detail);
+    });
+    document.addEventListener('nodo:fill-brief', (e) => {
+      compilaEApri(e.detail);
+    });
+
+    /* Apre il brief con una risposta gia' scelta alla prima domanda.
+       Serve agli inviti delle quattro schede dei servizi: prima
+       promettevano quattro cose diverse e portavano tutti e quattro
+       alla stessa domanda vuota. */
     function apriCon(tipo) {
       const scelta = $(`input[name="project_type"][value="${tipo}"]`, form);
       if (scelta) {
@@ -420,7 +505,7 @@ function createBriefController() {
       open(0, true);
     }
 
-    return { open, apriCon };
+    return { open, apriCon, compilaEApri };
   }
 
 export function initBrief() {

@@ -1,6 +1,14 @@
 @font-face{font-family:"Barlow Condensed";src:url("../assets/fonts/barlow-condensed-600-latin.woff2") format("woff2");font-weight:600;font-display:swap}
 @font-face{font-family:"Manrope";src:url("../assets/fonts/manrope-latin.woff2") format("woff2");font-weight:400 700;font-display:swap}
 
+/* [hidden] deve vincere sempre: senza !important, un elemento con un
+   display esplicito nel foglio (.hud{display:flex}, .lab{display:grid},
+   ecc.) ignora l'attributo — lo stile dell'autore batte quello nativo
+   del browser anche se meno specifico. Trovato nascondendo l'hud
+   dell'hero e i giochi del laboratorio: restavano visibili nonostante
+   hidden="" fosse presente nel markup. */
+[hidden]{display:none!important}
+
 /* ═══ token ═══ */
 :root{
   --stage:#05070b; --panel:#0b0f16; --panel-2:#111823; --alt:#080c12;
@@ -54,9 +62,9 @@
 
 *{box-sizing:border-box}
 html{scroll-behavior:smooth;scroll-padding-top:calc(var(--bar) + 20px);color-scheme:dark;
-  -webkit-text-size-adjust:100%;text-size-adjust:100%}
+  -webkit-text-size-adjust:100%;text-size-adjust:100%;overscroll-behavior-x:none}
 body{margin:0;min-width:320px;overflow-x:hidden;background:var(--stage);color:var(--ink);
-  font:400 var(--t-base)/1.62 var(--body);-webkit-font-smoothing:antialiased}
+  font:400 var(--t-base)/1.62 var(--body);-webkit-font-smoothing:antialiased;overscroll-behavior-x:none}
 img,canvas{display:block;max-width:100%}
 button,input{font:inherit;color:inherit}
 a{color:inherit;text-decoration:none}
@@ -265,6 +273,18 @@ strong{color:var(--ink);font-weight:700}
 .vetrina__fila{display:flex;gap:clamp(8px,1vw,14px);min-width:0;
   overflow-x:auto;scrollbar-width:none;padding-bottom:2px}
 .vetrina__fila::-webkit-scrollbar{display:none}
+/* Con JavaScript la fila non scorre piu' da sola: la muove un binario
+   che gira in tondo (app.js). Il margine sopra e sotto lascia posto al
+   sollevamento al passaggio e al contorno del fuoco, che overflow:hidden
+   altrimenti taglierebbe; la sfumatura ai lati dice che il giro continua. */
+.vetrina__fila--giro{display:block;overflow:hidden;touch-action:pan-y;cursor:grab;
+  padding:6px 0 4px;margin:-6px 0 -4px;user-select:none;-webkit-user-select:none;
+  -webkit-mask-image:linear-gradient(90deg,transparent,#000 18px,#000 calc(100% - 18px),transparent);
+  mask-image:linear-gradient(90deg,transparent,#000 18px,#000 calc(100% - 18px),transparent)}
+.vetrina__fila--tira{cursor:grabbing}
+.vetrina__fila--tira .vetrina__caso{pointer-events:none}
+.vetrina__fila--giro img{-webkit-user-drag:none}
+.vetrina__binario{display:flex;gap:clamp(8px,1vw,14px);width:max-content;will-change:transform}
 .vetrina__caso{flex:none;width:clamp(92px,8.4vw,124px);display:flex;flex-direction:column;gap:5px;
   transition:transform .22s var(--ease)}
 .vetrina__caso img{width:100%;height:auto;aspect-ratio:3/4;object-fit:cover;
@@ -294,6 +314,25 @@ strong{color:var(--ink);font-weight:700}
   .vetrina__caso,.vetrina__caso:hover{transition:none;transform:none}
 }
 
+/* La quinta copertina non e' una foto: e' una finestra di browser in
+   miniatura, perche' quel caso e' un sito vero e non una campagna —
+   l'unica cosa onesta da mostrare qui e' la sua stessa cornice. */
+.vetrina__finto{display:flex;flex-direction:column;width:100%;aspect-ratio:3/4;
+  border-radius:var(--r-min);border:1px solid var(--rule);overflow:hidden;
+  background:linear-gradient(160deg,#f1eefa 0%,#ded4f4 100%);
+  transition:border-color .22s,filter .22s}
+.vetrina__finto i{display:inline-block;width:5px;height:5px;border-radius:50%;
+  background:#cabdda;margin:8px 0 0 7px}
+.vetrina__finto i:first-child{margin-left:7px}
+.vetrina__finto i + i{margin-left:4px}
+.vetrina__finto em{display:block;margin:5px 7px 0;padding:3px 7px;border-radius:5px;
+  background:rgba(255,255,255,.7);color:#5c4a80;font-style:normal;
+  font-family:var(--mono);font-size:7px;letter-spacing:.02em;white-space:nowrap;
+  overflow:hidden;text-overflow:ellipsis}
+.vetrina__finto b{flex:1;display:grid;place-items:center;margin:6px;border-radius:4px;
+  background:#140b28;color:#a78bfa;font-family:var(--display);font-size:15px;
+  line-height:1.05;text-align:center;letter-spacing:-.01em}
+.vetrina__caso--sito:hover .vetrina__finto{border-color:var(--em);filter:brightness(1.04)}
 /* ═══ sezioni ═══ */
 .sec{position:relative;padding:var(--space) var(--gutter);
   width:100%;}
@@ -321,11 +360,13 @@ strong{color:var(--ink);font-weight:700}
    si allarga mentre l'altro si restringe — come due persone vere. */
 .btn:nth-child(even){animation-delay:1.3s}
 .btn:active{transform:scale(.985)}
-.btn--solid{background:var(--em);border-color:var(--em);color:#fff}
-.btn--solid:hover{background:var(--em-bright);border-color:var(--em-bright);color:#fff}
-.btn--sm{padding:10px 15px;font-size:var(--t-micro);gap:10px}
+.btn--solid{background:var(--em);border-color:var(--em);color:#04231a}
+.btn--solid:hover{background:var(--em-bright);border-color:var(--em-bright);color:#04231a}
+.btn--sm{padding:6px 10px;font-size:var(--t-micro);gap:10px}
 .btn--lg{padding:17px 26px;font-size:var(--t-mini)}
 .btn i{font-style:normal;font-size:var(--t-grande)}
+/* questo tasto non deve respirare/pulsare come gli altri */
+.fmtEdit__rigenera{animation:none}
 
 /* ═══ banchi ═══ */
 .bench{display:grid;gap:clamp(20px,2.6vw,38px);align-items:start}
@@ -370,7 +411,7 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border:0;border-radiu
 /* formati */
 .formats{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));align-items:end}
 .formats figure{margin:0;border:1px solid var(--rule);border-radius:var(--r-media);overflow:hidden;background:#06090e}
-.formats canvas{width:100%;height:auto}
+.formats canvas{width:100%;height:auto;display:block}
 /* flex-wrap perche' sotto i ~110px di colonna "Instagram" e "Post" non
    ci stanno sulla stessa riga: misurato, sbordavano di 3px. Andando a
    capo la didascalia diventa di due righe invece che tagliata. */
@@ -378,6 +419,31 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border:0;border-radiu
   font-family:var(--mono);font-size:var(--t-micro);letter-spacing:.13em;text-transform:uppercase;
   display:flex;flex-wrap:wrap;justify-content:space-between;gap:2px 8px}
 .formats figcaption b{color:var(--em)}
+
+/* Ogni riquadro si apre per scriverci il proprio testo: deve capirsi
+   guardandolo, non solo provando a cliccare a caso. Bottone vero (non
+   la figura con un click appiccicato sopra), cursore, un rialzo al
+   passaggio del dito e un'etichetta "Modifica" che compare sopra il
+   fermo immagine — la stessa lingua visiva di "cosa faccio nel
+   dettaglio" nelle schede dei servizi. */
+.fmt__tasto{all:unset;display:block;position:relative;cursor:pointer;
+  border-radius:var(--r-media);transition:transform .2s var(--ease)}
+.fmt__tasto:hover,.fmt__tasto:focus-visible{transform:translateY(-3px)}
+.fmt__tasto:hover figure,.fmt__tasto:focus-visible figure{border-color:var(--em)}
+.fmt__tasto:focus-visible{outline:2px solid var(--em-bright);outline-offset:3px}
+.fmt__hint{position:absolute;inset:0;border-radius:var(--r-media);
+  display:flex;align-items:center;justify-content:center;gap:8px;
+  background:rgba(6,9,14,.72);color:#fff;opacity:0;transition:opacity .2s var(--ease);
+  font-family:var(--mono);font-size:var(--t-mini);letter-spacing:.1em;text-transform:uppercase;
+  pointer-events:none}
+.fmt__hint i{width:16px;height:16px;flex:none;font-style:normal}
+.fmt__tasto:hover .fmt__hint,.fmt__tasto:focus-visible .fmt__hint{opacity:1}
+@media(hover:none){
+  /* senza un dito che passa sopra senza toccare, l'invito resta visibile
+     appena un poco per dire che si tocca, non un lampo su ogni tap */
+  .fmt__hint{opacity:.85;background:linear-gradient(0deg,rgba(6,9,14,.75) 0 34px,transparent 34px);
+    align-items:flex-end;padding-bottom:8px;font-size:9px}
+}
 
 /* deck lavori */
 .deck{display:grid;gap:clamp(14px,1.6vw,22px);grid-template-columns:repeat(auto-fit,minmax(min(100%,290px),1fr))}
@@ -551,19 +617,73 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border:0;border-radiu
 .brief__posta:hover{filter:brightness(1.12)}
 .brief__posta i{font-style:normal}
 
-/* ═══ voce di sistema ═══ */
-.voice{position:fixed;z-index:290;left:var(--gutter);right:var(--gutter);bottom:16px;
-  display:flex;align-items:center;gap:12px;padding:10px 16px;
-  border:1px solid var(--em-dim);border-radius:var(--r-pill);background:rgba(8,12,18,.9);
-  backdrop-filter:blur(14px);opacity:0;transform:translateY(14px);pointer-events:none;
-  transition:opacity .5s var(--ease),transform .5s var(--ease)}
-.voice.on{opacity:1;transform:none}
-.voice__dot{width:7px;height:7px;border-radius:var(--r-tondo);background:var(--em);flex:none;animation:ping 2.6s ease-out infinite}
-.voice p{margin:0;flex:1;min-width:0;color:var(--em-light);font-family:var(--mono);font-size:var(--t-micro);
-  letter-spacing:.05em;line-height:1.5;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.voice__prog{color:var(--muted);flex:none}
-.voice__prog b{color:var(--em)}
-@media(max-width:620px){.voice p{white-space:normal}}
+/* ═══ voce di sistema ═══
+   Il testo che il sito si narra (say(), decine di punti in app.js) resta
+   vivo per chi usa uno screen reader — aria-live continua a leggerlo —
+   ma non occupa piu' spazio a video: quel posto in basso ora e' del
+   menu di navigazione. Stessa tecnica del resto del sito per il testo
+   solo-per-lettori: dimensione 1px, tagliato, mai display:none (che
+   toglierebbe l'annuncio invece di limitarsi a nasconderlo alla vista). */
+.voice{position:absolute;width:1px;height:1px;padding:0;margin:-1px;
+  overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+
+/* ═══ dock di navigazione ═══
+   Prende il posto in basso che era della voce: sempre visibile, anche
+   sotto i 900px dove la barra in alto si nasconde — è l'unico modo per
+   saltare fra le sezioni da telefono senza risalire in cima. */
+.navdock{position:fixed;z-index:290;left:50%;bottom:16px;transform:translateX(-50%);
+  display:flex;gap:2px;padding:3px 18px;border-radius:var(--r-pill);
+  background:rgba(8,12,18,.88);backdrop-filter:blur(14px);
+  border:1px solid var(--em-dim);
+  box-shadow:0 10px 30px rgba(0,0,0,.45),0 0 0 1px rgba(0,0,0,.4) inset;
+  max-width:calc(100vw - 24px);overflow:hidden}
+/* il filo di luce che scorre da un capo all'altro, come uno scanner */
+.navdock::before{content:"";position:absolute;inset:0;pointer-events:none;z-index:1;
+  background:linear-gradient(100deg,transparent 42%,
+    color-mix(in srgb,var(--em-light) 55%,transparent) 50%,transparent 58%);
+  background-size:260% 100%;animation:navdock-scan 4.6s linear infinite}
+@keyframes navdock-scan{0%{background-position:140% 0}100%{background-position:-140% 0}}
+/* le staffe agli angoli, come un mirino */
+.navdock::after{content:"";position:absolute;inset:0;pointer-events:none;z-index:1;
+  --b:1px solid color-mix(in srgb,var(--em) 70%,transparent);
+  background:
+    linear-gradient(var(--b),var(--b)) 0 0/10px 1px no-repeat,
+    linear-gradient(var(--b),var(--b)) 0 0/1px 7px no-repeat,
+    linear-gradient(var(--b),var(--b)) 100% 0/10px 1px no-repeat,
+    linear-gradient(var(--b),var(--b)) 100% 0/1px 7px no-repeat,
+    linear-gradient(var(--b),var(--b)) 0 100%/10px 1px no-repeat,
+    linear-gradient(var(--b),var(--b)) 0 100%/1px 7px no-repeat,
+    linear-gradient(var(--b),var(--b)) 100% 100%/10px 1px no-repeat,
+    linear-gradient(var(--b),var(--b)) 100% 100%/1px 7px no-repeat;
+  opacity:.85}
+.navdock a{position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;gap:4px;
+  padding:3px 10px;border-radius:var(--r-pill);color:var(--muted);text-decoration:none;
+  font-family:var(--mono);font-size:11px;letter-spacing:.07em;text-transform:uppercase;
+  transition:color .2s var(--ease),text-shadow .2s var(--ease)}
+.navdock a svg{width:25px;height:25px;animation:navdock-respiro 3.4s ease-in-out infinite;
+  transition:filter .2s var(--ease)}
+.navdock a:nth-child(2) svg{animation-delay:.4s}
+.navdock a:nth-child(3) svg{animation-delay:.8s}
+.navdock a:nth-child(4) svg{animation-delay:1.2s}
+.navdock a:nth-child(5) svg{animation-delay:1.6s}
+.navdock a:nth-child(6) svg{animation-delay:2s}
+@keyframes navdock-respiro{0%,100%{opacity:.85}50%{opacity:1}}
+/* si illumina solo il loghino e la scritta, mai uno sfondo dietro:
+   :hover/:focus-visible per chi ci passa sopra, .navdock a--qui per la
+   voce della sezione che si sta guardando in questo momento */
+.navdock a:hover,.navdock a:focus-visible,.navdock a.qui{color:var(--em-light);
+  text-shadow:0 0 10px color-mix(in srgb,var(--em-light) 70%,transparent)}
+.navdock a:hover svg,.navdock a:focus-visible svg,.navdock a.qui svg{
+  filter:drop-shadow(0 0 6px color-mix(in srgb,var(--em-light) 80%,transparent))}
+.navdock a:focus-visible{outline:2px solid var(--em-bright);outline-offset:2px}
+@media (max-width:460px){
+  .navdock{gap:1px;padding:6px 10px}
+  .navdock a{padding:6px 5px;font-size:11px;letter-spacing:0}
+  .navdock a svg{width:21px;height:21px}
+}
+@media (prefers-reduced-motion:reduce){
+  .navdock,.navdock::before,.navdock a svg{animation:none}
+}
 /* Il nastro e' fisso e non occupa spazio nel flusso: senza questo, la
    fine della pagina gli scorre sotto e le ultime righe si leggono da
    dietro un vetro. Tiene da parte la propria altezza piu' il suo stacco
@@ -648,7 +768,7 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border:0;border-radiu
 
 @keyframes contaUnionPezzi{to{--conta:9}}
 @keyframes contaUnionStrumenti{to{--conta:5}}
-@keyframes contaEsoPezzi{to{--conta:4}}
+@keyframes contaEsoPezzi{to{--conta:10}}
 @keyframes contaEsoSito{to{--conta:1}}
 @keyframes contaEsoDocumenti{to{--conta:6}}
 @keyframes contaLocandaMarchio{to{--conta:1}}
@@ -737,13 +857,13 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border:0;border-radiu
   font-size:var(--d7);letter-spacing:.01em;text-transform:uppercase;
   line-height:1.05}
 .stack__head span{font-size:var(--t-mini);letter-spacing:.1em}
-/* Due colonne come nell'originale: le categorie 03 e 06 attraversano tutto,
-   le altre stanno a coppie. Con auto-fit venivano quattro colonne e due
-   restavano vuote. */
+/* Due colonne come nell'originale: la categoria 08 (social, due sole
+   voci) attraversa tutto per non lasciare un buco vuoto accanto. Con
+   auto-fit venivano quattro colonne e due restavano vuote. */
 .stack__grid{padding:18px;display:grid;gap:clamp(18px,2vw,30px);grid-template-columns:1fr}
 @media(min-width:760px){.stack__grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 .stack__group{display:grid;gap:11px;align-content:start}
-.stack__group--video,.stack__group--social{grid-column:1/-1}
+.stack__group--social{grid-column:1/-1}
 .stack__group b{display:flex;align-items:center;gap:9px;color:var(--tool);letter-spacing:.13em}
 .stack__group b span{color:var(--muted);font-variant-numeric:tabular-nums}
 .stack__group > div{display:flex;flex-wrap:wrap;gap:8px}
@@ -765,9 +885,70 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border:0;border-radiu
 .stack__group--creative{--tool:#ff8b62}
 .stack__group--cloud{--tool:#5ad2e6}
 .stack__group--video{--tool:#ef8dff}
+.stack__group--audio{--tool:#ffb454}
+.stack__group--cloni{--tool:#ff6fa8}
 .stack__group--local{--tool:#9c8cff}
 .stack__group--orchestration{--tool:#ffd166}
 .stack__group--social{--tool:#4fe3b0}
+
+/* Effetti leggeri sulle schede chiare/scure dei servizi e dei formati.
+   Tutto su opacity e transform, niente filtri ne' ombre animate.
+   1) L'ingresso parte un po' piu' piccolo e si assesta con un rimbalzo
+      corto: la salita di 14px c'era gia' (.rv), qui si aggiunge la scala.
+   2) Sul computer un alone illumina SOLO il bordo, seguendo il mouse: lo
+      ritaglia una maschera, quindi il contenuto non viene toccato. */
+.offerta__card.rv:not(.in),.bench__panel.rv:not(.in){transform:translateY(18px) scale(.965)}
+.offerta__card.rv.in,.bench__panel.rv.in{
+  transition:opacity .7s var(--ease),transform .8s cubic-bezier(.34,1.3,.5,1),border-color .22s}
+@media (hover:hover) and (prefers-reduced-motion:no-preference){
+  .offerta__card,.bench__panel{position:relative}
+  .offerta__card::after,.bench__panel::after{content:"";position:absolute;inset:0;
+    border-radius:inherit;padding:1px;pointer-events:none;opacity:0;
+    transition:opacity .3s var(--ease);
+    background:radial-gradient(200px circle at var(--mx,50%) var(--my,50%),var(--em-bright),transparent 70%);
+    -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);
+    -webkit-mask-composite:xor;mask-composite:exclude}
+  .offerta__card:hover::after,.bench__panel:hover::after{opacity:.9}
+}
+
+/* il blocco dei formati sta fra le schede dei servizi e gli strumenti:
+   senza margine sopra e sotto si attaccava a tutti e due */
+#b-grafica{margin-block:clamp(40px,7vw,72px)}
+
+/* La sezione delle skill e' una sezione scura come le altre: dopo una
+   sezione chiara il sito la arrotonda e la sovrappone da solo
+   (.sec--chiara + .sec), e il profilo chiaro sotto le arrotonda il
+   fondo. Niente pannello bianco. Dietro c'e' una griglia con una riga,
+   e agli incroci compaiono e spariscono dei punti (app.js). */
+#strumenti{overflow:hidden;isolation:isolate;
+  /* la regola .sec--chiara + .sec non la raggiunge: subito prima c'e'
+     la sezione nascosta del metodo. Stesso schema, scritto qui: sale
+     sopra i lavori e prende gli angoli alti tondi. */
+  background-color:var(--stage);margin-top:-28px;
+  border-start-start-radius:22px;border-start-end-radius:22px;
+  padding-top:clamp(28px,3.6vw,48px);
+  box-shadow:0 -22px 46px -24px rgba(5,7,11,.42)}
+.strumenti__scena{position:absolute;inset:0;z-index:0;width:100%;height:100%;
+  color:var(--em-vivo);pointer-events:none;opacity:.55}
+#strumenti > .stack{position:relative;z-index:1}
+#strumenti .stack{margin-top:0;background:none;border:0;border-radius:0;overflow:visible}
+#strumenti .stack__head{border-bottom-color:rgba(221,231,242,.1)}
+.strumenti__punti circle{fill:currentColor;opacity:0}
+.strumenti--attivi .strumenti__punti circle{
+  animation:punto-incrocio var(--dur,5s) ease-in-out var(--rit,0s) infinite}
+@keyframes punto-incrocio{
+  0%,100%{opacity:0;transform:scale(.4)}
+  45%,55%{opacity:.95;transform:scale(1)}}
+.strumenti__punti circle{transform-box:fill-box;transform-origin:center}
+@media (prefers-reduced-motion:reduce){
+  .strumenti--attivi .strumenti__punti circle{animation:none;opacity:.3}}
+/* il sopratitolo col pallino, come sopra ogni sezione del sito: occupa
+   tutta la riga e spinge il titolo sotto */
+.stack__eti{flex:0 0 100%;margin:0 0 4px}
+#strumenti .stack__group > div :is(span,button){padding:5px 10px 6px;font-size:12px;gap:7px;min-height:0}
+#strumenti .stack__group > div :is(span,button)::before{width:5px;height:5px}
+#strumenti .stack__group > div{gap:6px}
+#strumenti .stack__grid{gap:16px}
 
 @media(max-width:560px){
   .stack__grid{padding:14px;gap:20px}
@@ -826,6 +1007,9 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border:0;border-radiu
   box-shadow:inset 0 0 0 3px var(--panel-2)}
 .brief-options label:has(input:checked){border-color:var(--em);background:color-mix(in srgb,var(--em) 9%,transparent);color:var(--ink)}
 .brief-options input:focus-visible{outline:2px solid var(--em-bright);outline-offset:3px}
+.brief-options .opt-ico{width:22px;height:22px;flex:none;color:var(--muted);transition:color .2s}
+.brief-options label:hover .opt-ico{color:var(--em)}
+.brief-options label:has(input:checked) .opt-ico{color:var(--em)}
 
 .brief-date{grid-column:1/-1}
 .brief-date input{width:100%;margin-top:10px;padding:12px 14px;border:1px solid var(--rule);
@@ -907,6 +1091,45 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border:0;border-radiu
   font-size:1.16em;transform:skewX(-6deg);margin-inline:.02em}
 @media(max-width:899px){.profilo__mark{justify-content:flex-start;font-size:var(--d2)}}
 
+/* Il tasto che apre "un po' di più su di me": una tendina vera
+   (<details>), niente JavaScript per un contenuto così semplice. */
+.profilo__extra{margin-top:4px}
+.profilo__extra summary{display:inline-flex;align-items:center;gap:8px;cursor:pointer;
+  list-style:none;color:var(--em);font-family:var(--mono);font-size:var(--t-mini);
+  letter-spacing:.08em;text-transform:uppercase;padding:6px 2px;user-select:none}
+.profilo__extra summary::-webkit-details-marker{display:none}
+/* il cursore lampeggiante mentre la scritta si batte a macchina —
+   sparisce da solo appena l'ultima lettera e' arrivata */
+.profilo__extra summary span.macchina-cursore::after{
+  content:"";display:inline-block;width:2px;height:.9em;margin-left:2px;
+  background:currentColor;vertical-align:-.1em;animation:blink .9s step-end infinite}
+.profilo__extra summary i{display:grid;place-items:center;width:20px;height:20px;flex:none;
+  border:1px solid var(--em);border-radius:50%;font-style:normal;line-height:1;
+  transition:transform .25s var(--ease);
+  animation:profilo-piu-invito 2.2s ease-in-out infinite}
+/* il cerchietto invita al clic invertendo i suoi stessi colori: verde
+   pieno con la croce bianca, poi torna trasparente con la croce verde */
+@keyframes profilo-piu-invito{
+  0%,100%{background:transparent;color:var(--em)}
+  50%{background:var(--em);color:#fff}
+}
+.profilo__extra[open] summary i{animation:none;background:var(--em);color:#fff;transform:rotate(45deg)}
+.profilo__chi{display:grid;gap:12px;margin-top:14px;
+  grid-template-columns:repeat(auto-fill,minmax(240px,1fr))}
+.chi__pill{padding:16px 18px;border-radius:var(--r-media);
+  border:1px solid var(--rule);background:var(--panel-2)}
+.chi__pill svg{width:26px;height:26px;color:var(--em);margin-bottom:8px}
+.chi__pill b{display:block;font-family:var(--display);font-size:var(--t-corpo);
+  text-transform:uppercase;letter-spacing:-.01em;color:var(--ink);line-height:1.1;
+  margin-bottom:6px}
+.chi__pill p{margin:0;color:var(--muted);font-size:var(--t-mini);line-height:1.5}
+
+/* Il blocco del contatto continua dentro la stessa sezione del profilo:
+   niente nuovo sfondo, solo un margine e un filo che segna dove
+   comincia la seconda meta' — la stessa chiusura, non due. */
+.profilo__giunzione{margin-top:clamp(56px,8vw,104px);padding-top:clamp(40px,6vw,64px);
+  border-top:1px solid var(--rule)}
+
 /* ═══ le quattro competenze ═══
    I banchi dimostrano; questo blocco dichiara che cosa offro. Sono due
    cose diverse e stanno bene una sotto l'altra. */
@@ -915,8 +1138,8 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border:0;border-radiu
 .offerta__intro{color:var(--muted);margin-bottom:18px}
 .offerta__grid{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(min(100%,250px),1fr))}
 .offerta__card{border:1px solid var(--rule);border-radius:var(--r);background:var(--panel);
-  padding:20px 20px 22px;display:grid;gap:10px;align-content:start;
-  transition:border-color .25s,transform .25s}
+  padding:18px 18px 20px;display:grid;gap:10px;align-content:start;
+  transition:border-color .22s,transform .22s}
 .offerta__card:hover{border-color:var(--em);transform:translateY(-3px)}
 .offerta__card > .mono{color:var(--em)}
 .offerta__card h3{font-size:var(--d7)}
@@ -947,7 +1170,7 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border:0;border-radiu
   color:var(--em);font-size:var(--t-micro);letter-spacing:.14em;text-transform:uppercase}
 .serv__cat .n{padding-right:10px;border-right:1px solid var(--rule)}
 .serv__cat em{font-style:normal}
-.serv h3{margin:8px 0 0;padding:0 24px;font-size:var(--d6);letter-spacing:-.015em;line-height:1.1}
+.serv h3{margin:8px 0 0;padding:0 24px;font-size:var(--d7);letter-spacing:-.015em;line-height:1.1}
 .serv__lede{margin:12px 0 0;padding:0 24px;color:var(--text);line-height:1.6}
 
 /* Le quattro domande si devono vedere separate: sono quattro risposte
@@ -977,7 +1200,7 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border:0;border-radiu
 .serv__dove span{color:var(--muted);font-size:var(--t-mini);line-height:1.4}
 
 .serv__piede{margin-top:24px;padding:16px 24px 20px;border-top:1px solid var(--rule);
-  display:flex;flex-wrap:wrap;align-items:center;gap:10px;
+  display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:10px;
   position:sticky;bottom:0;background:#0b0f16}
 
 /* Il bottone che apre. Copre tutta la scheda con un ::after — cosi' il
@@ -1389,7 +1612,7 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border:0;border-radiu
   .bench__panel > .decis   {order:-1}
   /* la spiegazione scende sotto lo strumento: si legge dopo aver
      provato, e non separa più il comando dal suo risultato */
-  .bench__panel > p        {order:0;margin-top:18px}
+  .bench__panel > p        {order:0;margin-top:10px}
 }
 
 /* ═══════════════════════════════════════════════════════════════════
@@ -1722,7 +1945,7 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border:0;border-radiu
 
 .pal{
   color-scheme:dark;
-  border:1px solid rgba(221,231,242,.14);border-radius:var(--r-card);padding:0;
+  border:1px solid color-mix(in srgb,var(--em) 34%,transparent);border-radius:var(--r-card);padding:0;
   background:#0b0f16;color:#f2f4f7;
   width:min(560px,calc(100vw - 32px));max-height:calc(100dvh - 32px);
   font:400 var(--t-corpo)/1.6 var(--body)}
@@ -1731,19 +1954,19 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border:0;border-radiu
   letter-spacing:.14em;text-transform:uppercase}
 .pal__sub{margin:8px 20px 0;color:#c3ccd6;font-size:var(--t-corpo);line-height:1.55}
 .pal__griglia{display:grid;gap:8px;padding:16px 20px;
-  grid-template-columns:repeat(auto-fit,minmax(150px,1fr))}
+  grid-template-columns:repeat(3,1fr)}
 .pal__griglia button{
-  display:grid;grid-template-columns:auto 1fr;grid-template-rows:auto auto;
-  gap:2px 11px;align-items:center;text-align:left;
-  padding:11px 13px;border:1px solid rgba(221,231,242,.14);border-radius:var(--r-media);
+  display:flex;flex-direction:column;align-items:center;text-align:center;
+  gap:5px;justify-content:center;
+  padding:14px 8px;border:1px solid rgba(221,231,242,.14);border-radius:var(--r-media);
   background:transparent;color:inherit;cursor:pointer;font:inherit;
   transition:border-color .18s,background .18s}
-.pal__griglia i{grid-row:1/3;width:30px;height:30px;border-radius:var(--r-min);
+.pal__griglia i{width:28px;height:28px;border-radius:var(--r-min);
   background:linear-gradient(135deg,var(--campione),var(--campione2));
   box-shadow:inset 0 0 0 1px rgba(255,255,255,.14)}
-.pal__griglia b{font-family:var(--display);font-size:var(--t-grande);letter-spacing:-.01em;
+.pal__griglia b{font-family:var(--display);font-size:var(--t-mini);letter-spacing:-.01em;
   text-transform:uppercase;line-height:1}
-.pal__griglia span{color:#7f8b98;font-size:var(--t-mini);line-height:1.35}
+.pal__griglia span{color:#7f8b98;font-size:9px;line-height:1.25}
 .pal__griglia button[aria-checked="true"]{
   border-color:var(--campione);background:color-mix(in srgb,var(--campione) 12%,transparent)}
 .pal__griglia button:focus-visible{outline:2px solid var(--campione);outline-offset:2px}
@@ -1760,14 +1983,18 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border:0;border-radiu
    un rosso qui spaventerebbe per una cosa che non fa paura. Diventa
    caldo solo mentre e' armato, cioe' solo nei sei secondi in cui il
    prossimo colpo fa davvero qualcosa. */
-.pal__azzera{width:100%;justify-content:center}
-.pal__azzera--certo{border-color:var(--em-bright);background:var(--em-dim);
-  color:var(--em-bright)}
+.pal__azzera{width:100%;justify-content:center;background:var(--em);
+  border-color:var(--em);color:#04231a;margin-top:6px;
+  animation:azzera-respiro 2.6s ease-in-out infinite}
+@keyframes azzera-respiro{0%,100%{transform:scale(1)}50%{transform:scale(1.015)}}
+.pal__azzera:hover{background:var(--em);border-color:var(--em);color:#fff;animation:none}
+.pal__azzera--certo{border-color:var(--em-bright);background:var(--em-bright);
+  color:#04231a}
 .pal__fatto{min-height:1.2em;margin:8px 0 0;color:var(--em);text-align:center}
 
-.pal__piede{display:flex;align-items:center;justify-content:space-between;gap:14px;
+.pal__piede{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:14px;
   padding:14px 20px 18px;border-top:1px solid rgba(221,231,242,.08);
-  position:sticky;bottom:0;background:#0b0f16;z-index:2}
+  position:sticky;bottom:0;background:#0b0f16;z-index:2;text-align:center}
 .pal{overscroll-behavior:contain}
 .pal__piede .mono{color:#7f8b98;font-size:var(--t-micro);letter-spacing:.08em}
 
@@ -1783,20 +2010,21 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border:0;border-radiu
   padding:11px 12px 11px 16px;border:1px solid var(--em-dim);border-radius:var(--r-pill);
   background:rgba(11,15,22,.95);backdrop-filter:blur(10px);
   color:#c3ccd6;font-size:var(--t-mini);letter-spacing:.03em;
-  opacity:0;transition:opacity .35s var(--ease),translate .35s var(--ease)}
-.pal-accenno.in{opacity:1;translate:-50% 0}
+  opacity:0;pointer-events:none;transition:opacity .35s var(--ease),translate .35s var(--ease)}
+.pal-accenno.in{opacity:1;pointer-events:auto;translate:-50% 0}
 .pal-accenno span{min-width:0}
 .pal-accenno button{width:44px;height:44px;flex:none;border-radius:var(--r-tondo);
   border:1px solid rgba(221,231,242,.14);background:transparent;color:#7f8b98;
   cursor:pointer;font-size:var(--t-mini);line-height:1}
 
 @media (max-width:760px){
-  .pal__griglia{grid-template-columns:1fr;padding:14px 16px}
-  .pal__griglia button{min-height:56px}
+  .pal__griglia{grid-template-columns:repeat(3,1fr);gap:6px;padding:14px 16px}
+  .pal__griglia button{min-height:56px;padding:10px 4px}
+  .pal__griglia span{display:none}
   .pal-accenno{bottom:70px;font-size:var(--t-mini);padding-block:13px}
   .pal-accenno button{width:46px;height:46px}
   .pal__piede{flex-wrap:wrap}
-  .pal__piede .btn{min-height:46px;flex:1}
+  .pal__piede .btn{min-height:46px}
 }
 
 /* ── i campioni in testata ──────────────────────────────────────────
@@ -1909,6 +2137,16 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border:0;border-radiu
 /* ── la sezione griglia dentro il pannello ── */
 .pal__sez{margin:0;padding:16px 20px 0;border-top:1px solid rgba(221,231,242,.08)}
 .pal__sez .pal__tit{padding:0}
+/* la scelta della griglia (una colonna, due, larga a destra...) e' roba
+   da chi costruisce la pagina: su telefono, dove i riquadri sono gia'
+   impilati uno sotto l'altro senza alternativa, la sezione non serve
+   a nessuno e occupa solo spazio nel pannello colori. */
+@media (max-width:640px){.pal__sez--griglia{display:none}}
+/* "tieni premuto e trascina" e' un gesto da mouse/desktop: su telefono
+   non si puo' fare, quindi la sezione che lo spiega resta muta e
+   occupa solo spazio. */
+@media (max-width:640px){.pal__sez--pos{display:none}}
+@media (max-width:640px){.pal__sez--azzera .pal__sub{display:none}}
 .pal__gr{display:grid;gap:6px;padding:12px 0 0;
   grid-template-columns:repeat(auto-fit,minmax(158px,1fr))}
 .pal__gr button{display:grid;gap:3px;text-align:left;padding:9px 11px;
@@ -1925,7 +2163,7 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border:0;border-radiu
   color:#c3ccd6;font-size:var(--t-mini);cursor:pointer;min-height:44px}
 .pal__vedi input{width:20px;height:20px;accent-color:var(--em)}
 @media (max-width:760px){
-  .pal__gr{grid-template-columns:1fr}
+  .pal__gr{grid-template-columns:repeat(2,1fr)}
   .pal__gr button{min-height:52px}
 }
 
@@ -2106,7 +2344,7 @@ body.ord-in-corso *{cursor:grabbing !important}
    e' quello che evita l'overflow quando la carta e' piu' stretta del
    minimo. */
 .appmie__capacita{margin-top:6px;display:grid;gap:clamp(12px,1.6vw,18px);
-  grid-template-columns:repeat(auto-fit,minmax(min(100%,168px),1fr))}
+  grid-template-columns:1fr}
 .appmie__tile{border:1px solid var(--rule-2);border-radius:var(--r-media);
   background:var(--carta-2,rgba(255,255,255,.02));transition:border-color .2s var(--ease)}
 .appmie__tile:hover{border-color:var(--em-light)}
@@ -2214,9 +2452,9 @@ body.ord-in-corso *{cursor:grabbing !important}
   margin:0 0 clamp(34px,4vw,56px);
   border-radius:var(--r-grande);overflow:hidden;
   background:var(--u-corpo);color:var(--u-verde);
-  box-shadow:0 30px 80px -34px rgba(0,0,0,.8)}
+  box-shadow:0 1px 2px rgba(5,7,11,.14),0 16px 26px -18px rgba(5,7,11,.5)}
 
-/* la lastra lime con il lama */
+/* la lastra lime con l'alpaca */
 .union__slab{
   position:relative;isolation:isolate;overflow:hidden;
   display:grid;gap:clamp(18px,2vw,30px);
@@ -2247,7 +2485,17 @@ body.ord-in-corso *{cursor:grabbing !important}
    mai come un "loop" che distrae. Solo opacity: zero layout, zero costo. */
 @media (prefers-reduced-motion: no-preference){
   @keyframes foglie-respiro{0%,100%{opacity:.13}50%{opacity:.22}}
+  /* prima respiravano solo in trasparenza, ferme al loro posto: ora
+     ondeggiano appena, come mosse da un'aria leggera — ognuna con un
+     ritardo diverso (vedi :nth-child piu' sotto) cosi' non si muovono
+     tutte insieme come un blocco unico. */
+  @keyframes foglie-fluttua{0%,100%{translate:0 0}50%{translate:5px -9px}}
   .union__foglie{animation:foglie-respiro 8s ease-in-out infinite}
+  .union__foglie use{animation:foglie-fluttua 7s ease-in-out infinite}
+  .union__foglie use:nth-child(2){animation-delay:-2.3s}
+  .union__foglie use:nth-child(3){animation-delay:-4.6s}
+  .union__foglie use:nth-child(4){animation-delay:-1.1s}
+  .union__foglie use:nth-child(5){animation-delay:-3.4s}
 }
 /* Sopra al respiro (opacity, sempre attivo) si aggiunge — solo dove
    view() esiste — una seconda animazione legata allo scorrimento, su
@@ -2309,9 +2557,20 @@ body.ord-in-corso *{cursor:grabbing !important}
   border-bottom:3px solid var(--u-lime);padding-bottom:3px}
 .union__claim::before,.union__claim::after{content:"";position:absolute;
   top:50%;width:14px;height:3px;border-radius:2px;background:var(--u-verde);
-  opacity:.55}
-.union__claim::before{right:calc(100% + 10px)}
-.union__claim::after{left:calc(100% + 10px)}
+  opacity:.55;animation:claim-va 1.8s ease-in-out infinite}
+.union__claim::before{right:calc(100% + 10px);animation-name:claim-vieni}
+.union__claim::after{left:calc(100% + 10px);animation-name:claim-va}
+
+/* le due stanghette ai lati delle etichette "claim" respirano verso
+   l'esterno e tornano indietro, di qua e di la' dell'etichetta —
+   condivisa da tutti i casi (union, eso/cest, locanda) */
+@keyframes claim-va{0%,100%{transform:translateY(-50%) translateX(0)}50%{transform:translateY(-50%) translateX(9px)}}
+@keyframes claim-vieni{0%,100%{transform:translateY(-50%) translateX(0)}50%{transform:translateY(-50%) translateX(-9px)}}
+@media (prefers-reduced-motion:reduce){
+  .union__claim::before,.union__claim::after,
+  .eso__claim::before,.eso__claim::after,.cest__claim::before,.cest__claim::after,
+  .locanda__claim::before,.locanda__claim::after{animation:none}
+}
 
 /* I tre numeri stanno dove la locandina mette le tre icone. Li' dicono
    cosa guadagna il cliente, qui dicono quanto lavoro c'e' dentro:
@@ -2352,11 +2611,15 @@ body.ord-in-corso *{cursor:grabbing !important}
 
    L'ombra e' disegnata, non fotografata: quella vera era sul pavimento
    di uno studio e sul lime si vedeva come una pozza grigia. */
-.union__davide{margin:0;display:grid;justify-items:center;align-self:end}
+.union__davide{margin:0 6% 0 0;display:grid;justify-items:center;align-self:end}
 .union__davide img{display:block;width:auto;height:auto;
   max-width:100%;max-height:clamp(300px,40vw,580px);
   filter:drop-shadow(0 26px 26px rgba(28,68,16,.30))}
-.union__davide figcaption{margin-top:10px;color:var(--u-verde);
+/* Sotto gli 840px la sua colonna e' "auto": stretta esattamente sulla sua
+   larghezza, quindi finiva a filo del bordo destro della lastra. Un
+   margine a destra lo stacca un poco verso il centro. */
+@media(max-width:839px){.union__davide{margin-right:8%}}
+.union__davide figcaption{margin-top:10px;color:var(--u-verde);text-align:right;
   font-size:var(--t-micro);letter-spacing:.14em;text-transform:uppercase}
 @media(max-width:839px){
   /* Sul telefono si appoggia al bordo destro della lastra, dentro il
@@ -2364,9 +2627,10 @@ body.ord-in-corso *{cursor:grabbing !important}
   /* i numeri restano attaccati al payoff, il vuoto finisce sotto di
      loro accanto alle gambe di Davide invece che in mezzo alla lastra */
   .union__piede{align-self:start;padding-top:4px}
-  .union__davide{justify-items:end;margin:-10px calc(-1 * clamp(24px,3.2vw,48px)) 0 0}
+  .union__davide{justify-items:end;margin:-10px calc(-1 * clamp(12px,1.6vw,24px)) 0 0;
+    padding-right:14%}
   .union__davide img{max-height:min(84vw,370px)}
-  .union__davide figcaption{margin-right:clamp(24px,3.2vw,48px)}
+  .union__davide figcaption{margin-right:clamp(12px,1.6vw,24px)}
 }
 
 /* il corpo bianco: i nove pezzi e come sono fatti */
@@ -2503,7 +2767,7 @@ body.ord-in-corso *{cursor:grabbing !important}
   margin:0 0 clamp(34px,4vw,56px);
   border-radius:var(--r-grande);overflow:hidden;
   background:var(--sk-corpo);color:var(--sk-inchiostro);
-  box-shadow:0 30px 80px -34px rgba(0,0,0,.8)}
+  box-shadow:0 1px 2px rgba(5,7,11,.14),0 16px 26px -18px rgba(5,7,11,.5)}
 
 .eso__slab,.cest__slab{
   position:relative;isolation:isolate;overflow:hidden;
@@ -2544,9 +2808,13 @@ body.ord-in-corso *{cursor:grabbing !important}
 .eso__lede b,.cest__lede b{color:var(--sk-carta);font-weight:700}
 
 /* La targa del payoff: e' la frase dell'endcard del marchio. */
-.eso__claim,.cest__claim{margin:20px 0 0;display:inline-grid;justify-items:start;
+.eso__claim{margin:20px 0 0;display:inline-grid;justify-items:start;
   position:relative;gap:2px;padding:11px 22px 13px;border-radius:var(--r-media);
   background:var(--sk-targa);border:1px solid var(--sk-targa-riga);
+  font-family:var(--display);line-height:1.15}
+.cest__claim{margin:20px 0 0;display:inline-grid;justify-items:start;
+  position:relative;gap:2px;padding:11px 22px 13px;border-radius:var(--r-media);
+  background:rgba(157,184,214,.10);border:1px solid rgba(157,184,214,.4);
   font-family:var(--display);line-height:1.15}
 .eso__claim span,.cest__claim span{color:var(--sk-tenue);font-size:var(--t-micro);
   font-weight:600;letter-spacing:.18em;text-transform:uppercase}
@@ -2555,9 +2823,9 @@ body.ord-in-corso *{cursor:grabbing !important}
   border-bottom:3px solid var(--sk-vivo);padding-bottom:3px}
 .eso__claim::before,.eso__claim::after,.cest__claim::before,.cest__claim::after{
   content:"";position:absolute;top:50%;width:14px;height:3px;border-radius:2px;
-  background:var(--sk-targa-riga);opacity:.85}
-.eso__claim::before,.cest__claim::before{right:calc(100% + 10px)}
-.eso__claim::after,.cest__claim::after{left:calc(100% + 10px)}
+  background:var(--sk-tenue);opacity:.85;animation:claim-va 1.8s ease-in-out infinite}
+.eso__claim::before,.cest__claim::before{right:calc(100% + 10px);animation-name:claim-vieni}
+.eso__claim::after,.cest__claim::after{left:calc(100% + 10px);animation-name:claim-va}
 
 .eso__conti,.cest__conti{margin:0;padding:0;list-style:none;
   display:grid;grid-template-columns:repeat(3,minmax(0,1fr));max-width:400px}
@@ -2676,6 +2944,24 @@ body.ord-in-corso *{cursor:grabbing !important}
   border:1px solid var(--sk-riga)}
 .eso__tavola figcaption{max-width:66ch;color:var(--sk-grigio);font-size:var(--t-corpo);line-height:1.55}
 
+/* "Il dispositivo" in testa alla scheda e' una vista a 360° da
+   trascinare, al posto del render fermo: stessa misura e stesso
+   drop-shadow flottante dell'immagine che sostituisce, nessuna cornice
+   ne' sfondo — cosi' se un fotogramma non e' ancora pronto si vede lo
+   sfondo scuro della sezione dietro, mai un riquadro bianco. */
+.eso__360-stage{position:relative;height:clamp(260px,34vw,470px);
+  aspect-ratio:480/720;max-width:100%;cursor:grab;touch-action:pan-y}
+.eso__360-stage:active{cursor:grabbing}
+.eso__360-img{display:block;width:100%;height:100%;object-fit:contain;
+  user-select:none;-webkit-user-drag:none;
+  filter:drop-shadow(0 0 34px var(--sk-alone)) drop-shadow(0 18px 30px rgba(0,0,0,.5))}
+.eso__360-hint{position:absolute;left:50%;bottom:8px;transform:translateX(-50%);
+  padding:6px 12px;border-radius:var(--r-pill);background:rgba(20,11,40,.55);
+  color:#fff;font-family:var(--mono);font-size:10px;letter-spacing:.06em;
+  pointer-events:none;transition:opacity .3s var(--ease)}
+.eso__360-stage--via .eso__360-hint{opacity:0}
+@media(max-width:839px){.eso__360-stage{height:min(74vw,330px)}}
+
 /* e poi, di suo */
 .eso__come,.cest__come{margin-top:clamp(24px,3vw,40px);padding-top:clamp(18px,2vw,26px);
   border-top:1px solid var(--sk-riga);container-type:inline-size}
@@ -2721,7 +3007,7 @@ body.ord-in-corso *{cursor:grabbing !important}
   margin:0 0 clamp(34px,4vw,56px);
   border-radius:var(--r-grande);overflow:hidden;
   background:var(--l-carta);color:var(--l-inchiostro);
-  box-shadow:0 30px 80px -34px rgba(0,0,0,.8)}
+  box-shadow:0 1px 2px rgba(5,7,11,.14),0 16px 26px -18px rgba(5,7,11,.5)}
 
 .locanda__slab{
   position:relative;isolation:isolate;overflow:hidden;
@@ -2778,9 +3064,9 @@ body.ord-in-corso *{cursor:grabbing !important}
   border-bottom:3px solid var(--l-oro-chiaro);padding-bottom:3px}
 .locanda__claim::before,.locanda__claim::after{content:"";position:absolute;
   top:50%;width:14px;height:3px;border-radius:2px;background:var(--l-oro-chiaro);
-  opacity:.6}
-.locanda__claim::before{right:calc(100% + 10px)}
-.locanda__claim::after{left:calc(100% + 10px)}
+  opacity:.6;animation:claim-va 1.8s ease-in-out infinite}
+.locanda__claim::before{right:calc(100% + 10px);animation-name:claim-vieni}
+.locanda__claim::after{left:calc(100% + 10px);animation-name:claim-va}
 
 .locanda__conti{margin:0;padding:0;list-style:none;
   display:grid;grid-template-columns:repeat(3,minmax(0,1fr));max-width:400px}
@@ -2883,6 +3169,8 @@ body.ord-in-corso *{cursor:grabbing !important}
 .eso .caso-firma b,.cest .caso-firma b{color:var(--sk-fondo);font-weight:600}
 .locanda .caso-firma{color:#4c3d34}
 .locanda .caso-firma b{color:var(--l-bordeaux);font-weight:600}
+.cdi .caso-firma{color:#4a3d66}
+.cdi .caso-firma b{color:#140b28;font-weight:600}
 
 /* i cinque brani */
 .locanda__musica{margin-top:clamp(24px,3vw,40px);padding-top:clamp(18px,2vw,26px);
@@ -2933,6 +3221,113 @@ body.ord-in-corso *{cursor:grabbing !important}
 @media (prefers-reduced-motion:reduce){
   .locanda__via:hover{transform:none}
 }
+
+/* ═══ CDI Infissi: l'unico caso senza video, con un sito vero dentro ═══ */
+.cdi{
+  --c-notte:#140b28; --c-fondo:#241247;
+  --c-vivo:#a78bfa; --c-tenue:#cabdf7;
+  --c-carta:#f3f0fb; --c-inchiostro:#1e1533;
+  --c-riga:rgba(20,11,40,.14);
+  margin:0 0 clamp(34px,4vw,56px);
+  border-radius:var(--r-grande);overflow:hidden;
+  background:var(--c-carta);color:var(--c-inchiostro);
+  box-shadow:0 1px 2px rgba(5,7,11,.14),0 16px 26px -18px rgba(5,7,11,.5)}
+.cdi__slab{padding:clamp(24px,3.2vw,48px);
+  background:linear-gradient(152deg, var(--c-fondo) 0%, var(--c-notte) 100%)}
+.cdi__testa{max-width:64ch}
+.cdi__testa .eyebrow{color:var(--c-tenue)}
+.cdi__testa .eyebrow .n{color:var(--c-tenue);border-right-color:rgba(167,139,250,.4)}
+.cdi__testa h3{margin:12px 0 0;color:var(--c-carta);
+  font-size:var(--d4);letter-spacing:-.025em;line-height:1.02}
+.cdi__testa h3 em{font-style:normal;color:var(--c-vivo)}
+.cdi__lede{margin:16px 0 0;color:rgba(238,244,248,.9);font-size:var(--t-grande);line-height:1.62}
+.cdi__claim{margin:20px 0 0;display:inline-grid;justify-items:start;
+  position:relative;gap:1px;padding:11px 22px 13px;border-radius:var(--r-media);
+  background:rgba(238,244,248,.08);border:1px solid rgba(167,139,250,.4);
+  font-family:var(--display);text-transform:uppercase;line-height:1}
+.cdi__claim span{color:var(--c-tenue);font-size:var(--t-lede);font-weight:600;letter-spacing:.16em}
+.cdi__claim b{color:var(--c-vivo);font-size:var(--d6);font-weight:700;letter-spacing:.02em;
+  border-bottom:3px solid var(--c-vivo);padding-bottom:3px}
+.cdi__claim::before,.cdi__claim::after{content:"";position:absolute;top:50%;
+  width:14px;height:3px;border-radius:2px;background:var(--c-vivo);opacity:.55;
+  animation:claim-va 1.8s ease-in-out infinite}
+.cdi__claim::before{right:calc(100% + 10px);animation-name:claim-vieni}
+.cdi__claim::after{left:calc(100% + 10px);animation-name:claim-va}
+.cdi__piede{margin-top:clamp(20px,2.6vw,32px)}
+.cdi__conti{margin:0;padding:0;list-style:none;
+  display:grid;grid-template-columns:repeat(3,minmax(0,1fr));max-width:400px}
+.cdi__conti li{display:grid;gap:2px;align-content:start;min-width:0;
+  padding-left:clamp(12px,1.4vw,18px);border-left:1px solid rgba(167,139,250,.3)}
+.cdi__conti li:first-child{padding-left:0;border-left:0}
+.cdi__conti b{color:var(--c-vivo);font-family:var(--display);font-size:var(--d6);
+  font-weight:700;line-height:1}
+.cdi__conti span{color:rgba(238,244,248,.82);font-family:var(--mono);
+  font-size:var(--t-micro);letter-spacing:.1em;text-transform:uppercase}
+.cdi__nota{margin:16px 0 0;max-width:34ch;position:relative;padding-left:24px;
+  color:rgba(238,244,248,.75);font-family:var(--mono);font-size:var(--t-mini);
+  letter-spacing:.08em;text-transform:uppercase;line-height:1.4}
+.cdi__nota::before{content:"";position:absolute;left:0;top:.5em;
+  width:14px;height:2px;border-radius:2px;background:var(--c-vivo);opacity:.7}
+
+/* il corpo chiaro: il sito vero, incorniciato come una finestra */
+.cdi__corpo{padding:clamp(22px,3vw,42px)}
+.cdi__intro{margin:0 0 16px;color:#5c4a80;
+  font-size:var(--t-micro);letter-spacing:.14em;text-transform:uppercase}
+.cdi__finestra{border-radius:var(--r-media);overflow:hidden;
+  border:1px solid rgba(20,11,40,.16);background:#fff;
+  box-shadow:0 20px 44px -24px rgba(20,11,40,.4)}
+/* griglia e non flex: cosi' l'indirizzo sta nel MEZZO dello spazio
+   libero fra i pallini e il tasto, non solo subito dopo i pallini */
+.cdi__barra{display:grid;grid-template-columns:repeat(3,auto) 1fr auto;
+  align-items:center;gap:8px;padding:10px 12px;
+  background:#ede8f7;border-bottom:1px solid rgba(20,11,40,.1)}
+/* i tre pallini del finto Mac non sono piu' muti: sono i tasti veri
+   della barra, coi tre colori del semaforo macOS — rosso indietro,
+   giallo avanti, verde ricarica. Niente cerchi in piu' accanto. */
+.cdi__punto{flex:none;width:24px;height:24px;padding:0;border:0;border-radius:50%;
+  display:grid;place-items:center;color:#fff;font-size:13px;line-height:1;
+  cursor:pointer;position:relative;transition:transform .15s var(--ease)}
+.cdi__punto--rosso{background:#ff5f57}
+.cdi__punto--giallo{background:#febc2e}
+.cdi__punto--verde{background:#28c840}
+.cdi__punto:disabled{opacity:.35;cursor:default}
+.cdi__punto:hover{transform:scale(1.12)}
+.cdi__punto:active{transform:scale(.9)}
+.cdi__url{justify-self:center;width:112px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+  padding:3px 10px;border-radius:20px;background:#fff;text-align:center;
+  color:#5c4a80;font-family:var(--mono);font-size:10px;letter-spacing:.04em}
+.cdi__toggle{display:inline-flex;align-items:center;gap:6px;
+  padding:7px 14px;border-radius:20px;border:0;
+  background:#2e1f52;color:#fff;font-family:var(--mono);font-size:11px;
+  letter-spacing:.03em;white-space:nowrap;cursor:pointer;transition:background-color .2s var(--ease)}
+.cdi__toggle i{font-style:normal;font-size:13px;line-height:1;color:#8a7fb0}
+.cdi__toggle:hover{background:#432c74}
+.cdi__toggle[aria-pressed="true"]{background:#8f86a8;color:#fff}
+.cdi__toggle[aria-pressed="true"] i{color:#28c840}
+@media(max-width:420px){
+  .cdi__url{display:none}
+  .cdi__toggle{justify-self:end}
+}
+.cdi__frame{display:block;width:100%;aspect-ratio:16/10;border:0;background:#fff}
+.cdi__apri{margin-top:16px;background:#2e1f52;border-color:#2e1f52;color:#fff;
+  animation:cdi-respiro 2.6s ease-in-out infinite}
+/* stesso battito del resto del sito, ma solo la dimensione — niente
+   bagliore attorno: qui il colore pieno basta gia' a farlo notare */
+@keyframes cdi-respiro{0%,100%{transform:scale(1)}50%{transform:scale(1.04)}}
+.cdi__apri:hover{background:#432c74;border-color:#432c74;color:#fff}
+@media(max-width:600px){.cdi__frame{aspect-ratio:3/4}}
+/* Un iframe scrollabile dentro una pagina che scorre e' una trappola:
+   il dito o la rotella che arrivano sopra scorrono il sito DENTRO la
+   finestra, non il portfolio. Come i video, resta spento finché non lo
+   attivi tu apposta — fino a quel clic la pagina scorre come sempre. */
+.cdi__frameBox{position:relative}
+.cdi__attiva{position:absolute;inset:0;z-index:1;display:grid;place-items:center;
+  background:rgba(20,11,40,.34);border:0;padding:0;cursor:pointer;
+  transition:opacity .35s var(--ease)}
+.cdi__attiva span{padding:.9rem 1.6rem;border-radius:999px;
+  background:rgba(20,11,40,.78);color:#fff;font-weight:600;font-size:var(--t-corpo);
+  border:1px solid rgba(255,255,255,.35);backdrop-filter:blur(6px)}
+.cdi__attiva--via{opacity:0;pointer-events:none}
 
 
 /* La scaletta dei pezzi di un caso: si vede solo a JavaScript spento,
@@ -3037,6 +3432,19 @@ body.ord-in-corso *{cursor:grabbing !important}
   50%{transform:scale(1.05);box-shadow:0 0 16px 4px color-mix(in srgb,var(--em-light) 50%,transparent)}}
 .manifesto__slab:hover .manifesto__cta{opacity:1;animation:none}
 .manifesto__cta i{font-style:normal;display:inline-block}
+/* due versioni del paragrafo: dal telefono molte cose non si possono
+   fare (spostare i riquadri, tenere premuto), quindi il testo cambia e
+   l'invito ad aprire le istruzioni sparisce */
+.solo-piccolo{display:none}
+@media (max-width:640px){
+  .solo-largo{display:none}
+  .solo-piccolo{display:block}
+  .manifesto__cta--largo{display:none}
+  /* le istruzioni sono quasi tutte per il computer: sul telefono la
+     tendina non serve, quindi non si apre (vedi app.js) */
+  .manifesto__corpo{display:none}
+  .manifesto__slab{cursor:default}
+}
 
 /* La lastra risponde al tocco prima ancora che il contenuto cominci a
    crescere: un piccolo affondo, la stessa cosa che fa un tasto vero.
@@ -3131,6 +3539,11 @@ body.ord-in-corso *{cursor:grabbing !important}
  * ═══════════════════════════════════════════════════════════════════ */
 .scheda{
   color-scheme:dark;
+  /* Il tasto Chiudi e' un .btn qualunque, e i .btn respirano nel colore
+     di --em: qui dentro lo si fa respirare nel colore dello strumento
+     invece che nel verde del sito, cosi' la scheda di Krea 2 chiude in
+     magenta e quella di n8n chiude in viola, non tutte uguali. */
+  --em:var(--tool);
   width:min(460px,calc(100vw - 32px));max-height:calc(100dvh - 32px);
   padding:0;border:1px solid color-mix(in srgb,var(--tool) 40%,transparent);
   border-radius:var(--r-card);background:#0b0f16;color:#f2f4f7;
@@ -3151,14 +3564,165 @@ body.ord-in-corso *{cursor:grabbing !important}
   font-size:var(--t-corpo);line-height:1.5}
 .scheda__lista li::before{content:"";position:absolute;left:2px;top:.62em;
   width:6px;height:6px;border-radius:var(--r-tondo);background:var(--tool)}
-.scheda__piede{position:sticky;bottom:0;display:flex;align-items:center;justify-content:space-between;
+.scheda__piede{position:sticky;bottom:0;display:flex;align-items:center;justify-content:center;
   gap:14px;padding:14px 22px 18px;background:#0b0f16;
   border-top:1px solid rgba(221,231,242,.08)}
-.scheda__piede .mono{color:#7f8b98;font-size:var(--t-micro);letter-spacing:.08em}
 @media (max-width:560px){
   .scheda h3{font-size:var(--d7)}
   .scheda__piede{flex-wrap:wrap}
-  .scheda__piede .btn{min-height:46px;flex:1}
+  .scheda__piede .btn{min-height:46px}
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+ * L'EDITOR DEL KEY VISUAL — scrivi il tuo titolo, scegli il formato
+ *
+ * Stessa finestra modale delle altre (.serv/.scheda/.pal), un colore
+ * suo (l'azzurro dell'editor, non quello dei casi ne' quello dei
+ * gruppi di strumenti) cosi' si distingue subito dalle schede che
+ * spiegano e si capisce che qui, invece, si lavora.
+ * ═══════════════════════════════════════════════════════════════════ */
+.fmtEdit{
+  color-scheme:dark;
+  --em:#5fb8e0;
+  container-type:inline-size;
+  width:min(880px,calc(100vw - 32px));max-height:calc(100dvh - 32px);
+  display:flex;flex-direction:column;
+  padding:0;border:1px solid color-mix(in srgb,var(--em) 40%,transparent);
+  border-radius:var(--r-card);background:#0b0f16;color:#f2f4f7;
+  font:400 var(--t-corpo)/1.6 var(--body);
+  /* la finestra stessa non scorre piu': l'immagine e il piede sono
+     riquadri fissi del layout a colonna, solo il pannello dei controlli
+     (fmtEdit__lato) e' l'unico che scorre. Prima l'immagine era "sticky"
+     dentro un unico scroller insieme agli slider: Chrome, scorrendo,
+     a volte ridipingeva un pixel di uno slider sopra l'immagine
+     incollata. Con due riquadri separati il bug non ha piu' un posto
+     dove annidarsi. */
+  overflow:hidden}
+.fmtEdit::backdrop{background:rgba(5,7,11,.72);backdrop-filter:blur(6px)}
+.fmtEdit__cat{margin:0;padding:18px 22px 0;color:var(--em);flex:0 0 auto;
+  font-size:var(--t-micro);letter-spacing:.14em;text-transform:uppercase}
+.fmtEdit h3{margin:6px 0 0;padding:0 22px;font-size:var(--d7);letter-spacing:-.01em;
+  line-height:1.15;flex:0 0 auto}
+.fmtEdit__corpo{display:flex;flex-direction:column;flex:1 1 auto;min-height:0;padding:0 22px}
+.fmtEdit__anteprima{flex:0 0 auto;display:grid;justify-items:center;
+  gap:6px;padding:14px 0 12px;background:#0b0f16;min-width:0}
+/* Un canvas e' un elemento "replaced": senza min-width:0 il browser gli
+   riserva comunque lo spazio della sua dimensione intrinseca (fino a
+   720px), scavalcando qualunque max-width. */
+.fmtEdit__zoomBox{position:relative;max-width:100%;overflow:hidden;touch-action:none;
+  border:1px solid var(--rule);border-radius:var(--r-media);background:#06090e;cursor:zoom-in}
+.fmtEdit__anteprima canvas{display:block;width:auto;max-width:100%;max-height:38vh;min-width:0;height:auto;
+  transform-origin:50% 50%;user-select:none;-webkit-user-drag:none}
+.fmtEdit__zoomHint{position:absolute;right:6px;bottom:6px;padding:3px 8px;
+  border-radius:999px;background:rgba(5,7,11,.72);color:var(--muted);
+  font-family:var(--mono);font-size:9px;letter-spacing:.06em;text-transform:uppercase;
+  pointer-events:none;opacity:0;transition:opacity .2s}
+.fmtEdit__zoomBox[data-zoomed="true"] .fmtEdit__zoomHint{opacity:1}
+.fmtEdit__formatoNome{margin:0;color:var(--muted);font-size:var(--t-micro);
+  letter-spacing:.1em;text-transform:uppercase}
+/* l'unico pannello che scorre: tutto il resto della finestra e' fisso.
+   Una barra di scorrimento sottile (non quella di sistema, larga anche
+   17px) cosi' i campi non perdono spazio utile sulla destra. */
+.fmtEdit__lato{display:grid;gap:16px;align-content:start;min-width:0;
+  flex:1 1 auto;min-height:0;overflow-x:hidden;overflow-y:auto;
+  overscroll-behavior:contain;
+  /* la barra occupa spazio reale nel box (fino a 17px di sistema): la
+     faccio sporgere fuori a destra con un margine negativo e la
+     ripago in padding, cosi' il bordo dei campi resta dov'era prima,
+     qualunque sia la larghezza vera della barra */
+  width:calc(100% + 18px);margin-right:-18px;padding:4px 8px 18px 5px;
+  scrollbar-width:thin;scrollbar-color:color-mix(in srgb,var(--em) 55%,transparent) transparent}
+.fmtEdit__lato::-webkit-scrollbar{width:6px}
+.fmtEdit__lato::-webkit-scrollbar-track{background:transparent}
+.fmtEdit__lato::-webkit-scrollbar-thumb{background:color-mix(in srgb,var(--em) 55%,transparent);
+  border-radius:999px}
+.fmtEdit__campo{display:grid;gap:8px;min-width:0}
+.fmtEdit__campo label{color:var(--muted);font-family:var(--mono);font-size:var(--t-mini);
+  letter-spacing:.1em;text-transform:uppercase}
+.fmtEdit__campo label output{color:var(--em)}
+.fmtEdit__campo textarea,.fmtEdit__input{width:100%;box-sizing:border-box;min-width:0;
+  resize:vertical;min-height:84px;padding:12px 14px;
+  border:1px solid var(--rule);border-radius:var(--r-media);background:var(--panel-2);
+  color:var(--ink);font:inherit;font-size:var(--t-corpo);line-height:1.4}
+.fmtEdit__input{min-height:auto;resize:none}
+.fmtEdit__select{cursor:pointer;color-scheme:dark}
+.fmtEdit__select option{background:var(--panel-2);color:var(--ink)}
+.fmtEdit__campo textarea:focus-visible,.fmtEdit__input:focus-visible{outline:2px solid var(--em);outline-offset:2px}
+.fmtEdit__formati{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.fmtEdit__formati button{display:grid;gap:2px;padding:10px 12px;text-align:left;min-width:0;
+  border:1px solid var(--rule);border-radius:var(--r-media);
+  background:var(--panel-2);color:var(--ink);font:inherit;cursor:pointer;
+  transition:border-color .2s,background .2s}
+.fmtEdit__formati button b{font-size:var(--t-mini);font-weight:600}
+.fmtEdit__formati button span{color:var(--muted);font-size:10px;line-height:1.25}
+.fmtEdit__formati button:hover{border-color:var(--em)}
+.fmtEdit__formati button[aria-pressed="true"]{border-color:var(--em);
+  background:color-mix(in srgb,var(--em) 16%,var(--panel-2))}
+.fmtEdit__formati button[aria-pressed="true"] b{color:var(--em)}
+.fmtEdit__font{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.fmtEdit__font button{display:grid;gap:2px;padding:10px 6px;text-align:center;min-width:0;
+  border:1px solid var(--rule);border-radius:var(--r-media);
+  background:var(--panel-2);color:var(--ink);cursor:pointer;overflow:hidden;
+  transition:border-color .2s,background .2s}
+.fmtEdit__font button b{font-size:13px;font-weight:600;line-height:1.15;
+  overflow-wrap:break-word;word-break:break-word}
+.fmtEdit__font button span{color:var(--muted);font-size:9px;line-height:1.2;
+  font-family:var(--body)}
+.fmtEdit__font button:hover{border-color:var(--em)}
+.fmtEdit__font button[aria-pressed="true"]{border-color:var(--em);
+  background:color-mix(in srgb,var(--em) 16%,var(--panel-2))}
+.fmtEdit__font button[aria-pressed="true"] b{color:var(--em)}
+/* i tre versi del testo, come in un editor vero: tre tasti, un segno
+   solo, niente etichetta a fianco che occupi spazio */
+.fmtEdit__allinei,.fmtEdit__stile{display:flex;gap:8px}
+.fmtEdit__stile b{font-family:Georgia,serif;font-weight:800;font-style:normal}
+.fmtEdit__stile i{font-family:Georgia,serif;font-style:italic;font-weight:600}
+.fmtEdit__pillo{width:44px;height:40px;display:grid;place-items:center;
+  border:1px solid var(--rule);border-radius:var(--r-media);
+  background:var(--panel-2);color:var(--ink);font-size:16px;cursor:pointer;
+  transition:border-color .2s,background .2s}
+.fmtEdit__pillo:hover{border-color:var(--em)}
+.fmtEdit__pillo[aria-pressed="true"]{border-color:var(--em);color:var(--em);
+  background:color-mix(in srgb,var(--em) 16%,var(--panel-2))}
+/* i colori: pallini pieni, come in un vero pannello di grafica — il
+   nome del colore non serve, si vede cos'e' */
+.fmtEdit__colori{display:flex;flex-wrap:wrap;gap:8px}
+.fmtEdit__tinta{width:30px;height:30px;border-radius:50%;cursor:pointer;
+  background:var(--tinta);border:2px solid transparent;box-shadow:0 0 0 1px var(--rule);
+  transition:transform .15s var(--ease),box-shadow .2s}
+.fmtEdit__tinta:hover{transform:scale(1.1)}
+.fmtEdit__tinta[aria-pressed="true"]{box-shadow:0 0 0 2px #0b0f16,0 0 0 4px var(--tinta)}
+/* colore testo / colore sfondo: due selettori veri, fianco a fianco
+   come in un pannello di photoshop in miniatura */
+.fmtEdit__riga2{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+@media(max-width:420px){.fmtEdit__riga2{grid-template-columns:1fr 1fr}}
+.fmtEdit__riga2--stile{grid-template-columns:1fr 1fr}
+.fmtEdit__pickerColore{width:100%;height:40px;padding:3px;box-sizing:border-box;
+  border:1px solid var(--rule);border-radius:var(--r-media);
+  background:var(--panel-2);cursor:pointer}
+.fmtEdit__pickerColore::-webkit-color-swatch-wrapper{padding:0}
+.fmtEdit__pickerColore::-webkit-color-swatch{border:none;border-radius:calc(var(--r-media) - 4px)}
+.fmtEdit__pickerColore::-moz-color-swatch{border:none;border-radius:calc(var(--r-media) - 4px)}
+/* Le tre azioni stanno tutte sulla stessa riga, stesso peso — nessuna
+   vale piu' delle altre: chiudere, scaricare o applicare il titolo
+   sono tre uscite equivalenti da questa finestra, non una scelta
+   principale con due ripieghi accanto. */
+.fmtEdit__piede{flex:0 0 auto;display:flex;flex-wrap:wrap;align-items:center;
+  justify-content:center;gap:10px;padding:14px 22px 18px;
+  background:#0b0f16;border-top:1px solid rgba(221,231,242,.08)}
+/* la stessa X tonda degli altri popup del sito (video e immagini), ma
+   DENTRO la finestra: .fmtEdit ha overflow:hidden, e messa sopra il bordo
+   come negli altri popup veniva tagliata via — invisibile e non cliccabile */
+.fmtEdit__chiudiX{position:absolute;top:12px;right:12px;z-index:3;width:36px;height:36px;
+  border-radius:var(--r-tondo);border:1px solid var(--rule);background:var(--panel-2);
+  color:var(--ink);font-size:22px;line-height:1;cursor:pointer;
+  transition:background-color .2s var(--ease),border-color .2s var(--ease)}
+.fmtEdit__chiudiX:hover{background:var(--panel);border-color:var(--em-light)}
+@media (max-width:560px){
+  .fmtEdit__chiudiX{top:10px;right:10px;width:32px;height:32px;font-size:19px}
+}
+@media(max-width:559px){
+  .fmtEdit__anteprima canvas{max-width:220px}
 }
 
 /* ═══════════════════════════════════════════════════════════════════
@@ -3178,19 +3742,19 @@ body.ord-in-corso *{cursor:grabbing !important}
  * anche alla CHIUSURA di dissolversi invece di sparire di scatto,
  * senza un onclose in JavaScript a gestirla.
  * ═══════════════════════════════════════════════════════════════════ */
-.serv,.scheda,.pal,.video-lightbox{
+.serv,.scheda,.pal,.video-lightbox,.fmtEdit,.img-lightbox{
   opacity:0;transform:scale(.96) translateY(10px);filter:blur(9px);
   transition:opacity .32s var(--ease),transform .36s var(--ease),filter .36s var(--ease),
     display .36s allow-discrete,overlay .36s allow-discrete}
-.serv[open],.scheda[open],.pal[open],.video-lightbox[open]{opacity:1;transform:none;filter:blur(0)}
+.serv[open],.scheda[open],.pal[open],.video-lightbox[open],.fmtEdit[open],.img-lightbox[open]{opacity:1;transform:none;filter:blur(0)}
 @starting-style{
-  .serv[open],.scheda[open],.pal[open],.video-lightbox[open]{opacity:0;transform:scale(.96) translateY(10px);filter:blur(9px)}
+  .serv[open],.scheda[open],.pal[open],.video-lightbox[open],.fmtEdit[open],.img-lightbox[open]{opacity:0;transform:scale(.96) translateY(10px);filter:blur(9px)}
 }
-.serv::backdrop,.scheda::backdrop,.pal::backdrop,.video-lightbox::backdrop{
+.serv::backdrop,.scheda::backdrop,.pal::backdrop,.video-lightbox::backdrop,.fmtEdit::backdrop,.img-lightbox::backdrop{
   opacity:0;transition:opacity .32s var(--ease),display .32s allow-discrete,overlay .32s allow-discrete}
-.serv[open]::backdrop,.scheda[open]::backdrop,.pal[open]::backdrop,.video-lightbox[open]::backdrop{opacity:1}
+.serv[open]::backdrop,.scheda[open]::backdrop,.pal[open]::backdrop,.video-lightbox[open]::backdrop,.fmtEdit[open]::backdrop,.img-lightbox[open]::backdrop{opacity:1}
 @starting-style{
-  .serv[open]::backdrop,.scheda[open]::backdrop,.pal[open]::backdrop,.video-lightbox[open]::backdrop{opacity:0}
+  .serv[open]::backdrop,.scheda[open]::backdrop,.pal[open]::backdrop,.video-lightbox[open]::backdrop,.fmtEdit[open]::backdrop,.img-lightbox[open]::backdrop{opacity:0}
 }
 
 /* ═══════════════════════════════════════════════════════════════════
@@ -3212,6 +3776,32 @@ body.ord-in-corso *{cursor:grabbing !important}
 @media (max-width:560px){
   .video-lightbox__chiudi{top:-40px;width:32px;height:32px;font-size:19px}
 }
+
+/* ═══════════════════════════════════════════════════════════════════
+ * IL LIGHTBOX DELLE IMMAGINI — stessa lastra del video, per le tavole
+ * che vanno lette da vicino (es. il riferimento prodotto degli eso)
+ * ═══════════════════════════════════════════════════════════════════ */
+.img-lightbox{
+  color-scheme:dark;
+  width:min(1100px,calc(100vw - 32px));max-height:calc(100dvh - 96px);
+  padding:0;border:0;border-radius:var(--r-card);background:#000;
+  overflow:visible}
+.img-lightbox::backdrop{background:rgba(3,6,9,.88);backdrop-filter:blur(6px)}
+.img-lightbox img{display:block;width:100%;max-height:calc(100dvh - 96px);
+  object-fit:contain;border-radius:var(--r-card)}
+.img-lightbox__chiudi{position:absolute;top:-44px;right:0;width:36px;height:36px;
+  border-radius:var(--r-tondo);border:1px solid var(--rule);background:var(--panel-2);
+  color:var(--ink);font-size:22px;line-height:1;cursor:pointer;
+  transition:background-color .2s var(--ease),border-color .2s var(--ease)}
+.img-lightbox__chiudi:hover{background:var(--panel);border-color:var(--em-light)}
+@media (max-width:560px){
+  .img-lightbox__chiudi{top:-40px;width:32px;height:32px;font-size:19px}
+}
+/* l'affordance sull'immagine nella pagina: cursore a lente, un filo di
+   sollevamento al passaggio, cosi' si capisce che si apre ingrandita
+   prima ancora di cliccarci */
+.eso__tavola img{cursor:zoom-in;transition:filter .2s var(--ease)}
+.eso__tavola img:hover{filter:brightness(1.05)}
 
 /* Le frecce per sfogliare: stessa lastra del bottone di chiusura,
    appoggiate ai bordi del video invece che sopra — cosi' non coprono

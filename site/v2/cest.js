@@ -19,6 +19,8 @@
 import { scheda } from './scheda.js';
 
 export const PEZZI = [
+  { id: 'marchio-alto', t: 'Il marchio che si costruisce', d: '0:05', w: 720, h: 1280,
+    n: 'Il logo animato in 9:16 per le storie: la linea che gira, lo scudo tricolore, il drone che si posa.' },
   { id: 'antincendio', t: 'La scadenza', d: '0:31', w: 720, h: 1280,
     n: 'Una scintilla in un quadro elettrico, poi la data: da fine settembre la manutenzione antincendio la firma solo un tecnico qualificato.' },
   { id: 'amministratori', t: 'Il servizio, per intero', d: '0:40', w: 720, h: 1280,
@@ -27,10 +29,8 @@ export const PEZZI = [
     n: 'Zero giorni liberi, sommerso dalle scartoffie: parla uno che ci è passato, e finisce con cosa cambia — niente più caos, tempi dimezzati.' },
   { id: 'ced-vita', t: 'Riprenditi la tua vita', d: '0:16', w: 720, h: 1280,
     n: 'Stessa promessa senza parole: i fogli che sommergono la scrivania, poi lo stesso uomo che esce dallo studio.' },
-  { id: 'marchio-largo', t: 'Il marchio che si costruisce', d: '0:05', w: 1280, h: 720,
-    n: 'Il logo animato in 16:9: la linea che gira, lo scudo tricolore, il drone che si posa — sigla di apertura e chiusura degli altri pezzi.' },
-  { id: 'marchio-alto', t: 'Lo stesso, in verticale', d: '0:05', w: 720, h: 1280,
-    n: 'La versione 9:16 per le storie: non il 16:9 ritagliato, ma l’aria ridistribuita sopra e sotto — se no lo scudo resta minuscolo.' },
+  { id: 'marchio-largo', t: 'Lo stesso, in orizzontale', d: '0:05', w: 1280, h: 720,
+    n: 'La versione 16:9, sigla di apertura e chiusura degli altri pezzi: non il verticale ritagliato, ma l’aria ridistribuita ai lati.' },
 ];
 
 const mio = scheda({ nome: 'cest', cartella: 'cest/', pezzi: PEZZI });

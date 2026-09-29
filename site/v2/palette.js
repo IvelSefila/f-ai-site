@@ -1,12 +1,12 @@
 import { PRESET, applicaGriglia, contenitoreDi, nomeContenitore,
-         mostraGriglia, grigliaVisibile, initGriglia, azzeraGriglia } from './griglia.js?v=20260911-135324';
+         mostraGriglia, grigliaVisibile, initGriglia, azzeraGriglia } from './griglia.js?v=20260928-69';
 import { initOrdine, bersaglioDi, spostaDi, puoAndare, rimetti, ordineCambiato,
-         iniziaTrascino, traTrascinando, azzeraOrdine } from './sposta.js?v=20260911-135324';
+         iniziaTrascino, traTrascinando, azzeraOrdine } from './sposta.js?v=20260928-69';
 
 /* ═══════════════════════════════════════════════════════════════════
  * PALETTE — tieni premuto su un riquadro e scegli il colore del sito
  *
- * Sette palette, non scelte a occhio. Ogni colore deve reggere otto
+ * Nove palette, non scelte a occhio. Ogni colore deve reggere otto
  * ruoli: accento e stati attivi sul fondo scuro, testo e stati attivi
  * sulla carta, inchiostro profondo, superficie piena, e la fascia con
  * la scritta bianca sopra. Le luminosità sono state cercate per
@@ -60,6 +60,18 @@ export const PALETTE = {
     'em-dim':'rgba(129,191,24,.16)','em-vivo':'#81bf18',
     'em-c':'#4a6d0d','em-c-bright':'#415f0c','em-c-light':'#547c0f','em-c-deep':'#38520a',
     'em-c-dim':'rgba(74,109,13,.10)','em-banda':'#547c0f' },
+
+  blu: { nome: 'Blu', nota: 'cobalto, diretto',
+    'em':'#3f8cff','em-bright':'#6ba6ff','em-light':'#96c0ff','em-deep':'#1f5fd1',
+    'em-dim':'rgba(63,140,255,.16)','em-vivo':'#2f74e6',
+    'em-c':'#1f5fd1','em-c-bright':'#1a52ba','em-c-light':'#2660d6','em-c-deep':'#163f8f',
+    'em-c-dim':'rgba(31,95,209,.10)','em-banda':'#2660d6' },
+
+  rubino: { nome: 'Rubino', nota: 'intenso, da titolo',
+    'em':'#f0506e','em-bright':'#f47f95','em-light':'#f7a3b3','em-deep':'#c11f3d',
+    'em-dim':'rgba(240,80,110,.16)','em-vivo':'#e23458',
+    'em-c':'#c41f3f','em-c-bright':'#ad1a37','em-c-light':'#c41f3f','em-c-deep':'#8c1530',
+    'em-c-dim':'rgba(196,31,63,.10)','em-banda':'#c41f3f' },
 };
 
 const CHIAVE = 'fai-palette';
@@ -91,7 +103,7 @@ function costruisciPannello() {
   d.setAttribute('aria-label', 'Colore del sito');
   d.innerHTML = `
     <p class="pal__tit mono">Colore del sito</p>
-    <p class="pal__sub">Sette palette. Ognuna è calcolata perché ogni testo
+    <p class="pal__sub">Nove palette. Ognuna è calcolata perché ogni testo
       resti leggibile sia sul fondo scuro sia sui blocchi su carta.</p>
     <div class="pal__griglia" role="radiogroup" aria-label="Palette disponibili">
       ${Object.entries(PALETTE).map(([id, p]) => `
@@ -111,7 +123,7 @@ function costruisciPannello() {
         <button type="button" class="btn btn--sm" data-pos-reset>Rimetti come prima</button>
       </div>
     </div>
-    <div class="pal__sez">
+    <div class="pal__sez pal__sez--griglia">
       <p class="pal__tit mono">Griglia · <span data-gr-nome>questo gruppo</span></p>
       <p class="pal__sub" style="margin-inline:0">Dodici colonne invisibili sotto tutto il
         sito. Scegli come stanno questo riquadro e quelli sopra e sotto.</p>
@@ -307,7 +319,7 @@ function armaPressioneLunga() {
     const box = e.target.closest?.(RIQUADRI);
     if (!box) return;
     /* se il dito è su un comando vero, quello ha la precedenza */
-    if (e.target.closest('button, a, input, select, textarea, summary, canvas')) return;
+    if (e.target.closest('button, a, input, select, textarea, summary, canvas, .eso__360-stage, .vetrina__fila')) return;
     bersaglio = box; x0 = e.clientX; y0 = e.clientY;
     box.classList.add('pal-attesa');
     timer = setTimeout(() => {

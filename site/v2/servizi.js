@@ -56,7 +56,7 @@ export const SERVIZI = {
     con: ['Adobe Photoshop', 'Adobe Illustrator', 'Adobe InDesign', 'GPT Image 2.5', 'Nano Banana 2'],
     dove: [
       ['#caso-union', 'Union Energia', 'un mondo inventato e nove pezzi di campagna'],
-      ['#caso-locanda', 'La Locanda del Castello', 'marchio, nove locandine animate, cinque brani'],
+      ['#caso-locanda', 'La Locanda del Castello', 'marchio, quindici pezzi animati, cinque brani'],
       ['#caso-cest', 'Studio CETS', 'un marchio nato da zero e messo subito al lavoro'],
     ],
   },
@@ -78,7 +78,7 @@ export const SERVIZI = {
     ],
     con: ['Adobe Premiere Pro', 'Adobe Audition', 'Gemini Omni', 'Grok Video', 'Seedance 2.5', 'ElevenLabs'],
     dove: [
-      ['#lavori', 'Ventiquattro video', 'nei quattro casi qui sotto, tutti apribili'],
+      ['#lavori', 'Quaranta video', 'nei quattro casi qui sotto, tutti apribili'],
       ['#caso-eso', 'Human Robots', 'un prodotto raccontato prima di poterlo riprendere'],
     ],
   },
@@ -125,6 +125,93 @@ export const SERVIZI = {
       ['#top', 'Questa pagina', 'scritta riga per riga, zero dipendenze esterne'],
       ['#banchi', 'Alfred e Max Video Downloader', 'due applicazioni finite, non dimostrazioni'],
       ['#laboratorio', 'Il laboratorio', 'quattro motori di gioco e un costruttore'],
+    ],
+  },
+
+  siti: {
+    num: '05', cat: 'Presenza', tit: 'Siti internet',
+    lede: 'Creo i siti in puro codice, senza builder. E dove serve WordPress — per chi deve poi gestirselo da solo — scrivo temi e plugin su misura.',
+    consegno: [
+      'Siti in puro codice: HTML, CSS e JavaScript, senza framework di terze parti',
+      'Temi WordPress disegnati per quel sito, non adattati da uno esistente',
+      'Plugin WordPress su misura, quando la funzione che serve non esiste già',
+      'Un sito veloce perché non porta dietro codice che non usa',
+      'I file sorgente, modificabili da chiunque sappia leggerli',
+    ],
+    lavoro: [
+      'Parto dai contenuti veri, non da un modello da riempire: la struttura nasce da cosa c’è da dire.',
+      'Scelgo puro codice o WordPress sul bisogno di chi lo userà dopo, non per abitudine.',
+      'Ogni pagina la controllo su schermi diversi prima di dichiararla finita, non solo sul mio.',
+    ],
+    con: ['HTML/CSS/JS', 'WordPress', 'Web design e prototipazione', 'n8n', 'Automazioni AI'],
+    dove: [
+      ['#top', 'Questa pagina', 'lo stesso sito che stai guardando, zero dipendenze esterne'],
+      ['#banchi', 'Alfred e Max Video Downloader', 'le interfacce delle due applicazioni'],
+    ],
+  },
+
+  webapp: {
+    num: '06', cat: 'Strumenti', tit: 'Web app',
+    lede: 'Applicazioni vere, non prototipi da vetrina. Quando lo strumento giusto non esiste, lo scrivo io.',
+    consegno: [
+      'Un’applicazione funzionante, non solo una schermata disegnata',
+      'La parte che lavora dietro le quinte: dati, code, automazioni',
+      'L’interfaccia con cui ci si lavora tutti i giorni, non solo alla presentazione',
+      'Aggiornamenti quando il lavoro reale cambia le regole',
+      'Documentazione minima ma vera: cosa fa, come si usa',
+    ],
+    lavoro: [
+      'Costruisco prima il prototipo navigabile: molte idee muoiono lì, ed è un risparmio.',
+      'Scelgo locale o cloud sulle cose che contano — dati, costo, velocità — non per abitudine.',
+      'Un’applicazione la considero finita quando la uso io stesso tutti i giorni, non quando compila.',
+    ],
+    con: ['n8n', 'ComfyUI', 'Ollama', 'LM Studio', 'Webapp su misura', 'Agenti AI'],
+    dove: [
+      ['#banchi', 'Alfred', 'il gestionale social che uso ogni giorno, non una demo'],
+      ['#banchi', 'Max Video Downloader', 'l’app che comprime e scarica video, in produzione'],
+    ],
+  },
+
+  marketing: {
+    num: '07', cat: 'Diffusione', tit: 'Campagne media',
+    lede: 'Creo la campagna di marketing da zero — idea, direzione, materiali — e la seguo fino alla pubblicazione, su più canali insieme, digitali e non.',
+    consegno: [
+      'L’idea della campagna e la direzione creativa che la regge',
+      'Il piano media: quali canali, in che ordine, con che budget',
+      'Gli adattamenti della campagna per ogni canale scelto',
+      'La pubblicazione vera e propria, coordinata fra i canali',
+      'Una lettura dei risultati, canale per canale',
+    ],
+    lavoro: [
+      'Parto dall’idea, non dal formato: il canale si sceglie dopo, in base a chi deve vederla.',
+      'Il digitale e il non digitale li tratto come un unico piano, non come due lavori separati.',
+      'Non mi fermo alla consegna dei file: seguo la campagna fino a quando è online o stampata.',
+    ],
+    con: ['Meta Business Suite', 'Postiz', 'Adobe Photoshop', 'Adobe InDesign', 'Adobe Illustrator'],
+    dove: [
+      ['#caso-union', 'Union Energia', 'la stessa campagna declinata su formati e canali diversi'],
+      ['#caso-locanda', 'La Locanda del Castello', 'locandine, social e materiali per ogni serata'],
+    ],
+  },
+
+  jingle: {
+    num: '08', cat: 'Suono', tit: 'Jingle e canzoni pubblicitarie',
+    lede: 'La firma sonora di una campagna o di un marchio: musica e jingle originali, non un brano preso da una libreria.',
+    consegno: [
+      'Il jingle o la canzone, scritti per quel marchio o quella campagna',
+      'Le versioni per ogni durata: lo spot lungo e il taglio breve per i social',
+      'La voce, quando la canzone la prevede, pulita e mixata',
+      'Il file sorgente e le stem separate, per rimontarlo su un nuovo spot',
+      'Una versione strumentale, per chi la vuole sotto un altro parlato',
+    ],
+    lavoro: [
+      'Parto dal marchio o dalla campagna, non da un genere: la musica deve somigliare a chi la usa.',
+      'Genero un tema alla volta e lo affino, non ne scelgo uno fra cinquanta scritti a caso.',
+      'Il ritornello lo verifico canticchiato, non solo ascoltato: se non si ricorda a memoria, non è un jingle.',
+    ],
+    con: ['Lyria/Flow Music', 'ElevenLabs', 'Adobe Audition'],
+    dove: [
+      ['#caso-locanda', 'La Locanda del Castello', 'cinque brani originali, uno per ogni atmosfera della casa'],
     ],
   },
 };

@@ -22,6 +22,11 @@ export function leggiColori() {
   EM_DEEP   = v('--em-deep', EM_DEEP);
 }
 const INK = '#f2f4f7';
+/* letta da uno scope che non ombreggia mai EM: dentro keyVisual serve
+   il valore ORIGINALE prima di ombreggiarlo con quello scelto, e un
+   "const EM" locale blocca (temporal dead zone) l'intero corpo della
+   funzione, anche le righe scritte prima della sua dichiarazione. */
+const coloriAttuali = () => [EM, EM_BRIGHT, EM_LIGHT, EM_DEEP];
 
 /* ── i colori del disegno seguono la palette ──────────────────────
    Qui dentro c'erano quattordici rgba() verdi scritti a mano piu' tre
@@ -94,8 +99,57 @@ export function keyVisual(ctx, o) {
   const { w, h, seed } = o;
   const ai = clamp(o.ai ?? 0.3, 0, 1);
   const weight = clamp(o.weight ?? 0.55, 0, 1);
-  const title = (o.title ?? 'Un’idea,\npiù formati').toUpperCase();
+  const maiuscolo = o.maiuscolo ?? true;
+  const titoloGrezzo = o.title ?? 'Un’idea,\npiù formati';
+  const title = maiuscolo ? titoloGrezzo.toUpperCase() : titoloGrezzo;
   const kicker = (o.kicker ?? 'MF/AI · key visual').toUpperCase();
+  const pos = o.pos || 'basso';   /* dove va il blocco titolo: basso, alto, centro, sinistra, destra, diagonale */
+  const fontTitolo = o.font || '"Barlow Condensed","Arial Narrow",sans-serif';
+  const pesoFont = o.grassetto ? 800 : 600;   /* normale o grassetto, sul font del titolo */
+  const corsivoFont = o.corsivo ? 'italic ' : '';
+  /* il "grassetto" richiesto al font non basta: i font caricati (sia
+     quelli in dotazione al sito sia quelli di Google) portano un solo
+     peso incorporato, quindi il canvas ignora silenziosamente 800 e
+     disegna comunque a 600 — bottone senza effetto. Un ripasso col
+     tratto (stroke sopra il riempimento) inspessisce le lettere
+     davvero, qualunque sia il font scelto. */
+  const grassettoFinto = !!o.grassetto;
+  /* il colore della "grafica" ridisegna tutto il campo generativo —
+     griglia, bagliore, diaframma, banda, schegge — non solo il kicker.
+     Le tre tinte derivate (chiara, brillante, profonda) nascono dalla
+     stessa base scelta, con lo stesso rapporto che il sito usa per la
+     sua palette, cosi' la composizione resta coerente anche fuori dai
+     nove colori predefiniti.
+     Mai riassegnare le "let" esportate: sono lo stato condiviso di
+     tutto il sito. Le ombreggio solo dentro questa funzione — const
+     locali con lo stesso nome, valide solo qui, il resto del sito
+     non se ne accorge. Devono stare PRIMA di ogni uso di EM qui sotto:
+     una volta dichiarato un "const EM" in questo scope, il nome e'
+     bloccato (temporal dead zone) dall'inizio della funzione. */
+  const mix = (hex, verso, q) => { const [rr, gg, bb] = _tri(hex);
+    const m = i => Math.round([rr, gg, bb][i] + q * (verso[i] - [rr, gg, bb][i]));
+    /* esadecimale, non rgb(): alfa() e _tri() leggono solo #rrggbb, e un
+       rgb(...) diventava nero — anelli e griglia sparivano */
+    return '#' + [0, 1, 2].map(i => m(i).toString(16).padStart(2, '0')).join(''); };
+  const [EM0, EM_BRIGHT0, EM_LIGHT0, EM_DEEP0] = coloriAttuali();
+  const EM = o.grafica || EM0;
+  const EM_BRIGHT = o.grafica ? mix(o.grafica, [255, 255, 255], .35) : EM_BRIGHT0;
+  const EM_LIGHT = o.grafica ? mix(o.grafica, [255, 255, 255], .55) : EM_LIGHT0;
+  const EM_DEEP = o.grafica ? mix(o.grafica, [0, 0, 0], .35) : EM_DEEP0;
+  const ACC = o.color || EM0;      /* il colore dell'accento, scelto o quello della palette del sito */
+  const INKC = o.textColor || INK;             /* colore del testo del titolo */
+  const fontScale = clamp(o.fontScale ?? 1, 0.5, 1.8);
+  const letterSp = o.letterSpacing ?? 0;       /* px fra le lettere del titolo */
+  const lineMul = clamp(o.lineHeight ?? 1, 0.7, 1.8);
+  const allineaDefault = pos === 'destra' ? 'destra' : pos === 'diagonale' ? 'centro' : 'sinistra';
+  const allinea = o.align || allineaDefault;   /* sinistra, centro, destra — indipendente dalla posizione */
+  /* lo sfondo non e' piu' per forza quasi-nero: se scelto, il duotono e
+     il velo dietro al testo nascono dalla stessa tinta scura scelta */
+  const baseSfondo = o.bgColor ? _tri(o.bgColor) : NERO;
+  const campoLocale = (col, forza) => { const [rr, gg, bb] = _tri(col);
+    const m = i => Math.round(baseSfondo[i] + forza * ([rr, gg, bb][i] - baseSfondo[i]));
+    return `rgb(${m(0)},${m(1)},${m(2)})`; };
+  const velo = a => `rgba(${baseSfondo[0]},${baseSfondo[1]},${baseSfondo[2]},${a})`;
   const r = rng(seed);
   const S = Math.min(w, h) / 700;
   const margin = Math.round(lerp(58, 34, ai) * S);
@@ -111,9 +165,9 @@ export function keyVisual(ctx, o) {
 
   /* 1 · campo — duotono, non nero piatto */
   const field = ctx.createLinearGradient(0, 0, w, h);
-  field.addColorStop(0, campo(EM, .02));
-  field.addColorStop(lerp(0.55, 0.38, ai), campo(EM, .06));
-  field.addColorStop(1, campo(EM, 0));
+  field.addColorStop(0, campoLocale(EM, .02));
+  field.addColorStop(lerp(0.55, 0.38, ai), campoLocale(EM, .06));
+  field.addColorStop(1, campoLocale(EM, 0));
   ctx.fillStyle = field;
   ctx.fillRect(0, 0, w, h);
 
@@ -210,51 +264,122 @@ export function keyVisual(ctx, o) {
     ctx.restore();
   }
 
-  /* 5 · velo — riporta il piede a leggibilità garantita, sempre */
-  const veil = ctx.createLinearGradient(0, h * 0.34, 0, h);
-  veil.addColorStop(0, 'rgba(4,7,9,0)');
-  veil.addColorStop(0.55, 'rgba(4,7,9,.72)');
-  veil.addColorStop(1, 'rgba(4,7,9,.96)');
-  ctx.fillStyle = veil;
-  ctx.fillRect(0, h * 0.34, w, h * 0.66);
+  /* 5 · velo — riporta il testo a leggibilità garantita, dove che sia */
+  const bandaCentrale = pos === 'centro' || pos === 'diagonale' || pos === 'sinistra' || pos === 'destra';
+  const veil = pos === 'alto'
+    ? ctx.createLinearGradient(0, 0, 0, h * 0.66)
+    : bandaCentrale
+      ? ctx.createLinearGradient(0, h * 0.24, 0, h * 0.76)
+      : ctx.createLinearGradient(0, h * 0.34, 0, h);
+  if (pos === 'alto') {
+    veil.addColorStop(0, velo(.96));
+    veil.addColorStop(0.55, velo(.72));
+    veil.addColorStop(1, velo(0));
+    ctx.fillStyle = veil; ctx.fillRect(0, 0, w, h * 0.66);
+  } else if (bandaCentrale) {
+    veil.addColorStop(0, velo(0));
+    veil.addColorStop(0.5, velo(.82));
+    veil.addColorStop(1, velo(0));
+    ctx.fillStyle = veil; ctx.fillRect(0, h * 0.24, w, h * 0.52);
+  } else {
+    veil.addColorStop(0, velo(0));
+    veil.addColorStop(0.55, velo(.72));
+    veil.addColorStop(1, velo(.96));
+    ctx.fillStyle = veil; ctx.fillRect(0, h * 0.34, w, h * 0.66);
+  }
 
-  /* 6 · blocco tipografico — misurato per stare sempre dentro */
+  /* 6 · blocco tipografico — misurato per stare sempre dentro, ovunque vada */
   const kickSize = Math.max(9, 12 * S);
   ctx.font = `600 ${kickSize}px ui-monospace, Consolas, monospace`;
   const metaSize = kickSize;
 
-  let tSize = lerp(88, 66, ai) * S * (0.66 + weight * 0.78);
+  let tSize = lerp(88, 66, ai) * S * (0.66 + weight * 0.78) * fontScale;
+  if (pos === 'diagonale') tSize *= 0.86;   /* ruotato, deve restare dentro anche in diagonale */
+  if (pos === 'sinistra' || pos === 'destra') tSize *= 0.9;   /* colonna piu' stretta */
   let lines, lh;
-  const maxW = w - margin * 2;
+  ctx.letterSpacing = `${letterSp}px`;
+  /* la regione dove il testo puo' stare: piena larghezza per basso/alto/
+     centro, una colonna di lato per sinistra/destra, un fuso stretto
+     per diagonale (che poi ruota) */
+  const regionX0 = pos === 'destra' ? w - margin - (w - margin * 2) * 0.52 : margin;
+  const regionX1 = pos === 'sinistra' ? margin + (w - margin * 2) * 0.52 : w - margin;
+  const maxW = pos === 'diagonale' ? w * 0.86 - margin * 2 : regionX1 - regionX0;
   const maxBlock = h * 0.52;
   for (let guard = 0; guard < 24; guard++) {
-    ctx.font = `600 ${tSize}px "Barlow Condensed", "Arial Narrow", sans-serif`;
+    ctx.font = `${corsivoFont}${pesoFont} ${tSize}px ${fontTitolo}`;
     lines = title.split('\n').flatMap(l => wrap(ctx, l, maxW));
-    lh = tSize * 0.85;
+    lh = tSize * 0.85 * lineMul;
     if (lh * lines.length <= maxBlock && lines.every(l => ctx.measureText(l).width <= maxW)) break;
     tSize *= 0.92;
   }
 
   const barH = Math.round(Math.max(3, 7 * S));
-  const baseY = h - margin - metaSize * 2.1;
-  let ty = baseY - lh * (lines.length - 1);
+  const blockH = lh * lines.length;
 
-  /* accenti: uno solo quando decido io */
-  const barY = ty - tSize * 0.86 - barH * 2.6;
-  for (let i = 0; i < accents; i++) {
-    const bw = maxW * (i === 0 ? lerp(0.34, 0.15, ai) : 0.05 + r() * 0.12);
-    const bx = margin + (i === 0 ? 0 : maxW * (0.4 + r() * 0.55));
-    ctx.fillStyle = i === 0 ? EM : alfa(EM, 0.45 + r() * 0.4);
-    ctx.fillRect(Math.round(bx), Math.round(barY), Math.round(bw), barH);
+  /* il punto di ancoraggio orizzontale e l'allineamento del testo sono
+     due scelte separate: dove sta la colonna (pos) e come il testo si
+     mette in fila dentro quella colonna (allinea) */
+  const ancoraX = allinea === 'destra' ? regionX1 : allinea === 'centro' ? (regionX0 + regionX1) / 2 : regionX0;
+
+  if (pos === 'diagonale') {
+    /* il titolo taglia il centro sull'asse della composizione, come una
+       fascia stampata sopra — l'effetto che i punti fissi non possono dare */
+    ctx.save();
+    ctx.translate(w / 2, h / 2);
+    ctx.rotate(diag * 0.5);
+    ctx.textAlign = 'center';
+    let ty = -blockH / 2 + tSize * 0.78;
+    const barY = ty - tSize * 0.86 - barH * 2.6;
+    ctx.fillStyle = ACC;
+    ctx.fillRect(Math.round(-maxW * lerp(0.17, 0.075, ai)), Math.round(barY),
+      Math.round(maxW * lerp(0.34, 0.15, ai)), barH);
+    ctx.font = `600 ${kickSize}px ui-monospace, Consolas, monospace`;
+    ctx.fillText(kicker, 0, barY - barH * 2.2);
+    ctx.font = `${corsivoFont}${pesoFont} ${tSize}px ${fontTitolo}`;
+    ctx.fillStyle = INKC;
+    if (grassettoFinto) { ctx.strokeStyle = INKC; ctx.lineWidth = tSize * 0.035; ctx.lineJoin = 'round'; }
+    for (const l of lines) {
+      if (grassettoFinto) ctx.strokeText(l, 0, ty);
+      ctx.fillText(l, 0, ty); ty += lh;
+    }
+    ctx.restore();
+    ctx.textAlign = 'left';
+  } else {
+    const baseY = pos === 'alto' ? margin + metaSize * 1.4 + blockH
+      : (pos === 'centro' || pos === 'sinistra' || pos === 'destra') ? h / 2 + blockH / 2 - lh * 0.15
+      : h - margin - metaSize * 2.1;
+    let ty = baseY - lh * (lines.length - 1);
+
+    ctx.textAlign = allinea === 'destra' ? 'right' : allinea === 'centro' ? 'center' : 'left';
+
+    /* accenti: uno solo quando decido io — parte dall'ancora, non
+       sempre dal margine sinistro, cosi' segue l'allineamento scelto */
+    const barY = ty - tSize * 0.86 - barH * 2.6;
+    const barW0 = maxW * lerp(0.34, 0.15, ai);
+    const barX0 = allinea === 'destra' ? ancoraX - barW0 : allinea === 'centro' ? ancoraX - barW0 / 2 : ancoraX;
+    ctx.fillStyle = ACC;
+    ctx.fillRect(Math.round(barX0), Math.round(barY), Math.round(barW0), barH);
+    for (let i = 1; i < accents; i++) {
+      const bw = maxW * (0.05 + r() * 0.12);
+      const bx = regionX0 + maxW * (0.4 + r() * 0.55);
+      ctx.fillStyle = alfa(ACC, 0.45 + r() * 0.4);
+      ctx.fillRect(Math.round(bx), Math.round(barY), Math.round(bw), barH);
+    }
+
+    ctx.font = `600 ${kickSize}px ui-monospace, Consolas, monospace`;
+    ctx.fillStyle = ACC;
+    ctx.fillText(kicker, ancoraX, barY - barH * 2.2);
+
+    ctx.font = `${corsivoFont}${pesoFont} ${tSize}px ${fontTitolo}`;
+    ctx.fillStyle = INKC;
+    if (grassettoFinto) { ctx.strokeStyle = INKC; ctx.lineWidth = tSize * 0.035; ctx.lineJoin = 'round'; }
+    for (const l of lines) {
+      if (grassettoFinto) ctx.strokeText(l, ancoraX, ty);
+      ctx.fillText(l, ancoraX, ty); ty += lh;
+    }
+    ctx.textAlign = 'left';
   }
-
-  ctx.font = `600 ${kickSize}px ui-monospace, Consolas, monospace`;
-  ctx.fillStyle = EM;
-  ctx.fillText(kicker, margin, barY - barH * 2.2);
-
-  ctx.font = `600 ${tSize}px "Barlow Condensed", "Arial Narrow", sans-serif`;
-  ctx.fillStyle = INK;
-  for (const l of lines) { ctx.fillText(l, margin, ty); ty += lh; }
+  ctx.letterSpacing = '0px';
 
   ctx.font = `600 ${metaSize}px ui-monospace, Consolas, monospace`;
   ctx.fillStyle = 'rgba(195,204,214,.6)';

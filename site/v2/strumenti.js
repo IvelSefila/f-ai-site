@@ -99,6 +99,18 @@ export const SCHEDE = {
          'Ricerca di riferimenti e casi',
          'Confronto rapido fra prodotti o servizi'],
   },
+  'Hermes': {
+    cos: 'Modello locale (Qwen 3.8) che gira sulla mia workstation e fa da orchestratore a costo zero fra gli altri assistenti.',
+    io: ['Smistare un compito verso l’assistente più adatto, senza consumare crediti',
+         'Leggere e aggiornare la memoria di progetto prima di delegare',
+         'Girare offline, per tutto quello che non deve uscire dal mio computer'],
+  },
+  'Orca': {
+    cos: 'L’applicazione dove tengo insieme dodici assistenti diversi, ognuno nel suo terminale.',
+    io: ['Passare da un assistente all’altro senza cambiare finestra',
+         'Tenere Hermes come regista che decide chi chiamare',
+         'Un solo posto per la cronologia di tutte le conversazioni con l’AI'],
+  },
 
   /* ── 03 · immagine, video e audio generati ────────────────────── */
   'GPT Image 2.5': {
@@ -114,6 +126,18 @@ export const SCHEDE = {
          'Togliere elementi di troppo',
          'Allargare un’immagine per farla entrare in un altro formato',
          'Ritocchi mirati lasciando identico il resto'],
+  },
+  'Krea 2': {
+    cos: 'Modello di immagini pensato per il fotorealismo e per texture e materiali credibili.',
+    io: ['Immagini realistiche dove la texture deve reggere da vicino',
+         'Varianti veloci della stessa idea per scegliere la strada giusta',
+         'Base fotorealistica su cui poi rifinisco in Photoshop'],
+  },
+  'Qwen Image 2.1': {
+    cos: 'Modello open di Alibaba, forte su testo dentro l’immagine e composizioni precise.',
+    io: ['Scritte leggibili dentro il visual, senza rifarle dopo in Photoshop',
+         'Layout con più elementi disposti dove voglio io',
+         'Alternativa quando gli altri modelli sbagliano il testo'],
   },
   'Grok Image': {
     cos: 'Generatore di immagini di xAI.',
@@ -155,7 +179,7 @@ export const SCHEDE = {
          'Musica senza problemi di diritti, perché nasce per quel pezzo',
          'Varianti della stessa base per durate diverse'],
   },
-  'Lyria': {
+  'Lyria/Flow Music': {
     cos: 'Modello musicale di Google. Genera brani strumentali su descrizione, con un ' +
          'controllo fine su strumenti, ritmo e andamento.',
     io: ['Musica di sottofondo su misura per un montaggio',
@@ -295,6 +319,18 @@ export const SCHEDE = {
          'Pubblicazione contemporanea su più piattaforme',
          'Code di contenuti pronti, per non restare scoperti'],
   },
+  'TikTok Studio': {
+    cos: 'L’app ufficiale di TikTok per pubblicare, programmare e leggere i dati dei video.',
+    io: ['Programmazione dei video con giorno e ora scelti',
+         'Sottotitoli e copertine sistemati prima della pubblicazione',
+         'Dati di ogni video: quanto ha girato, dove si è fermato chi guardava'],
+  },
+  'Alfred': {
+    cos: 'L’applicazione che ho scritto io: porta i miei canali social dall’inizio alla fine, dalla fonte alla pubblicazione.',
+    io: ['Raccogliere le fonti e scegliere cosa vale la pena pubblicare',
+         'Produrre i video, non solo programmarli',
+         'Pubblicare da solo, con ogni passaggio visibile e fermabile'],
+  },
 };
 
 /* ── la scheda ────────────────────────────────────────────────────── */
@@ -312,11 +348,6 @@ function costruisci() {
     <p class="scheda__eti mono">Cosa ci faccio</p>
     <ul class="scheda__lista"></ul>
     <div class="scheda__piede">
-      <!-- La scheda e' modale: finche' e' aperta, gli strumenti dietro non
-           si toccano. La prima versione di questa riga prometteva il
-           contrario, e una promessa che non si mantiene e' peggio del
-           silenzio. -->
-      <span class="mono">Uno alla volta · Esc per chiudere</span>
       <button type="button" class="btn btn--sm" data-scheda-chiudi>Chiudi</button>
     </div>`;
   document.body.appendChild(d);
