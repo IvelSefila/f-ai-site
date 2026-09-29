@@ -2,16 +2,16 @@
 * app.js — la sessione. Tiene il filo fra le prove, parla, misura,
 * e alla fine scrive il dossier. Nessuna libreria.
 * ═══════════════════════════════════════════════════════════════════ */
-import { initHero } from './hero.js?v=20260928-69';
-import { initStrumenti } from './strumenti.js?v=20260928-69';
-import { initUnion } from './union.js?v=20260928-69';
-import { initEso } from './eso.js?v=20260928-69';
-import { initLocanda } from './locanda.js?v=20260928-69';
-import { initCest } from './cest.js?v=20260928-69';
-import { initPalette } from './palette.js?v=20260928-69';
-import { keyVisual, radar, MODES, rng, leggiColori} from './engine.js?v=20260928-69';
-import { initBrief } from './brief.js?v=20260928-69';
-import { initServizi } from './servizi.js?v=20260928-69';
+import { initHero } from './hero.js?v=20260928-76';
+import { initStrumenti } from './strumenti.js?v=20260928-76';
+import { initUnion } from './union.js?v=20260928-76';
+import { initEso } from './eso.js?v=20260928-76';
+import { initLocanda } from './locanda.js?v=20260928-76';
+import { initCest } from './cest.js?v=20260928-76';
+import { initPalette } from './palette.js?v=20260928-76';
+import { keyVisual, radar, MODES, rng, leggiColori} from './engine.js?v=20260928-76';
+import { initBrief } from './brief.js?v=20260928-76';
+import { initServizi } from './servizi.js?v=20260928-76';
 
 const $ = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => [...r.querySelectorAll(s)];
