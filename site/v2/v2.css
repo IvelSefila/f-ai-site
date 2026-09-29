@@ -4338,3 +4338,9 @@ body.mirino-on, body.mirino-on * { cursor: none !important; }
   .bar__pal, .bar__pal__eti + .bar__pal { margin-left: 8px; }
   .bar__contatti { margin-left: auto; }
 }
+
+/* ── Pulsanti dell'eroe: piu' grandi e piu' in basso, a meta' fra il carosello e il bordo ── */
+@media (min-width: 901px) {
+  .hero__actions { margin-top: clamp(64px, 10vh, 112px); margin-bottom: clamp(24px, 4vh, 48px); gap: 16px; }
+  .hero__actions .btn { min-height: 64px; padding: 0 40px; font-size: clamp(14px, 1.05vw, 17px); }
+}

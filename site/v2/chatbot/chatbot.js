@@ -2,8 +2,8 @@
  * Widget Controller "Nous" — F/AI Portfolio
  * Versione 1.0 (Settembre 2026)
  */
-import { CONFIG } from './chatbot.config.js?v=20260928-130';
-import { ChatEngine } from './chatbot.engine.js?v=20260928-130';
+import { CONFIG } from './chatbot.config.js?v=20260928-131';
+import { ChatEngine } from './chatbot.engine.js?v=20260928-131';
 
 /* Cosa sta girando: testi mostrati in alto e nel pannello dettagli (italiano semplice) */
 const ENGINE_INFO = {
