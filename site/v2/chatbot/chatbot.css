@@ -5,17 +5,17 @@
    ═════════════════════════════════════════════════════════════════ */
 
 :root {
-  --nodo-em: #14c08a;
-  --nodo-em-bright: #4fe3b0;
-  --nodo-em-light: #7fe3bd;
-  --nodo-em-deep: #0a8f63;
-  --nodo-em-dim: rgba(20, 192, 138, 0.22);
+  --nodo-em: var(--em, #14c08a);
+  --nodo-em-bright: var(--em-bright, #4fe3b0);
+  --nodo-em-light: var(--em-light, #7fe3bd);
+  --nodo-em-deep: var(--em-deep, #0a8f63);
+  --nodo-em-dim: color-mix(in srgb, var(--nodo-em) 22%, transparent);
   --nodo-bg: #070a0f;
   --nodo-panel: rgba(9, 13, 20, 0.94);
   --nodo-text: #c3ccd6;
   --nodo-title: #f2f4f7;
-  --nodo-muted: #7f8c9b;
-  --nodo-border: rgba(20, 192, 138, 0.28);
+  --nodo-muted: #93a0af;
+  --nodo-border: color-mix(in srgb, var(--nodo-em) 28%, transparent);
   --nodo-radius-card: 16px;
   --nodo-radius-pill: 999px;
   --nodo-font-title: 'Barlow Condensed', ui-sans-serif, sans-serif;
@@ -35,7 +35,7 @@
   border-radius: var(--nodo-radius-pill);
   background: var(--nodo-panel);
   border: 1.5px solid var(--nodo-border);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6), 0 0 16px rgba(20, 192, 138, 0.22);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6), 0 0 16px color-mix(in srgb, var(--nodo-em) 22%, transparent);
   backdrop-filter: blur(16px);
   cursor: pointer;
   display: grid;
@@ -46,7 +46,7 @@
 .nodo-fab:hover {
   transform: scale(1.06);
   border-color: var(--nodo-em-bright);
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7), 0 0 24px rgba(20, 192, 138, 0.4);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7), 0 0 24px color-mix(in srgb, var(--nodo-em) 40%, transparent);
 }
 
 .nodo-fab:focus-visible {
@@ -169,7 +169,7 @@
 
   .nodo-mode-badge {
     padding: 3px 7px;
-    font-size: 9px;
+    font-size: 12px;
   }
 }
 
@@ -205,7 +205,7 @@
 
 .nodo-header-title h3 span {
   font-family: var(--nodo-font-mono);
-  font-size: 11px;
+  font-size: 12px;
   color: var(--nodo-em-bright);
   font-weight: 400;
   letter-spacing: 0.08em;
@@ -221,13 +221,13 @@
 /* ── Mode Badge (Selettore di Modalità Istantaneo / GPU / Cloud) ─── */
 .nodo-mode-badge {
   font-family: var(--nodo-font-mono);
-  font-size: 10px;
+  font-size: 12px;
   font-weight: 500;
   text-transform: uppercase;
   letter-spacing: 0.06em;
   padding: 4px 9px;
   border-radius: var(--nodo-radius-pill);
-  background: rgba(20, 192, 138, 0.08);
+  background: color-mix(in srgb, var(--nodo-em) 8%, transparent);
   border: 1px solid var(--nodo-border);
   color: var(--nodo-em-bright);
   cursor: pointer;
@@ -241,10 +241,10 @@
 }
 
 .nodo-mode-badge:hover {
-  background: rgba(20, 192, 138, 0.2);
+  background: color-mix(in srgb, var(--nodo-em) 20%, transparent);
   border-color: var(--nodo-em-bright);
   color: #ffffff;
-  box-shadow: 0 0 10px rgba(20, 192, 138, 0.35);
+  box-shadow: 0 0 10px color-mix(in srgb, var(--nodo-em) 35%, transparent);
   transform: translateY(-1px);
 }
 
@@ -259,14 +259,14 @@
 
 .nodo-mode-badge--instant {
   color: var(--nodo-em-light);
-  border-color: rgba(20, 192, 138, 0.3);
+  border-color: color-mix(in srgb, var(--nodo-em) 30%, transparent);
 }
 
 .nodo-mode-badge--webgpu {
-  background: rgba(79, 227, 176, 0.16);
+  background: color-mix(in srgb, var(--nodo-em-bright) 16%, transparent);
   border-color: var(--nodo-em-bright);
   color: #ffffff;
-  box-shadow: 0 0 8px rgba(79, 227, 176, 0.3);
+  box-shadow: 0 0 8px color-mix(in srgb, var(--nodo-em-bright) 30%, transparent);
 }
 
 .nodo-mode-badge--cloud {
@@ -302,7 +302,7 @@
   justify-content: space-between;
   align-items: center;
   font-family: var(--nodo-font-mono);
-  font-size: 10px;
+  font-size: 12px;
   color: var(--nodo-em-light);
   letter-spacing: 0.02em;
 }
@@ -340,7 +340,7 @@
 .nodo-toast {
   padding: 6px 14px;
   font-family: var(--nodo-font-mono);
-  font-size: 11px;
+  font-size: 12px;
   line-height: 1.4;
   border-bottom: 1px solid rgba(255, 85, 85, 0.35);
   background: rgba(28, 14, 16, 0.96);
@@ -454,8 +454,8 @@
 
 .nodo-msg--user {
   align-self: flex-end;
-  background: rgba(20, 192, 138, 0.14);
-  border: 1px solid rgba(20, 192, 138, 0.38);
+  background: color-mix(in srgb, var(--nodo-em) 14%, transparent);
+  border: 1px solid color-mix(in srgb, var(--nodo-em) 38%, transparent);
   color: #ffffff;
   border-radius: var(--nodo-radius-card);
   border-bottom-right-radius: 4px;
@@ -474,14 +474,14 @@
 
 .nodo-action-link {
   font-family: var(--nodo-font-mono);
-  font-size: 11px;
+  font-size: 12px;
   color: var(--nodo-em-bright);
   text-decoration: none;
   display: inline-flex;
   align-items: center;
   gap: 4px;
   padding: 4px 8px;
-  background: rgba(20, 192, 138, 0.12);
+  background: color-mix(in srgb, var(--nodo-em) 12%, transparent);
   border-radius: var(--nodo-radius-pill);
   transition: background 0.15s, color 0.15s;
 }
@@ -524,9 +524,9 @@
 .nodo-chip {
   flex-shrink: 0;
   font-family: var(--nodo-font-mono);
-  font-size: 11px;
+  font-size: 12px;
   white-space: nowrap;
-  background: rgba(20, 192, 138, 0.08);
+  background: color-mix(in srgb, var(--nodo-em) 8%, transparent);
   border: 1px solid var(--nodo-em-dim);
   color: var(--nodo-em-light);
   padding: 6px 14px;
@@ -569,7 +569,7 @@
 
 .nodo-input:focus {
   border-color: var(--nodo-em);
-  background: rgba(20, 192, 138, 0.04);
+  background: color-mix(in srgb, var(--nodo-em) 4%, transparent);
 }
 
 .nodo-input:disabled {
@@ -615,7 +615,7 @@
   font-family: var(--nodo-font-body);
   font-size: 13px;
   color: var(--nodo-title);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5), 0 0 12px rgba(20, 192, 138, 0.25);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5), 0 0 12px color-mix(in srgb, var(--nodo-em) 25%, transparent);
   max-width: 230px;
   opacity: 0;
   transform: translateY(8px);
@@ -685,11 +685,11 @@
 
 .nodo-webgpu-offer {
   font-family: var(--nodo-font-mono);
-  font-size: 11px;
+  font-size: 12px;
   padding: 5px 12px;
   border-radius: var(--nodo-radius-pill);
   border: 1px solid var(--nodo-border);
-  background: rgba(20, 192, 138, 0.1);
+  background: color-mix(in srgb, var(--nodo-em) 10%, transparent);
   color: var(--nodo-em-bright);
   cursor: pointer;
   transition: background 0.15s, color 0.15s, border-color 0.15s;
@@ -705,7 +705,7 @@
 .nodo-msg--lead {
   border-color: var(--nodo-em) !important;
   border-width: 1.5px !important;
-  background: rgba(20, 192, 138, 0.06) !important;
+  background: color-mix(in srgb, var(--nodo-em) 6%, transparent) !important;
 }
 
 .nodo-lead-cta {
@@ -744,7 +744,7 @@
 
 .nodo-wiz-btn {
   font-family: var(--nodo-font-mono);
-  font-size: 11px;
+  font-size: 12px;
   padding: 6px 12px;
   border-radius: var(--nodo-radius-pill);
   border: 1px solid var(--nodo-border);
@@ -760,7 +760,7 @@
 .nodo-wiz-btn:hover:not(:disabled) {
   border-color: var(--nodo-em);
   color: var(--nodo-em-bright);
-  background: rgba(20, 192, 138, 0.1);
+  background: color-mix(in srgb, var(--nodo-em) 10%, transparent);
   transform: translateY(-1px);
 }
 
@@ -779,12 +779,12 @@
 
 /* ── Scheda Brief Preparato ───────────────────────────────────────── */
 .nodo-brief-card {
-  background: linear-gradient(135deg, rgba(20, 192, 138, 0.08) 0%, rgba(7, 10, 15, 0.95) 100%);
+  background: linear-gradient(135deg, color-mix(in srgb, var(--nodo-em) 8%, transparent) 0%, rgba(7, 10, 15, 0.95) 100%);
   border: 1.5px solid var(--nodo-em);
   border-radius: var(--nodo-radius-card);
   padding: 14px;
   margin-top: 4px;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4), inset 0 0 16px rgba(20, 192, 138, 0.1);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4), inset 0 0 16px color-mix(in srgb, var(--nodo-em) 10%, transparent);
 }
 
 .nodo-brief-header {
@@ -795,7 +795,7 @@
   font-size: 12px;
   letter-spacing: 0.05em;
   color: var(--nodo-em-bright);
-  border-bottom: 1px solid rgba(20, 192, 138, 0.2);
+  border-bottom: 1px solid color-mix(in srgb, var(--nodo-em) 20%, transparent);
   padding-bottom: 8px;
   margin-bottom: 10px;
 }
@@ -840,13 +840,13 @@
   font-weight: 700;
   cursor: pointer;
   transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
-  box-shadow: 0 4px 12px rgba(20, 192, 138, 0.3);
+  box-shadow: 0 4px 12px color-mix(in srgb, var(--nodo-em) 30%, transparent);
 }
 
 .nodo-brief-submit-cta:hover {
   background: var(--nodo-em-bright);
   transform: translateY(-1px) scale(1.01);
-  box-shadow: 0 6px 18px rgba(20, 192, 138, 0.45);
+  box-shadow: 0 6px 18px color-mix(in srgb, var(--nodo-em) 45%, transparent);
 }
 
 /* ── 1. Voice Controls (STT & TTS) ────────────────────────────────── */
@@ -866,14 +866,14 @@
 
 .nodo-voice-btn:hover {
   color: var(--nodo-text);
-  border-color: rgba(20, 192, 138, 0.4);
+  border-color: color-mix(in srgb, var(--nodo-em) 40%, transparent);
 }
 
 .nodo-voice-btn.is-active {
   color: var(--nodo-em);
   border-color: var(--nodo-em);
-  background: rgba(20, 192, 138, 0.12);
-  box-shadow: 0 0 10px rgba(20, 192, 138, 0.25);
+  background: color-mix(in srgb, var(--nodo-em) 12%, transparent);
+  box-shadow: 0 0 10px color-mix(in srgb, var(--nodo-em) 25%, transparent);
 }
 
 .nodo-voice-btn.is-active .icon-voice-off { display: none !important; }
@@ -923,7 +923,7 @@
 
 /* Glow e pulsazione audio del FAB quando Nous parla ad alta voce */
 .nodo-fab.is-speaking {
-  box-shadow: 0 0 0 3px rgba(20, 192, 138, 0.45), 0 0 24px rgba(79, 227, 176, 0.7) !important;
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--nodo-em) 45%, transparent), 0 0 24px color-mix(in srgb, var(--nodo-em-bright) 70%, transparent) !important;
   animation: nodo-pulse-speaking 1.4s ease-in-out infinite alternate;
 }
 
@@ -949,7 +949,7 @@
 
 .nodo-mic-btn:hover {
   color: var(--nodo-em);
-  background: rgba(20, 192, 138, 0.1);
+  background: color-mix(in srgb, var(--nodo-em) 10%, transparent);
 }
 
 .nodo-mic-btn.is-listening {
@@ -965,8 +965,8 @@
   justify-content: center;
   width: 28px;
   height: 28px;
-  background: rgba(20, 192, 138, 0.08);
-  border: 1px solid rgba(20, 192, 138, 0.28);
+  background: color-mix(in srgb, var(--nodo-em) 8%, transparent);
+  border: 1px solid color-mix(in srgb, var(--nodo-em) 28%, transparent);
   border-radius: var(--nodo-radius-pill);
   color: var(--nodo-em-bright);
   font-family: var(--nodo-font-mono);
@@ -985,7 +985,7 @@
   background: var(--nodo-em);
   color: #070a0f;
   border-color: var(--nodo-em-bright);
-  box-shadow: 0 0 12px rgba(20, 192, 138, 0.4);
+  box-shadow: 0 0 12px color-mix(in srgb, var(--nodo-em) 40%, transparent);
   transform: scale(1.05);
 }
 
@@ -1000,7 +1000,7 @@
   margin-top: 10px;
   padding: 12px 14px;
   background: rgba(7, 10, 15, 0.95);
-  border: 1px solid rgba(20, 192, 138, 0.3);
+  border: 1px solid color-mix(in srgb, var(--nodo-em) 30%, transparent);
   border-radius: var(--nodo-radius-card);
   display: flex;
   flex-direction: column;
@@ -1015,7 +1015,7 @@
 
 .nodo-audio-title {
   font-family: var(--nodo-font-mono);
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 700;
   color: var(--nodo-em-bright);
   letter-spacing: 0.04em;
@@ -1024,7 +1024,7 @@
 
 .nodo-audio-duration {
   font-family: var(--nodo-font-mono);
-  font-size: 10px;
+  font-size: 12px;
   color: var(--nodo-muted);
 }
 
@@ -1062,7 +1062,7 @@
 }
 
 .nodo-audio-note {
-  font-size: 11px;
+  font-size: 12px;
   color: var(--nodo-muted);
   white-space: nowrap;
   overflow: hidden;
@@ -1099,26 +1099,26 @@
   align-items: center;
   justify-content: space-between;
   padding: 8px 12px;
-  background: rgba(20, 192, 138, 0.08);
-  border: 1px solid rgba(20, 192, 138, 0.25);
+  background: color-mix(in srgb, var(--nodo-em) 8%, transparent);
+  border: 1px solid color-mix(in srgb, var(--nodo-em) 25%, transparent);
   border-radius: var(--nodo-radius-pill);
   color: #ffffff;
   font-family: var(--nodo-font-mono);
-  font-size: 11px;
+  font-size: 12px;
   cursor: pointer;
   transition: all 0.2s ease;
   text-align: left;
 }
 
 .nodo-spot-btn:hover {
-  background: rgba(20, 192, 138, 0.18);
+  background: color-mix(in srgb, var(--nodo-em) 18%, transparent);
   border-color: var(--nodo-em-bright);
   transform: translateX(3px);
   color: var(--nodo-em-bright);
 }
 
 .nodo-spot-badge {
-  font-size: 10px;
+  font-size: 12px;
   color: var(--nodo-muted);
   background: rgba(0, 0, 0, 0.4);
   padding: 2px 6px;
@@ -1134,9 +1134,9 @@
   max-height: 250px;
   overflow-y: auto;
   background: rgba(9, 14, 22, 0.98);
-  border: 1px solid rgba(20, 192, 138, 0.35);
+  border: 1px solid color-mix(in srgb, var(--nodo-em) 35%, transparent);
   border-radius: var(--nodo-radius-card);
-  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.8), 0 0 20px rgba(20, 192, 138, 0.15);
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.8), 0 0 20px color-mix(in srgb, var(--nodo-em) 15%, transparent);
   backdrop-filter: blur(14px);
   z-index: 400;
   display: flex;
@@ -1153,7 +1153,7 @@
   background: rgba(0, 0, 0, 0.2);
 }
 .nodo-slash-menu::-webkit-scrollbar-thumb {
-  background: rgba(20, 192, 138, 0.3);
+  background: color-mix(in srgb, var(--nodo-em) 30%, transparent);
   border-radius: 4px;
 }
 .nodo-slash-menu::-webkit-scrollbar-thumb:hover {
@@ -1177,7 +1177,7 @@
 
 .nodo-slash-item:hover,
 .nodo-slash-item.is-selected {
-  background: rgba(20, 192, 138, 0.14);
+  background: color-mix(in srgb, var(--nodo-em) 14%, transparent);
 }
 
 .nodo-slash-item:hover .nodo-slash-desc,
@@ -1190,7 +1190,7 @@
   font-size: 12px;
   font-weight: 700;
   color: var(--nodo-em-bright);
-  background: rgba(20, 192, 138, 0.14);
+  background: color-mix(in srgb, var(--nodo-em) 14%, transparent);
   padding: 3px 8px;
   border-radius: 6px;
   min-width: 68px;
@@ -1215,11 +1215,11 @@
   gap: 6px;
   margin-bottom: 8px;
   padding: 4px 10px;
-  background: rgba(20, 192, 138, 0.1);
-  border: 1px solid rgba(20, 192, 138, 0.25);
+  background: color-mix(in srgb, var(--nodo-em) 10%, transparent);
+  border: 1px solid color-mix(in srgb, var(--nodo-em) 25%, transparent);
   border-radius: var(--nodo-radius-pill);
   font-family: var(--nodo-font-mono);
-  font-size: 10px;
+  font-size: 12px;
   color: var(--nodo-em-bright);
   letter-spacing: 0.04em;
   text-transform: uppercase;
@@ -1238,9 +1238,9 @@
   margin-top: 10px;
   padding: 12px 14px;
   background: rgba(15, 23, 34, 0.96);
-  border: 1px solid rgba(20, 192, 138, 0.45);
+  border: 1px solid color-mix(in srgb, var(--nodo-em) 45%, transparent);
   border-radius: var(--nodo-radius-card);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5), 0 0 16px rgba(20, 192, 138, 0.15);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5), 0 0 16px color-mix(in srgb, var(--nodo-em) 15%, transparent);
   animation: nodo-fade-up 0.25s ease;
 }
 
@@ -1250,7 +1250,7 @@
   align-items: center;
   margin-bottom: 8px;
   font-family: var(--nodo-font-mono);
-  font-size: 11px;
+  font-size: 12px;
 }
 
 .nodo-tour-meta {
@@ -1269,12 +1269,12 @@
   display: inline-flex;
   align-items: center;
   gap: 4px;
-  background: rgba(20, 192, 138, 0.15);
-  border: 1px solid rgba(20, 192, 138, 0.3);
+  background: color-mix(in srgb, var(--nodo-em) 15%, transparent);
+  border: 1px solid color-mix(in srgb, var(--nodo-em) 30%, transparent);
   color: var(--nodo-em-bright);
   padding: 2px 6px;
   border-radius: var(--nodo-radius-pill);
-  font-size: 9px;
+  font-size: 12px;
   letter-spacing: 0.08em;
   font-weight: 700;
   text-transform: uppercase;
@@ -1355,7 +1355,7 @@
   justify-content: space-between;
   align-items: center;
   font-family: var(--nodo-font-mono);
-  font-size: 10px;
+  font-size: 12px;
   color: var(--nodo-muted);
 }
 
@@ -1378,7 +1378,7 @@
   padding: 6px 12px;
   border-radius: var(--nodo-radius-pill);
   font-family: var(--nodo-font-mono);
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.15s ease;
@@ -1418,13 +1418,13 @@
 }
 
 .nodo-tour-btn--action {
-  background: rgba(20, 192, 138, 0.15);
+  background: color-mix(in srgb, var(--nodo-em) 15%, transparent);
   color: var(--nodo-em-bright);
   border: 1px solid var(--nodo-border);
 }
 
 .nodo-tour-btn--action:hover {
-  background: rgba(20, 192, 138, 0.28);
+  background: color-mix(in srgb, var(--nodo-em) 28%, transparent);
 }
 
 /* ── Tour Bubble Fluttuante (Accanto al Pallino Nous Chiuso) ────── */
@@ -1435,9 +1435,9 @@
   bottom: 24px;
   width: min(390px, calc(100vw - 120px));
   background: rgba(10, 16, 26, 0.95);
-  border: 1.5px solid rgba(20, 192, 138, 0.45);
+  border: 1.5px solid color-mix(in srgb, var(--nodo-em) 45%, transparent);
   border-radius: var(--nodo-radius-card);
-  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.8), 0 0 25px rgba(20, 192, 138, 0.22);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.8), 0 0 25px color-mix(in srgb, var(--nodo-em) 22%, transparent);
   backdrop-filter: blur(20px);
   padding: 14px 16px;
   color: var(--nodo-text);
@@ -1456,8 +1456,8 @@
   width: 12px;
   height: 12px;
   background: rgba(10, 16, 26, 0.95);
-  border-right: 1.5px solid rgba(20, 192, 138, 0.45);
-  border-top: 1.5px solid rgba(20, 192, 138, 0.45);
+  border-right: 1.5px solid color-mix(in srgb, var(--nodo-em) 45%, transparent);
+  border-top: 1.5px solid color-mix(in srgb, var(--nodo-em) 45%, transparent);
   transform: rotate(45deg);
   pointer-events: none;
 }
@@ -1534,13 +1534,13 @@
 /* Stile Pallino durante il Tour */
 .nodo-fab.is-touring {
   border-color: var(--nodo-em-bright);
-  box-shadow: 0 0 0 3px rgba(20, 192, 138, 0.35), 0 0 24px rgba(20, 192, 138, 0.5), 0 8px 24px rgba(0, 0, 0, 0.7);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--nodo-em) 35%, transparent), 0 0 24px color-mix(in srgb, var(--nodo-em) 50%, transparent), 0 8px 24px rgba(0, 0, 0, 0.7);
   animation: nodo-fab-touring 2s ease-in-out infinite alternate;
 }
 
 @keyframes nodo-fab-touring {
   0% { transform: scale(1); }
-  100% { transform: scale(1.08); box-shadow: 0 0 0 5px rgba(20, 192, 138, 0.2), 0 0 32px rgba(20, 192, 138, 0.7); }
+  100% { transform: scale(1.08); box-shadow: 0 0 0 5px color-mix(in srgb, var(--nodo-em) 20%, transparent), 0 0 32px color-mix(in srgb, var(--nodo-em) 70%, transparent); }
 }
 
 .nodo-fab.is-touring .nodo-ring {
@@ -1563,9 +1563,9 @@
   .nodo-tour-bubble::after {
     right: 22px;
     bottom: -7px;
-    border-right: 1.5px solid rgba(20, 192, 138, 0.45);
+    border-right: 1.5px solid color-mix(in srgb, var(--nodo-em) 45%, transparent);
     border-top: none;
-    border-bottom: 1.5px solid rgba(20, 192, 138, 0.45);
+    border-bottom: 1.5px solid color-mix(in srgb, var(--nodo-em) 45%, transparent);
     transform: rotate(45deg);
   }
 
@@ -1586,9 +1586,9 @@
   margin-top: 10px;
   padding: 14px;
   background: rgba(9, 14, 22, 0.96);
-  border: 1px solid rgba(20, 192, 138, 0.4);
+  border: 1px solid color-mix(in srgb, var(--nodo-em) 40%, transparent);
   border-radius: var(--nodo-radius-card);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5), 0 0 16px rgba(20, 192, 138, 0.12);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5), 0 0 16px color-mix(in srgb, var(--nodo-em) 12%, transparent);
   animation: nodo-fade-up 0.25s ease;
 }
 
@@ -1597,10 +1597,10 @@
   align-items: center;
   gap: 6px;
   padding: 3px 8px;
-  background: rgba(20, 192, 138, 0.15);
+  background: color-mix(in srgb, var(--nodo-em) 15%, transparent);
   border-radius: 4px;
   font-family: var(--nodo-font-mono);
-  font-size: 10px;
+  font-size: 12px;
   font-weight: 700;
   color: var(--nodo-em-bright);
   letter-spacing: 0.06em;
@@ -1625,7 +1625,7 @@
 
 .nodo-concept-block-label {
   font-family: var(--nodo-font-mono);
-  font-size: 10px;
+  font-size: 12px;
   font-weight: 700;
   color: var(--nodo-em-bright);
   text-transform: uppercase;
@@ -1640,7 +1640,7 @@
 
 .nodo-concept-prompt-box {
   background: #030508;
-  border: 1px dashed rgba(20, 192, 138, 0.35);
+  border: 1px dashed color-mix(in srgb, var(--nodo-em) 35%, transparent);
   border-radius: 6px;
   padding: 8px 10px;
   margin-bottom: 12px;
@@ -1648,8 +1648,8 @@
 
 .nodo-concept-prompt-code {
   font-family: var(--nodo-font-mono);
-  font-size: 11px;
-  color: #a3e7cb;
+  font-size: 12px;
+  color: var(--nodo-em-light);
   line-height: 1.4;
   word-break: break-word;
   user-select: all;
@@ -1676,7 +1676,7 @@
 .nodo-concept-cta:hover {
   background: var(--nodo-em-bright);
   transform: translateY(-1px);
-  box-shadow: 0 4px 14px rgba(20, 192, 138, 0.35);
+  box-shadow: 0 4px 14px color-mix(in srgb, var(--nodo-em) 35%, transparent);
 }
 
 /* ── 8. Dossier & Export Card ─────────────────────────────────────── */
@@ -1684,7 +1684,7 @@
   margin-top: 10px;
   padding: 14px;
   background: rgba(11, 17, 26, 0.98);
-  border: 1px solid rgba(20, 192, 138, 0.45);
+  border: 1px solid color-mix(in srgb, var(--nodo-em) 45%, transparent);
   border-radius: var(--nodo-radius-card);
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
   animation: nodo-fade-up 0.25s ease;
@@ -1694,14 +1694,14 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border-bottom: 1px solid rgba(20, 192, 138, 0.2);
+  border-bottom: 1px solid color-mix(in srgb, var(--nodo-em) 20%, transparent);
   padding-bottom: 8px;
   margin-bottom: 10px;
 }
 
 .nodo-dossier-header b {
   font-family: var(--nodo-font-mono);
-  font-size: 11px;
+  font-size: 12px;
   letter-spacing: 0.08em;
   color: var(--nodo-em-bright);
 }
@@ -1718,7 +1718,7 @@
 .nodo-dossier-row .lbl {
   color: var(--nodo-muted);
   font-family: var(--nodo-font-mono);
-  font-size: 11px;
+  font-size: 12px;
 }
 
 .nodo-dossier-row .val {
@@ -1745,7 +1745,7 @@
   padding: 8px 12px;
   border-radius: var(--nodo-radius-pill);
   font-family: var(--nodo-font-mono);
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.15s ease;
@@ -1754,13 +1754,13 @@
 }
 
 .nodo-dossier-btn--copy {
-  background: rgba(20, 192, 138, 0.15);
+  background: color-mix(in srgb, var(--nodo-em) 15%, transparent);
   color: var(--nodo-em-bright);
   border: 1px solid var(--nodo-border);
 }
 
 .nodo-dossier-btn--copy:hover {
-  background: rgba(20, 192, 138, 0.3);
+  background: color-mix(in srgb, var(--nodo-em) 30%, transparent);
   transform: translateY(-1px);
 }
 
@@ -1773,7 +1773,7 @@
 .nodo-dossier-btn--mail:hover {
   background: var(--nodo-em-bright);
   transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(20, 192, 138, 0.3);
+  box-shadow: 0 4px 12px color-mix(in srgb, var(--nodo-em) 30%, transparent);
 }
 
 /* ── 9. Shader Feedback Indicator ─────────────────────────────────── */
@@ -1782,13 +1782,78 @@
   align-items: center;
   gap: 6px;
   padding: 4px 10px;
-  background: rgba(20, 192, 138, 0.15);
+  background: color-mix(in srgb, var(--nodo-em) 15%, transparent);
   border: 1px solid var(--nodo-em);
   border-radius: var(--nodo-radius-pill);
   font-family: var(--nodo-font-mono);
-  font-size: 11px;
+  font-size: 12px;
   color: var(--nodo-em-bright);
   margin-top: 4px;
 }
 
 
+
+/* ── Correzioni: accessibilità, mobile, stop, privacy ───────────── */
+.nodo-sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.nodo-privacy-note {
+  padding: 6px 14px;
+  font-size: 12px;
+  line-height: 1.35;
+  color: var(--nodo-text);
+  background: color-mix(in srgb, var(--nodo-em) 8%, transparent);
+  border-bottom: 1px solid var(--nodo-border);
+}
+
+.nodo-stop-btn {
+  flex: none;
+  height: 34px;
+  padding: 0 12px;
+  border-radius: var(--nodo-radius-pill);
+  border: 1px solid var(--nodo-border);
+  background: transparent;
+  color: var(--nodo-em-bright);
+  font-family: var(--nodo-font-body);
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.nodo-stop-btn:hover { background: var(--nodo-em-dim); }
+
+.nodo-window button:focus-visible,
+.nodo-window a:focus-visible,
+.nodo-window input:focus-visible {
+  outline: 2px solid var(--nodo-em-bright);
+  outline-offset: 2px;
+}
+
+@media (max-width: 640px) {
+  .nodo-input {
+    font-size: 16px; /* evita lo zoom automatico di iOS */
+  }
+
+  .nodo-window {
+    /* --nodo-vvh è impostata da JS con visualViewport quando compare la tastiera */
+    height: var(--nodo-vvh, calc(100dvh - 190px));
+    max-height: calc(100dvh - 24px);
+  }
+
+  .nodo-window.is-keyboard {
+    bottom: calc(8px + env(safe-area-inset-bottom, 0px));
+  }
+
+  .nodo-input-bar {
+    padding-bottom: calc(10px + env(safe-area-inset-bottom, 0px));
+  }
+}

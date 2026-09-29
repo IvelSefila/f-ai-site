@@ -338,11 +338,14 @@ export function keyVisual(ctx, o) {
     ctx.font = `${corsivoFont}${pesoFont} ${tSize}px ${fontTitolo}`;
     ctx.fillStyle = INKC;
     if (grassettoFinto) { ctx.strokeStyle = INKC; ctx.lineWidth = tSize * 0.035; ctx.lineJoin = 'round'; }
+    /* alone scuro: le linee del fondo che sfiorano una lettera non devono sembrare accenti */
+    ctx.shadowColor = 'rgba(4,8,12,.9)'; ctx.shadowBlur = tSize * 0.16;
     for (const l of lines) {
       if (grassettoFinto) ctx.strokeText(l, 0, ty);
       ctx.fillText(l, 0, ty); ty += lh;
     }
     ctx.restore();
+    ctx.shadowBlur = 0; ctx.shadowColor = 'transparent';
     ctx.textAlign = 'left';
   } else {
     const baseY = pos === 'alto' ? margin + metaSize * 1.4 + blockH
@@ -373,10 +376,13 @@ export function keyVisual(ctx, o) {
     ctx.font = `${corsivoFont}${pesoFont} ${tSize}px ${fontTitolo}`;
     ctx.fillStyle = INKC;
     if (grassettoFinto) { ctx.strokeStyle = INKC; ctx.lineWidth = tSize * 0.035; ctx.lineJoin = 'round'; }
+    /* alone scuro: le linee del fondo che sfiorano una lettera non devono sembrare accenti */
+    ctx.shadowColor = 'rgba(4,8,12,.9)'; ctx.shadowBlur = tSize * 0.16;
     for (const l of lines) {
       if (grassettoFinto) ctx.strokeText(l, ancoraX, ty);
       ctx.fillText(l, ancoraX, ty); ty += lh;
     }
+    ctx.shadowBlur = 0; ctx.shadowColor = 'transparent';
     ctx.textAlign = 'left';
   }
   ctx.letterSpacing = '0px';

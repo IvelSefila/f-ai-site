@@ -24,3 +24,6 @@ site/pixel/immagini/*.png
 # al sito viene fuori dalla quantizzazione.
 site/pixel/fotogrammi/*.png
 audit/*.mp4
+
+# chiave Groq per il server locale: mai nel repository
+.groq_key

@@ -2,16 +2,16 @@
 * app.js — la sessione. Tiene il filo fra le prove, parla, misura,
 * e alla fine scrive il dossier. Nessuna libreria.
 * ═══════════════════════════════════════════════════════════════════ */
-import { initHero } from './hero.js?v=20260928-76';
-import { initStrumenti } from './strumenti.js?v=20260928-76';
-import { initUnion } from './union.js?v=20260928-76';
-import { initEso } from './eso.js?v=20260928-76';
-import { initLocanda } from './locanda.js?v=20260928-76';
-import { initCest } from './cest.js?v=20260928-76';
-import { initPalette } from './palette.js?v=20260928-76';
-import { keyVisual, radar, MODES, rng, leggiColori} from './engine.js?v=20260928-76';
-import { initBrief } from './brief.js?v=20260928-76';
-import { initServizi } from './servizi.js?v=20260928-76';
+import { initHero } from './hero.js?v=20260928-97';
+import { initStrumenti } from './strumenti.js?v=20260928-97';
+import { initUnion } from './union.js?v=20260928-97';
+import { initEso } from './eso.js?v=20260928-97';
+import { initLocanda } from './locanda.js?v=20260928-97';
+import { initCest } from './cest.js?v=20260928-97';
+import { initPalette } from './palette.js?v=20260928-97';
+import { keyVisual, radar, MODES, rng, leggiColori} from './engine.js?v=20260928-97';
+import { initBrief } from './brief.js?v=20260928-97';
+import { initServizi } from './servizi.js?v=20260928-97';
 
 const $ = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => [...r.querySelectorAll(s)];
@@ -192,10 +192,19 @@ fmtIdea.addEventListener('input', () => {
   if (fmtRaf) return;
   fmtRaf = requestAnimationFrame(() => { fmtRaf = 0; drawFormats(); });
 });
-$('#fmtNew').addEventListener('click', () => {
+$('#fmtNew').addEventListener('click', async () => {
+  /* stessa rigenerazione dell'editor: composizione nuova intera, non solo
+     la texture — dove va il titolo, cosa dice, font e colori */
   fmtSeed = (Math.random() * 9999) | 0;
   fmtTitolo = FMT_TITOLI[(Math.random() * FMT_TITOLI.length) | 0];
+  fmtPos = scegli(EDITOR_POSIZIONI)[0];
+  fmtAllinea = scegli(EDITOR_ALLINEI)[0];
+  const f = scegli(EDITOR_FONT);
+  fmtFont = f.css;
+  fmtColore = scegli(EDITOR_COLORI);
   drawFormats(); act(); proof('banchi');
+  await caricaGoogleFont(f);
+  drawFormats();
 });
 
 /* ── l'editor: scrivi il tuo testo, scegli dove va e con che carica ──
@@ -1256,7 +1265,7 @@ $$('.eso__360-stage').forEach(stage360 => {
   const TOT = Number(stage360.dataset.frame360) || 120;
   const cartella360 = stage360.dataset.cartella360 || '';
   const PX_PER_FRAME = 5;
-  const src360 = i => `${cartella360}frame_${String(i).padStart(3, '0')}.webp`;
+  const src360 = i => `${cartella360}frame_${String(i).padStart(3, '0')}.webp?v=4`;
   const cache360 = new Array(TOT);
   const pronti = new Array(TOT).fill(false);
   let pronto = false, frame = 0, mostrato = 0, trascinando = false, xInizio = 0, frameInizio = 0;
@@ -1369,6 +1378,37 @@ if (matchMedia('(hover:hover)').matches) {
     });
   }, { passive: true });
 }
+
+/* La scena degli infissi nella scheda CDI si muove solo mentre la scheda
+   e' in vista: fuori schermo le sue animazioni restano in pausa. */
+(() => {
+  const cdi = $('.cdi');
+  if (!cdi) return;
+  cdi.classList.add('cdi--fermo');
+  new IntersectionObserver(es => {
+    cdi.classList.toggle('cdi--fermo', !es[0].isIntersecting);
+  }, { rootMargin: '80px' }).observe(cdi);
+})();
+
+/* La scena animata di Studio CETS gira solo mentre la scheda e' in vista. */
+(() => {
+  const cest = $('.cest');
+  if (!cest) return;
+  cest.classList.add('cest--fermo');
+  new IntersectionObserver(es => {
+    cest.classList.toggle('cest--fermo', !es[0].isIntersecting);
+  }, { rootMargin: '80px' }).observe(cest);
+})();
+
+/* La scena animata di Human Robots gira solo mentre la scheda e' in vista. */
+(() => {
+  const eso = $('.eso');
+  if (!eso) return;
+  eso.classList.add('eso--fermo');
+  new IntersectionObserver(es => {
+    eso.classList.toggle('eso--fermo', !es[0].isIntersecting);
+  }, { rootMargin: '80px' }).observe(eso);
+})();
 
 /* Sezione delle skill: agli incroci della griglia compaiono e spariscono
    dei punti, ognuno col suo ritmo, come una luce che si accende a caso.

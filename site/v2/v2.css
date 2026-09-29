@@ -3895,3 +3895,126 @@ body.ord-in-corso *{cursor:grabbing !important}
   .piede__colonne{grid-template-columns:1.4fr 1fr 1.2fr 1.2fr}
   .piede__col--chi{grid-column:auto}
 }
+
+/* Le stelline della Locanda brillano: ognuna col suo ritmo e il suo
+   ritardo, cosi' non si accendono insieme. Solo trasparenza e scala, e
+   non partono per chi ha chiesto meno movimento. */
+@media (prefers-reduced-motion:no-preference){
+  .stella{transform-box:fill-box;transform-origin:center;
+    animation:stella-brilla var(--d,4s) ease-in-out var(--r,0s) infinite}
+  @keyframes stella-brilla{
+    0%,100%{opacity:.35;transform:scale(.8) rotate(0deg)}
+    50%{opacity:1;transform:scale(1.18) rotate(14deg)}}
+}
+
+/* Scena della scheda CDI: infissi stilizzati a linea, dietro il testo.
+   Una finestra con l'anta che si apre, uno scorrevole che scivola, una
+   tapparella che si avvolge e un riflesso che attraversa il vetro. Solo
+   trasform e opacity; si fermano fuori schermo (.cdi--fermo, app.js) e
+   non partono con "riduci animazioni". */
+.cdi__slab{position:relative;isolation:isolate;overflow:hidden}
+.cdi__slab > :not(.cdi__scena){position:relative;z-index:1}
+.cdi__scena{position:absolute;inset:0;z-index:0;width:100%;height:100%;
+  color:var(--c-vivo);opacity:.38;pointer-events:none}
+.cdi__scena--stretto{display:none}
+@media (max-width:839px){
+  .cdi__scena--largo{display:none}
+  .cdi__scena--stretto{display:block;opacity:.3}
+}
+@media (prefers-reduced-motion:no-preference){
+  .cdi__anta{transform-box:fill-box;transform-origin:right center;
+    animation:cdi-apri 9s ease-in-out infinite}
+  .cdi__scorri{animation:cdi-scorri 10s ease-in-out infinite}
+  .cdi__tapparella{transform-box:fill-box;transform-origin:center top;
+    animation:cdi-tapparella 8s ease-in-out infinite}
+  .cdi__luce{animation:cdi-luce 6.5s ease-in-out infinite}
+  .cdi--fermo .cdi__anta,.cdi--fermo .cdi__scorri,
+  .cdi--fermo .cdi__tapparella,.cdi--fermo .cdi__luce{animation-play-state:paused}
+  @keyframes cdi-apri{0%,15%{transform:scaleX(1)}38%,60%{transform:scaleX(.16)}83%,100%{transform:scaleX(1)}}
+  @keyframes cdi-scorri{0%,18%{transform:translateX(0)}42%,64%{transform:translateX(-96px)}90%,100%{transform:translateX(0)}}
+  @keyframes cdi-tapparella{0%,12%{transform:scaleY(1)}40%,58%{transform:scaleY(.14)}86%,100%{transform:scaleY(1)}}
+  @keyframes cdi-luce{0%,25%{transform:translateX(0);opacity:0}45%{opacity:1}75%,100%{transform:translateX(190px);opacity:0}}
+}
+
+/* Scena animata di Studio CETS: un drone in volo con il suo cono di
+   scansione, il condominio con le finestre che si accendono a caso, e il
+   foglio con le spunte che compaiono una dopo l'altra — i tre pezzi di
+   questo lavoro (rilievi con drone, condomini, pratiche). Solo trasform e
+   opacity; in pausa fuori schermo (.cest--fermo, app.js) e spente con
+   "riduci animazioni". Sta sopra la scena statica e sotto il testo. */
+.cest__slab{position:relative;isolation:isolate}
+.cest__anima{color:var(--sk-tenue);opacity:.42}
+.cest__fin{opacity:.14}
+.cest__cono{opacity:.1}
+@media (prefers-reduced-motion:no-preference){
+  .cest__drone{animation:cest-vola 5.2s ease-in-out infinite}
+  .cest__rotore{transform-box:fill-box;transform-origin:center;
+    animation:cest-rotore .16s linear infinite alternate}
+  .cest__cono{animation:cest-cono 3.4s ease-in-out infinite}
+  .cest__fin{animation:cest-finestra 7s ease-in-out calc(var(--i) * -1.15s) infinite}
+  .cest__spunta{opacity:0;animation:cest-spunta 6s ease-in-out calc(var(--i) * .9s) infinite}
+  .cest--fermo .cest__drone,.cest--fermo .cest__rotore,.cest--fermo .cest__cono,
+  .cest--fermo .cest__fin,.cest--fermo .cest__spunta{animation-play-state:paused}
+  @keyframes cest-vola{0%,100%{transform:translate(0,0) rotate(-2deg)}
+    35%{transform:translate(14px,-12px) rotate(2deg)}70%{transform:translate(-10px,-6px) rotate(-1deg)}}
+  @keyframes cest-rotore{from{transform:scaleX(1)}to{transform:scaleX(.3)}}
+  @keyframes cest-cono{0%,100%{opacity:.04}50%{opacity:.2}}
+  @keyframes cest-finestra{0%,100%{opacity:.1}18%{opacity:.85}44%{opacity:.85}62%{opacity:.1}}
+  @keyframes cest-spunta{0%,12%{opacity:0;transform:scale(.6)}30%,72%{opacity:1;transform:scale(1)}90%,100%{opacity:0;transform:scale(.6)}}
+}
+@media (prefers-reduced-motion:reduce){.cest__fin:nth-of-type(3n){opacity:.7}}
+.cest__spunta{transform-box:fill-box;transform-origin:center}
+
+/* Scena animata di Human Robots: un esoscheletro di profilo che cammina
+   (coscia e ginocchio ruotano, la seconda gamba sfasata di mezzo passo),
+   due ingranaggi che girano in verso opposto e un'onda di telemetria che
+   scorre in una finestra col suo sensore che pulsa. Solo trasform e
+   opacity; in pausa fuori schermo (.eso--fermo, app.js) e spenti con
+   "riduci animazioni". */
+.eso__anima{color:var(--sk-tenue);opacity:.18}
+.eso__sensore{opacity:.5}
+@media (prefers-reduced-motion:no-preference){
+  .eso__gamba,.eso__stinco,.eso__ingranaggio{transform-origin:0 0}
+  .eso__gamba--a{animation:eso-coscia 2.6s ease-in-out infinite alternate}
+  .eso__gamba--b{animation:eso-coscia 2.6s ease-in-out -1.3s infinite alternate}
+  .eso__stinco--a{animation:eso-ginocchio 2.6s ease-in-out -.55s infinite alternate}
+  .eso__stinco--b{animation:eso-ginocchio 2.6s ease-in-out -1.85s infinite alternate}
+  .eso__anca{animation:eso-pulsa 2.6s ease-in-out infinite;transform-box:fill-box;transform-origin:center}
+  .eso__ingranaggio{animation:eso-gira 16s linear infinite}
+  .eso__ingranaggio--r{animation-direction:reverse;animation-duration:9s}
+  .eso__onda{animation:eso-onda 1.9s linear infinite}
+  .eso__sensore{transform-box:fill-box;transform-origin:center;animation:eso-sensore 1.9s ease-in-out infinite}
+  .eso--fermo .eso__gamba,.eso--fermo .eso__stinco,.eso--fermo .eso__anca,
+  .eso--fermo .eso__ingranaggio,.eso--fermo .eso__onda,.eso--fermo .eso__sensore{animation-play-state:paused}
+  @keyframes eso-coscia{from{transform:rotate(-24deg)}to{transform:rotate(24deg)}}
+  @keyframes eso-ginocchio{from{transform:rotate(2deg)}to{transform:rotate(-38deg)}}
+  @keyframes eso-pulsa{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.4);opacity:.6}}
+  @keyframes eso-gira{to{transform:rotate(360deg)}}
+  @keyframes eso-onda{from{transform:translateX(0)}to{transform:translateX(-60px)}}
+  @keyframes eso-sensore{0%,100%{transform:scale(1);opacity:.35}50%{transform:scale(1.7);opacity:1}}
+}
+
+/* Copertina del CDI: e' una foto senza scritte, quindi il nome sta sopra,
+   in grande e centrato, con una sfumatura scura sotto perche' si legga
+   su qualunque parte della foto. Le altre copertine hanno il testo
+   dentro l'immagine. */
+.vetrina__foto{position:relative;display:block;width:100%;line-height:0}
+.vetrina__foto::after{content:"";position:absolute;inset:0;border-radius:var(--r-min);
+  background:linear-gradient(180deg,rgba(20,11,40,.05) 30%,rgba(20,11,40,.62) 100%);pointer-events:none}
+.vetrina__scritta{position:absolute;left:0;right:0;bottom:10%;z-index:1;text-align:center;
+  font-style:normal;font-family:var(--display);font-weight:600;
+  font-size:clamp(20px,2.3vw,30px);line-height:.95;letter-spacing:.01em;text-transform:uppercase;
+  color:#fff;text-shadow:0 2px 10px rgba(20,11,40,.6)}
+
+/* badge durata rimosso dalle schede video */
+.locanda__durata,.union__durata,.eso__durata,.cest__durata{display:none}
+
+/* Human Robots: titolo in acciaio pesante sovraimpresso alla foto */
+.vetrina__foto--acciaio::after{background:linear-gradient(180deg,rgba(4,8,14,0) 35%,rgba(4,8,14,.7) 100%)}
+.vetrina__scritta--acciaio{bottom:9%;font-weight:900;letter-spacing:.02em;line-height:.92;
+  font-size:clamp(19px,2.1vw,27px);color:#c9d1d9;
+  background:linear-gradient(180deg,#fff 0%,#dfe5ea 26%,#7d8791 50%,#e9eef2 58%,#8c96a0 82%,#4b545d 100%);
+  -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
+  -webkit-text-stroke:.6px rgba(10,14,20,.9);text-shadow:none;
+  filter:drop-shadow(0 1px 0 rgba(255,255,255,.35)) drop-shadow(0 3px 5px rgba(0,0,0,.85))}
+.sr-solo{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}

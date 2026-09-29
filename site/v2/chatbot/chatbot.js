@@ -2,8 +2,8 @@
  * Widget Controller "Nous" — F/AI Portfolio
  * Versione 1.0 (Settembre 2026)
  */
-import { CONFIG } from './chatbot.config.js';
-import { ChatEngine } from './chatbot.engine.js';
+import { CONFIG } from './chatbot.config.js?v=20260928-97';
+import { ChatEngine } from './chatbot.engine.js?v=20260928-97';
 
 class NodoWidget {
   constructor() {
@@ -18,6 +18,9 @@ class NodoWidget {
       this.voiceEnabled = localStorage.getItem('nous_voice_enabled') === '1';
     } catch (e) {}
     this.activeRecognition = null;
+    this.isDictating = false;
+    this._gen = 0;            // token di generazione: cambia a ogni reset/stop/cambio modalità
+    this._ttsTimer = null;
     this.slashCommands = [
       { cmd: '/tour', desc: 'Tour guidato di regia in 4 sale del portfolio', run: () => this.startStudioTour() },
       { cmd: '/concept', desc: 'Generatore interattivo di concept e prompt video', run: () => this.startConceptLab() },
@@ -26,9 +29,9 @@ class NodoWidget {
       { cmd: '/scena', desc: 'Cambia la scena fotografica nell\'Hero (3 scene)', run: () => this.cycleShaderScene() },
       { cmd: '/calma', desc: 'Rallenta la turbolenza dello shader WebGL a 0.25x', run: () => this.setShaderSpeed(0.25, 'Calma') },
       { cmd: '/turbo', desc: 'Accelera la turbolenza dello shader WebGL a 2.5x', run: () => this.setShaderSpeed(2.5, 'Turbo') },
-      { cmd: '/brief', desc: 'Avvia preventivo interattivo guidato in 3 step', run: () => this.startBriefWizard() },
+      { cmd: '/brief', desc: 'Brief rapido in chat: 3 domande, poi il questionario completo del sito', run: () => this.startBriefWizard() },
       { cmd: '/spot', desc: 'Guarda gli spot video AI per Union Energia', run: () => this.handleUserQuery('Mostrami gli spot video per Union Energia') },
-      { cmd: '/audio', desc: 'Ascolta i 5 jingle musicali creati con Lyria', run: () => this.handleUserQuery('Fammi ascoltare i jingle della Locanda del Falco') },
+      { cmd: '/audio', desc: 'Ascolta i 5 jingle musicali creati con Lyria', run: () => this.handleUserQuery('Fammi ascoltare i jingle della Locanda del Castello') },
       { cmd: '/stack', desc: 'Scheda tecnica workstation RTX 5090 e software AI', run: () => this.handleUserQuery('Qual è lo stack tecnico e la configurazione hardware?') },
       { cmd: '/colore', desc: 'Cambia al volo la palette cromatica del sito', run: () => this.cyclePalette() }
     ];
@@ -84,7 +87,9 @@ class NodoWidget {
     const win = document.createElement('div');
     win.className = 'nodo-window';
     win.setAttribute('role', 'dialog');
+    win.setAttribute('aria-modal', 'true');
     win.setAttribute('aria-label', `Chat con ${CONFIG.name}`);
+    win.setAttribute('tabindex', '-1');
     win.innerHTML = `
       <header class="nodo-header">
         <div class="nodo-header-title">
@@ -126,7 +131,10 @@ class NodoWidget {
 
       <div class="nodo-toast" style="display: none;" role="status" aria-live="polite"></div>
 
-      <div class="nodo-messages" role="log" aria-live="polite"></div>
+      <div class="nodo-privacy-note" style="display: none;" role="note">☁️ Modalità Cloud attiva: le domande vengono inviate a un servizio esterno.</div>
+
+      <div class="nodo-messages" role="log" aria-live="off" aria-label="Conversazione con Nous"></div>
+      <div class="nodo-sr-only nodo-live" role="status" aria-live="polite" aria-atomic="true"></div>
 
       <div class="nodo-chips" role="toolbar" aria-label="Suggerimenti rapidi">
         ${CONFIG.quickChips.map(c => `<button class="nodo-chip" type="button" data-query="${c.query}">${c.label}</button>`).join('')}
@@ -140,11 +148,15 @@ class NodoWidget {
         </button>
         <button class="nodo-slash-btn" type="button" aria-label="Menu comandi rapidi" title="Comandi rapidi (/)">/</button>
         <input class="nodo-input" type="text" placeholder="Chiedi a Nous su progetti, video, AI... (o digita /)" aria-label="Scrivi un messaggio per Nous" maxlength="300" autocomplete="off" />
+        <button class="nodo-stop-btn" type="button" aria-label="Interrompi la risposta" title="Interrompi la risposta" style="display:none;">Stop</button>
         <button class="nodo-send-btn" type="submit" aria-label="Invia messaggio">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
         </button>
       </form>
     `;
+
+    win.inert = true;
+    win.setAttribute('aria-hidden', 'true');
 
     document.body.appendChild(fab);
     document.body.appendChild(hint);
@@ -164,6 +176,9 @@ class NodoWidget {
       progressPct: win.querySelector('.nodo-progress-pct'),
       toast: win.querySelector('.nodo-toast'),
       messages: win.querySelector('.nodo-messages'),
+      live: win.querySelector('.nodo-live'),
+      privacyNote: win.querySelector('.nodo-privacy-note'),
+      stopBtn: win.querySelector('.nodo-stop-btn'),
       chips: win.querySelector('.nodo-chips'),
       slashMenu: win.querySelector('.nodo-slash-menu'),
       form: win.querySelector('.nodo-input-bar'),
@@ -273,10 +288,49 @@ class NodoWidget {
 
     // Chiusura con ESC
     document.addEventListener('keydown', e => {
-      if (e.key === 'Escape' && this.isOpen) {
+      if (!this.isOpen) return;
+      if (e.key === 'Escape') {
+        if (this.elements.slashMenu && this.elements.slashMenu.style.display !== 'none') return;
         this.close();
+        return;
+      }
+      // Focus trap: Tab e Shift+Tab restano dentro la finestra
+      if (e.key === 'Tab') {
+        const focusables = Array.from(this.elements.win.querySelectorAll(
+          'button, a[href], input, select, textarea, audio[controls], [tabindex]:not([tabindex="-1"])'
+        )).filter(el => !el.disabled && el.offsetParent !== null);
+        if (!focusables.length) {
+          e.preventDefault();
+          this.elements.win.focus();
+          return;
+        }
+        const first = focusables[0];
+        const last = focusables[focusables.length - 1];
+        const active = document.activeElement;
+        if (!this.elements.win.contains(active)) {
+          e.preventDefault();
+          first.focus();
+        } else if (e.shiftKey && (active === first || active === this.elements.win)) {
+          e.preventDefault();
+          last.focus();
+        } else if (!e.shiftKey && active === last) {
+          e.preventDefault();
+          first.focus();
+        }
       }
     });
+
+    // Pulsante Stop: interrompe la risposta in corso
+    if (this.elements.stopBtn) {
+      this.elements.stopBtn.addEventListener('click', () => this.stopGeneration());
+    }
+
+    // Tastiera mobile: adatta l'altezza della finestra al visualViewport
+    if (window.visualViewport) {
+      const onVV = () => this.applyViewport();
+      window.visualViewport.addEventListener('resize', onVV);
+      window.visualViewport.addEventListener('scroll', onVV);
+    }
 
     // Chiusura automatica su click esterno (pointerdown al di fuori di .nodo-window e .nodo-fab)
     document.addEventListener('pointerdown', e => {
@@ -287,6 +341,8 @@ class NodoWidget {
       }
       if (!this.isOpen) return;
       if (this.elements.win?.contains(e.target) || this.elements.fab?.contains(e.target)) return;
+      // Non chiudere durante tour guidato o dettatura vocale
+      if (this.tourState || this.isDictating) return;
       this.close();
     });
 
@@ -295,8 +351,8 @@ class NodoWidget {
       const link = e.target.closest('.nodo-action-link');
       if (link) {
         e.preventDefault();
-        const target = link.getAttribute('data-target');
-        const elem = document.querySelector(target);
+        const target = this.safeTarget(link.getAttribute('data-target'));
+        const elem = target ? document.querySelector(target) : null;
         if (elem) {
           if (window.innerWidth <= 640) this.close();
           elem.scrollIntoView({ behavior: 'smooth' });
@@ -389,6 +445,69 @@ class NodoWidget {
     }, true);
   }
 
+  /** Accetta solo ancore #id esistenti nella pagina; altrimenti null */
+  safeTarget(target) {
+    if (typeof target !== 'string' || !/^#[A-Za-z][\w-]{0,63}$/.test(target)) return null;
+    return document.getElementById(target.slice(1)) ? target : null;
+  }
+
+  escapeHtml(str) {
+    return String(str ?? '')
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;');
+  }
+
+  /** HTML sicuro del link di azione (target validato, label escapata); '' se non valido */
+  actionLinkHtml(action) {
+    if (!action || typeof action !== 'object') return '';
+    const target = this.safeTarget(action.target);
+    if (!target) return '';
+    const label = this.escapeHtml(String(action.label || 'Vai alla sezione').slice(0, 80));
+    return `
+      <div class="nodo-msg-action">
+        <a href="${target}" class="nodo-action-link" data-target="${target}">
+          ${label} <span>&rarr;</span>
+        </a>
+      </div>
+    `;
+  }
+
+  applyViewport() {
+    const win = this.elements.win;
+    const vv = window.visualViewport;
+    if (!win || !vv) return;
+    if (window.innerWidth > 640 || !this.isOpen) {
+      win.style.removeProperty('--nodo-vvh');
+      win.classList.remove('is-keyboard');
+      return;
+    }
+    const keyboard = window.innerHeight - vv.height - vv.offsetTop > 80;
+    win.classList.toggle('is-keyboard', keyboard);
+    if (keyboard) {
+      win.style.setProperty('--nodo-vvh', `${Math.max(240, Math.round(vv.height - 16))}px`);
+    } else {
+      win.style.removeProperty('--nodo-vvh');
+    }
+  }
+
+  /** Annuncia a screen reader solo la risposta completa (l'area messaggi è aria-live=off) */
+  announce(text) {
+    if (!this.elements.live) return;
+    this.elements.live.textContent = '';
+    setTimeout(() => { if (this.elements.live) this.elements.live.textContent = text; }, 50);
+  }
+
+  /** discard=true (reset / cambio modalità): il testo in arrivo viene scartato e la cronologia non viene toccata */
+  stopGeneration(discard = false) {
+    if (!this.isGenerating) return;
+    if (discard) this._gen++;
+    if (this.engine) this.engine.abortGeneration();
+    // L'aggiornamento dello stato dei controlli avviene nel finally di handleUserQuery
+  }
+
   scheduleHint() {
     if (localStorage.getItem('nodo_hint_dismissed')) return;
     setTimeout(() => {
@@ -411,7 +530,10 @@ class NodoWidget {
   open() {
     this.isOpen = true;
     this.elements.fab.setAttribute('aria-expanded', 'true');
+    this.elements.win.inert = false;
+    this.elements.win.removeAttribute('aria-hidden');
     this.elements.win.classList.add('is-open');
+    this.applyViewport();
     this.dismissHint();
 
     if (this.tourBubble) {
@@ -435,7 +557,7 @@ class NodoWidget {
           const offerMsg = document.createElement('div');
           offerMsg.className = 'nodo-msg nodo-msg--bot';
           offerMsg.innerHTML = `
-            <div class="nodo-msg-text">⚡ Il tuo browser supporta l'AI locale (WebGPU). Vuoi risposte più libere e contestuali con il modello neurale Qwen2.5?</div>
+            <div class="nodo-msg-text">⚡ Il tuo browser supporta l'AI locale (WebGPU). Vuoi risposte più libere e contestuali con il modello neurale Qwen3 1.7B, che gira sul tuo dispositivo?</div>
             <div class="nodo-msg-action nodo-webgpu-offer-actions">
               <button class="nodo-webgpu-offer" data-choice="yes">Sì, attiva</button>
               <button class="nodo-webgpu-offer" data-choice="no">No grazie</button>
@@ -466,6 +588,9 @@ class NodoWidget {
     this.isOpen = false;
     this.elements.fab.setAttribute('aria-expanded', 'false');
     this.elements.win.classList.remove('is-open');
+    this.elements.win.inert = true; // fuori dall'ordine di Tab e dagli screen reader quando chiusa
+    this.elements.win.setAttribute('aria-hidden', 'true');
+    this.applyViewport();
     this.hideSlashMenu();
     if (this.currentAudio) {
       this.currentAudio.pause();
@@ -481,6 +606,7 @@ class NodoWidget {
   }
 
   resetChat() {
+    this.stopGeneration(true);
     this.clearTourTimer();
     this.tourState = null;
     this.history = [];
@@ -494,7 +620,9 @@ class NodoWidget {
   }
 
   async handleModeToggle() {
-    if (this.isGenerating || (this.engine && this.engine.isWebGPULoading)) return;
+    if (this.engine && this.engine.isWebGPULoading) return;
+    // Cambio modalità durante una risposta: annulla lo stream in corso
+    if (this.isGenerating) this.stopGeneration(true);
 
     if (!this.engine) {
       try {
@@ -519,7 +647,7 @@ class NodoWidget {
       if (this.engine.isWebGPULoaded) {
         this.engine.setMode('webgpu');
         this.updateModeBadge();
-        this.showToast("⚡ GPU Locale (Qwen2.5 0.5B) attivata.", false, 2000);
+        this.showToast("⚡ GPU Locale (Qwen3 1.7B) attivata.", false, 2000);
         return;
       }
 
@@ -531,7 +659,7 @@ class NodoWidget {
           this.updateProgress(progress, text);
         });
 
-        this.updateProgress(1.0, "Pesi Qwen2.5 0.5B pronti (100%)");
+        this.updateProgress(1.0, "Pesi Qwen3 1.7B pronti (100%)");
         this.engine.setMode('webgpu');
         this.updateModeBadge();
 
@@ -567,10 +695,13 @@ class NodoWidget {
     if (!badge) return;
 
     badge.className = 'nodo-mode-badge';
+    if (this.elements.privacyNote) {
+      this.elements.privacyNote.style.display = mode === 'cloud' ? 'block' : 'none';
+    }
     if (mode === 'webgpu') {
       badge.classList.add('nodo-mode-badge--webgpu');
       badge.innerHTML = `[ ⚡ GPU LOCALE ]`;
-      badge.setAttribute('title', 'Modalità attiva: GPU Locale (Qwen2.5 0.5B in-browser). Clicca per passare a Istantaneo.');
+      badge.setAttribute('title', 'Modalità attiva: GPU Locale (Qwen3 1.7B in-browser). Clicca per passare a Istantaneo.');
       badge.setAttribute('aria-label', 'Modalità attiva: GPU Locale. Clicca per cambiare.');
     } else if (mode === 'cloud') {
       badge.classList.add('nodo-mode-badge--cloud');
@@ -607,7 +738,7 @@ class NodoWidget {
     if (this.elements.progressFill) {
       this.elements.progressFill.style.width = `${pct}%`;
     }
-    const displayMsg = text || `Caricamento pesi Qwen2.5 (${pct}%)...`;
+    const displayMsg = text || `Caricamento pesi Qwen3 (${pct}%)...`;
     if (this.elements.progressText) {
       this.elements.progressText.textContent = displayMsg;
     }
@@ -636,9 +767,24 @@ class NodoWidget {
     this.elements.input.value = '';
     this.appendUserMessage(text);
 
+    const myGen = this._gen;
+    const stale = () => myGen !== this._gen;
+    const releaseControls = () => {
+      if (this.elements.header) this.elements.header.classList.remove('is-talking');
+      if (this.elements.fab) this.elements.fab.classList.remove('is-talking');
+      if (this.elements.sendBtn) this.elements.sendBtn.disabled = false;
+      if (this.elements.stopBtn) this.elements.stopBtn.style.display = 'none';
+      if (this.elements.input) {
+        this.elements.input.disabled = false;
+        setTimeout(() => this.elements.input.focus(), 50);
+      }
+      this.isGenerating = false;
+    };
+
     this.isGenerating = true;
     this.elements.sendBtn.disabled = true;
     this.elements.input.disabled = true;
+    if (this.elements.stopBtn) this.elements.stopBtn.style.display = 'inline-block';
     this.elements.header.classList.add('is-talking');
     this.elements.fab.classList.add('is-talking');
 
@@ -651,6 +797,7 @@ class NodoWidget {
 
     await new Promise(r => setTimeout(r, 380));
     typingMsg.remove();
+    if (stale()) { releaseControls(); return; }
 
     // Crea subito il messaggio bot vuoto nel DOM con il cursore .nodo-cursor
     const botMsg = document.createElement('div');
@@ -666,7 +813,12 @@ class NodoWidget {
     this.scrollToBottom();
 
     let currentText = '';
+    const onReset = () => {
+      currentText = '';
+      textNode.innerHTML = '<span class="nodo-cursor" aria-hidden="true"></span>';
+    };
     const onChunk = (delta) => {
+      if (stale()) return;
       currentText += delta;
       textNode.innerHTML = this.formatMarkdown(currentText) + '<span class="nodo-cursor" aria-hidden="true"></span>';
       this.scrollToBottom();
@@ -677,7 +829,7 @@ class NodoWidget {
       if (!this.engine) {
         this.engine = await ChatEngine.create();
       }
-      res = await this.engine.replyStream(text, this.history, onChunk);
+      res = await this.engine.replyStream(text, this.history, onChunk, onReset);
     } catch (err) {
       console.error("[Nodo] Errore nello streaming:", err);
       if (!currentText) {
@@ -685,20 +837,33 @@ class NodoWidget {
       }
     } finally {
       try {
+        // Reset o cambio modalità durante la risposta: non scrivere nulla nella cronologia svuotata
+        if (stale()) return;
+
+        // Stop manuale: tieni il testo già arrivato (se c'è) e chiudi senza effetti collaterali
+        if (res?.aborted) {
+          if (currentText) {
+            textNode.innerHTML = this.formatMarkdown(currentText);
+            this.saveHistory('bot', currentText);
+          } else {
+            botMsg.remove();
+          }
+          return;
+        }
+
         // 1. Rimuovi il cursore
         textNode.innerHTML = this.formatMarkdown(currentText);
+        this.announce(currentText);
 
-        // 2. Se c'è un'azione di deep-link (res.action), inserisci il pulsante di salto
+        // 2. Se c'è un'azione di deep-link (res.action), inserisci il pulsante di salto (target validato)
         if (res && res.action) {
-          const actionHtml = document.createElement('div');
-          actionHtml.className = 'nodo-msg-action';
-          actionHtml.innerHTML = `
-            <a href="${res.action.target}" class="nodo-action-link" data-target="${res.action.target}">
-              ${res.action.label} <span>&rarr;</span>
-            </a>
-          `;
-          botMsg.appendChild(actionHtml);
-          this.scrollToBottom();
+          const linkHtml = this.actionLinkHtml(res.action);
+          if (linkHtml) {
+            const actionHtml = document.createElement('div');
+            actionHtml.innerHTML = linkHtml;
+            botMsg.appendChild(actionHtml.firstElementChild);
+            this.scrollToBottom();
+          }
         }
 
         // 3. Voice synthesis (TTS) se abilitata dall'utente
@@ -769,14 +934,7 @@ class NodoWidget {
         console.error("[Nodo] Errore nel post-processing del messaggio:", innerErr);
       } finally {
         // 5. Rimuovi .is-talking e riabilita tassativamente i controlli
-        if (this.elements.header) this.elements.header.classList.remove('is-talking');
-        if (this.elements.fab) this.elements.fab.classList.remove('is-talking');
-        if (this.elements.sendBtn) this.elements.sendBtn.disabled = false;
-        if (this.elements.input) {
-          this.elements.input.disabled = false;
-          setTimeout(() => this.elements.input.focus(), 50);
-        }
-        this.isGenerating = false;
+        releaseControls();
       }
     }
   }
@@ -823,19 +981,12 @@ class NodoWidget {
     const msg = document.createElement('div');
     msg.className = 'nodo-msg nodo-msg--bot';
     let html = `<div class="nodo-msg-text">${this.formatMarkdown(text)}</div>`;
-    if (action) {
-      html += `
-        <div class="nodo-msg-action">
-          <a href="${action.target}" class="nodo-action-link" data-target="${action.target}">
-            ${action.label} <span>&rarr;</span>
-          </a>
-        </div>
-      `;
-    }
+    if (action) html += this.actionLinkHtml(action);
     msg.innerHTML = html;
     this.elements.messages.appendChild(msg);
     this.scrollToBottom();
     this.saveHistory('bot', text, action);
+    this.announce(text);
   }
 
   scrollToBottom() {
@@ -1077,9 +1228,11 @@ class NodoWidget {
     let ttsSuccess = false;
 
     if (ttsEndpoint) {
+      // Il server locale (serve.py) espone /api/tts solo in GET: il testo resta in querystring ma su localhost.
+      const ctrl = new AbortController();
+      const timeoutId = setTimeout(() => ctrl.abort(), 4500);
+      this._ttsTimer = timeoutId;
       try {
-        const ctrl = new AbortController();
-        const timeoutId = setTimeout(() => ctrl.abort(), 4500);
         const url = `${ttsEndpoint}?text=${encodeURIComponent(speechText)}&voice=${encodeURIComponent(voiceName)}`;
         const resp = await fetch(url, { signal: ctrl.signal });
         clearTimeout(timeoutId);
@@ -1104,6 +1257,9 @@ class NodoWidget {
         }
       } catch (err) {
         ttsSuccess = false;
+      } finally {
+        clearTimeout(timeoutId); // il timeout viene sempre cancellato, anche in caso di errore
+        if (this._ttsTimer === timeoutId) this._ttsTimer = null;
       }
     }
 
@@ -1183,44 +1339,71 @@ class NodoWidget {
     recognition.continuous = false;
     recognition.interimResults = true;
 
+    const defaultPlaceholder = this.elements.input.placeholder;
     let isListening = false;
+    let heardSpeech = false; // true solo se questa sessione ha davvero ricevuto voce
+    let micError = false;
     this.elements.micBtn.addEventListener('click', () => {
       if (isListening) {
         recognition.stop();
         return;
       }
+      if (this.isGenerating) return;
+      heardSpeech = false;
+      micError = false;
       try {
         recognition.start();
       } catch (err) {
         console.warn('[Nous] Errore start SpeechRecognition:', err);
+        this.isDictating = false;
+        this.showToast('Non riesco ad avviare il microfono. Riprova tra un attimo o scrivi la domanda.');
       }
     });
 
     recognition.onstart = () => {
       isListening = true;
+      this.isDictating = true;
       this.elements.micBtn.classList.add('is-listening');
       this.elements.input.placeholder = "Ascolto... parla pure in italiano";
     };
 
     recognition.onresult = (e) => {
       const transcript = Array.from(e.results).map(r => r[0].transcript).join('');
+      if (transcript.trim()) heardSpeech = true;
       this.elements.input.value = transcript;
     };
 
     recognition.onend = () => {
       isListening = false;
+      this.isDictating = false;
       this.elements.micBtn.classList.remove('is-listening');
-      this.elements.input.placeholder = "Chiedi a Nous su progetti, video, AI... (o digita /)";
+      this.elements.input.placeholder = defaultPlaceholder;
+      // Invia solo se il testo arriva dalla dettatura, mai quello scritto a mano
       const query = this.elements.input.value.trim();
-      if (query && !this.isGenerating) {
+      if (heardSpeech && !micError && query && !this.isGenerating) {
         this.handleUserQuery(query);
       }
+      heardSpeech = false;
     };
 
-    recognition.onerror = () => {
+    recognition.onerror = (ev) => {
+      micError = true;
       isListening = false;
+      this.isDictating = false;
       this.elements.micBtn.classList.remove('is-listening');
-      this.elements.input.placeholder = "Chiedi a Nous su progetti, video, AI... (o digita /)";
+      this.elements.input.placeholder = defaultPlaceholder;
+      const code = ev && ev.error;
+      if (code === 'not-allowed' || code === 'service-not-allowed') {
+        this.showToast('Microfono bloccato: consenti l’accesso al microfono nelle impostazioni del browser per dettare.');
+      } else if (code === 'no-speech') {
+        this.showToast('Non ho sentito nulla. Riprova a parlare più vicino al microfono.');
+      } else if (code === 'audio-capture') {
+        this.showToast('Non trovo nessun microfono collegato.');
+      } else if (code === 'network') {
+        this.showToast('La dettatura ha bisogno di connessione. Riprova oppure scrivi la domanda.');
+      } else if (code !== 'aborted') {
+        this.showToast('Dettatura non riuscita. Puoi scrivere la domanda qui sotto.');
+      }
     };
   }
 
@@ -1327,9 +1510,9 @@ class NodoWidget {
         {
           num: '3/4',
           target: '#caso-eso',
-          title: 'Sala 3: Hardware & Materia 3D (Esoscheletro)',
-          desc: 'Dalla telemetria bionica alla nuvola di 12.600 punti interattivi WebGL in OGL. Pipeline: Blender 3D → ComfyUI ControlNet → LTX Video.',
-          speech: "Tappa 3. Hardware e simulazione 3D per l'esoscheletro, integrando Blender, ComfyUI e la nuvola di punti WebGL.",
+          title: 'Sala 3: Hardware & Materia (Esoscheletro)',
+          desc: 'Dalla telemetria bionica alla nuvola di 12.600 punti interattivi WebGL in OGL. Scene generate con GPT Image, sistemate in Photoshop e montate in Premiere Pro.',
+          speech: "Tappa 3. Hardware e video di prodotto per l'esoscheletro, con la nuvola di punti WebGL.",
           actionText: '🔄 Vai a Esoscheletro',
           onAction: () => {
             const mSec = document.querySelector('#caso-eso');
@@ -1449,7 +1632,7 @@ class NodoWidget {
             <button class="nodo-tour-bubble-close" type="button" title="Chiudi" aria-label="Chiudi">✕</button>
           </div>
           <div class="nodo-tour-title">Hai esplorato tutte le 4 sale del portfolio!</div>
-          <div class="nodo-tour-desc">Dall'origine WebGL agli spot AI, dalla materia 3D ai banchi di lavoro. Da dove vuoi partire ora?</div>
+          <div class="nodo-tour-desc">Dall'origine WebGL agli spot AI, dalla materia ai banchi di lavoro. Da dove vuoi partire ora?</div>
           <div class="nodo-tour-nav" style="margin-top: 10px;">
             <button class="nodo-tour-btn nodo-tour-btn--action" id="nodo-bubble-brief-btn" type="button">📋 Avvia Brief</button>
             <button class="nodo-tour-btn nodo-tour-btn--next" id="nodo-bubble-open-chat" type="button">💬 Apri Nous</button>
@@ -1479,7 +1662,7 @@ class NodoWidget {
       });
     }
 
-    this.appendBotMessage("🎬 **Tour di regia completato!** Abbiamo esplorato l'origine WebGL, gli spot video AI, la modellazione 3D e i banchi di lavoro.\n\nVuoi approfondire un progetto specifico o configurare un brief in 3 passaggi?");
+    this.appendBotMessage("🎬 **Tour di regia completato!** Abbiamo esplorato l'origine WebGL, gli spot video AI, la materia e i banchi di lavoro.\n\nVuoi approfondire un progetto specifico o partire da un brief rapido in chat, con 3 domande?");
     if (this.voiceEnabled) {
       this.speakText("Tour di regia completato. Abbiamo attraversato tutte le sale. Da cosa vuoi partire?");
     }
@@ -1854,14 +2037,14 @@ Data: ${new Date().toLocaleDateString('it-IT')}
 
   detectCurrentSection() {
     const sections = [
-      { id: 'caso-union', name: 'Union Energia', prompt: 'Posso mostrarti i 9 spot video AI o spiegare come abbiamo mantenuto coerente l\'alpaca Davide.' },
-      { id: 'caso-eso', name: 'Esoscheletro (Human Robots)', prompt: 'Vuoi esplorare la simulazione 3D tra Blender, ComfyUI e LTX Video per la mobilità?' },
-      { id: 'caso-locanda', name: 'La Locanda del Castello', prompt: 'Vuoi ascoltare uno dei 5 jingle musicali creati con Lyria o vedere le locandine animate?' },
-      { id: 'caso-cest', name: 'Studio CETS (Alpi Marittime)', prompt: 'Posso raccontarti il progetto di identità visiva per il turismo sostenibile.' },
-      { id: 'caso-cdi', name: 'CDI Infissi', prompt: 'Vuoi scoprire come funziona il configuratore web di serramenti?' },
-      { id: 'skill', name: 'Strumenti & AI Stack', prompt: 'Vuoi conoscere i dettagli della workstation locale RTX 5090 e dei flussi ComfyUI?' },
+      { id: 'caso-union', name: 'Union Energia', prompt: 'Posso mostrarti i 9 spot o raccontarti come sono nati.' },
+      { id: 'caso-eso', name: 'Esoscheletro (Human Robots)', prompt: 'Vuoi vedere come è stato raccontato il lancio di un esoscheletro, con il giro a 360° del dispositivo?' },
+      { id: 'caso-locanda', name: 'La Locanda del Castello', prompt: 'Vuoi ascoltare uno dei 5 brani creati con Lyria o vedere le locandine animate?' },
+      { id: 'caso-cest', name: 'Studio CETS', prompt: 'Posso raccontarti il marchio rifatto e i 6 video per lo studio.' },
+      { id: 'caso-cdi', name: 'CDI Infissi', prompt: 'Vuoi sapere come è fatto il sito con il catalogo QFORT?' },
+      { id: 'strumenti', name: 'Strumenti & AI Stack', prompt: 'Posso dirti quali strumenti uso e per cosa.' },
       { id: 'banchi', name: 'I Banchi di Lavoro', prompt: 'Posso orientarti tra i servizi (video, grafica, web app o jingle).' },
-      { id: 'brief', name: 'Modulo Brief', prompt: 'Vuoi che compiliamo insieme il questionario qui in chat in 3 passaggi veloci?' }
+      { id: 'brief', name: 'Modulo Brief', prompt: 'Il questionario sul sito ha 6 domande. Se preferisci, ne facciamo una versione rapida qui in chat, con 3 domande.' }
     ];
 
     const vh = window.innerHeight || 800;
@@ -1999,6 +2182,7 @@ Data: ${new Date().toLocaleDateString('it-IT')}
         const parsed = JSON.parse(stored);
         this.history = Array.isArray(parsed) ? parsed : [];
         for (const item of this.history) {
+          if (!item || typeof item.text !== 'string') continue;
           if (item.role === 'user') {
             const msg = document.createElement('div');
             msg.className = 'nodo-msg nodo-msg--user';
@@ -2008,15 +2192,7 @@ Data: ${new Date().toLocaleDateString('it-IT')}
             const msg = document.createElement('div');
             msg.className = 'nodo-msg nodo-msg--bot';
             let html = `<div class="nodo-msg-text">${this.formatMarkdown(item.text)}</div>`;
-            if (item.action) {
-              html += `
-                <div class="nodo-msg-action">
-                  <a href="${item.action.target}" class="nodo-action-link" data-target="${item.action.target}">
-                    ${item.action.label} <span>&rarr;</span>
-                  </a>
-                </div>
-              `;
-            }
+            if (item.action) html += this.actionLinkHtml(item.action);
             msg.innerHTML = html;
             this.elements.messages.appendChild(msg);
           }

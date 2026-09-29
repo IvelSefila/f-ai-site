@@ -3,266 +3,310 @@
     "name": "Fabrizio Mana",
     "brand": "MF/AI",
     "tagline": "Creo immagini. Dirigo il movimento. Progetto sistemi AI.",
-    "role": "Creative Technologist, AI Builder & Art Director",
-    "location": "Piemonte, Italia",
+    "role": "Grafico pubblicitario, fotografo, video editor, copywriter, web designer, AI builder",
+    "location": "Base in Piemonte",
     "email": "fabriziomana@gmail.com",
-    "philosophy": "Il controllo umano guida la visione, l'intelligenza artificiale moltiplica l'iterazione e la velocità. Non un generatore automatico di contenuti, ma una regia di montaggio esigente.",
+    "philosophy": "Sono la mano che decide dentro la macchina che esegue. L'AI serve dove serve, mai a caso: dove finisce lo strumento e comincia il giudizio, quella parte resta sua.",
+    "availability": "Disponibile per nuovi progetti",
     "website": "https://ivelsefila.github.io/f-ai-site/v2/index.html"
   },
   "projects": [
     {
       "id": "union",
       "client": "Union Energia",
-      "title": "Campagna spot video multi-soggetto (9 episodi)",
-      "tag": "Spot Video & Character Design",
-      "year": 2024,
-      "duration": "6 settimane",
+      "title": "Un mondo dove le bollette sono andate a zero",
+      "tag": "Campagna marketing",
+      "commissioner": "Roberto Baldizzone",
       "highlights": [
-        "9 spot prodotti in 6 settimane senza una sola ripresa dal vivo",
-        "Personaggio Davide l'alpaca costruito con seed fissi ComfyUI + ControlNet per coerenza tra tutti gli episodi",
-        "Voci clonate con ElevenLabs: ogni personaggio mantiene timbro identico in tutti gli spot"
+        "9 pezzi di campagna, nessuna ripresa dal vivo, 4:09 di girato in tutto",
+        "Un universo parallelo dove una cometa a forma di zero azzera le bollette e gli animali diventano bipedi che parlano",
+        "Voci generate dentro Omni insieme al video, o con ElevenLabs quando serve la stessa voce da un episodio all'altro"
       ],
-      "challenge": "Realizzare 9 spot pubblicitari completi senza attori dal vivo né troupe sul set, mantenendo coerenza visiva e narrativa tra gli episodi.",
+      "challenge": "Brand identity dentro un marchio che esisteva già: raccontare l'energia pulita senza fare una lezione, con una storia che continua a crescere.",
       "stack": ["GPT Image", "Gemini Omni", "Adobe Premiere Pro", "ElevenLabs", "Lyria"],
-      "method": "Generazione dei fotogrammi chiave con GPT Image, animazione del movimento con Gemini Omni, montaggio e titolazione in Premiere Pro, voci con ElevenLabs e musiche Lyria.",
-      "characters": ["Davide l'alpaca", "Marco", "Luca l'asino sommerso"],
+      "method": "I pezzi nascono come immagini con GPT Image, si muovono con Gemini Omni (che costruisce anche i personaggi che sembrano persone vere) e si montano in Adobe Premiere Pro, con ritmo, sottotitoli e grafica di campagna. La musica è in parte generata con Lyria e in parte presa da librerie con licenza per uso commerciale.",
+      "characters": ["Davide l'alpaca", "Luca l'asino", "Marco"],
       "episodes": [
-        {
-          "title": "Azzeriamola green",
-          "desc": "Davide sfida il caro energia con la proposta green di Union: risparmio e sostenibilità in 30 secondi."
-        },
-        {
-          "title": "Caro benzina",
-          "desc": "Spot comico sul paradosso del caro carburante: Davide propone un'alternativa più intelligente."
-        },
-        {
-          "title": "La bolletta di luce e gas",
-          "desc": "La bolletta mensile diventa protagonista: un racconto ironico sull'incubo condiviso di milioni di italiani."
-        },
-        {
-          "title": "Luca l'asino sommerso",
-          "desc": "Luca, consulente energetico con le orecchie lunghe, si trova sommerso di offerte confuse — finché arriva Union."
-        },
-        {
-          "title": "La cometa a forma di zero",
-          "desc": "Spot animato: una cometa che rappresenta il risparmio zero sbatte contro la realtà finché Union non cambia le carte."
-        },
-        {
-          "title": "Insieme si può",
-          "desc": "Episodio corale: Davide, Marco e Luca uniscono le forze per passare a Union e tagliare i costi energetici."
-        },
-        {
-          "title": "Rapito dalle bollette",
-          "desc": "Sketch surreale: Marco viene letteralmente trascinato via dalla bolletta finché Davide non lo salva con l'offerta Union."
-        },
-        {
-          "title": "Marco",
-          "desc": "Character study del cliente tipo: dubbi, ritardi e indecisioni — ma alla fine Marco sceglie Union."
-        },
-        {
-          "title": "Quanto ti costa la tua casa",
-          "desc": "Spot consultivo: Davide analizza i consumi domestici di una famiglia tipo e dimostra il risparmio reale con Union."
-        }
+        { "title": "Azzeriamola green", "desc": "La locandina animata della campagna: il payoff, i tre passaggi e l'invito a scrivere (7 secondi)." },
+        { "title": "Caro benzina", "desc": "Davide l'alpaca davanti a una pompa di benzina, nel primo dei corti che lo presentano." },
+        { "title": "La bolletta di luce e gas", "desc": "Davide sulla porta di casa, con la bolletta appena arrivata." },
+        { "title": "Luca l'asino sommerso", "desc": "Un salotto sepolto sotto un mare di bollette, e Luca l'asino in mezzo." },
+        { "title": "La cometa a forma di zero", "desc": "L'origine di tutto: una cometa a forma di 0 entra nell'atmosfera e nasce il mondo parallelo." },
+        { "title": "Insieme si può", "desc": "Il pezzo lungo (1:18): la richiesta di partecipazione e il gancio finale, sottotitolato." },
+        { "title": "Rapito dalle bollette", "desc": "Un uomo sollevato in cielo da un disco volante sopra un prato: le bollette che ti portano via." },
+        { "title": "Marco", "desc": "Sembra una ripresa dal vivo in un viale alberato e non lo è: persona, luce e movimento sono tutti generati." },
+        { "title": "Quanto ti costa la tua casa", "desc": "Un dialogo fra due persone su una panchina. L'unico video orizzontale della serie (1:08)." }
       ],
-      "section_id": "lavori"
+      "section_id": "caso-union"
     },
     {
       "id": "eso",
-      "client": "Esoscheletro (Human Robots)",
-      "title": "Simulazione cinematografica camminata assistita e mobilità bionica",
-      "tag": "3D, CGI & Motion Design",
-      "year": 2024,
-      "duration": "3-4 settimane",
+      "client": "Human Robots",
+      "title": "Un prodotto che si vede prima di poterlo fotografare",
+      "tag": "Prodotto e lancio",
       "highlights": [
-        "Visualizzazione completa del dispositivo prima che il prototipo fisico esistesse",
-        "Pipeline Blender 3D → ComfyUI ControlNet → LTX Video → Premiere Pro: mesh meccanica → texturing fotorealistico → animazione cammino → montaggio finale",
-        "Render usati nel pitch agli investitori come proof-of-concept visivo"
+        "10 pezzi, 1 sito e 6 documenti di ricerca, dal trailer alle riprese di studio",
+        "Il lancio italiano di esoscheletri per la mobilità (nomi sul sito: Strider-X ed E-Legs) costruito tutto a monte: niente set, niente attori, niente prodotto in mano",
+        "Una vista 360 del dispositivo che si ruota trascinando, e quattro viste master perché sia identico in ogni inquadratura"
       ],
-      "challenge": "Visualizzare un dispositivo ingegneristico complesso di assistenza al cammino prima della costruzione del prototipo industriale.",
-      "stack": ["Blender 3D", "ComfyUI", "LTX Video", "Adobe Premiere Pro"],
-      "pipeline": "Blender 3D per la modellazione della struttura meccanica e del reticolo anatomico → ComfyUI ControlNet (depth + openpose) per texturing fotorealistico dei materiali → LTX Video per l'interpolazione fluida del cammino assistito → Adobe Premiere Pro per il montaggio finale e la color correction.",
-      "method": "Modellazione del reticolo 3D anatomico, rendering biomeccanico ed espansione video fotorealistica.",
-      "section_id": "lavori"
+      "challenge": "Far sì che l'oggetto sia lo stesso in ogni inquadratura, e che il tono regga sia in una palestra di riabilitazione sia su un crinale a duemila metri.",
+      "stack": ["GPT Image", "Photoshop", "Adobe Premiere Pro"],
+      "pipeline": "Le scene nascono come immagini con GPT Image, si sistemano in Photoshop e si montano in Adobe Premiere Pro: inquadrature generate una per una, di una cinquantina di spezzoni ne entra meno della metà.",
+      "method": "Una tavola con quattro viste del dispositivo, per averlo identico in ogni inquadratura. Ricerca: sei documenti di analisi del mercato italiano (numeri, concorrenti, canali, prezzi) e video di approfondimento fatti con NotebookLM. Sito: codice su misura, non un tema, con schede tecniche, configuratore, dati di mercato e modulo di pre-ordine.",
+      "pieces": ["Il trailer (24 secondi: casa, palestra di riabilitazione, montagna)", "Trekking (verticale per i social)", "Più forza, più libertà (spot per la scheda prodotto)", "Il dispositivo (product film)", "Sei viste e dettagli dello studio, tra cui macro e texture in carbonio"],
+      "section_id": "caso-eso"
     },
     {
       "id": "cets",
-      "client": "Studio CETS — Parco Alpi Marittime",
-      "title": "Identità visiva e cartellonistica per turismo sostenibile",
-      "tag": "Visual Identity & Print",
-      "year": 2024,
-      "duration": "2-3 settimane",
+      "client": "Studio CETS",
+      "title": "Il lavoro che l'amministratore non deve più fare",
+      "tag": "Marchio e campagna",
+      "commissioner": "Michele Devalle",
       "highlights": [
-        "Identità visiva istituzionale per un parco naturale protetto delle Alpi Marittime",
-        "Cartellonistica ad alta leggibilità calibrata su formati fisici (pannelli, mappe, brochure)",
-        "Palette naturalista derivata dai colori della biosfera alpina: verdi, ocra e blu montagna"
+        "Un centro elaborazione dati per amministratori di condominio (antincendio, GSA, rilievi con drone) che esisteva già ma era ancora poco conosciuto",
+        "Prima il marchio rifatto da capo (scudo, tricolore, palazzo e drone), poi la campagna per farlo conoscere",
+        "6 pezzi video, 1 marchio, 2 formati: verticale e orizzontale sono due montaggi, non un ritaglio"
       ],
-      "challenge": "Comunicazione istituzionale ad alta leggibilità per la valorizzazione del territorio montano protetto.",
-      "stack": ["Illustrator", "Photoshop", "Qwen", "Tipografia editoriale"],
-      "method": "Grafica vettoriale, composizione fotografica naturalistica e palette calibrata sui colori della biosfera alpina.",
-      "section_id": "lavori"
+      "challenge": "Un pubblico stretto che non compra sogni, compra ore: ogni pezzo parte da un problema vero del mestiere e arriva alla stessa promessa (Alleggerisci la tua burocrazia) da una porta diversa.",
+      "stack": ["Adobe Premiere Pro"],
+      "method": "Lo scudo nasce in vettoriale e solo dopo si muove. Le inquadrature sono generate una per una, senza set e senza attore, e scritte, ritmo e montaggio si chiudono in Adobe Premiere Pro.",
+      "pieces": ["Il marchio che si costruisce (verticale)", "La scadenza (la manutenzione antincendio dopo fine settembre la firma solo un tecnico qualificato)", "Il servizio, per intero", "Caro amministratore", "Riprenditi la tua vita", "Lo stesso marchio in orizzontale"],
+      "section_id": "caso-cest"
     },
     {
       "id": "locanda",
       "client": "La Locanda del Castello",
-      "title": "Rebranding olistico, 5 jingle musicali e video spot",
-      "tag": "Branding, Sound Design & Video",
-      "year": 2025,
-      "duration": "3 settimane",
+      "title": "Dal marchio alla locandina di sabato sera",
+      "tag": "Marchio e locandine",
+      "place": "Rocca de' Baldi, Piazza Pio VII",
       "highlights": [
-        "5 jingle originali (.m4a) che coprono l'intera esperienza del locale: dall'aperitivo al commiato",
-        "Rebranding completo: marchio, packaging per fritto e vini, spot video d'atmosfera",
-        "Circa 40 varianti musicali generate con Lyria per selezionare le 5 tracce finali"
+        "Un ristorante nel parco di un castello, senza un'identità sua: prima il marchio, poi una locandina animata per ogni serata",
+        "1 marchio, 14 pezzi animati, 5 brani",
+        "Serate diverse, tono diverso, ma in due secondi su un telefono si capisce che è sempre la stessa casa"
       ],
-      "challenge": "Esprimere l'accoglienza, la cucina tipica piemontese e la tradizione culinaria con un'identità multimediale completa.",
-      "stack": ["Photoshop", "Illustrator", "Lyria", "ElevenLabs", "Premiere Pro"],
-      "method": "Identità visiva (marchio, packaging fritto e vini), spot video d'atmosfera e composizione di 5 tracce jingle proprietarie (.m4a).",
+      "challenge": "Tenere insieme serate diverse, dalla degustazione di champagne al fritto misto, con un'identità riconoscibile a colpo d'occhio.",
+      "stack": ["GPT Image", "Photoshop", "Grok Video", "Adobe Premiere Pro", "Lyria"],
+      "method": "Le locandine nascono come immagini con GPT Image, si sistemano in Photoshop, si muovono con Grok Video e si montano in Premiere Pro, che aggiunge testi, prezzo e il marchio di chiusura. Il marchio è disegnato e chiuso in vettoriale: monogramma, lettering e tre versioni (intera, tonda, solo simbolo).",
+      "music": "Cinque brani generati con Lyria di Google, da trenta secondi ciascuno, scritti per il posto e non presi da una libreria.",
       "jingles": [
-        "L'Aperitivo — tono vivace, archi leggeri e folk piemontese per il benvenuto in sala.",
-        "Il Pranzo della Domenica — caldo e conviviale, strumenti acustici e tempi larghi.",
-        "La Cantina — atmosfera intima e legnosa, chitarra classica e contrabbasso per la carta dei vini.",
-        "Il Dolce Momento — leggero e dolce, glockenspiel e piano per il dessert.",
-        "Il Commiato — malinconico e memorabile, archi e fisarmonica per il saluto finale."
+        "The Shared Table",
+        "Rafters Under Gold",
+        "Copper and Stone",
+        "Salt and Golden Light",
+        "Where the Shadows Dance"
       ],
-      "section_id": "lavori"
+      "section_id": "caso-locanda"
     },
     {
       "id": "cdi",
       "client": "CDI Infissi",
-      "title": "Configuratore interattivo serramenti e isolamento",
-      "tag": "Web App & Product Showcase",
-      "year": 2025,
-      "duration": "2-4 settimane",
+      "title": "Un sito nel sito",
+      "tag": "Sito internet",
       "highlights": [
-        "Calcolo trasmittanza termica Uw e abbattimento acustico dB in tempo reale secondo norma UNI",
-        "Tre collezioni configurabili: Epiq, Arrogance, Paysage — con palette interattiva e PDF generabile lato client",
-        "Zero dipendenze: Vanilla JS puro, caricamento sotto 1 secondo"
+        "Un catalogo di 51 prodotti QFORT consultabile e filtrabile, pronto a portare a una richiesta di sopralluogo",
+        "4 pagine e 4 categorie: finestre, scorrevoli, porte, sistemi ombreggianti",
+        "Scritto in puro codice (HTML, CSS, JavaScript), senza tema, senza builder e senza dipendenze esterne oltre ai dati del produttore"
       ],
-      "challenge": "Permettere al cliente finale di esplorare le collezioni (Epiq, Arrogance, Paysage) simulando trasmittanza termica Uw e abbattimento dB.",
-      "stack": ["JavaScript Vanilla", "HTML5 Canvas", "CSS Grid", "Normative UNI"],
-      "method": "Applicazione web interattiva con visualizzatore finiture, sezioni dei profili e calcolatore prestazionale integrato.",
-      "section_id": "lavori"
+      "challenge": "Un sito per un rivenditore piemontese che renda consultabile un catalogo grande e porti chi lo guarda a chiedere un sopralluogo.",
+      "stack": ["HTML", "CSS", "JavaScript"],
+      "method": "Struttura, testi e catalogo scritti da zero. Nella pagina del portfolio il sito si vede in diretta, non in uno screenshot, e si può aprire a schermo intero.",
+      "section_id": "caso-cdi"
     }
   ],
+  "software": [
+    {
+      "id": "alfred",
+      "name": "Alfred",
+      "kind": "Applicazione web, assistente editoriale",
+      "desc": "Porta i canali social di Fabrizio dall'inizio alla fine: legge cinque fonti in ordine di priorità con le API ufficiali dove esistono, sceglie cosa vale la pena raccontare, trasforma un'immagine ferma in un Reel (un modello scrive il movimento, ComfyUI lo esegue) con una base musicale diversa per ogni Reel, e pubblica su Facebook, Instagram, YouTube, LinkedIn, Threads e Telegram, solo con API ufficiali e solo su account collegati da lui. Calendario visibile, stop immediato, ripartenza senza doppioni, statistiche per canale. Lo usa tutti i giorni.",
+      "under_the_hood": "Python con FastAPI e Uvicorn, APScheduler, PostgreSQL, Docker, Playwright, accesso con JWT e segreti cifrati. Si collega a qualunque AI da riga di comando (Claude, GPT, Gemini, Grok o un modello locale) con un server MCP."
+    },
+    {
+      "id": "mvd",
+      "name": "Max Video Downloader",
+      "kind": "Applicazione per Windows",
+      "desc": "Scarica video da fonti autorizzate (in coda, riprende se cade la rete) e ne ricava trascrizione e sottotitoli, tutto sul computer, senza caricamenti e senza costo al minuto. Trascrive con Voxtral e Whisper di riserva; i sottotitoli sono sincronizzati e correggibili parola per parola. Usa la scheda video, esiste in versione portatile con tutto dentro e Fabrizio la usa ogni giorno per lavoro.",
+      "under_the_hood": "Tauri 2 con React e TypeScript, motore in Python con la scheda video via CUDA, e un'AI da riga di comando che ripassa il testo con mano leggera: corregge, non riscrive."
+    }
+  ],
+  "site": {
+    "about": "Il sito è stato progettato da Fabrizio e scritto riga per riga con le migliori AI di frontiera: grafica, animazioni, interazioni, codice. Le immagini non sono file caricati: le disegna il browser, da un numero chiamato seed. Tutto quello che cambi resta nel tuo browser: il sito non salva e non manda niente a nessuno.",
+    "palette": "Nove palette di colore, dai pallini in alto a destra: Smeraldo, Ciano, Indaco, Magenta, Corallo, Ambra, Lime, Blu, Rubino. Ognuna è calcolata perché il testo resti leggibile su fondo scuro e su carta.",
+    "interactions": [
+      "Cambiare il colore di tutto il sito",
+      "Spostare qualsiasi riquadro tenendo premuto mezzo secondo e trascinando",
+      "Spostare le sezioni intere tenendo premuto sul titolo",
+      "Cambiare l'impaginazione (da una a quattro colonne)",
+      "Rigenerare le immagini cambiando il seed"
+    ],
+    "playlab": "Il Playlab è un laboratorio con quattro giochi scritti da zero (Trama, Piega, Flusso, Coro) e un costruttore che ne crea uno in sedici domande, con venti regole modificabili. Si carica solo al primo clic."
+  },
   "tools": {
     "grafica_video": [
-      { "name": "ComfyUI", "desc": "Pipeline nodali avanzate per generazione e controllo immagini/video con LoRA, ControlNet e LCM." },
-      { "name": "Forge", "desc": "Ambiente SD WebUI rapido e ottimizzato per batch processing e prompt testing." },
-      { "name": "LTX Video", "desc": "Generazione e interpolazione video ad alta coerenza temporale." },
-      { "name": "Qwen", "desc": "Modelli multimodali visivi e di linguaggio per prompt expander e visual analysis." },
-      { "name": "Topaz Video AI", "desc": "Upscaling, interpolazione a 60fps e denoising neurale per video master." },
-      { "name": "Adobe Premiere Pro", "desc": "Montaggio video professionale, timeline multi-traccia, sincro labiale e color correction." },
-      { "name": "DaVinci Resolve", "desc": "Color grading avanzato e conformazione cromatica da cinema." },
-      { "name": "Blender", "desc": "Modellazione 3D, simulazione luci e tracciamento prospettico per integrazioni CGI." }
+      { "name": "Adobe Photoshop", "desc": "Fotoritocco, composizione dei key visual, ripulitura delle immagini generate con l'AI." },
+      { "name": "Adobe Illustrator", "desc": "Marchi, loghi, lettering, esecutivi per la stampa." },
+      { "name": "Adobe Premiere Pro", "desc": "Montaggio, ritmo dei tagli, sottotitoli, versioni per ogni piattaforma." },
+      { "name": "Adobe Audition", "desc": "Pulizia della voce, livelli, musica sotto il parlato." },
+      { "name": "Adobe InDesign", "desc": "Cataloghi, brochure, presentazioni e documenti lunghi." }
     ],
-    "audio": [
-      { "name": "Lyria", "desc": "Composizione musicale generativa strumentale e jingle tematici." },
-      { "name": "ElevenLabs", "desc": "Clonazione e sintesi vocale neurale con inflessione naturale ed emotiva." },
-      { "name": "Suno / Udio", "desc": "Sintesi di basi e brani cantati per spot e canzoni pubblicitarie." },
-      { "name": "Reaper / Audacity", "desc": "Mastering audio, pulizia tracce vocali, equalizzazione e riduzione rumore." }
+    "assistenti_coding": [
+      { "name": "ChatGPT", "desc": "Prime stesure, riscritture, sintesi." },
+      { "name": "Claude / Code / Design", "desc": "Il codice di questo sito, revisione e documentazione dei progetti." },
+      { "name": "Gemini / Antigravity", "desc": "Confronto fra modelli, lettura di documenti lunghi, analisi di immagini." },
+      { "name": "xAI Grok", "desc": "Secondo parere su un testo e controllo del tono." },
+      { "name": "Perplexity", "desc": "Verifica di un dato citando le fonti." },
+      { "name": "Hermes", "desc": "Modello locale (Qwen 3.8) sulla workstation, fa da orchestratore a costo zero fra gli altri assistenti." },
+      { "name": "Orca", "desc": "L'applicazione dove tiene insieme dodici assistenti, ognuno nel suo terminale." }
     ],
-    "modelli_locali": [
-      { "name": "Qwen 2.5", "desc": "LLM open weights ad altissima prestazione per ragionamento, codice e testi complessi in italiano." },
-      { "name": "Flux.1", "desc": "Modello di generazione fotorealistica di ultima generazione ad alta fedeltà anatomica e tipografica." },
-      { "name": "SDXL", "desc": "Modello base per composizioni grafiche ad alta risoluzione con LoRA personalizzati." },
-      { "name": "Whisper", "desc": "Trascrizione vocale locale precisa con timecode al millisecondo per sottotitoli." }
+    "immagine_video_ai": [
+      { "name": "GPT Image 2.5", "desc": "Mockup, varianti di key visual, illustrazioni." },
+      { "name": "Nano Banana 2", "desc": "Modifica di immagini che esistono già." },
+      { "name": "Krea 2", "desc": "Immagini fotorealistiche con texture credibili." },
+      { "name": "Qwen Image 2.1", "desc": "Scritte leggibili dentro l'immagine e composizioni precise." },
+      { "name": "Grok Image", "desc": "Molte varianti in poco tempo." },
+      { "name": "Seedance 2.5", "desc": "Fa muovere un fotogramma fermo." },
+      { "name": "Gemini Omni", "desc": "Multimodale: testo, immagini e audio nello stesso passaggio." },
+      { "name": "Grok Video", "desc": "Clip brevi per i social." },
+      { "name": "Higgsfield", "desc": "Video con controllo esplicito sui movimenti di camera." }
     ],
-    "web_codice": [
-      { "name": "JavaScript Vanilla", "desc": "Sviluppo frontend puro, performante, zero dipendenze e zero bloat." },
-      { "name": "HTML5 Semantico", "desc": "Struttura accessibile, conforme a WCAG 2.2 e ottimizzata per screen reader e SEO." },
-      { "name": "CSS3 / Custom Properties", "desc": "Design system a token, fluid typography con clamp() e layout responsivi flessibili." },
-      { "name": "WebGL2 / OGL", "desc": "Shader GLSL su GPU per animazioni visive interattive ad alto frame rate." },
-      { "name": "Python & Linux", "desc": "Scripting, automazione pipeline, elaborazione batch con FFmpeg e deployment self-hosted." }
+    "audio_ai": [
+      { "name": "ACE 1.5", "desc": "Modello aperto per basi musicali originali." },
+      { "name": "Lyria/Flow Music", "desc": "Musica strumentale di Google su descrizione." },
+      { "name": "ElevenLabs", "desc": "Sintesi vocale e clonazione della voce." }
+    ],
+    "cloni_ai": [
+      { "name": "HeyGen", "desc": "Presentatori digitali, anche in altre lingue." },
+      { "name": "Avatar AI", "desc": "Un volto generato che presenta a camera." },
+      { "name": "Voice Cloning", "desc": "Continuità di voce fra episodi." }
+    ],
+    "workflow_ai_locale": [
+      { "name": "n8n", "desc": "Automazione a nodi che collega servizi diversi." },
+      { "name": "ComfyUI", "desc": "Sistema a nodi, gratuito e aperto, per generare immagini, video, testi e musica sul proprio computer." },
+      { "name": "Stable Diffusion", "desc": "Generazione di immagini in locale." },
+      { "name": "Ollama", "desc": "Modelli linguistici che girano sul computer." },
+      { "name": "LM Studio", "desc": "Per scaricare, provare e confrontare modelli locali." },
+      { "name": "Hooks Engineering", "desc": "Tecnica: controlli automatici agganciati ai passaggi di un flusso." }
+    ],
+    "ai_engineering": [
+      { "name": "Prompt Engineering", "desc": "Istruzioni scritte perché diano lo stesso risultato anche domani." },
+      { "name": "Prompt JSON", "desc": "Risposte in formato strutturato, leggibile da un programma." },
+      { "name": "Skills Engineering", "desc": "Un metodo di lavoro impacchettato in una procedura riusabile." },
+      { "name": "Memoria persistente AI / Mem0", "desc": "Una memoria fra una sessione e l'altra." },
+      { "name": "Agenti AI", "desc": "Assistenti che eseguono più passaggi in autonomia." },
+      { "name": "Webapp su misura", "desc": "Applicazioni scritte descrivendole a un assistente e correggendole finché funzionano." },
+      { "name": "Automazioni AI", "desc": "Flussi che tolgono i passaggi manuali ripetitivi." }
+    ],
+    "social_pubblicazione": [
+      { "name": "Meta Business Suite", "desc": "Pagine Facebook e Instagram da un posto solo." },
+      { "name": "Postiz", "desc": "Pianificazione su più social da un calendario unico." },
+      { "name": "TikTok Studio", "desc": "L'app ufficiale di TikTok per pubblicare e leggere i dati." },
+      { "name": "Alfred", "desc": "L'applicazione che ha scritto lui, dalla fonte alla pubblicazione." }
     ]
   },
+  "tools_count": 44,
   "services": [
-    { "title": "Grafica pubblicitaria e visual identity", "desc": "Marchi, loghi, impaginazione, manifesti e identità visiva coordinata per brand e istituzioni." },
-    { "title": "Video e post-produzione con AI generativa", "desc": "Spot pubblicitari, reel, video istituzionali realizzati con regia virtuale e montaggio tradizionale." },
-    { "title": "Sistemi per social media", "desc": "Flussi di automazione per la produzione sistematica di contenuti verticali, clip e caroselli." },
-    { "title": "Flussi e prototipi AI personalizzati", "desc": "Costruzione di workflow ComfyUI, modelli LoRA addestrati su stile o prodotto, agenti locali." },
-    { "title": "Siti internet statici ultra-performanti", "desc": "Portfolio, landing page e siti vetrina ad altissima velocità, zero dipendenze e deploy su GitHub Pages." },
-    { "title": "Web app e interfacce interattive", "desc": "Configuratori di prodotto, calcolatori tecnici e simulatori 3D/WebGL direttamente nel browser." },
-    { "title": "Campagne media multi-canale", "desc": "Direzione creativa integrata: dal concept visivo al copy, dai video agli asset promozionali per l'advertising." },
-    { "title": "Jingle e canzoni pubblicitarie", "desc": "Musiche originali, identità sonore e jingle memorabili per spot radio, web e video promozionali." }
+    { "title": "Grafica pubblicitaria", "desc": "Direzione visiva e declinazioni per ogni formato: key visual, locandine, marchi e lettering in vettoriale, digitale e stampa." },
+    { "title": "Video e post-produzione", "desc": "Montaggio, motion, compositing e sottotitoli, con riprese esistenti o generazione assistita." },
+    { "title": "Sistemi per social media", "desc": "Format riconoscibili, template, adattamenti per ogni piattaforma e un flusso di revisione." },
+    { "title": "Flussi e prototipi AI", "desc": "Automazioni, agenti e prototipi, in locale o in cloud." },
+    { "title": "Siti internet", "desc": "Siti in puro codice, e anche temi e plugin WordPress su misura quando serve quella piattaforma." },
+    { "title": "Web app", "desc": "Applicazioni vere, non demo: quando lo strumento che serve non esiste ancora, lo scrive." },
+    { "title": "Campagne media", "desc": "La campagna di marketing da zero, seguita fino alla pubblicazione, su più canali insieme, digitali e non." },
+    { "title": "Jingle e canzoni pubblicitarie", "desc": "Musiche e jingle originali per spot e campagne, con voce e mix." }
   ],
   "process": {
     "steps": [
-      { "n": 1, "name": "Brief", "desc": "Questionario strutturato in 6 domande per definire obiettivi, canali, tempi e budget." },
-      { "n": 2, "name": "Concept", "desc": "Bozzetti, moodboard e direzione creativa condivisa prima della produzione." },
-      { "n": 3, "name": "Produzione", "desc": "Realizzazione con iterazioni rapide grazie alle pipeline AI locali." },
-      { "n": 4, "name": "Consegna", "desc": "File master in formato richiesto, revisioni incluse, senza costi aggiuntivi a sorpresa." }
+      { "n": 1, "name": "Capisco", "desc": "Obiettivo, pubblico, materiali, canali e vincoli." },
+      { "n": 2, "name": "Dirigo", "desc": "Concept, linguaggio, ritmo e sistema visivo." },
+      { "n": 3, "name": "Produco", "desc": "Creo e monto con tecniche tradizionali e AI dove utile." },
+      { "n": 4, "name": "Controllo", "desc": "Seleziono, correggo e mantengo coerenza tra gli output." },
+      { "n": 5, "name": "Consegno", "desc": "Preparo file, versioni e indicazioni d'uso." }
     ],
-    "typical_timeline": "Da 1 settimana per asset singoli a 4-6 settimane per campagne video complete."
+    "principle": "Prima capisco il risultato, poi scelgo gli strumenti."
+  },
+  "brief": {
+    "steps": 6,
+    "questions": [
+      "Che cosa vuoi ottenere?",
+      "Da cosa partiamo?",
+      "Dove dovrà funzionare?",
+      "Quando ti serve?",
+      "Che supporto cerchi?",
+      "Come posso ricontattarti? (nome ed email obbligatori; azienda, fascia di investimento e nota facoltative)"
+    ],
+    "data": "Il brief viene compilato nel tuo browser. Il sito non salva e non invia niente: alla fine si copia il riepilogo oppure si apre il programma di posta con il testo già dentro, e lo mandi tu."
   },
   "pricing": {
-    "note": "Ogni progetto è calibrato sul brief. Nessuna tariffa esposta: il brief interattivo aiuta a trovare l'equilibrio tra obiettivi e budget.",
-    "approach": "Preventivo trasparente dopo il brief. Nessuna sorpresa."
+    "note": "Sul sito non ci sono prezzi né listini.",
+    "approach": "Nel brief c'è una domanda facoltativa sulla fascia di investimento (si può anche non indicarla o definirla insieme). Il brief non calcola nessun preventivo: è un riepilogo da mandare a Fabrizio."
   },
   "workStyle": {
-    "remote": true,
-    "location": "Piemonte, Italia. Lavora in remoto con clienti in tutta Italia.",
-    "languages": ["Italiano", "Inglese tecnico"],
-    "sectors": ["Energia e utility", "Ristorazione e food", "Turismo e ambiente", "Industria e tecnologia", "Arredamento e serramenti"]
+    "location": "Base in Piemonte. Sul sito non è scritto se lavora in remoto o in presenza.",
+    "sectors": ["Energia", "Prodotti per la mobilità e robotica", "Servizi per amministratori di condominio", "Ristorazione", "Serramenti"]
   },
   "techSetup": {
-    "gpu": "NVIDIA RTX 5090",
-    "note": "Workstation locale ad alte prestazioni per inferenza LLM, rendering GPU e pipeline AI senza dipendenze cloud."
+    "note": "Installa, confronta e integra modelli su una workstation sua, e sceglie fra locale, cloud e ibrido. Le percentuali della sezione Tecnologia sono stime dalla sua esperienza, non misure di laboratorio."
   },
   "faq": [
     {
       "q": "Chi è Fabrizio Mana?",
-      "a": "Fabrizio Mana (MF/AI) è un creative technologist e art director con sede in Piemonte. Si occupa di grafica pubblicitaria, video con intelligenza artificiale generativa, siti internet ultra-performanti e sistemi AI locali."
+      "a": "Fabrizio Mana (MF/AI) è grafico pubblicitario, fotografo, video editor, copywriter, web designer e AI builder. Ha base in Piemonte e porta le idee dalla progettazione alla pubblicazione: campagne, video, siti, web app, jingle."
+    },
+    {
+      "q": "Sei un'AI? Sei un bot?",
+      "a": "Sì, sono Nous, un assistente automatico: rispondo solo con quello che c'è scritto sul sito. Fabrizio invece è una persona reale, e per parlargli scrivi a fabriziomana@gmail.com o compila il brief."
     },
     {
       "q": "Come lavora con l'intelligenza artificiale?",
-      "a": "Non usa l'AI come generatore pigro o casuale: l'AI moltiplica le varianti visive e velocizza la produzione, mentre il controllo umano governa regia, montaggio, coerenza cromatica e ritmo narrativo."
+      "a": "L'AI la usa dove serve, mai a caso: strumenti tradizionali, agentica e modelli in locale o in cloud, i migliori per ogni bisogno. Regia, scelta e controllo restano suoi."
     },
     {
       "q": "Come posso richiedere un preventivo o collaborare?",
-      "a": "Puoi compilare il modulo brief interattivo a 6 domande nella sezione Contatto del sito, oppure scrivere direttamente via email a fabriziomana@gmail.com."
+      "a": "Compili il brief sul sito (6 domande, circa due minuti) e mandi il riepilogo a Fabrizio per email, oppure gli scrivi direttamente a fabriziomana@gmail.com."
     },
     {
-      "q": "Quali sono i progetti più importanti visibili sul sito?",
-      "a": "Tra i progetti principali ci sono la campagna video di 9 spot per Union Energia, lo studio per l'esoscheletro Human Robots, l'identità visiva per il Parco Alpi Marittime (CETS), il rebranding de La Locanda del Castello e il configuratore interattivo per CDI Infissi."
+      "q": "Il brief invia i miei dati?",
+      "a": "No. Il brief resta nel tuo browser: il sito non salva e non invia niente. A fine compilazione copi il riepilogo o apri il programma di posta con il testo già scritto, e lo mandi tu."
+    },
+    {
+      "q": "Quali sono i lavori visibili sul sito?",
+      "a": "Cinque: Union Energia (campagna), Human Robots (lancio di prodotto), Studio CETS (marchio e campagna), La Locanda del Castello (marchio, locandine e cinque brani) e CDI Infissi (sito internet)."
+    },
+    {
+      "q": "Quanto costa? Quali sono i prezzi?",
+      "a": "Sul sito non ci sono prezzi né listini. Puoi indicare una fascia nel brief (o lasciarla da definire) e poi scrivere a Fabrizio."
     },
     {
       "q": "Quanto ci vuole per un progetto?",
-      "a": "Dipende dalla complessità: da 1 settimana per un jingle o un asset singolo, a 4-6 settimane per una campagna video completa come Union Energia (9 spot). I tempi esatti vengono concordati nel brief."
+      "a": "Sul sito non sono dichiarati tempi. Nel brief c'è la domanda Quando ti serve, con una data indicativa o flessibile: per i tempi concreti va sentito Fabrizio."
     },
     {
-      "q": "Lavori anche con piccole aziende o liberi professionisti?",
-      "a": "Sì. La pipeline AI locale abbatte i costi di produzione tradizionali, rendendo accessibili spot video, jingle e siti web anche per realtà più piccole. Il brief aiuta a calibrare il progetto sul budget disponibile."
+      "q": "Cos'è Studio CETS?",
+      "a": "È un centro elaborazione dati per amministratori di condominio (antincendio, GSA, rilievi con drone), di Michele Devalle. Fabrizio ha rifatto il marchio e poi ha fatto una campagna di sei video per farlo conoscere."
     },
     {
-      "q": "Puoi fare sia grafica che video nello stesso progetto?",
-      "a": "Assolutamente sì. La Locanda del Castello è l'esempio perfetto: rebranding grafico (logo, packaging), 5 jingle originali e spot video d'atmosfera — tutto coordinato in un'unica campagna multimediale."
+      "q": "Fai anche siti WordPress?",
+      "a": "Sì. Fa siti in puro codice e, quando serve quella piattaforma, temi e plugin WordPress su misura. Sceglie in base a chi dovrà gestire il sito dopo."
     },
     {
-      "q": "Cosa ti rende diverso dai normali grafici o agenzie?",
-      "a": "Tre cose: pipeline AI orchestrate (non prompt casuali), tutto gira in locale su RTX 5090 (zero API cloud per la generazione), e la regia narrativa è sempre umana. Il risultato è velocità da agenzia e controllo da regista indipendente."
+      "q": "Cos'è Alfred?",
+      "a": "È un'applicazione web scritta da Fabrizio che gestisce i suoi canali social: legge le fonti, produce i video e pubblica su sei piattaforme. Ogni passaggio resta visibile e fermabile."
     },
     {
-      "q": "Come funziona il processo di lavoro passo per passo?",
-      "a": "4 step: 1) Brief — 6 domande per definire obiettivi, canali e budget. 2) Concept — moodboard e direzione creativa condivisa. 3) Produzione — pipeline AI con iterazioni rapide. 4) Consegna — file master nei formati richiesti, revisioni incluse."
+      "q": "Cos'è Max Video Downloader?",
+      "a": "È un'app per Windows scritta da Fabrizio: scarica video da fonti autorizzate e ne ricava trascrizione e sottotitoli, tutto sul computer, senza costo al minuto."
     },
     {
-      "q": "Fai anche manutenzione di siti?",
-      "a": "I siti che Fabrizio produce sono statici (HTML/JS/CSS puro), praticamente a manutenzione zero. Aggiornamenti di contenuto, nuove sezioni o restyling sono comunque gestiti su accordo."
+      "q": "Fai jingle e canzoni pubblicitarie?",
+      "a": "Sì, è uno degli otto servizi. Un esempio sono i cinque brani da trenta secondi scritti per La Locanda del Castello con Lyria."
     },
     {
-      "q": "Hai esperienza nel settore alimentare/ristorazione?",
-      "a": "Sì: il progetto La Locanda del Castello include rebranding completo, packaging per prodotti alimentari (fritto e vini), 5 jingle e spot video per un ristorante storico piemontese."
+      "q": "Dove lavori?",
+      "a": "Fabrizio ha base in Piemonte. Sul sito non è scritto se lavora in remoto o in presenza: chiedilo nel brief o per email."
     },
     {
-      "q": "Hai esperienza nel settore industriale/tecnologico?",
-      "a": "Sì: il progetto Esoscheletro (Human Robots) ha richiesto la visualizzazione di un dispositivo ingegneristico complesso (camminata assistita bionica) prima della costruzione del prototipo fisico. I render sono stati usati nel pitch agli investitori."
-    },
-    {
-      "q": "Consegni i file sorgente?",
-      "a": "Dipende dall'accordo nel brief. Di solito vengono consegnati i file master (video H.264/H.265, audio .wav/.m4a, grafica .ai/.psd) e su richiesta anche i file di progetto (Premiere .prproj, Blender .blend, ComfyUI workflow .json)."
-    },
-    {
-      "q": "Posso vedere altri esempi oltre al sito?",
-      "a": "Il portfolio sul sito mostra i 5 casi principali. Per materiali aggiuntivi, demo private o showreel specifici per settore, scrivi a fabriziomana@gmail.com — vengono condivisi su richiesta diretta."
+      "q": "Quanti strumenti usa?",
+      "a": "Il sito ne elenca 44, in otto gruppi. Toccando una voce nella sezione Strumenti si apre la scheda con cosa sono e cosa ci fa."
     }
   ]
 }

@@ -36,8 +36,6 @@ export const PEZZI = [
     n: 'Una scheda per ogni champagne in degustazione: stessa impaginazione, contenuto diverso — il sistema, non una grafica sola.' },
   { id: 'fritto-locandina', t: 'Fritto misto di pesce', d: '0:10', w: 946, h: 1280,
     n: 'La stessa serata in una locandina che si muove appena: prezzo, data e cosa è compreso, leggibili in due secondi.' },
-  { id: 'karaoke', t: 'Serata cena karaoke', d: '0:10', w: 946, h: 1280,
-    n: 'Microfono, note e candele. La serata più informale della casa, e si vede dal tono.' },
   { id: 'benessere', t: 'Giornata di benessere e gusto', d: '0:13', w: 960, h: 1280,
     n: 'Una giornata fra trattamento viso e buffet nel parco: un servizio fuori tema che deve sembrare comunque la stessa casa.' },
   { id: 'eventi', t: 'Il luogo dei momenti speciali', d: '0:10', w: 946, h: 1280,
