@@ -2,19 +2,19 @@
 * app.js — la sessione. Tiene il filo fra le prove, parla, misura,
 * e alla fine scrive il dossier. Nessuna libreria.
 * ═══════════════════════════════════════════════════════════════════ */
-import { initTipografia } from './tipografia.js?v=20260928-164';
+import { initTipografia } from './tipografia.js?v=20260928-165';
 initTipografia();
 // cursore a mirino tolto su richiesta (mirino.js resta nel progetto)
-import { initHero } from './hero.js?v=20260928-164';
-import { initStrumenti } from './strumenti.js?v=20260928-164';
-import { initUnion } from './union.js?v=20260928-164';
-import { initEso } from './eso.js?v=20260928-164';
-import { initLocanda } from './locanda.js?v=20260928-164';
-import { initCest } from './cest.js?v=20260928-164';
-import { initPalette } from './palette.js?v=20260928-164';
-import { keyVisual, radar, MODES, rng, leggiColori} from './engine.js?v=20260928-164';
-import { initBrief } from './brief.js?v=20260928-164';
-import { initServizi } from './servizi.js?v=20260928-164';
+import { initHero } from './hero.js?v=20260928-165';
+import { initStrumenti } from './strumenti.js?v=20260928-165';
+import { initUnion } from './union.js?v=20260928-165';
+import { initEso } from './eso.js?v=20260928-165';
+import { initLocanda } from './locanda.js?v=20260928-165';
+import { initCest } from './cest.js?v=20260928-165';
+import { initPalette } from './palette.js?v=20260928-165';
+import { keyVisual, radar, MODES, rng, leggiColori} from './engine.js?v=20260928-165';
+import { initBrief } from './brief.js?v=20260928-165';
+import { initServizi } from './servizi.js?v=20260928-165';
 
 const $ = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => [...r.querySelectorAll(s)];
@@ -1460,6 +1460,26 @@ $$('.eso__360-stage').forEach(stage360 => {
     if (e.type === 'pointerdown') clearTimeout(timerRiposo); else riprogramma();
   };
   for (const ev of ['pointerdown', 'pointerup', 'pointercancel', 'keydown']) stage360.addEventListener(ev, azione360, { capture: true });
+  /* Nous fa girare l'esoscheletro: un giro completo di 360 gradi in circa 9 secondi (con sfumatura fra i
+     fotogrammi), poi torna l'oscillazione a riposo. Il primo tocco dell'utente lo interrompe. */
+  let demoId = 0;
+  function giroDemo() {
+    if (demoId || riduci.matches || !inVista360) return;
+    if (!(pronto && pronti.every(Boolean))) return;
+    riposoOff();
+    clearTimeout(timerRiposo);
+    const t0 = performance.now(), DUR = 9000, partenza = frame;
+    const passo = now => {
+      const t = Math.min(1, (now - t0) / DUR);
+      const e = t < .5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2;   /* parte e arriva piano */
+      disegnaMix(partenza + e * TOT);
+      if (t < 1 && !trascinando) demoId = requestAnimationFrame(passo);
+      else { demoId = 0; riprogramma(); }
+    };
+    demoId = requestAnimationFrame(passo);
+  }
+  stage360.addEventListener('pointerdown', () => { if (demoId) { cancelAnimationFrame(demoId); demoId = 0; } }, { capture: true });
+  document.addEventListener('nous:demo-eso', giroDemo);
   stage360.setAttribute('role', 'slider');
   stage360.setAttribute('tabindex', '0');
   stage360.setAttribute('aria-label', 'Vista a 360 gradi del dispositivo, trascina o usa le frecce per ruotarlo');

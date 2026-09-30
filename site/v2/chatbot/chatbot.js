@@ -2,8 +2,8 @@
  * Widget Controller "Nous" — F/AI Portfolio
  * Versione 1.0 (Settembre 2026)
  */
-import { CONFIG } from './chatbot.config.js?v=20260928-164';
-import { ChatEngine } from './chatbot.engine.js?v=20260928-164';
+import { CONFIG } from './chatbot.config.js?v=20260928-165';
+import { ChatEngine } from './chatbot.engine.js?v=20260928-165';
 
 /* Cosa sta girando: testi mostrati in alto e nel pannello dettagli (italiano semplice) */
 const ENGINE_INFO = {
@@ -70,6 +70,8 @@ class NodoWidget {
     this.loadHistory();
     this.scheduleHint();
     this.suggerimentiSezione();
+    this.vitaOrb();
+    this.mostraBenvenuto();
     this.updateModeBadge();
 
     try {
@@ -576,7 +578,7 @@ class NodoWidget {
       ['#banchi', 'Questi sono gli otto servizi di Fabrizio: ognuno dice cosa consegna e dove lo vedi già fatto.', 'Quali servizi offre Fabrizio?'],
       ['#lavori', 'Qui ci sono i cinque lavori, dall\u2019idea alla pubblicazione.', 'Parlami dei lavori di Fabrizio'],
       ['#caso-union', 'Union Energia: nove video con Davide l\u2019alpaca e Luca l\u2019asino, senza riprese dal vivo.', 'Come è nata la campagna Union Energia?'],
-      ['#caso-eso', 'Human Robots: il lancio di un esoscheletro che non si poteva fotografare.', 'Come è stato fatto il lavoro su Human Robots?'],
+      ['#caso-eso', 'Questo è Human Robots, un esoscheletro vero. Guarda: adesso te lo faccio girare io.', 'Come è stato fatto il lavoro su Human Robots?'],
       ['#caso-cest', 'Studio CETS: un marchio rifatto da capo e animato, drone compreso.', 'Cosa è stato fatto per Studio CETS?'],
       ['#caso-locanda', 'La Locanda del Castello: dal marchio alla locandina, con cinque jingle.', 'Parlami della Locanda del Castello'],
       ['#caso-cdi', 'CDI Infissi: un sito scritto da zero, con il catalogo del produttore.', 'Com\u2019è fatto il sito di CDI Infissi?'],
@@ -598,6 +600,12 @@ class NodoWidget {
       ultimo = Date.now();
       clearTimeout(nascondi);
       nascondi = setTimeout(() => hint.classList.remove('is-visible'), 9000);
+      /* Nous si accorge di te: l'orb fa un piccolo saluto */
+      this.elements.fab?.classList.remove('nodo-saluta'); void this.elements.fab?.offsetWidth; this.elements.fab?.classList.add('nodo-saluta');
+      if (id === '#caso-eso') {
+        setTimeout(() => document.dispatchEvent(new CustomEvent('nous:demo-eso')), 700);
+        if (this.voiceEnabled) this.suonaVoce('eso', testo);
+      }
       visti.add(id);
       try { sessionStorage.setItem('nodo_sugg_visti', JSON.stringify([...visti])); } catch (e) {}
       return true;
@@ -640,6 +648,91 @@ class NodoWidget {
     setTimeout(controlla, 3000);
     /* se la chat o la visita si aprono, il suggerimento sparisce */
     document.addEventListener('nodo:aperto', () => hint.classList.remove('is-visible'));
+  }
+
+  /* ── Benvenuto ────────────────────────────────────────────────────
+     Appena si entra nel sito Nous si presenta dal suo pallino e spiega l'header: cosa si vede, cosa si puo'
+     trascinare, dove sono i colori e la barra in basso. Una volta per visita. Offre il giro completo, la voce
+     (il browser non permette di far parlare una pagina da sola: parte al tocco di "Ascolta") o di scorrere da soli. */
+  chiudiBenvenuto() {
+    if (!this.benvenuto) return;
+    const b = this.benvenuto;
+    this.benvenuto = null;
+    b.classList.add('is-closing');
+    this.stopSpeakingSeBenvenuto?.();
+    setTimeout(() => b.remove(), 260);
+  }
+
+  mostraBenvenuto() {
+    try { if (sessionStorage.getItem('nodo_benvenuto') === '1') return; } catch (e) {}
+    const TESTO = "Benvenuto! Sono Nous, l'assistente AI personale di Fabrizio. Quello che vedi qui è l'header: lo sfondo mostra la stessa scena in due versioni. A sinistra il lavoro fatto a mano, in bianco e nero, a destra il sistema di intelligenza artificiale. Trascina per spostare il confine. In alto trovi i colori del sito e il tasto Contatti, in basso la barra per saltare da una sezione all'altra. Se vuoi ti faccio fare un giro, altrimenti scorri: ti racconto io cosa incontri.";
+    setTimeout(() => {
+      if (this.isOpen || this.tourState || this.benvenuto) return;
+      if (window.scrollY > innerHeight * 0.8) return;            /* e' gia' sceso: niente benvenuto fuori luogo */
+      try { sessionStorage.setItem('nodo_benvenuto', '1'); } catch (e) {}
+      const b = document.createElement('div');
+      b.className = 'nodo-tour-bubble nodo-guida nodo-benvenuto';
+      b.setAttribute('role', 'status');
+      b.setAttribute('aria-live', 'polite');
+      b.innerHTML = `
+        <button class="nodo-guida__x" type="button" aria-label="Chiudi">✕</button>
+        <p class="nodo-guida__testo"><b>Benvenuto!</b> Sono <b>Nous</b>, l'assistente AI personale di Fabrizio.</p>
+        <p class="nodo-guida__testo nodo-guida__testo--corpo">Qui sopra c'è l'<b>header</b>: lo sfondo mostra la stessa scena in due versioni. A sinistra il lavoro fatto a mano, in bianco e nero, a destra il sistema di intelligenza artificiale. <b>Trascina</b> per spostare il confine. In alto ci sono i colori del sito e il tasto Contatti, in basso la barra per saltare da una sezione all'altra.</p>
+        <p class="nodo-guida__testo nodo-guida__testo--corpo">Se vuoi ti faccio fare un giro, altrimenti scorri: ti racconto io cosa incontri.</p>
+        <div class="nodo-guida__scelta">
+          <button class="nodo-guida__btn nodo-guida__btn--si" type="button" data-b="giro">Fammi il giro</button>
+          <button class="nodo-guida__btn" type="button" data-b="voce">Ascolta</button>
+          <button class="nodo-guida__btn" type="button" data-b="scorro">Scorro io</button>
+        </div>`;
+      document.body.appendChild(b);
+      this.benvenuto = b;
+      this.elements.fab?.classList.add('nodo-saluta');
+      const chiudi = () => this.chiudiBenvenuto();
+      b.querySelector('.nodo-guida__x').addEventListener('click', chiudi);
+      b.querySelector('[data-b="scorro"]').addEventListener('click', chiudi);
+      b.querySelector('[data-b="giro"]').addEventListener('click', () => { chiudi(); this.startStudioTour(); });
+      const bv = b.querySelector('[data-b="voce"]');
+      bv.addEventListener('click', () => {
+        if (this.ttsAudio && !this.ttsAudio.paused) { this.stopSpeaking(); bv.textContent = 'Ascolta'; return; }
+        this.suonaVoce('benvenuto', TESTO, () => { bv.textContent = 'Ascolta'; });
+        bv.textContent = 'Ferma';
+      });
+      this.stopSpeakingSeBenvenuto = () => { if (this.ttsAudio) this.stopSpeaking(); };
+      /* quando si scende oltre l'header il benvenuto ha fatto il suo dovere */
+      const hero = document.querySelector('#top');
+      if (hero && 'IntersectionObserver' in window) {
+        const io = new IntersectionObserver(es => { if (!es[0].isIntersecting) { chiudi(); io.disconnect(); } }, { threshold: 0 });
+        io.observe(hero);
+      }
+      setTimeout(chiudi, 60000);
+    }, 3800);
+  }
+
+  /* ── Nous e' viva ──────────────────────────────────────────────────
+     Il suo pallino respira, sbatte l'occhio ogni tanto e con il mouse guarda verso il puntatore
+     (nucleo che si sposta di pochi pixel). Niente di tutto questo con "riduci movimento". */
+  vitaOrb() {
+    const fab = this.elements.fab;
+    const core = fab?.querySelector('.nodo-core');
+    if (!fab || !core) return;
+    fab.classList.add('is-viva');
+    if (matchMedia('(prefers-reduced-motion: reduce)').matches || !matchMedia('(pointer: fine)').matches) return;
+    let gx = 0, gy = 0, tx = 0, ty = 0, raf = 0;
+    const aggiorna = () => {
+      raf = 0;
+      gx += (tx - gx) * 0.16; gy += (ty - gy) * 0.16;
+      core.style.translate = `${gx.toFixed(2)}px ${gy.toFixed(2)}px`;
+      if (Math.abs(tx - gx) > 0.02 || Math.abs(ty - gy) > 0.02) raf = requestAnimationFrame(aggiorna);
+    };
+    window.addEventListener('pointermove', e => {
+      if (e.pointerType !== 'mouse') return;
+      const r = fab.getBoundingClientRect();
+      const dx = e.clientX - (r.left + r.width / 2), dy = e.clientY - (r.top + r.height / 2);
+      const d = Math.hypot(dx, dy) || 1;
+      const f = Math.min(1, d / 500) * 3.2;
+      tx = (dx / d) * f; ty = (dy / d) * f;
+      if (!raf) raf = requestAnimationFrame(aggiorna);
+    }, { passive: true });
   }
 
   scheduleHint() {
@@ -1737,6 +1830,7 @@ class NodoWidget {
   }
 
   startStudioTour() {
+    this.chiudiBenvenuto();
     this.clearTourTimer();
     this.stopSpeaking();
     this.tourState = { step: -1, steps: this.guidaPassi(), timer: null, isPaused: false, voce: false };
