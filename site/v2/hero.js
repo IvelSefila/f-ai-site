@@ -228,7 +228,7 @@ export function initHero(canvas, onState) {
      la differenza non si vede; il dimezzamento del frame time sì. */
   /* Sui computer (puntatore preciso) il tetto e' piu' alto: lo sfondo esce piu' nitido.
      Sui telefoni resta basso. Se il frame rate scende sotto 26 il tetto cala del 20%. */
-  let tetto = matchMedia('(pointer: fine)').matches ? 3.4e6 : 2.2e6;
+  let tetto = matchMedia('(pointer: fine)').matches ? 3.4e6 : 1.7e6;
   function resize() {
     const cw = canvas.clientWidth, ch = canvas.clientHeight;
     if (!cw || !ch) return;

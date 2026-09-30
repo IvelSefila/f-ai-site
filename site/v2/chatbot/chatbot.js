@@ -2,8 +2,8 @@
  * Widget Controller "Nous" — F/AI Portfolio
  * Versione 1.0 (Settembre 2026)
  */
-import { CONFIG } from './chatbot.config.js?v=20260928-155';
-import { ChatEngine } from './chatbot.engine.js?v=20260928-155';
+import { CONFIG } from './chatbot.config.js?v=20260928-164';
+import { ChatEngine } from './chatbot.engine.js?v=20260928-164';
 
 /* Cosa sta girando: testi mostrati in alto e nel pannello dettagli (italiano semplice) */
 const ENGINE_INFO = {
@@ -617,18 +617,27 @@ class NodoWidget {
         this.elements.input.focus({ preventScroll: true });
       }
     });
-    const attesa = new Map();
-    const io = new IntersectionObserver(voci => {
-      for (const v of voci) {
-        const riga = SEZIONI.find(s => document.querySelector(s[0]) === v.target);
-        if (!riga) continue;
-        if (!v.isIntersecting) { clearTimeout(attesa.get(riga[0])); continue; }
-        if (visti.has(riga[0])) continue;
-        clearTimeout(attesa.get(riga[0]));
-        attesa.set(riga[0], setTimeout(() => mostra(riga[0], riga[1], riga[2]), 2400));
+    /* Il suggerimento esce quando lo scorrimento si ferma: prima serviva restare 2,4 secondi fermi nella
+       fascia centrale di una sezione, e scorrendo non succedeva mai. Ora, 0,7 secondi dopo l'ultimo
+       movimento, si guarda quale sezione sta a meta' schermo (la piu' specifica, per esempio un caso
+       dentro "lavori") e, se non l'hai gia' vista in questa visita, Nous ne parla. */
+    const sezioneAlCentro = () => {
+      const y = innerHeight * 0.45;
+      for (let i = SEZIONI.length - 1; i >= 0; i--) {
+        const el = document.querySelector(SEZIONI[i][0]);
+        if (!el || el.hidden) continue;
+        const r = el.getBoundingClientRect();
+        if (r.height > 0 && r.top <= y && r.bottom >= y) return SEZIONI[i];
       }
-    }, { rootMargin: '-35% 0px -45% 0px' });
-    SEZIONI.forEach(s => { const el = document.querySelector(s[0]); if (el) io.observe(el); });
+      return null;
+    };
+    let fermo = 0;
+    const controlla = () => {
+      const riga = sezioneAlCentro();
+      if (riga && !visti.has(riga[0])) mostra(riga[0], riga[1], riga[2]);
+    };
+    window.addEventListener('scroll', () => { clearTimeout(fermo); fermo = setTimeout(controlla, 700); }, { passive: true });
+    setTimeout(controlla, 3000);
     /* se la chat o la visita si aprono, il suggerimento sparisce */
     document.addEventListener('nodo:aperto', () => hint.classList.remove('is-visible'));
   }

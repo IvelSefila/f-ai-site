@@ -2,19 +2,19 @@
 * app.js — la sessione. Tiene il filo fra le prove, parla, misura,
 * e alla fine scrive il dossier. Nessuna libreria.
 * ═══════════════════════════════════════════════════════════════════ */
-import { initTipografia } from './tipografia.js?v=20260928-155';
+import { initTipografia } from './tipografia.js?v=20260928-164';
 initTipografia();
 // cursore a mirino tolto su richiesta (mirino.js resta nel progetto)
-import { initHero } from './hero.js?v=20260928-155';
-import { initStrumenti } from './strumenti.js?v=20260928-155';
-import { initUnion } from './union.js?v=20260928-155';
-import { initEso } from './eso.js?v=20260928-155';
-import { initLocanda } from './locanda.js?v=20260928-155';
-import { initCest } from './cest.js?v=20260928-155';
-import { initPalette } from './palette.js?v=20260928-155';
-import { keyVisual, radar, MODES, rng, leggiColori} from './engine.js?v=20260928-155';
-import { initBrief } from './brief.js?v=20260928-155';
-import { initServizi } from './servizi.js?v=20260928-155';
+import { initHero } from './hero.js?v=20260928-164';
+import { initStrumenti } from './strumenti.js?v=20260928-164';
+import { initUnion } from './union.js?v=20260928-164';
+import { initEso } from './eso.js?v=20260928-164';
+import { initLocanda } from './locanda.js?v=20260928-164';
+import { initCest } from './cest.js?v=20260928-164';
+import { initPalette } from './palette.js?v=20260928-164';
+import { keyVisual, radar, MODES, rng, leggiColori} from './engine.js?v=20260928-164';
+import { initBrief } from './brief.js?v=20260928-164';
+import { initServizi } from './servizi.js?v=20260928-164';
 
 const $ = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => [...r.querySelectorAll(s)];
@@ -1294,7 +1294,7 @@ $$('.eso__360-stage').forEach(stage360 => {
   const largh360 = o => o.naturalWidth || o.width;
   const alt360 = o => o.naturalHeight || o.height;
   const aBitmap = (i, im) => ('createImageBitmap' in window)
-    ? createImageBitmap(im).then(b => { bm360[i] = b; }).catch(() => {})
+    ? createImageBitmap(im).then(b => { bm360[i] = b; cache360[i] = null; }).catch(() => {})
     : Promise.resolve();
   const pronti = new Array(TOT).fill(false);
   let pronto = false, frame = 0, mostrato = 0, trascinando = false, xInizio = 0, frameInizio = 0;
@@ -1320,6 +1320,8 @@ $$('.eso__360-stage').forEach(stage360 => {
   function disegna360(i) {
     const im = sorg360(i);
     if (!im || !pronti[i] || !cv360.width || disegnato360 === i) return;
+    /* un <img> non ancora caricato non disegna niente: non si segna come "disegnato" */
+    if (!bm360[i] && !(im.complete && im.naturalWidth)) return;
     const r = Math.min(cv360.width / largh360(im), cv360.height / alt360(im));
     const w = largh360(im) * r, h = alt360(im) * r;
     cx360.clearRect(0, 0, cv360.width, cv360.height);
@@ -1329,7 +1331,7 @@ $$('.eso__360-stage').forEach(stage360 => {
   }
   new ResizeObserver(misura360).observe(stage360);
   misura360();
-  (cache360[0].decode ? cache360[0].decode() : Promise.resolve()).then(() => aBitmap(0, cache360[0])).then(() => { disegna360(frame); }).catch(() => {});
+  (cache360[0].decode ? cache360[0].decode() : Promise.resolve()).then(() => aBitmap(0, cache360[0])).then(() => { disegnato360 = -1; disegna360(frame); }).catch(() => {});
 
   /* "completo" (evento load) non basta: un'immagine puo' essere
      scaricata e non ancora decodificata e assegnarla comunque a
@@ -1365,21 +1367,51 @@ $$('.eso__360-stage').forEach(stage360 => {
   }
   /* Due maniglie piccole ai lati che pulsano, e un leggero dondolio del dispositivo:
      dicono che si puo' girare. Spariscono al primo tocco; con "riduci movimento" niente dondolio. */
+  /* Le due frecce ai lati sono pulsanti: tenendole premute il dispositivo gira (sinistra o destra),
+     un tocco breve lo sposta di qualche fotogramma; con la tastiera (Invio o Spazio) un passo alla volta.
+     Dicono anche, pulsando, che il dispositivo si puo' girare. */
   for (const lato of ['sx', 'dx']) {
-    const m = document.createElement('span');
+    const m = document.createElement('button');
+    m.type = 'button';
     m.className = `eso__360-maniglia eso__360-maniglia--${lato}`;
-    m.setAttribute('aria-hidden', 'true');
-    m.innerHTML = lato === 'sx' ? '<i>‹</i>' : '<i>›</i>';
+    m.setAttribute('aria-label', lato === 'sx' ? 'Ruota il dispositivo verso sinistra' : 'Ruota il dispositivo verso destra');
+    m.innerHTML = lato === 'sx' ? '<i aria-hidden="true">‹</i>' : '<i aria-hidden="true">›</i>';
+    const verso = lato === 'sx' ? 1 : -1;            /* come trascinare verso sinistra / destra */
+    let raf = 0, pos = 0, ultimo = 0;
+    const passo = now => {
+      const dt = Math.min(0.05, (now - ultimo) / 1000); ultimo = now;
+      pos += verso * dt * 22;                         /* circa 22 fotogrammi al secondo */
+      vaAFrame(Math.round(pos));
+      stage360.setAttribute('aria-valuenow', String(frame));
+      raf = requestAnimationFrame(passo);
+    };
+    const ferma = () => { cancelAnimationFrame(raf); raf = 0; };
+    m.addEventListener('pointerdown', e => {
+      e.stopPropagation(); e.preventDefault();
+      precarica360(); cancelAnimationFrame(inerziaId);
+      pos = frame + verso * 2; vaAFrame(Math.round(pos));
+      ultimo = performance.now();
+      ferma(); raf = requestAnimationFrame(passo);
+      try { m.setPointerCapture(e.pointerId); } catch (_) {}
+    });
+    for (const ev of ['pointerup', 'pointercancel', 'lostpointercapture']) m.addEventListener(ev, ferma);
+    m.addEventListener('keydown', e => {
+      if (e.key !== 'Enter' && e.key !== ' ') return;
+      e.preventDefault(); e.stopPropagation(); precarica360();
+      vaAFrame(frame + verso * 6);
+      stage360.setAttribute('aria-valuenow', String(frame));
+    });
     stage360.append(m);
   }
-  /* Dondolio dolce: il dispositivo oscilla piano un po' a sinistra e un po' a destra (circa 25 gradi
-     per lato, un'andata e ritorno ogni 7 secondi). Fra un fotogramma e il successivo i due si sfumano,
-     cosi' il moto resta fluido. Si ferma mentre lo giri tu e riparte da solo, da dove l'hai lasciato. */
-  const AMPIEZZA = 8, PERIODO_MS = 7000;
-  let toccato = false, dondolaId = 0, inVista360 = false, ultimaAzione = -1e9, centro = 0, faseInizio = 0, inAttesa = true;
+  /* Movimento a riposo: il dispositivo oscilla piano a sinistra e a destra con una trasformazione 3D
+     (CSS, compositata dalla scheda video), non cambiando fotogramma. Cosi' non ci sono scalini, doppie
+     immagini ne' salti fra i fotogrammi: il moto e' continuo alla frequenza dello schermo. Quando lo
+     giri tu, al posto dell'oscillazione entrano i veri fotogrammi; dopo qualche secondo senza toccarlo
+     l'oscillazione riparte da dove l'hai lasciato. */
+  let toccato = false, inVista360 = false, timerRiposo = 0;
   const riduci = matchMedia('(prefers-reduced-motion: reduce)');
   function disegnaMix(pos) {
-    const f0 = Math.floor(pos), t = pos - f0;
+    const f0 = Math.floor(pos), tl = pos - f0, t = tl * tl * (3 - 2 * tl);
     const i0 = ((f0 % TOT) + TOT) % TOT, i1 = (i0 + 1) % TOT;
     const a0 = sorg360(i0), a1 = sorg360(i1);
     if (!pronti[i0] || !pronti[i1] || !cv360.width) return;
@@ -1398,32 +1430,36 @@ $$('.eso__360-stage').forEach(stage360 => {
     frame = ((Math.round(pos) % TOT) + TOT) % TOT; mostrato = frame;
     if (!stage360.classList.contains('eso__360-stage--canvas')) stage360.classList.add('eso__360-stage--canvas');
   }
-  function dondola(now) {
-    if (!inVista360 || riduci.matches || document.hidden) { dondolaId = 0; return; }
-    const vicini = [];
-    for (let k = -AMPIEZZA - 1; k <= AMPIEZZA + 1; k++) vicini.push(((Math.round(centro) + k) % TOT + TOT) % TOT);
-    if (pronto && vicini.every(i => pronti[i])) {
-      if (trascinando || now - ultimaAzione < 2500) {
-        centro = frame; inAttesa = true;
-      } else {
-        if (inAttesa) { inAttesa = false; faseInizio = now; }
-        const t = now - faseInizio;
-        const salita = Math.min(1, t / 1500);          /* parte piano, senza strappi */
-        disegnaMix(centro + Math.sin(t * 2 * Math.PI / PERIODO_MS) * AMPIEZZA * salita);
-      }
-    }
-    dondolaId = requestAnimationFrame(dondola);
+  const inRiposo = () => cv360.classList.contains('eso__360-riposo');
+  function riposoOn() {
+    if (riduci.matches || !inVista360 || trascinando || document.hidden || inRiposo()) return;
+    cv360.style.transform = '';
+    cv360.classList.add('eso__360-riposo');
   }
+  /* all'inizio del tocco: si ferma l'oscillazione dal punto esatto in cui si trova e si raddrizza in un attimo */
+  function riposoOff() {
+    if (!inRiposo()) return;
+    const m = getComputedStyle(cv360).transform;
+    cv360.classList.remove('eso__360-riposo');
+    cv360.style.transition = 'none';
+    cv360.style.transform = m === 'none' ? '' : m;
+    void cv360.offsetWidth;
+    cv360.style.transition = 'transform .25s cubic-bezier(.23, 1, .32, 1)';
+    cv360.style.transform = 'none';
+    setTimeout(() => { cv360.style.transition = ''; cv360.style.transform = ''; }, 300);
+  }
+  const riprogramma = () => { clearTimeout(timerRiposo); timerRiposo = setTimeout(riposoOn, 2500); };
   new IntersectionObserver(es => {
     inVista360 = es[0].isIntersecting;
-    if (inVista360 && !dondolaId) { dondolaId = requestAnimationFrame(dondola); }
+    if (inVista360) riposoOn(); else { clearTimeout(timerRiposo); riposoOff(); }
   }, { rootMargin: '40px' }).observe(stage360);
-  const azione360 = () => {
-    ultimaAzione = performance.now();
+  document.addEventListener('visibilitychange', () => { if (document.hidden) riposoOff(); else riposoOn(); });
+  const azione360 = e => {
+    riposoOff();
     if (!toccato) { toccato = true; stage360.classList.add('eso__360-stage--via'); }
+    if (e.type === 'pointerdown') clearTimeout(timerRiposo); else riprogramma();
   };
   for (const ev of ['pointerdown', 'pointerup', 'pointercancel', 'keydown']) stage360.addEventListener(ev, azione360, { capture: true });
-  stage360.addEventListener('pointermove', () => { if (trascinando) ultimaAzione = performance.now(); }, { passive: true });
   stage360.setAttribute('role', 'slider');
   stage360.setAttribute('tabindex', '0');
   stage360.setAttribute('aria-label', 'Vista a 360 gradi del dispositivo, trascina o usa le frecce per ruotarlo');
@@ -1762,4 +1798,37 @@ if (macchinaSpan && !window.matchMedia('(prefers-reduced-motion: reduce)').match
     for (const v of voci) v.target.classList.toggle('fuori', !v.isIntersecting);
   }, { rootMargin: '120px 0px' });
   document.querySelectorAll('main section, main .sec').forEach(el => io.observe(el));
+})();
+
+
+/* La gamba e gli ingranaggi di Human Robots camminano da un lato all'altro della lastra: la scena e' ritagliata
+   (slice) e ancorata a destra, quindi la parte visibile dipende dalla forma della lastra. Qui si calcola dove
+   parte (fuori a sinistra) e dove finisce (fuori a destra), in unita' della scena. */
+(() => {
+  const slab = document.querySelector('.eso__slab');
+  if (!slab) return;
+  const SCENE = [
+    { sel: '.eso__scena--largo', w: 1200, h: 700, xMin: 804, xMax: 1075 },
+    { sel: '.eso__scena--stretto', w: 420, h: 800, xMin: 204, xMax: 364 },
+  ];
+  function misura() {
+    const r = slab.getBoundingClientRect();
+    if (!r.width || !r.height) return;
+    for (const s of SCENE) {
+      const el = slab.querySelector(s.sel);
+      if (!el) continue;
+      const scala = Math.max(r.width / s.w, r.height / s.h);
+      const visibile = r.width / scala;                /* larghezza visibile, in unita' della scena */
+      const sinistra = s.w - visibile;                 /* la scena e' ancorata a destra (xMax) */
+      const ca = Math.round(sinistra - s.xMax - 10);   /* il bordo destro del gruppo entra dal lato sinistro */
+      const cb = Math.round(s.w - s.xMin + 10);        /* il bordo sinistro del gruppo esce dal lato destro */
+      el.style.setProperty('--ca', ca + 'px');
+      el.style.setProperty('--cb', cb + 'px');
+      /* stessa velocita' apparente a qualsiasi larghezza: circa 60 px di schermo al secondo */
+      const pxSchermo = (cb - ca) * scala;
+      el.style.setProperty('--cam-durata', Math.max(9, Math.min(40, pxSchermo / 70)).toFixed(1) + 's');
+    }
+  }
+  new ResizeObserver(misura).observe(slab);
+  misura();
 })();

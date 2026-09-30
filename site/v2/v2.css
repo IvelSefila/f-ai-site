@@ -3975,20 +3975,29 @@ body.ord-in-corso *{cursor:grabbing !important}
 .eso__anima{color:var(--sk-tenue);opacity:.18}
 .eso__sensore{opacity:.5}
 @media (prefers-reduced-motion:no-preference){
-  .eso__gamba,.eso__stinco,.eso__ingranaggio{transform-origin:0 0}
-  .eso__gamba--a{animation:eso-coscia 2.6s ease-in-out infinite alternate}
-  .eso__gamba--b{animation:eso-coscia 2.6s ease-in-out -1.3s infinite alternate}
-  .eso__stinco--a{animation:eso-ginocchio 2.6s ease-in-out -.55s infinite alternate}
-  .eso__stinco--b{animation:eso-ginocchio 2.6s ease-in-out -1.85s infinite alternate}
+  .eso__gamba,.eso__stinco,.eso__piede,.eso__ingranaggio{transform-origin:0 0}
+  .eso__gamba--a{animation:eso-anca 8.4s linear infinite}
+  .eso__gamba--b{animation:eso-anca 8.4s linear -4.2s infinite}
+  .eso__stinco--a{animation:eso-ginocchio 8.4s ease-in-out infinite}
+  .eso__piede--a{animation:eso-caviglia 8.4s ease-in-out infinite}
+  .eso__stinco--b{animation:eso-ginocchio 8.4s ease-in-out -4.2s infinite}
+  .eso__piede--b{animation:eso-caviglia 8.4s ease-in-out -4.2s infinite}
   .eso__anca{animation:eso-pulsa 2.6s ease-in-out infinite;transform-box:fill-box;transform-origin:center}
   .eso__ingranaggio{animation:eso-gira 16s linear infinite}
   .eso__ingranaggio--r{animation-direction:reverse;animation-duration:9s}
   .eso__onda{animation:eso-onda 1.9s linear infinite}
   .eso__sensore{transform-box:fill-box;transform-origin:center;animation:eso-sensore 1.9s ease-in-out infinite}
-  .eso--fermo .eso__gamba,.eso--fermo .eso__stinco,.eso--fermo .eso__anca,
+  .eso--fermo .eso__gamba,.eso--fermo .eso__stinco,.eso--fermo .eso__piede,.eso--fermo .eso__anca,
   .eso--fermo .eso__ingranaggio,.eso--fermo .eso__onda,.eso--fermo .eso__sensore{animation-play-state:paused}
-  @keyframes eso-coscia{from{transform:rotate(-24deg)}to{transform:rotate(24deg)}}
-  @keyframes eso-ginocchio{from{transform:rotate(2deg)}to{transform:rotate(-38deg)}}
+  /* Un passo completo: appoggio del tallone (gamba avanti), spinta (gamba indietro), oscillazione (gamba che torna avanti).
+     L'anca avanza a velocita' costante durante l'appoggio e riparte piano; il ginocchio si piega solo quando la gamba
+     e' in aria; la caviglia tiene la punta alta al tallone e spinge a fine appoggio. Avanti = angolo negativo. */
+  @keyframes eso-anca{0%{transform:rotate(-22deg);animation-timing-function:linear}
+    58%{transform:rotate(20deg);animation-timing-function:cubic-bezier(.45,.05,.4,1)}100%{transform:rotate(-22deg)}}
+  @keyframes eso-ginocchio{0%{transform:rotate(3deg)}14%{transform:rotate(12deg)}40%{transform:rotate(3deg)}
+    58%{transform:rotate(34deg)}74%{transform:rotate(62deg)}92%{transform:rotate(12deg)}100%{transform:rotate(3deg)}}
+  @keyframes eso-caviglia{0%{transform:rotate(-10deg)}16%{transform:rotate(1deg)}42%{transform:rotate(-4deg)}
+    58%{transform:rotate(18deg)}72%{transform:rotate(4deg)}90%{transform:rotate(-12deg)}100%{transform:rotate(-10deg)}}
   @keyframes eso-pulsa{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.4);opacity:.6}}
   @keyframes eso-gira{to{transform:rotate(360deg)}}
   @keyframes eso-onda{from{transform:translateX(0)}to{transform:translateX(-60px)}}
@@ -4367,7 +4376,7 @@ body.mirino-on, body.mirino-on * { cursor: none !important; }
 }
 .eso__360-maniglia--dx::after { animation-delay: 1.2s; }
 @keyframes eso360-onda { 0% { transform: scale(1); opacity: .7; } 100% { transform: scale(1.9); opacity: 0; } }
-.eso__360-stage--via .eso__360-maniglia { opacity: 0; }
+.eso__360-stage--via .eso__360-maniglia { opacity: .75; }
 @media (prefers-reduced-motion: reduce) { .eso__360-maniglia::after { animation: none; } }
 
 
@@ -4419,3 +4428,68 @@ body.mirino-on, body.mirino-on * { cursor: none !important; }
 .piede__legale{font-size:inherit}
 .piede__legale a{color:inherit;text-decoration:underline;text-underline-offset:3px}
 .piede__legale a:hover{color:var(--em-bright)}
+
+
+/* ── 360: meno lavoro di rendering mentre il dispositivo dondola ── */
+/* le maniglie battono solo con transform e opacity (niente ombra animata) e si fermano dopo il primo tocco */
+@keyframes eso360-batte { 0%, 100% { transform: scale(1); opacity: .8; } 50% { transform: scale(1.14); opacity: 1; } }
+.eso__360-maniglia { will-change: transform; }
+.eso__360-stage--via .eso__360-maniglia, .eso__360-stage--via .eso__360-maniglia::after { animation: none !important; }
+.eso__360-canvas { transform: translateZ(0); }
+/* il filo di luce animato sulla barra in basso si ridisegnava a ogni frame: resta come riflesso fermo */
+.navdock::before { animation: none !important; background-position: 30% 0; opacity: .55; }
+
+
+/* ── 360: oscillazione a riposo con trasformazione 3D (niente cambio di fotogramma) ── */
+.eso__360-canvas { transform-origin: 50% 62%; }
+@keyframes eso360-oscilla {
+  0%   { transform: perspective(820px) rotateY(-11deg) translateX(-6px); }
+  100% { transform: perspective(820px) rotateY(11deg) translateX(6px); }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .eso__360-riposo { animation: eso360-oscilla 3.2s cubic-bezier(.45, 0, .55, 1) infinite alternate; will-change: transform; }
+}
+
+
+/* ── Human Robots: la gamba e gli ingranaggi dietro camminano da sinistra a destra, poi ricominciano ──
+   Le due posizioni (--ca e --cb, in unita' della scena) le calcola app.js in base alla parte di scena
+   che si vede davvero nella lastra. Solo transform e opacity. */
+@media (prefers-reduced-motion: no-preference) {
+  .eso__cammino { animation: eso-cammina var(--cam-durata, 16s) linear infinite; }
+  .eso--fermo .eso__cammino { animation-play-state: paused; }
+  @keyframes eso-cammina {
+    0%   { transform: translateX(var(--ca, -500px)); opacity: 0; }
+    8%   { opacity: 1; }
+    92%  { opacity: 1; }
+    100% { transform: translateX(var(--cb, 200px)); opacity: 0; }
+  }
+}
+
+/* ── 360: le due frecce laterali piu' staccate dal dispositivo ── */
+.eso__360-maniglia--sx { left: -46px; }
+.eso__360-maniglia--dx { right: -46px; }
+@media (max-width: 420px) {
+  .eso__360-maniglia--sx { left: -30px; }
+  .eso__360-maniglia--dx { right: -30px; }
+}
+
+
+/* ── Telefono: meno lavoro per la grafica ──
+   Niente sfocature dietro barre e finestre (sono gia' quasi opache), niente parallasse legato allo scorrimento
+   sulle scene, niente filtri animati. Stesso aspetto, molto meno da ridisegnare a ogni scorrimento. */
+@media (max-width: 840px) {
+  .bar, .navdock, .cookie, .nodo-window, .nodo-fab, .nodo-hint, .nodo-tour-bubble, .nodo-header {
+    -webkit-backdrop-filter: none !important; backdrop-filter: none !important;
+  }
+  .bar { background: rgba(5, 7, 11, .94); }
+  .navdock { background: rgba(9, 13, 20, .95); }
+  .union__scena, .eso__scena, .cest__scena, .locanda__scena { animation: none !important; }
+  .navdock::before, .navdock::after { animation: none !important; }
+}
+
+
+/* le frecce laterali si premono */
+.eso__360-maniglia { pointer-events: auto; cursor: pointer; touch-action: none; -webkit-tap-highlight-color: transparent; padding: 0; z-index: 3; }
+.eso__360-maniglia:hover, .eso__360-maniglia:focus-visible { opacity: 1 !important; border-color: var(--em-bright); background: color-mix(in srgb, var(--em) 28%, transparent); }
+.eso__360-maniglia:active { transform: scale(.92); }
+.eso__360-maniglia:focus-visible { outline: 2px solid var(--em-bright); outline-offset: 3px; }
