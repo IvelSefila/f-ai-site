@@ -2,8 +2,8 @@
  * Widget Controller "Nous" — F/AI Portfolio
  * Versione 1.0 (Settembre 2026)
  */
-import { CONFIG } from './chatbot.config.js?v=20260928-165';
-import { ChatEngine } from './chatbot.engine.js?v=20260928-165';
+import { CONFIG } from './chatbot.config.js?v=20260928-166';
+import { ChatEngine } from './chatbot.engine.js?v=20260928-166';
 
 /* Cosa sta girando: testi mostrati in alto e nel pannello dettagli (italiano semplice) */
 const ENGINE_INFO = {
@@ -570,7 +570,6 @@ class NodoWidget {
   suggerimentiSezione() {
     if (!('IntersectionObserver' in window)) return;
     const spenti = () => { try { return localStorage.getItem('nodo_sugg_off') === '1'; } catch (e) { return false; } };
-    if (spenti()) return;
     const visti = new Set();
     try { JSON.parse(sessionStorage.getItem('nodo_sugg_visti') || '[]').forEach(v => visti.add(v)); } catch (e) {}
     const SEZIONI = [
@@ -593,13 +592,13 @@ class NodoWidget {
     const esc = t => String(t).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
     const mostra = (id, testo, domanda) => {
       if (spenti() || this.isOpen || this.tourState || this.isGenerating) return false;
-      if (Date.now() - ultimo < 14000) return false;
+      if (Date.now() - ultimo < 6000) return false;
       corrente = { id, domanda };
       testoEl.innerHTML = `<b>Nous</b> · ${esc(testo)} Se vuoi sapere di più, <b>parla con me</b>.`;
       hint.classList.add('is-visible', 'is-sezione');
       ultimo = Date.now();
       clearTimeout(nascondi);
-      nascondi = setTimeout(() => hint.classList.remove('is-visible'), 9000);
+      nascondi = setTimeout(() => hint.classList.remove('is-visible'), 12000);
       /* Nous si accorge di te: l'orb fa un piccolo saluto */
       this.elements.fab?.classList.remove('nodo-saluta'); void this.elements.fab?.offsetWidth; this.elements.fab?.classList.add('nodo-saluta');
       if (id === '#caso-eso') {
@@ -610,6 +609,19 @@ class NodoWidget {
       try { sessionStorage.setItem('nodo_sugg_visti', JSON.stringify([...visti])); } catch (e) {}
       return true;
     };
+    /* interruttore nel piede della pagina: riaccende (o spegne) i suggerimenti di Nous */
+    document.addEventListener('click', e => {
+      const t = e.target instanceof Element ? e.target.closest('[data-nous-sugg]') : null;
+      if (!t) return;
+      e.preventDefault();
+      let acceso = true;
+      try {
+        acceso = localStorage.getItem('nodo_sugg_off') === '1';
+        if (acceso) localStorage.removeItem('nodo_sugg_off'); else localStorage.setItem('nodo_sugg_off', '1');
+      } catch (er) {}
+      this.showToast(acceso ? 'Suggerimenti di Nous riattivati: li vedrai scorrendo' : 'Suggerimenti di Nous disattivati', false, 2400);
+      if (acceso) { try { sessionStorage.removeItem('nodo_sugg_visti'); } catch (er) {} visti.clear(); }
+    });
     /* "non mostrare piu'" e apertura della chat dal suggerimento */
     const off = hint.querySelector('.nodo-hint-off');
     off?.addEventListener('click', e => {
