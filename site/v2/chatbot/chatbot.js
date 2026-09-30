@@ -2,8 +2,8 @@
  * Widget Controller "Nous" — F/AI Portfolio
  * Versione 1.0 (Settembre 2026)
  */
-import { CONFIG } from './chatbot.config.js?v=20260928-166';
-import { ChatEngine } from './chatbot.engine.js?v=20260928-166';
+import { CONFIG } from './chatbot.config.js?v=20260928-167';
+import { ChatEngine } from './chatbot.engine.js?v=20260928-167';
 
 /* Cosa sta girando: testi mostrati in alto e nel pannello dettagli (italiano semplice) */
 const ENGINE_INFO = {
@@ -721,30 +721,48 @@ class NodoWidget {
   }
 
   /* ── Nous e' viva ──────────────────────────────────────────────────
-     Il suo pallino respira, sbatte l'occhio ogni tanto e con il mouse guarda verso il puntatore
-     (nucleo che si sposta di pochi pixel). Niente di tutto questo con "riduci movimento". */
+     Il suo pallino respira e sbatte l'occhio. L'occhio (il nucleo) guarda: se non fai niente si guarda in giro
+     da solo, con piccoli spostamenti a caso; appena tocchi o muovi il puntatore guarda verso quel punto dello
+     schermo (dito compreso), poi dopo un paio di secondi torna a guardarsi in giro. Niente di tutto questo con
+     "riduci movimento". */
   vitaOrb() {
     const fab = this.elements.fab;
     const core = fab?.querySelector('.nodo-core');
     if (!fab || !core) return;
     fab.classList.add('is-viva');
-    if (matchMedia('(prefers-reduced-motion: reduce)').matches || !matchMedia('(pointer: fine)').matches) return;
-    let gx = 0, gy = 0, tx = 0, ty = 0, raf = 0;
+    if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    const AMP = 5;                                   /* spostamento massimo, in unita' del disegno (il disegno e' 40) */
+    let gx = 0, gy = 0, tx = 0, ty = 0, raf = 0, ultimoSegno = 0, idle = 0;
     const aggiorna = () => {
       raf = 0;
-      gx += (tx - gx) * 0.16; gy += (ty - gy) * 0.16;
+      gx += (tx - gx) * 0.2; gy += (ty - gy) * 0.2;
       core.style.translate = `${gx.toFixed(2)}px ${gy.toFixed(2)}px`;
       if (Math.abs(tx - gx) > 0.02 || Math.abs(ty - gy) > 0.02) raf = requestAnimationFrame(aggiorna);
     };
-    window.addEventListener('pointermove', e => {
-      if (e.pointerType !== 'mouse') return;
+    const vai = (x, y) => { tx = x; ty = y; if (!raf) raf = requestAnimationFrame(aggiorna); };
+    /* guarda verso un punto dello schermo */
+    const guarda = (cx, cy) => {
       const r = fab.getBoundingClientRect();
-      const dx = e.clientX - (r.left + r.width / 2), dy = e.clientY - (r.top + r.height / 2);
+      const dx = cx - (r.left + r.width / 2), dy = cy - (r.top + r.height / 2);
       const d = Math.hypot(dx, dy) || 1;
-      const f = Math.min(1, d / 500) * 3.2;
-      tx = (dx / d) * f; ty = (dy / d) * f;
-      if (!raf) raf = requestAnimationFrame(aggiorna);
-    }, { passive: true });
+      const f = Math.min(1, d / 350) * AMP;
+      ultimoSegno = performance.now();
+      vai((dx / d) * f, (dy / d) * f);
+    };
+    window.addEventListener('pointermove', e => guarda(e.clientX, e.clientY), { passive: true });
+    window.addEventListener('pointerdown', e => guarda(e.clientX, e.clientY), { passive: true });
+    /* sul telefono il browser prende il controllo dello scorrimento e smette di mandare pointermove: si ascolta anche il tocco */
+    window.addEventListener('touchstart', e => { const t = e.touches[0]; if (t) guarda(t.clientX, t.clientY); }, { passive: true });
+    window.addEventListener('touchmove', e => { const t = e.touches[0]; if (t) guarda(t.clientX, t.clientY); }, { passive: true });
+    /* se non succede niente, si guarda in giro da solo */
+    const inGiro = () => {
+      idle = setTimeout(inGiro, 1300 + Math.random() * 2200);
+      if (document.hidden || performance.now() - ultimoSegno < 2600) return;
+      if (Math.random() < 0.22) { vai(0, 0); return; }        /* ogni tanto torna al centro */
+      const ang = Math.random() * Math.PI * 2, m = (0.35 + Math.random() * 0.65) * AMP;
+      vai(Math.cos(ang) * m, Math.sin(ang) * m * 0.8);
+    };
+    idle = setTimeout(inGiro, 2500);
   }
 
   scheduleHint() {

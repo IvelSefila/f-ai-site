@@ -1,5 +1,5 @@
-import { accentoGL } from './palette.js?v=20260928-166';
-import { emetti, mirinoTieni, mirinoDati } from './mirino.js?v=20260928-166';
+import { accentoGL } from './palette.js?v=20260928-167';
+import { emetti, mirinoTieni, mirinoDati } from './mirino.js?v=20260928-167';
 /* ═══════════════════════════════════════════════════════════════════
  * hero.js — il confine fra mano e macchina, calcolato a ogni frame.
  * WebGL2, nessuna libreria. Se manca, la pagina resta intera.
