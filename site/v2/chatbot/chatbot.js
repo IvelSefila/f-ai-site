@@ -2,8 +2,8 @@
  * Widget Controller "Nous" — F/AI Portfolio
  * Versione 1.0 (Settembre 2026)
  */
-import { CONFIG } from './chatbot.config.js?v=20260928-139';
-import { ChatEngine } from './chatbot.engine.js?v=20260928-139';
+import { CONFIG } from './chatbot.config.js?v=20260928-141';
+import { ChatEngine } from './chatbot.engine.js?v=20260928-141';
 
 /* Cosa sta girando: testi mostrati in alto e nel pannello dettagli (italiano semplice) */
 const ENGINE_INFO = {
@@ -1342,12 +1342,15 @@ class NodoWidget {
       .trim();
   }
 
-  async speakText(text) {
-    if (!this.voiceEnabled) return;
+  finePar() { const f = this._fineVoce; this._fineVoce = null; if (f) { try { f(); } catch (e) {} } }
+
+  async speakText(text, alFinire) {
+    if (!this.voiceEnabled) { alFinire?.(); return; }
     this.stopSpeaking();
+    this._fineVoce = alFinire || null;
 
     const clean = this.cleanTextForSpeech(text);
-    if (!clean) return;
+    if (!clean) { this.finePar(); return; }
 
     // Se il testo è molto lungo, taglia in corrispondenza dell'ultimo punto prima di 400 caratteri
     let speechText = clean;
@@ -1385,6 +1388,7 @@ class NodoWidget {
           audio.onended = () => {
             URL.revokeObjectURL(audioUrl);
             this.stopSpeaking();
+            this.finePar();
           };
           audio.onerror = () => {
             URL.revokeObjectURL(audioUrl);
@@ -1412,6 +1416,7 @@ class NodoWidget {
     if (!('speechSynthesis' in window) || !this.voiceEnabled) {
       this.elements.header?.classList.remove('is-speaking');
       this.elements.fab?.classList.remove('is-speaking');
+      this.finePar();
       return;
     }
 
@@ -1451,9 +1456,11 @@ class NodoWidget {
       };
       utter.onend = () => {
         this.stopSpeaking();
+        this.finePar();
       };
       utter.onerror = () => {
         this.stopSpeaking();
+        this.finePar();
       };
 
       window.speechSynthesis.speak(utter);
@@ -1612,218 +1619,136 @@ class NodoWidget {
     }
   }
 
-  /* ── 1. Tour Guidato di Regia (Modalità Automatica con Bubble Fluttuante dal Pallino) ── */
+  /* ── 1. Visita guidata ─────────────────────────────────────────────
+     Nous passa a icona e sul sito compaiono solo le sue parole, in una nuvoletta accanto
+     al pallino. Prima chiede se si vuole anche la voce, poi accompagna sezione per sezione
+     spiegando cosa c'è davvero in ognuna. Avanza da sola (a fine lettura o a fine voce)
+     e si ferma quando vuoi. */
+  guidaPassi() {
+    return [
+      { target: '#top', testo: "Siamo in cima. Lo sfondo non è una foto caricata: lo disegna il tuo browser in questo momento. Prova a trascinare a destra e a sinistra: sposti il confine fra il lavoro fatto a mano, in bianco e nero, e lo stesso soggetto reso come sistema AI. In alto a destra i pallini cambiano il colore di tutto il sito." },
+      { target: '#come', testo: "Questo è il libretto di istruzioni. Dice una cosa semplice: il sito non racconta il lavoro di Fabrizio, lo fa mentre lo guardi. Tenendo premuto su un riquadro lo puoi spostare, cambiare l'impaginazione o il colore. Tutto resta nel tuo browser: il sito non salva e non manda niente a nessuno." },
+      { target: '#banchi', testo: "Qui ci sono i servizi, otto in tutto: grafica pubblicitaria, video e post-produzione, sistemi per i social, flussi e prototipi AI, siti internet, web app, campagne media e jingle. Apri una scheda e vedi cosa consegna, come ci arriva e dove puoi vederlo già fatto." },
+      { target: '#lavori', testo: "Da qui iniziano i lavori veri: cinque marchi seguiti dall'idea fino alla pubblicazione. Nessun video parte da solo, scegli tu cosa guardare. Adesso ti porto a vederli uno alla volta." },
+      { target: '#caso-union', testo: "Union Energia. Una campagna dentro un marchio che esisteva già: un mondo parallelo dove una cometa a forma di zero azzera le bollette, con Davide l'alpaca, Luca l'asino e gli altri. Sono nove pezzi video, senza nessuna ripresa dal vivo: nascono come immagini e poi si muovono." },
+      { target: '#caso-eso', testo: "Human Robots. Il lancio di un esoscheletro che non si poteva fotografare. Il dispositivo lo giri a 360 gradi trascinandolo con il mouse o con il dito, e più sotto c'è una nuvola di punti in WebGL che puoi manovrare." },
+      { target: '#caso-cest', testo: "Studio CETS. Un'attività già avviata ma ancora poco conosciuta fra chi amministra condomìni. Il marchio è stato rifatto da capo, con scudo, tricolore, palazzo e drone, e poi animato. Il drone che vedi volare sullo sfondo fa parte del lavoro." },
+      { target: '#caso-locanda', testo: "La Locanda del Castello, a Rocca de' Baldi. Dal marchio alla locandina di sabato sera: l'identità di un ristorante nel parco di un castello. Qui trovi anche i jingle musicali, da ascoltare quando vuoi." },
+      { target: '#caso-cdi', testo: "CDI Infissi. Un sito scritto da zero in HTML, CSS e JavaScript, senza temi né builder, con i dati del produttore. Nella pagina lo vedi in diretta, non in uno screenshot, e lo puoi aprire a schermo intero." },
+      { target: '#strumenti', testo: "Questi sono gli strumenti che Fabrizio usa, quarantaquattro voci in tutto. Toccane una e ti dico a cosa gli serve." },
+      { target: '#profilo', testo: "Il profilo. Un occhio da grafico e un metodo da tecnico. Che l'AI sappia scrivere, disegnare e montare non è più una domanda: dove finisce lo strumento e comincia il giudizio, quello resta di Fabrizio." },
+      { target: '#brief', testo: "E qui il brief: sei domande, due minuti. Scegli quello che sai già e salta il resto. Il sito non salva e non invia niente: alla fine copi tu il riepilogo e decidi dove mandarlo." }
+    ];
+  }
+
   startStudioTour() {
     this.clearTourTimer();
-    this.tourState = {
-      step: 0,
-      autoDuration: 7, // 7 secondi per sala: tempo confortevole per guardare l'effetto e ascoltare
-      timeLeft: 7,
-      isPaused: false,
-      timer: null,
-      steps: [
-        {
-          num: '1/4',
-          target: '#top',
-          title: 'Sala 1: L\'Origine & Il Confine WebGL',
-          desc: 'A ogni frame calcoliamo il confine fra mano e macchina in WebGL2 puro (zero librerie esterne). Guarda lo shader in azione o prova a distorcerlo!',
-          speech: "Tappa 1. L'Origine e la moviola. Qui il confine tra mano e macchina è calcolato in tempo reale a ogni frame in WebGL.",
-          actionText: '⚡ Prova Glitch',
-          onAction: () => this.triggerShaderGlitch(false)
-        },
-        {
-          num: '2/4',
-          target: '#caso-union',
-          title: 'Sala 2: Spot Video & Personaggi AI (Union Energia)',
-          desc: '9 spot video completi per il format green con l\'alpaca Davide e l\'asino Luca, mantenuti coerenti tra ComfyUI e Premiere Pro senza set reale.',
-          speech: "Tappa 2. Gli spot video AI per Union Energia. Nove episodi con l'alpaca Davide e l'asino Luca.",
-          actionText: '🎬 Apri Spot 1',
-          onAction: async () => {
-            try {
-              const { apriVideo } = await import('../video-lightbox.js');
-              const { PEZZI } = await import('../union.js');
-              apriVideo({ cartella: 'lavori/', pezzi: PEZZI, index: 1 });
-            } catch (e) {}
-          }
-        },
-        {
-          num: '3/4',
-          target: '#caso-eso',
-          title: 'Sala 3: Hardware & Materia (Esoscheletro)',
-          desc: 'Dalla telemetria bionica alla nuvola di 12.600 punti interattivi WebGL in OGL. Scene generate con GPT Image, sistemate in Photoshop e montate in Premiere Pro.',
-          speech: "Tappa 3. Hardware e video di prodotto per l'esoscheletro, con la nuvola di punti WebGL.",
-          actionText: '🔄 Vai a Esoscheletro',
-          onAction: () => {
-            const mSec = document.querySelector('#caso-eso');
-            if (mSec) mSec.scrollIntoView({ behavior: 'smooth' });
-          }
-        },
-        {
-          num: '4/4',
-          target: '#banchi',
-          title: 'Sala 4: I Banchi di Lavoro & Contatto Diretto',
-          desc: 'Quattro banchi per i formati di produzione e il modulo brief interattivo per stimare costi e tempi del tuo progetto.',
-          speech: "Tappa 4. I banchi di lavoro e il brief interattivo per dare forma alle tue idee.",
-          actionText: '📋 Avvia Brief',
-          onAction: () => this.startBriefWizard()
-        }
-      ]
-    };
-
-    // Attiva styling di regia attiva sul pallino (glow e rotazione rapida)
+    this.stopSpeaking();
+    this.tourState = { step: -1, steps: this.guidaPassi(), timer: null, isPaused: false, voce: false };
     this.elements.fab?.classList.add('is-touring');
-
-    // Chiude la finestra di Nous per lasciare lo schermo interamente visibile
     this.close({ preserveTour: true });
+    this.saveHistory('bot', 'Visita guidata del sito avviata.');
+    this.renderTourChoice();
+  }
 
-    // Renderizza la bolla fluttuante accanto al pallino chiuso
-    this.renderTourStep(0);
+  /* la nuvoletta: solo testo di Nous, e pochi comandi a icona */
+  guidaBolla() {
+    if (!this.tourBubble) {
+      this.tourBubble = document.createElement('div');
+      this.tourBubble.className = 'nodo-tour-bubble nodo-guida';
+      this.tourBubble.setAttribute('role', 'status');
+      this.tourBubble.setAttribute('aria-live', 'polite');
+      document.body.appendChild(this.tourBubble);
+    }
+    this.tourBubble.classList.remove('is-hidden', 'is-closing');
+    return this.tourBubble;
+  }
+
+  renderTourChoice() {
+    const b = this.guidaBolla();
+    b.innerHTML = `
+      <button class="nodo-guida__x" type="button" aria-label="Chiudi la visita">✕</button>
+      <p class="nodo-guida__testo">Ciao, sono Nous. Ti faccio fare un giro del sito e ti spiego cosa trovi in ogni sezione. Vuoi che ti legga anche la spiegazione ad alta voce?</p>
+      <div class="nodo-guida__scelta">
+        <button class="nodo-guida__btn nodo-guida__btn--si" type="button" data-voce="1">Sì, con la voce</button>
+        <button class="nodo-guida__btn" type="button" data-voce="0">No, solo testo</button>
+      </div>`;
+    b.querySelector('.nodo-guida__x').addEventListener('click', () => this.stopStudioTour(true));
+    b.querySelectorAll('[data-voce]').forEach(btn => btn.addEventListener('click', () => {
+      const conVoce = btn.dataset.voce === '1';
+      this.tourState.voce = conVoce;
+      this.voiceEnabled = conVoce;
+      this.elements.voiceBtn?.classList.toggle('is-active', conVoce);
+      this.elements.voiceBtn?.setAttribute('aria-pressed', String(conVoce));
+      this.renderTourStep(0);
+    }));
   }
 
   clearTourTimer() {
     if (this.tourState?.timer) {
-      clearInterval(this.tourState.timer);
+      clearTimeout(this.tourState.timer);
       this.tourState.timer = null;
     }
   }
 
-  startTourTimer(card, index) {
+  /* avanza alla fine della voce (se c'è) oppure dopo il tempo di lettura */
+  programmaAvanzamento(index) {
     this.clearTourTimer();
-    if (!this.tourState) return;
-
-    this.tourState.timeLeft = this.tourState.autoDuration || 7;
-    this.tourState.isPaused = false;
-
-    const timeLabel = card.querySelector('.nodo-tour-countdown-sec');
-    const fillBar = card.querySelector('.nodo-tour-countdown-fill');
-
-    if (fillBar) {
-      fillBar.style.transition = 'none';
-      fillBar.style.width = '100%';
-      void fillBar.offsetWidth; // Force reflow
-      fillBar.style.transition = `width ${this.tourState.autoDuration}s linear`;
-      fillBar.style.width = '0%';
-    }
-
-    this.tourState.timer = setInterval(() => {
-      if (!this.tourState) {
-        this.clearTourTimer();
-        return;
-      }
-      if (this.tourState.isPaused) return;
-
-      this.tourState.timeLeft -= 1;
-      if (timeLabel) {
-        timeLabel.textContent = `${Math.max(0, this.tourState.timeLeft)}s`;
-      }
-
-      if (this.tourState.timeLeft <= 0) {
-        this.clearTourTimer();
-        if (index < this.tourState.steps.length - 1) {
-          this.renderTourStep(index + 1);
-        } else {
-          this.finishStudioTour();
-        }
-      }
-    }, 1000);
-  }
-
-  toggleTourPause(card) {
-    if (!this.tourState) return;
-    this.tourState.isPaused = !this.tourState.isPaused;
-    const pauseBtn = card.querySelector('.nodo-tour-btn--pause');
-    const fillBar = card.querySelector('.nodo-tour-countdown-fill');
-    const statusText = card.querySelector('.nodo-tour-countdown-label');
-
-    if (this.tourState.isPaused) {
-      if (pauseBtn) {
-        pauseBtn.innerHTML = `▶️ Riprendi`;
-        pauseBtn.title = 'Riprendi auto-avanzamento';
-      }
-      if (statusText) statusText.textContent = 'Auto-tour in pausa:';
-      if (fillBar) {
-        const computedWidth = window.getComputedStyle(fillBar).width;
-        fillBar.style.transition = 'none';
-        fillBar.style.width = computedWidth;
-      }
+    const st = this.tourState;
+    if (!st) return;
+    const testo = st.steps[index].testo;
+    const parole = testo.split(/\s+/).length;
+    const lettura = Math.max(7000, parole * 420);
+    const avanti = () => {
+      if (!this.tourState || this.tourState.step !== index) return;
+      if (this.tourState.isPaused) { this.tourState.pendente = true; return; }
+      this.guidaAvanti();
+    };
+    if (st.voce && this.voiceEnabled) {
+      let finita = false;
+      this.speakText(testo, () => { finita = true; if (this.tourState) this.tourState.timer = setTimeout(avanti, 1100); });
+      /* rete di sicurezza: se la voce non parte o non finisce */
+      st.timer = setTimeout(() => { if (!finita) avanti(); }, lettura * 2.2 + 6000);
     } else {
-      if (pauseBtn) {
-        pauseBtn.innerHTML = `⏸️ Pausa`;
-        pauseBtn.title = 'Metti in pausa';
-      }
-      if (statusText) statusText.textContent = 'Prossima sala tra:';
-      if (fillBar) {
-        fillBar.style.transition = `width ${this.tourState.timeLeft}s linear`;
-        fillBar.style.width = '0%';
-      }
+      st.timer = setTimeout(avanti, lettura);
     }
   }
 
-  finishStudioTour() {
+  guidaAvanti() {
+    if (!this.tourState) return;
     this.clearTourTimer();
-    this.elements.fab?.classList.remove('is-touring');
-
-    if (this.tourBubble) {
-      this.tourBubble.innerHTML = `
-        <div class="nodo-tour-bubble-inner">
-          <div class="nodo-tour-bubble-header">
-            <span class="nodo-tour-step">🎬 TOUR COMPLETATO</span>
-            <button class="nodo-tour-bubble-close" type="button" title="Chiudi" aria-label="Chiudi">✕</button>
-          </div>
-          <div class="nodo-tour-title">Hai esplorato tutte le 4 sale del portfolio!</div>
-          <div class="nodo-tour-desc">Dall'origine WebGL agli spot AI, dalla materia ai banchi di lavoro. Da dove vuoi partire ora?</div>
-          <div class="nodo-tour-nav" style="margin-top: 10px;">
-            <button class="nodo-tour-btn nodo-tour-btn--action" id="nodo-bubble-brief-btn" type="button">📋 Avvia Brief</button>
-            <button class="nodo-tour-btn nodo-tour-btn--next" id="nodo-bubble-open-chat" type="button">💬 Apri Nous</button>
-            <button class="nodo-tour-btn nodo-tour-btn--stop" id="nodo-bubble-dismiss" type="button">Chiudi</button>
-          </div>
-        </div>
-      `;
-
-      this.tourBubble.querySelector('#nodo-bubble-brief-btn')?.addEventListener('click', () => {
-        this.stopStudioTour(false);
-        const brief = document.querySelector('#brief');
-        if (brief) brief.scrollIntoView({ behavior: 'smooth' });
-        this.startBriefWizard();
-      });
-
-      this.tourBubble.querySelector('#nodo-bubble-open-chat')?.addEventListener('click', () => {
-        this.stopStudioTour(false);
-        this.open();
-      });
-
-      this.tourBubble.querySelector('#nodo-bubble-dismiss')?.addEventListener('click', () => {
-        this.stopStudioTour(false);
-      });
-
-      this.tourBubble.querySelector('.nodo-tour-bubble-close')?.addEventListener('click', () => {
-        this.stopStudioTour(false);
-      });
-    }
-
-    this.appendBotMessage("🎬 **Tour di regia completato!** Abbiamo esplorato l'origine WebGL, gli spot video AI, la materia e i banchi di lavoro.\n\nVuoi approfondire un progetto specifico o partire da un brief rapido in chat, con 3 domande?");
-    if (this.voiceEnabled) {
-      this.speakText("Tour di regia completato. Abbiamo attraversato tutte le sale. Da cosa vuoi partire?");
-    }
-
-    this.tourState = null;
+    this._fineVoce = null;
+    this.stopSpeaking();
+    const n = this.tourState.step + 1;
+    if (n < this.tourState.steps.length) this.renderTourStep(n);
+    else this.finishStudioTour();
   }
 
-  stopStudioTour(notify = true) {
+  guidaIndietro() {
+    if (!this.tourState || this.tourState.step <= 0) return;
     this.clearTourTimer();
-    this.elements.fab?.classList.remove('is-touring');
-    if (this.tourBubble) {
-      this.tourBubble.classList.add('is-closing');
-      setTimeout(() => {
-        this.tourBubble?.remove();
-        this.tourBubble = null;
-      }, 250);
+    this._fineVoce = null;
+    this.stopSpeaking();
+    this.renderTourStep(this.tourState.step - 1);
+  }
+
+  guidaPausa() {
+    const st = this.tourState;
+    if (!st) return;
+    st.isPaused = !st.isPaused;
+    const btn = this.tourBubble?.querySelector('[data-guida="pausa"]');
+    if (btn) {
+      btn.textContent = st.isPaused ? '▶' : '❚❚';
+      btn.setAttribute('aria-label', st.isPaused ? 'Riprendi' : 'Pausa');
     }
-    if (notify) {
-      this.showToast("Tour di regia terminato", false, 1800);
-      this.saveHistory('bot', "Tour interrotto dall'utente.");
+    if (st.isPaused) {
+      this.clearTourTimer();
+      try { window.speechSynthesis?.pause(); this.ttsAudio?.pause(); } catch (e) {}
+    } else {
+      try { window.speechSynthesis?.resume(); this.ttsAudio?.play(); } catch (e) {}
+      if (st.pendente) { st.pendente = false; this.guidaAvanti(); }
+      else if (!(st.voce && (this.ttsAudio || window.speechSynthesis?.speaking))) this.programmaAvanzamento(st.step);
     }
-    this.tourState = null;
   }
 
   renderTourStep(index) {
@@ -1831,102 +1756,71 @@ class NodoWidget {
     const current = this.tourState.steps[index];
     if (!current) return;
     this.tourState.step = index;
+    this.tourState.pendente = false;
 
-    // Scroll fluido alla sezione
     const targetEl = document.querySelector(current.target);
-    if (targetEl) {
-      targetEl.scrollIntoView({ behavior: 'smooth' });
-    }
+    if (targetEl) targetEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
 
-    // Crea o recupera la bolla fluttuante accanto al pallino
-    if (!this.tourBubble) {
-      this.tourBubble = document.createElement('div');
-      this.tourBubble.className = 'nodo-tour-bubble';
-      document.body.appendChild(this.tourBubble);
-    }
-    this.tourBubble.classList.remove('is-hidden', 'is-closing');
+    const tot = this.tourState.steps.length;
+    const b = this.guidaBolla();
+    b.innerHTML = `
+      <button class="nodo-guida__x" type="button" aria-label="Chiudi la visita">✕</button>
+      <p class="nodo-guida__testo">${current.testo}</p>
+      <div class="nodo-guida__piede">
+        <span class="nodo-guida__conta">${index + 1} / ${tot}</span>
+        <span class="nodo-guida__comandi">
+          <button type="button" data-guida="indietro" aria-label="Indietro"${index === 0 ? ' disabled' : ''}>‹</button>
+          <button type="button" data-guida="pausa" aria-label="${this.tourState.isPaused ? 'Riprendi' : 'Pausa'}">${this.tourState.isPaused ? '▶' : '❚❚'}</button>
+          <button type="button" data-guida="avanti" aria-label="Avanti">›</button>
+        </span>
+      </div>`;
+    b.querySelector('.nodo-guida__x').addEventListener('click', () => this.stopStudioTour(true));
+    b.querySelector('[data-guida="indietro"]').addEventListener('click', () => this.guidaIndietro());
+    b.querySelector('[data-guida="pausa"]').addEventListener('click', () => this.guidaPausa());
+    b.querySelector('[data-guida="avanti"]').addEventListener('click', () => this.guidaAvanti());
+    this.saveHistory('bot', `[Visita guidata ${index + 1}/${tot}] ${current.testo}`);
+    if (!this.tourState.isPaused) this.programmaAvanzamento(index);
+  }
 
-    const pct = ((index + 1) / this.tourState.steps.length) * 100;
-
-    this.tourBubble.innerHTML = `
-      <div class="nodo-tour-bubble-inner">
-        <div class="nodo-tour-bubble-header">
-          <div class="nodo-tour-bubble-meta">
-            <span class="nodo-tour-step">🎬 TAPPA ${current.num}</span>
-            <span class="nodo-tour-auto-badge" title="Auto-Tour attivo (7s per tappa)">
-              <span class="nodo-tour-dot"></span> AUTO
-            </span>
-          </div>
-          <div class="nodo-tour-bubble-actions">
-            <div class="nodo-tour-progress-track">
-              <div class="nodo-tour-progress-fill" style="width: ${pct}%;"></div>
-            </div>
-            <button class="nodo-tour-bubble-close" type="button" title="Esci dal tour" aria-label="Esci dal tour">✕</button>
-          </div>
-        </div>
-        <div class="nodo-tour-title">${current.title}</div>
-        <div class="nodo-tour-desc">${current.desc}</div>
-
-        <div class="nodo-tour-countdown-wrap">
-          <div class="nodo-tour-countdown-bar">
-            <div class="nodo-tour-countdown-fill"></div>
-          </div>
-          <div class="nodo-tour-countdown-info">
-            <span class="nodo-tour-countdown-label">Prossima sala tra:</span>
-            <b class="nodo-tour-countdown-sec">7s</b>
-          </div>
-        </div>
-
-        <div class="nodo-tour-nav">
-          ${current.actionText ? `<button class="nodo-tour-btn nodo-tour-btn--action" type="button">${current.actionText}</button>` : ''}
-          <button class="nodo-tour-btn nodo-tour-btn--pause" type="button" title="Metti in pausa auto-tour">⏸️ Pausa</button>
-          ${index < this.tourState.steps.length - 1 ? `<button class="nodo-tour-btn nodo-tour-btn--next" type="button" title="Passa subito alla prossima sala">Salta ▶</button>` : `<button class="nodo-tour-btn nodo-tour-btn--next" type="button">🏁 Concludi</button>`}
-          <button class="nodo-tour-btn nodo-tour-btn--chat" type="button" title="Apri la chat completa">💬 Chat</button>
-        </div>
-      </div>
-    `;
-
-    // Salva un appunto nella cronologia della chat
-    this.saveHistory('bot', `[Tour - Tappa ${current.num}: ${current.title}] ${current.desc}`);
-
-    if (current.actionText) {
-      this.tourBubble.querySelector('.nodo-tour-btn--action')?.addEventListener('click', () => {
-        if (this.tourState && !this.tourState.isPaused) {
-          this.toggleTourPause(this.tourBubble);
-        }
-        current.onAction();
-      });
-    }
-
-    const pauseBtn = this.tourBubble.querySelector('.nodo-tour-btn--pause');
-    pauseBtn?.addEventListener('click', () => this.toggleTourPause(this.tourBubble));
-
-    const nextBtn = this.tourBubble.querySelector('.nodo-tour-btn--next');
-    nextBtn?.addEventListener('click', () => {
-      this.clearTourTimer();
-      if (index < this.tourState.steps.length - 1) {
-        this.renderTourStep(index + 1);
-      } else {
-        this.finishStudioTour();
-      }
+  finishStudioTour() {
+    this.clearTourTimer();
+    this.stopSpeaking();
+    this.elements.fab?.classList.remove('is-touring');
+    const b = this.guidaBolla();
+    const fine = "Il giro è finito. Se vuoi approfondire un lavoro o capire come funziona un servizio, chiedimelo: rispondo io. Oppure vai dritto al brief e scrivi a Fabrizio.";
+    b.innerHTML = `
+      <button class="nodo-guida__x" type="button" aria-label="Chiudi">✕</button>
+      <p class="nodo-guida__testo">${fine}</p>
+      <div class="nodo-guida__scelta">
+        <button class="nodo-guida__btn nodo-guida__btn--si" type="button" data-fine="chat">Chiedi a Nous</button>
+        <button class="nodo-guida__btn" type="button" data-fine="brief">Vai al brief</button>
+      </div>`;
+    b.querySelector('.nodo-guida__x').addEventListener('click', () => this.stopStudioTour(false));
+    b.querySelector('[data-fine="chat"]').addEventListener('click', () => { this.stopStudioTour(false); this.open(); });
+    b.querySelector('[data-fine="brief"]').addEventListener('click', () => {
+      this.stopStudioTour(false);
+      document.querySelector('#brief')?.scrollIntoView({ behavior: 'smooth' });
     });
+    if (this.tourState?.voce && this.voiceEnabled) this.speakText(fine);
+    this.tourState = null;
+  }
 
-    const chatBtn = this.tourBubble.querySelector('.nodo-tour-btn--chat');
-    chatBtn?.addEventListener('click', () => {
-      this.open();
-    });
-
-    const closeBtn = this.tourBubble.querySelector('.nodo-tour-bubble-close');
-    closeBtn?.addEventListener('click', () => {
-      this.stopStudioTour(true);
-    });
-
-    if (this.voiceEnabled && current.speech) {
-      this.speakText(current.speech);
+  stopStudioTour(notify = true) {
+    this.clearTourTimer();
+    this._fineVoce = null;
+    this.stopSpeaking();
+    this.elements.fab?.classList.remove('is-touring');
+    if (this.tourBubble) {
+      const bolla = this.tourBubble;
+      bolla.classList.add('is-closing');
+      this.tourBubble = null;
+      setTimeout(() => bolla.remove(), 250);
     }
-
-    // Avvia il countdown automatico
-    this.startTourTimer(this.tourBubble, index);
+    if (notify) {
+      this.showToast('Visita guidata terminata', false, 1800);
+      this.saveHistory('bot', "Visita interrotta dall'utente.");
+    }
+    this.tourState = null;
   }
 
   /* ── 2. Controllo WebGL & Moviola Shader ────────────────────────── */

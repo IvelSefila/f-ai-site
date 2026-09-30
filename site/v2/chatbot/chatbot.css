@@ -1941,3 +1941,34 @@
   .nodo-window.is-keyboard .nodo-notice { display: none !important; }
   .nodo-window.is-keyboard .nodo-input-bar { padding-bottom: 8px; }
 }
+
+/* ── Visita guidata: nuvoletta con solo le parole di Nous ── */
+.nodo-guida { width: min(380px, calc(100vw - 120px)); padding: 16px 18px 12px; }
+.nodo-guida__testo { margin: 0 22px 10px 0; font-size: 15px; line-height: 1.6; color: var(--nodo-title); animation: nodo-guida-testo .45s cubic-bezier(.23, 1, .32, 1) both; }
+@keyframes nodo-guida-testo { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+.nodo-guida__x {
+  position: absolute; top: 8px; right: 8px; width: 26px; height: 26px; border-radius: 50%;
+  border: 0; background: transparent; color: var(--nodo-muted); font-size: 13px; cursor: pointer;
+}
+.nodo-guida__x:hover { color: var(--nodo-title); background: rgba(255, 255, 255, .08); }
+.nodo-guida__piede { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.nodo-guida__conta { font: 600 12px/1 var(--nodo-font-mono); color: var(--nodo-muted); letter-spacing: .08em; }
+.nodo-guida__comandi { display: inline-flex; gap: 6px; }
+.nodo-guida__comandi button {
+  width: 32px; height: 32px; border-radius: 50%; border: 1px solid var(--nodo-border);
+  background: rgba(255, 255, 255, .04); color: var(--nodo-title); font-size: 14px; line-height: 1; cursor: pointer;
+}
+.nodo-guida__comandi button:hover:not(:disabled) { border-color: var(--nodo-em); color: var(--nodo-em-bright); }
+.nodo-guida__comandi button:disabled { opacity: .35; cursor: default; }
+.nodo-guida__scelta { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 4px; }
+.nodo-guida__btn {
+  padding: 9px 14px; border-radius: 999px; border: 1px solid var(--nodo-border);
+  background: rgba(255, 255, 255, .05); color: var(--nodo-title); font: 600 13px/1 var(--nodo-font-body); cursor: pointer;
+}
+.nodo-guida__btn:hover { border-color: var(--nodo-em); }
+.nodo-guida__btn--si { background: var(--nodo-em); border-color: var(--nodo-em); color: #070a0f; }
+@media (max-width: 640px) {
+  .nodo-guida { right: 12px; left: 12px; width: auto; bottom: calc(160px + env(safe-area-inset-bottom, 0px)); }
+  .nodo-guida::after { display: none; }
+}
+@media (prefers-reduced-motion: reduce) { .nodo-guida__testo { animation: none; } }

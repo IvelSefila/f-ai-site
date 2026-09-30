@@ -36,7 +36,7 @@ export const CONFIG = {
   welcomeMessage: "Ciao! Sono **Nous**, l’intelligenza di regia del portfolio di Fabrizio. Posso raccontarti i suoi progetti reali, gli strumenti AI che usa, o guidarti a costruire un brief su misura. Da cosa vuoi partire?",
   
   quickChips: [
-    { label: "🎬 Tour di Regia", query: "Avvia il tour guidato del portfolio" },
+    { label: "🎬 Visita guidata", query: "visita guidata" },
     { label: "Chi è Fabrizio?", query: "Chi è Fabrizio Mana e cosa fa?" },
     { label: "Progetti e clienti", query: "Quali sono i progetti e i marchi principali?" },
     { label: "💡 Ideare uno Spot", query: "Aiutami a ideare un concept video" },
