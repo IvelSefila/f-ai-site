@@ -5,7 +5,7 @@
  * 2. WebGPU Locale (WebLLM Qwen3-1.7B via Web Worker)
  * 3. Motore A Deterministico (Zero rete, offline, instant fallback)
  */
-import { CONFIG } from './chatbot.config.js?v=20260928-149';
+import { CONFIG } from './chatbot.config.js?v=20260928-155';
 
 /* ───────────────────────── RAG lessicale (BM25, zero librerie) ─────────────────────────
    I chunk si costruiscono a runtime dalla knowledge.json; retrieve() e' una funzione pura. */
@@ -276,7 +276,7 @@ export class ChatEngine {
   }
 
   static async create() {
-    const res = await fetch(new URL('./knowledge.json?v=20260928-149', import.meta.url));
+    const res = await fetch(new URL('./knowledge.json?v=20260928-155', import.meta.url));
     const kb = await res.json();
     return new ChatEngine(kb);
   }
@@ -327,7 +327,7 @@ export class ChatEngine {
 
   getSystemPrompt(context = null) {
     if (context && context.length) {
-      return `Il tuo nome ufficiale è NOUS (Noûs, intelligenza di regia): sei l'assistente del portfolio di Fabrizio Mana (MF/AI). Ti chiami esclusivamente NOUS.
+      return `Il tuo nome ufficiale è NOUS (Noûs, intelligenza di regia): sei l'assistente AI personale di Fabrizio Mana (MF/AI) e vivi sul suo portfolio. Ti chiami esclusivamente NOUS.
 Parli italiano naturale, chiaro, frasi brevi e tono competente con un tocco di ironia leggera.
 NON parli di temi esoterici, Lilith, tarocchi, astrologia, politica di partito, vita privata, diagnosi o pareri legali: declina con garbo e riporta il discorso sul lavoro di Fabrizio.
 Se ti chiedono se sei un'AI: sì, sei un assistente automatico; Fabrizio è una persona reale.
@@ -398,7 +398,7 @@ REGOLE DI RISPOSTA:
       };
       try {
         const initId = ++this._gpuReqId;
-        this.worker = new Worker(new URL('./chatbot.worker.js?v=20260928-149', import.meta.url), { type: 'module' });
+        this.worker = new Worker(new URL('./chatbot.worker.js?v=20260928-155', import.meta.url), { type: 'module' });
 
         this.worker.onmessage = (e) => {
           const { type, progress, text, error, id } = e.data || {};
@@ -728,9 +728,9 @@ REGOLE DI RISPOSTA:
           /\b(sei|siete) (tu )?fabrizio\b/
         ],
         replies: [
-          `Sì, sono **Nous**, un assistente automatico: rispondo solo con quello che c'è scritto sul sito. **Fabrizio** invece è una persona reale.\n\nPer parlare con lui scrivi a **${EMAIL}** o compila il brief.`,
+          `Sì, sono **Nous**, l'assistente AI personale di Fabrizio: rispondo solo con quello che c'è scritto sul sito. **Fabrizio** invece è una persona reale.\n\nPer parlare con lui scrivi a **${EMAIL}** o compila il brief.`,
           `Sono un'AI, sì: un assistente che conosce il sito e nient'altro. **Fabrizio Mana** è una persona vera, con base in Piemonte. Lo raggiungi a **${EMAIL}**.`,
-          `Non sono una persona: sono **Nous**, l'assistente automatico di questo sito. Fabrizio invece è reale e per scrivergli c'è **${EMAIL}** oppure il brief.`
+          `Non sono una persona: sono **Nous**, l'assistente AI personale di Fabrizio. Fabrizio invece è reale e per scrivergli c'è **${EMAIL}** oppure il brief.`
         ],
         action: { type: 'scroll', target: '#contatto', label: 'Vai ai contatti' }
       },
@@ -1436,7 +1436,7 @@ REGOLE DI RISPOSTA:
         maxWords: 4,
         keys: [/^(ciao|salve|hey|hei|hello|hi|buongiorno|buonasera|buon pomeriggio|buona sera|salut)\b/],
         replies: [
-          `Ciao! Sono **Nous**, l'assistente del portfolio di **Fabrizio Mana**. Cosa vuoi sapere: i lavori, gli strumenti o come contattarlo?`,
+          `Ciao! Sono **Nous**, l'assistente AI personale di **Fabrizio Mana**. Cosa vuoi sapere: i lavori, gli strumenti o come contattarlo?`,
           `Benvenuto. Posso raccontarti i cinque lavori, gli otto servizi o come funziona il brief. Da dove partiamo?`,
           `Ciao, dimmi pure. Sui lavori, sugli strumenti, sul brief o sui contatti ti rispondo io.`
         ],

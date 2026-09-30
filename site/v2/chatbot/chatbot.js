@@ -2,8 +2,8 @@
  * Widget Controller "Nous" — F/AI Portfolio
  * Versione 1.0 (Settembre 2026)
  */
-import { CONFIG } from './chatbot.config.js?v=20260928-149';
-import { ChatEngine } from './chatbot.engine.js?v=20260928-149';
+import { CONFIG } from './chatbot.config.js?v=20260928-155';
+import { ChatEngine } from './chatbot.engine.js?v=20260928-155';
 
 /* Cosa sta girando: testi mostrati in alto e nel pannello dettagli (italiano semplice) */
 const ENGINE_INFO = {
@@ -69,6 +69,7 @@ class NodoWidget {
     this.bindEvents();
     this.loadHistory();
     this.scheduleHint();
+    this.suggerimentiSezione();
     this.updateModeBadge();
 
     try {
@@ -106,7 +107,8 @@ class NodoWidget {
     const hint = document.createElement('div');
     hint.className = 'nodo-hint';
     hint.innerHTML = `
-      <span>Cerchi informazioni rapide sui lavori o sullo stack AI? <b>Chiedi a Nous</b></span>
+      <span class="nodo-hint-testo">Sono <b>Nous</b>, l’assistente AI personale di Fabrizio. Se vuoi sapere di più, <b>parla con me</b>.</span>
+      <button class="nodo-hint-off" type="button">Non mostrare più</button>
       <button class="nodo-hint-close" type="button" aria-label="Chiudi avviso">&times;</button>
     `;
 
@@ -558,6 +560,77 @@ class NodoWidget {
     if (discard) this._gen++;
     if (this.engine) this.engine.abortGeneration();
     // L'aggiornamento dello stato dei controlli avviene nel finally di handleUserQuery
+  }
+
+  /* Suggerimenti di sezione: mentre scorri, dal pallino di Nous compare una nota breve che dice
+     cosa stai guardando e invita a parlarne con lei. Una volta per sezione e per visita, mai mentre
+     la chat e' aperta o la visita guidata e' in corso, e si spengono per sempre con "Non mostrare piu'". */
+  suggerimentiSezione() {
+    if (!('IntersectionObserver' in window)) return;
+    const spenti = () => { try { return localStorage.getItem('nodo_sugg_off') === '1'; } catch (e) { return false; } };
+    if (spenti()) return;
+    const visti = new Set();
+    try { JSON.parse(sessionStorage.getItem('nodo_sugg_visti') || '[]').forEach(v => visti.add(v)); } catch (e) {}
+    const SEZIONI = [
+      ['#come', 'Queste sono le istruzioni del sito: si tocca, si sposta e si cambia.', 'Come funziona questo sito?'],
+      ['#banchi', 'Questi sono gli otto servizi di Fabrizio: ognuno dice cosa consegna e dove lo vedi già fatto.', 'Quali servizi offre Fabrizio?'],
+      ['#lavori', 'Qui ci sono i cinque lavori, dall\u2019idea alla pubblicazione.', 'Parlami dei lavori di Fabrizio'],
+      ['#caso-union', 'Union Energia: nove video con Davide l\u2019alpaca e Luca l\u2019asino, senza riprese dal vivo.', 'Come è nata la campagna Union Energia?'],
+      ['#caso-eso', 'Human Robots: il lancio di un esoscheletro che non si poteva fotografare.', 'Come è stato fatto il lavoro su Human Robots?'],
+      ['#caso-cest', 'Studio CETS: un marchio rifatto da capo e animato, drone compreso.', 'Cosa è stato fatto per Studio CETS?'],
+      ['#caso-locanda', 'La Locanda del Castello: dal marchio alla locandina, con cinque jingle.', 'Parlami della Locanda del Castello'],
+      ['#caso-cdi', 'CDI Infissi: un sito scritto da zero, con il catalogo del produttore.', 'Com\u2019è fatto il sito di CDI Infissi?'],
+      ['#strumenti', 'Questi sono i quarantaquattro strumenti che Fabrizio usa.', 'Quali strumenti usa Fabrizio?'],
+      ['#profilo', 'Il profilo: un occhio da grafico e un metodo da tecnico.', 'Chi è Fabrizio?'],
+      ['#brief', 'Qui puoi raccontare il tuo progetto: posso farti le domande io e compilare la scheda.', 'Fammi il brief']
+    ];
+    const hint = this.elements.hint;
+    const testoEl = hint.querySelector('.nodo-hint-testo');
+    if (!testoEl) return;
+    let ultimo = 0, nascondi = 0, corrente = null;
+    const esc = t => String(t).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+    const mostra = (id, testo, domanda) => {
+      if (spenti() || this.isOpen || this.tourState || this.isGenerating) return false;
+      if (Date.now() - ultimo < 14000) return false;
+      corrente = { id, domanda };
+      testoEl.innerHTML = `<b>Nous</b> · ${esc(testo)} Se vuoi sapere di più, <b>parla con me</b>.`;
+      hint.classList.add('is-visible', 'is-sezione');
+      ultimo = Date.now();
+      clearTimeout(nascondi);
+      nascondi = setTimeout(() => hint.classList.remove('is-visible'), 9000);
+      visti.add(id);
+      try { sessionStorage.setItem('nodo_sugg_visti', JSON.stringify([...visti])); } catch (e) {}
+      return true;
+    };
+    /* "non mostrare piu'" e apertura della chat dal suggerimento */
+    const off = hint.querySelector('.nodo-hint-off');
+    off?.addEventListener('click', e => {
+      e.stopPropagation();
+      try { localStorage.setItem('nodo_sugg_off', '1'); } catch (er) {}
+      hint.classList.remove('is-visible');
+    });
+    hint.addEventListener('click', e => {
+      if (!corrente || e.target.closest('.nodo-hint-close, .nodo-hint-off')) return;
+      if (corrente.domanda && this.elements.input) {
+        this.open();
+        this.elements.input.value = corrente.domanda;
+        this.elements.input.focus({ preventScroll: true });
+      }
+    });
+    const attesa = new Map();
+    const io = new IntersectionObserver(voci => {
+      for (const v of voci) {
+        const riga = SEZIONI.find(s => document.querySelector(s[0]) === v.target);
+        if (!riga) continue;
+        if (!v.isIntersecting) { clearTimeout(attesa.get(riga[0])); continue; }
+        if (visti.has(riga[0])) continue;
+        clearTimeout(attesa.get(riga[0]));
+        attesa.set(riga[0], setTimeout(() => mostra(riga[0], riga[1], riga[2]), 2400));
+      }
+    }, { rootMargin: '-35% 0px -45% 0px' });
+    SEZIONI.forEach(s => { const el = document.querySelector(s[0]); if (el) io.observe(el); });
+    /* se la chat o la visita si aprono, il suggerimento sparisce */
+    document.addEventListener('nodo:aperto', () => hint.classList.remove('is-visible'));
   }
 
   scheduleHint() {

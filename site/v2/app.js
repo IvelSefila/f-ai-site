@@ -2,19 +2,19 @@
 * app.js — la sessione. Tiene il filo fra le prove, parla, misura,
 * e alla fine scrive il dossier. Nessuna libreria.
 * ═══════════════════════════════════════════════════════════════════ */
-import { initTipografia } from './tipografia.js?v=20260928-149';
+import { initTipografia } from './tipografia.js?v=20260928-155';
 initTipografia();
 // cursore a mirino tolto su richiesta (mirino.js resta nel progetto)
-import { initHero } from './hero.js?v=20260928-149';
-import { initStrumenti } from './strumenti.js?v=20260928-149';
-import { initUnion } from './union.js?v=20260928-149';
-import { initEso } from './eso.js?v=20260928-149';
-import { initLocanda } from './locanda.js?v=20260928-149';
-import { initCest } from './cest.js?v=20260928-149';
-import { initPalette } from './palette.js?v=20260928-149';
-import { keyVisual, radar, MODES, rng, leggiColori} from './engine.js?v=20260928-149';
-import { initBrief } from './brief.js?v=20260928-149';
-import { initServizi } from './servizi.js?v=20260928-149';
+import { initHero } from './hero.js?v=20260928-155';
+import { initStrumenti } from './strumenti.js?v=20260928-155';
+import { initUnion } from './union.js?v=20260928-155';
+import { initEso } from './eso.js?v=20260928-155';
+import { initLocanda } from './locanda.js?v=20260928-155';
+import { initCest } from './cest.js?v=20260928-155';
+import { initPalette } from './palette.js?v=20260928-155';
+import { keyVisual, radar, MODES, rng, leggiColori} from './engine.js?v=20260928-155';
+import { initBrief } from './brief.js?v=20260928-155';
+import { initServizi } from './servizi.js?v=20260928-155';
 
 const $ = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => [...r.querySelectorAll(s)];
@@ -1287,6 +1287,15 @@ $$('.eso__360-stage').forEach(stage360 => {
   const PX_PER_FRAME = 5;
   const src360 = i => `${cartella360}frame_${String(i).padStart(3, '0')}.webp?v=4`;
   const cache360 = new Array(TOT);
+  /* ImageBitmap decodificati una volta e tenuti in memoria: drawImage su <img> puo' costringere il
+     browser a ridecodificare il webp a ogni frame se la cache lo scarta, ed e' cio' che fa scattare. */
+  const bm360 = new Array(TOT);
+  const sorg360 = i => bm360[i] || cache360[i];
+  const largh360 = o => o.naturalWidth || o.width;
+  const alt360 = o => o.naturalHeight || o.height;
+  const aBitmap = (i, im) => ('createImageBitmap' in window)
+    ? createImageBitmap(im).then(b => { bm360[i] = b; }).catch(() => {})
+    : Promise.resolve();
   const pronti = new Array(TOT).fill(false);
   let pronto = false, frame = 0, mostrato = 0, trascinando = false, xInizio = 0, frameInizio = 0;
   let velocita = 0, inerziaId = 0, campioni = [];
@@ -1309,10 +1318,10 @@ $$('.eso__360-stage').forEach(stage360 => {
     if (w && h && (cv360.width !== w || cv360.height !== h)) { cv360.width = w; cv360.height = h; disegnato360 = -1; disegna360(frame); }
   }
   function disegna360(i) {
-    const im = cache360[i];
+    const im = sorg360(i);
     if (!im || !pronti[i] || !cv360.width || disegnato360 === i) return;
-    const r = Math.min(cv360.width / im.naturalWidth, cv360.height / im.naturalHeight);
-    const w = im.naturalWidth * r, h = im.naturalHeight * r;
+    const r = Math.min(cv360.width / largh360(im), cv360.height / alt360(im));
+    const w = largh360(im) * r, h = alt360(im) * r;
     cx360.clearRect(0, 0, cv360.width, cv360.height);
     cx360.drawImage(im, (cv360.width - w) / 2, (cv360.height - h) / 2, w, h);
     disegnato360 = i;
@@ -1320,7 +1329,7 @@ $$('.eso__360-stage').forEach(stage360 => {
   }
   new ResizeObserver(misura360).observe(stage360);
   misura360();
-  cache360[0].decode?.().then(() => { disegna360(frame); }).catch(() => {});
+  (cache360[0].decode ? cache360[0].decode() : Promise.resolve()).then(() => aBitmap(0, cache360[0])).then(() => { disegna360(frame); }).catch(() => {});
 
   /* "completo" (evento load) non basta: un'immagine puo' essere
      scaricata e non ancora decodificata e assegnarla comunque a
@@ -1334,10 +1343,10 @@ $$('.eso__360-stage').forEach(stage360 => {
       const im = new Image();
       im.src = src360(i);
       cache360[i] = im;
-      const segnaPronto = () => {
+      const segnaPronto = () => aBitmap(i, im).then(() => {
         pronti[i] = true;
         if (frame === i && mostrato !== i) { disegna360(i); mostrato = i; }
-      };
+      });
       if (im.decode) im.decode().then(segnaPronto).catch(segnaPronto);
       else im.addEventListener('load', segnaPronto);
     }
@@ -1363,18 +1372,18 @@ $$('.eso__360-stage').forEach(stage360 => {
     m.innerHTML = lato === 'sx' ? '<i>‹</i>' : '<i>›</i>';
     stage360.append(m);
   }
-  /* Rotazione lenta e continua: un giro completo di 360 gradi in circa 24 secondi. Fra un
-     fotogramma e il successivo i due si sfumano (crossfade), cosi' a questa velocita' il moto
-     resta fluido. Si ferma mentre lo giri tu e riparte da solo dopo qualche secondo. */
-  const SECONDI_GIRO = 24;
-  let toccato = false, dondolaId = 0, inVista360 = false, posAuto = 0, ultimaAzione = -1e9, ultimoT = 0;
+  /* Dondolio dolce: il dispositivo oscilla piano un po' a sinistra e un po' a destra (circa 25 gradi
+     per lato, un'andata e ritorno ogni 7 secondi). Fra un fotogramma e il successivo i due si sfumano,
+     cosi' il moto resta fluido. Si ferma mentre lo giri tu e riparte da solo, da dove l'hai lasciato. */
+  const AMPIEZZA = 8, PERIODO_MS = 7000;
+  let toccato = false, dondolaId = 0, inVista360 = false, ultimaAzione = -1e9, centro = 0, faseInizio = 0, inAttesa = true;
   const riduci = matchMedia('(prefers-reduced-motion: reduce)');
   function disegnaMix(pos) {
     const f0 = Math.floor(pos), t = pos - f0;
     const i0 = ((f0 % TOT) + TOT) % TOT, i1 = (i0 + 1) % TOT;
-    const a0 = cache360[i0], a1 = cache360[i1];
+    const a0 = sorg360(i0), a1 = sorg360(i1);
     if (!pronti[i0] || !pronti[i1] || !cv360.width) return;
-    const fit = im => { const r = Math.min(cv360.width / im.naturalWidth, cv360.height / im.naturalHeight); return [im.naturalWidth * r, im.naturalHeight * r]; };
+    const fit = im => { const r = Math.min(cv360.width / largh360(im), cv360.height / alt360(im)); return [largh360(im) * r, alt360(im) * r]; };
     cx360.clearRect(0, 0, cv360.width, cv360.height);
     const [w0, h0] = fit(a0);
     cx360.globalAlpha = 1;
@@ -1386,26 +1395,28 @@ $$('.eso__360-stage').forEach(stage360 => {
       cx360.globalAlpha = 1;
     }
     disegnato360 = -1;
-    frame = Math.round(pos) % TOT; mostrato = frame;
+    frame = ((Math.round(pos) % TOT) + TOT) % TOT; mostrato = frame;
     if (!stage360.classList.contains('eso__360-stage--canvas')) stage360.classList.add('eso__360-stage--canvas');
   }
   function dondola(now) {
     if (!inVista360 || riduci.matches || document.hidden) { dondolaId = 0; return; }
-    const dt = Math.min(0.1, (now - (ultimoT || now)) / 1000); ultimoT = now;
-    const tuttiPronti = pronto && pronti.every(Boolean);
-    if (tuttiPronti) {
+    const vicini = [];
+    for (let k = -AMPIEZZA - 1; k <= AMPIEZZA + 1; k++) vicini.push(((Math.round(centro) + k) % TOT + TOT) % TOT);
+    if (pronto && vicini.every(i => pronti[i])) {
       if (trascinando || now - ultimaAzione < 2500) {
-        posAuto = frame;
+        centro = frame; inAttesa = true;
       } else {
-        posAuto = (posAuto + dt * TOT / SECONDI_GIRO) % TOT;
-        disegnaMix(posAuto);
+        if (inAttesa) { inAttesa = false; faseInizio = now; }
+        const t = now - faseInizio;
+        const salita = Math.min(1, t / 1500);          /* parte piano, senza strappi */
+        disegnaMix(centro + Math.sin(t * 2 * Math.PI / PERIODO_MS) * AMPIEZZA * salita);
       }
     }
     dondolaId = requestAnimationFrame(dondola);
   }
   new IntersectionObserver(es => {
     inVista360 = es[0].isIntersecting;
-    if (inVista360 && !dondolaId) { ultimoT = 0; dondolaId = requestAnimationFrame(dondola); }
+    if (inVista360 && !dondolaId) { dondolaId = requestAnimationFrame(dondola); }
   }, { rootMargin: '40px' }).observe(stage360);
   const azione360 = () => {
     ultimaAzione = performance.now();

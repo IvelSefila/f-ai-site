@@ -1985,3 +1985,15 @@
 .nodo-brief-errore { margin: 0; font-size: 13px; color: #ff8a8a; }
 .nodo-brief-nota { margin: 8px 0 0; font-size: 12.5px; line-height: 1.5; color: var(--nodo-muted); }
 .nodo-wiz-btn.is-primary { background: var(--nodo-em); border-color: var(--nodo-em); color: #070a0f; justify-self: start; }
+
+
+/* ── Suggerimenti di sezione dal pallino di Nous ── */
+.nodo-hint.is-sezione { max-width: 280px; padding: 12px 34px 10px 14px; line-height: 1.5; cursor: pointer; }
+.nodo-hint.is-sezione b { color: var(--nodo-em-bright); }
+.nodo-hint-off {
+  display: block; margin: 8px 0 0; padding: 0; background: none; border: 0; cursor: pointer;
+  font: 500 11px/1 var(--nodo-font-body); color: var(--nodo-muted); text-decoration: underline; text-underline-offset: 3px;
+}
+.nodo-hint-off:hover { color: var(--nodo-title); }
+.nodo-hint:not(.is-sezione) .nodo-hint-off { display: none; }
+@media (max-width: 640px) { .nodo-hint.is-sezione { max-width: 230px; font-size: 12.5px; } }
