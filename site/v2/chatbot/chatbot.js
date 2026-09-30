@@ -2,8 +2,8 @@
  * Widget Controller "Nous" — F/AI Portfolio
  * Versione 1.0 (Settembre 2026)
  */
-import { CONFIG } from './chatbot.config.js?v=20260928-132';
-import { ChatEngine } from './chatbot.engine.js?v=20260928-132';
+import { CONFIG } from './chatbot.config.js?v=20260928-139';
+import { ChatEngine } from './chatbot.engine.js?v=20260928-139';
 
 /* Cosa sta girando: testi mostrati in alto e nel pannello dettagli (italiano semplice) */
 const ENGINE_INFO = {
@@ -687,9 +687,9 @@ class NodoWidget {
     const inPausa = this.engine.getMode() === 'cloud' && eff !== 'cloud';
     let testo;
     if (eff === 'cloud') {
-      testo = "Al momento le risposte le dà <strong>Groq</strong> (modello gpt-oss-120b) tramite <strong>Cloudflare</strong>. Vuoi installare sul tuo dispositivo <strong>Qwen3 1.7B</strong>? Risponde da solo, senza mandare le domande in rete, e resta come riserva se Groq non risponde. Si scarica una volta sola (circa 1 GB).";
+      testo = "Al momento le risposte le dà <strong>Groq</strong> (modello gpt-oss-120b) tramite <strong>Cloudflare</strong>. Vuoi installare sul tuo dispositivo <strong>Qwen3 1.7B</strong>? Risponde da solo, senza mandare le domande in rete e resta come riserva se Groq non risponde. Si scarica una volta sola (circa 1 GB).";
     } else if (inPausa) {
-      testo = "Groq per ora non risponde (chiamate finite o servizio occupato): uso le risposte <strong>Istantanee</strong>, scritte sul sito, e riprovo da solo tra poco. Vuoi installare sul tuo dispositivo <strong>Qwen3 1.7B</strong>, un piccolo modello AI che risponde senza rete? Si scarica una volta sola (circa 1 GB).";
+      testo = "Groq per ora non risponde (chiamate finite o servizio occupato): uso le risposte <strong>Istantanee</strong>, scritte sul sito e riprovo da solo tra poco. Vuoi installare sul tuo dispositivo <strong>Qwen3 1.7B</strong>, un piccolo modello AI che risponde senza rete? Si scarica una volta sola (circa 1 GB).";
     } else {
       testo = "Al momento rispondo con testi scritti sul sito, senza intelligenza artificiale. Vuoi installare sul tuo dispositivo <strong>Qwen3 1.7B</strong>, un piccolo modello AI che risponde senza rete? Si scarica una volta sola (circa 1 GB).";
     }
@@ -2345,8 +2345,9 @@ Data: ${new Date().toLocaleDateString('it-IT')}
 }
 
 // Inizializzazione differita (non blocca il caricamento critico della pagina)
-if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', () => new NodoWidget().init());
-} else {
-  new NodoWidget().init();
-}
+const avviaNous = () => new NodoWidget().init();
+const quandoLibero = () => ('requestIdleCallback' in window)
+  ? requestIdleCallback(avviaNous, { timeout: 2500 })
+  : setTimeout(avviaNous, 600);
+if (document.readyState === 'complete') quandoLibero();
+else addEventListener('load', quandoLibero, { once: true });

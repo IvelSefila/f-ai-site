@@ -5,7 +5,7 @@
  * ═══════════════════════════════════════════════════════════════════ */
 
 /* I colori dell'accento non sono piu' costanti: il sito lascia scegliere
-   la palette, e questi vanno riletti dalle variabili del foglio di stile.
+   la palette e questi vanno riletti dalle variabili del foglio di stile.
    Sono `let` esportati: chi li importa vede il valore aggiornato, perche'
    fra moduli i binding sono vivi. */
 export let EM = '#14c08a';
@@ -23,7 +23,7 @@ export function leggiColori() {
 }
 const INK = '#f2f4f7';
 /* letta da uno scope che non ombreggia mai EM: dentro keyVisual serve
-   il valore ORIGINALE prima di ombreggiarlo con quello scelto, e un
+   il valore ORIGINALE prima di ombreggiarlo con quello scelto e un
    "const EM" locale blocca (temporal dead zone) l'intero corpo della
    funzione, anche le righe scritte prima della sua dichiarazione. */
 const coloriAttuali = () => [EM, EM_BRIGHT, EM_LIGHT, EM_DEEP];
@@ -128,7 +128,7 @@ export function keyVisual(ctx, o) {
      bloccato (temporal dead zone) dall'inizio della funzione. */
   const mix = (hex, verso, q) => { const [rr, gg, bb] = _tri(hex);
     const m = i => Math.round([rr, gg, bb][i] + q * (verso[i] - [rr, gg, bb][i]));
-    /* esadecimale, non rgb(): alfa() e _tri() leggono solo #rrggbb, e un
+    /* esadecimale, non rgb(): alfa() e _tri() leggono solo #rrggbb e un
        rgb(...) diventava nero — anelli e griglia sparivano */
     return '#' + [0, 1, 2].map(i => m(i).toString(16).padStart(2, '0')).join(''); };
   const [EM0, EM_BRIGHT0, EM_LIGHT0, EM_DEEP0] = coloriAttuali();

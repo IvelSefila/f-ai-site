@@ -1,5 +1,5 @@
-import { accentoGL } from './palette.js?v=20260928-132';
-import { emetti, mirinoTieni, mirinoDati } from './mirino.js?v=20260928-132';
+import { accentoGL } from './palette.js?v=20260928-139';
+import { emetti, mirinoTieni, mirinoDati } from './mirino.js?v=20260928-139';
 /* ═══════════════════════════════════════════════════════════════════
  * hero.js — il confine fra mano e macchina, calcolato a ogni frame.
  * WebGL2, nessuna libreria. Se manca, la pagina resta intera.
@@ -228,7 +228,7 @@ export function initHero(canvas, onState) {
      la differenza non si vede; il dimezzamento del frame time sì. */
   /* Sui computer (puntatore preciso) il tetto e' piu' alto: lo sfondo esce piu' nitido.
      Sui telefoni resta basso. Se il frame rate scende sotto 26 il tetto cala del 20%. */
-  let tetto = matchMedia('(pointer: fine)').matches ? 4.2e6 : 2.2e6;
+  let tetto = matchMedia('(pointer: fine)').matches ? 3.4e6 : 2.2e6;
   function resize() {
     const cw = canvas.clientWidth, ch = canvas.clientHeight;
     if (!cw || !ch) return;
@@ -241,7 +241,10 @@ export function initHero(canvas, onState) {
     if (canvas.width !== w || canvas.height !== h) { canvas.width = w; canvas.height = h; }
     gl.viewport(0, 0, canvas.width, canvas.height);
   }
-  new ResizeObserver(resize).observe(canvas);
+  /* il canvas si rimisura solo quando cambia qualcosa, non a ogni frame (evita riletture di layout) */
+  let sporco = true;
+  new ResizeObserver(() => { sporco = true; }).observe(canvas);
+  addEventListener('resize', () => { sporco = true; }, { passive: true });
 
   const fromX = x => {
     const r = canvas.getBoundingClientRect();
@@ -318,7 +321,7 @@ export function initHero(canvas, onState) {
     split += (target - split) * Math.min(1, dt * (isGlitch ? 18 : 6));
     erode += ((holding ? 1 : 0) - erode) * Math.min(1, dt * (holding ? 3.2 : 1.8));
 
-    resize();
+    if (sporco) { sporco = false; resize(); }
     gl.uniform2f(uRes, canvas.width, canvas.height);
     gl.uniform2f(uTexA, size.a[0], size.a[1]);
     gl.uniform2f(uTexB, size.b[0], size.b[1]);
@@ -348,15 +351,16 @@ export function initHero(canvas, onState) {
     if (now - lastFps > 500) {
       state.fps = Math.round(frames * 1000 / (now - lastFps));
       frames = 0; lastFps = now;
-      if (state.fps > 0 && state.fps < 26 && now - startedAt > 3000 && tetto > 1.3e6) tetto *= 0.8;
+      if (state.fps > 0 && state.fps < 40 && now - startedAt > 3000 && tetto > 1.3e6) { tetto *= 0.8; sporco = true; }
     }
     state.split = split; state.erode = erode; state.elapsed = now - startedAt;
     onState?.(state, 'frame');
   }
   const start = () => { if (raf) return; last = performance.now(); if (!startedAt) startedAt = last; lastFps = last; raf = requestAnimationFrame(frame); };
   const stop = () => { cancelAnimationFrame(raf); raf = 0; mirinoTieni(false); mirinoDati(null); };
-  new IntersectionObserver(([e]) => e.isIntersecting ? start() : stop()).observe(canvas);
-  document.addEventListener('visibilitychange', () => document.hidden ? stop() : start());
+  let inVista = false;
+  new IntersectionObserver(([e]) => { inVista = e.isIntersecting; inVista ? start() : stop(); }).observe(canvas);
+  document.addEventListener('visibilitychange', () => (document.hidden || !inVista) ? stop() : start());
 
   setScene(0).then(start);
   const controls = {

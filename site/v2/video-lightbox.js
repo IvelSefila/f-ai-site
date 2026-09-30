@@ -2,7 +2,7 @@
  * VIDEO LIGHTBOX — un solo posto dove i video si aprono in grande
  *
  * Prima ogni caso (Union, Human Robots, Locanda, Studio CETS) apriva il
- * video al posto della copertina, dentro la griglia: piccolo, e la
+ * video al posto della copertina, dentro la griglia: piccolo e la
  * scheda cambiava forma sotto le dita di chi guardava. Un solo <dialog>
  * condiviso, invece, si apre sopra tutto, a schermo pieno quanto serve,
  * e si chiude senza lasciare nessuna scheda a meta'.
@@ -110,7 +110,7 @@ function vai(i) {
 }
 
 /* si registra qui cosi' un brano della Locanda che parte ferma anche
-   questo, e viceversa — vedi uno-alla-volta.js */
+   questo e viceversa — vedi uno-alla-volta.js */
 const fermaLightbox = registra(() => { if (dialog?.open) dialog.close(); });
 
 /**

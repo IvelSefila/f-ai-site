@@ -285,7 +285,7 @@ function createBriefController() {
          meglio niente tasto che un tasto che manda nel vuoto, che era
          esattamente la ragione per cui prima non c'era.
          Il corpo passa per encodeURIComponent: un riepilogo ha a capo,
-         accenti e due punti, e in un mailto vanno cifrati o il
+         accenti e due punti e in un mailto vanno cifrati o il
          programma di posta taglia il testo al primo carattere strano. */
       const recapito = document.getElementById('recapito');
       const posta = document.getElementById('brief-mail');

@@ -6,7 +6,7 @@
  * la roba di questo lavoro.
  *
  * La cartella di partenza ha sei file e sono sei pezzi finiti diversi:
- * per una volta non c'era niente da scremare, e infatti ci sono tutti.
+ * per una volta non c'era niente da scremare e infatti ci sono tutti.
  * Vedi audit/porta-cest.py per come sono stati portati da 237 MB a 16.
  *
  * L'ordine non e' quello dei file. Apre la scadenza antincendio perche'
@@ -26,7 +26,7 @@ export const PEZZI = [
   { id: 'amministratori', t: 'Il servizio, per intero', d: '0:40', w: 720, h: 1280,
     n: 'Il giro completo: la firma che non copre, la rivalsa, il rilievo con drone, lo scudo — il pezzo da mandare a chi ha già chiesto.' },
   { id: 'ced-voce', t: 'Caro amministratore', d: '0:14', w: 1280, h: 860,
-    n: 'Zero giorni liberi, sommerso dalle scartoffie: parla uno che ci è passato, e finisce con cosa cambia — niente più caos, tempi dimezzati.' },
+    n: 'Zero giorni liberi, sommerso dalle scartoffie: parla uno che ci è passato e finisce con cosa cambia — niente più caos, tempi dimezzati.' },
   { id: 'ced-vita', t: 'Riprenditi la tua vita', d: '0:16', w: 720, h: 1280,
     n: 'Stessa promessa senza parole: i fogli che sommergono la scrivania, poi lo stesso uomo che esce dallo studio.' },
   { id: 'marchio-largo', t: 'Lo stesso, in orizzontale', d: '0:05', w: 1280, h: 720,

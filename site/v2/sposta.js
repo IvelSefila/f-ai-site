@@ -8,16 +8,16 @@
  * muovere, si apre il pannello del colore come prima.
  *
  * Si muove tutto: le carte dentro i loro gruppi, i due lati di un
- * banco, i passi del metodo, i gruppi di strumenti, e le sezioni
+ * banco, i passi del metodo, i gruppi di strumenti e le sezioni
  * dell'intera pagina.
  *
  * ── MA NON DOVUNQUE ───────────────────────────────────────────────
  * Poter spostare tutto e poter rovinare tutto sarebbero la stessa cosa
- * senza delle regole, e queste sono lette dal foglio di stile, non
+ * senza delle regole e queste sono lette dal foglio di stile, non
  * decise a gusto:
  *
  *  · Chiaro e scuro si alternano. Dalla seconda sezione in poi la
- *    pagina alterna carta e fondo scuro, e la cucitura fra i blocchi —
+ *    pagina alterna carta e fondo scuro e la cucitura fra i blocchi —
  *    il blocco che sale di 44px sul precedente, angoli arrotondati,
  *    ombra — e' scritta con `.sec--chiara + .sec`: due blocchi chiari
  *    di fila fanno una scheda che scivola sopra un'altra dello stesso
@@ -27,7 +27,7 @@
  *    sbagliare, non dopo.
  *
  *  · L'apertura resta prima e il contatto resta ultimo. Sono i due capi
- *    del racconto, e l'apertura per giunta non e' una sezione come le
+ *    del racconto e l'apertura per giunta non e' una sezione come le
  *    altre.
  *
  *  · I numeri seguono. "01 02 03" sulle carte, "Prova 04" negli
@@ -38,7 +38,7 @@
  *  · Il banco che si specchia. Le due colonne di un banco sono 1,42fr e
  *    0,58fr: scambiando la scena col pannello, il canvas finirebbe in
  *    300px e il testo largo il doppio. Quando i due si scambiano si
- *    scambiano anche le colonne, e il banco viene specchiato invece che
+ *    scambiano anche le colonne e il banco viene specchiato invece che
  *    storto.
  *
  * ── LE SEZIONI SI SPOSTANO DA UNA MAPPA ───────────────────────────
@@ -55,7 +55,7 @@ const CHIAVE = 'fai-ordine';
 /* ── i gruppi di pezzi intercambiabili ────────────────────────────
    `numeri` e' il selettore del pezzo di testo che porta il numero
    stampato: dopo ogni spostamento le cifre iniziali si riscrivono con
-   la posizione, e l'etichetta accanto resta com'e'. */
+   la posizione e l'etichetta accanto resta com'e'. */
 export const GRUPPI = [
   ['.deck',          { numeri: '.work__meta b' }],
   ['.offerta__grid', { numeri: 'span.mono' }],
@@ -157,13 +157,13 @@ function ricorda(gruppo) {
 export function ordineCambiato(gruppo) { return !!leggi()[chiaveGruppo(gruppo)]; }
 
 /* Rimette il gruppo com'era.
-   Guardava data-ordId, e data-ordId ce l'hanno solo i pezzi che si
+   Guardava data-ordId e data-ordId ce l'hanno solo i pezzi che si
    possono spostare: le sezioni fisse ne sono senza di proposito, cosi'
    nessun ordine salvato puo' muoverle. Ma in fase di RIMESSA quella
    scelta diventava un difetto — riappendendo solo i mobili, quelli
-   finivano tutti in coda ai fissi, e azzerando la pagina il contatto
+   finivano tutti in coda ai fissi e azzerando la pagina il contatto
    saltava in seconda posizione. Serviva un secondo indice, quello di
-   casa, che ce l'hanno TUTTI: qui si riordina su quello, e i fissi
+   casa, che ce l'hanno TUTTI: qui si riordina su quello e i fissi
    tornano esattamente dove stavano. */
 export function rimetti(gruppo) {
   const pezzi = pezziDi(gruppo).filter(p => p.dataset.ordCasa != null)
@@ -346,9 +346,9 @@ function chiudiMappa() {
    A schermo pieno non si vedeva — sessanta fotogrammi pieni anche con
    la CPU rallentata quattro volte — ma rallentandola otto volte, che e'
    un telefono vero di qualche anno fa, il conto arrivava: 121
-   fotogrammi saltati su 122, e due secondi e mezzo di lavoro lungo.
+   fotogrammi saltati su 122 e due secondi e mezzo di lavoro lungo.
 
-   Adesso la geometria si legge UNA VOLTA quando parte, e poi solo
+   Adesso la geometria si legge UNA VOLTA quando parte e poi solo
    quando il DOM cambia davvero. Nei fotogrammi in mezzo si scrive una
    trasformazione e basta, che il browser compone senza ricalcolare
    niente. E il ciclo gira per conto suo invece di aspettare il
@@ -388,7 +388,7 @@ export function iniziaTrascino(b, e) {
 
   const r = pezzo.getBoundingClientRect();
   /* In riga o in colonna? Va deciso ORA, con il pezzo ancora al suo
-     posto: appena parte porta con se' una trasformazione, e la sua
+     posto: appena parte porta con se' una trasformazione e la sua
      geometria non dice piu' dove il layout lo terrebbe. La stessa
      griglia a dodici colonne diventa una colonna sola sul telefono,
      quindi non basta guardare il preset: si guardano i vicini. */
@@ -512,10 +512,10 @@ function posa(e) {
 
 /* ── all'avvio: dare un nome ai pezzi, poi rimetterli come li aveva
       lasciati chi guarda ──────────────────────────────────────────── */
-/* Rimette in fila TUTTI i gruppi, sezioni comprese, e poi butta la
+/* Rimette in fila TUTTI i gruppi, sezioni comprese e poi butta la
    memoria. L'ordine conta: rimetti() salva l'ordine nuovo mentre lo
    applica, quindi se si cancellasse la memoria per prima si riscriverebbe
-   subito dopo. Si rimette a posto, e solo alla fine si dimentica. */
+   subito dopo. Si rimette a posto e solo alla fine si dimentica. */
 export function azzeraOrdine() {
   const gruppi = [];
   for (const [sel] of GRUPPI) document.querySelectorAll(sel).forEach(g => gruppi.push(g));
@@ -539,11 +539,11 @@ export function initOrdine() {
     });
   }
 
-  /* Due indici, e servono a due cose diverse.
-     ordCasa ce l'hanno tutti: e' il posto in cui un pezzo nasce, e serve
+  /* Due indici e servono a due cose diverse.
+     ordCasa ce l'hanno tutti: e' il posto in cui un pezzo nasce e serve
      a rimetterlo li' quando si azzera.
      ordId ce l'hanno solo i pezzi che si possono spostare: e' il nome con
-     cui un ordine salvato li richiama, e le sezioni fisse ne restano
+     cui un ordine salvato li richiama e le sezioni fisse ne restano
      senza apposta, cosi' nessun ordine salvato puo' muoverle nemmeno per
      sbaglio. */
   for (const g of gruppi)
@@ -555,9 +555,9 @@ export function initOrdine() {
 
   /* Una passata di rinumerazione anche all'apertura, non solo dopo uno
      spostamento. I numeri delle prove e quelli della testata sono
-     scritti a mano nell'HTML, e appena si cambia l'ordine delle sezioni
+     scritti a mano nell'HTML e appena si cambia l'ordine delle sezioni
      nel file quei numeri restano indietro senza che nessun errore lo
-     dica: e' successo scambiando tecnologia e profilo, e la testata ha
+     dica: e' successo scambiando tecnologia e profilo e la testata ha
      continuato a dire "04 Tecnologia" per un pezzo. Facendola girare
      qui, la fonte della verita' diventa l'ordine in pagina. */
   if (pag) rinumeraSezioni();

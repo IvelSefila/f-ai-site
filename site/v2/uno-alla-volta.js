@@ -3,7 +3,7 @@
  *
  * Ogni blocco dei casi sapeva gia' fermare i propri video: apri il
  * secondo e il primo si ferma. Nessuno pero' sapeva dell'esistenza
- * degli altri due, e la revisione generale ha trovato la crepa che
+ * degli altri due e la revisione generale ha trovato la crepa che
  * stava in mezzo: aperti un video di Union Energia, uno degli
  * esoscheletri e uno della Locanda, suonavano tutti e tre insieme, piu'
  * una canzone della Locanda sopra.

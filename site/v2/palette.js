@@ -1,15 +1,15 @@
-import { htmlSezioneTipo, armaSezioneTipo, azzeraTipo } from './tipografia.js?v=20260928-132';
+import { htmlSezioneTipo, armaSezioneTipo, azzeraTipo } from './tipografia.js?v=20260928-139';
 import { PRESET, applicaGriglia, contenitoreDi, nomeContenitore,
-         mostraGriglia, grigliaVisibile, initGriglia, azzeraGriglia } from './griglia.js?v=20260928-132';
+         mostraGriglia, grigliaVisibile, initGriglia, azzeraGriglia } from './griglia.js?v=20260928-139';
 import { initOrdine, bersaglioDi, spostaDi, puoAndare, rimetti, ordineCambiato,
-         iniziaTrascino, traTrascinando, azzeraOrdine } from './sposta.js?v=20260928-132';
+         iniziaTrascino, traTrascinando, azzeraOrdine } from './sposta.js?v=20260928-139';
 
 /* ═══════════════════════════════════════════════════════════════════
  * PALETTE — tieni premuto su un riquadro e scegli il colore del sito
  *
  * Nove palette, non scelte a occhio. Ogni colore deve reggere otto
  * ruoli: accento e stati attivi sul fondo scuro, testo e stati attivi
- * sulla carta, inchiostro profondo, superficie piena, e la fascia con
+ * sulla carta, inchiostro profondo, superficie piena e la fascia con
  * la scritta bianca sopra. Le luminosità sono state cercate per
  * bisezione fino a centrare il rapporto di contrasto richiesto da
  * ciascun ruolo — nessuna scende sotto 4,5:1 dove c'è del testo.
@@ -160,7 +160,7 @@ function costruisciPannello() {
   /* ── il tasto che rimette tutto com'era ──────────────────────────
      Chiede due volte. Non e' distruttivo — non si perde niente che non
      sia una scelta di aspetto — ma e' l'unico comando della pagina che
-     disfa tutto insieme il lavoro di chi sta guardando, e sta a due dita
+     disfa tutto insieme il lavoro di chi sta guardando e sta a due dita
      dal tasto Chiudi. Un colpo di pollice sbagliato non deve bastare. */
   const azzera = d.querySelector('[data-pal-azzera]');
   const fatto = d.querySelector('.pal__fatto');
@@ -242,7 +242,7 @@ function costruisciPannello() {
     d.querySelector('[data-pos-tit]').textContent =
       sez ? 'Posizione nella pagina' : 'Posizione nel gruppo';
     /* Fra sezioni non si infila, si SCAMBIA con una dello stesso tono:
-       e' quello che tiene in piedi l'alternanza chiaro/scuro, e va
+       e' quello che tiene in piedi l'alternanza chiaro/scuro e va
        detto qui perche' altrimenti "Su" sembra spostare di un posto e
        invece salta la vicina di tono sbagliato. */
     d.querySelector('[data-pos-nota]').innerHTML = sez
@@ -398,7 +398,7 @@ function accenno() {
     ob.disconnect();
     const p = document.createElement('div');
     p.className = 'pal-accenno mono';
-    /* corto: sul telefono questa bolla sta sopra il contenuto, e tre
+    /* corto: sul telefono questa bolla sta sopra il contenuto e tre
        righe di spiegazione coprono mezza pagina */
     /* La frase sta dentro uno span suo. Senza, il <b> in mezzo diventa
        un elemento flex per conto proprio e la bolla si spezza in tre
@@ -444,7 +444,7 @@ export function initPalette() {
   /* Con ?probe=1 le funzioni di spostamento si possono chiamare da
      fuori. Serve alle prove per fare cento mosse a caso e poi guardare
      se la pagina regge: passando dai bottoni del pannello ci vorrebbe
-     un'apertura per mossa, e il fuzz non si farebbe. Stessa
+     un'apertura per mossa e il fuzz non si farebbe. Stessa
      convenzione di hero.js. */
   if (new URLSearchParams(location.search).has('probe'))
     window.__sposta = { bersaglioDi, spostaDi, puoAndare, rimetti, ordineCambiato };

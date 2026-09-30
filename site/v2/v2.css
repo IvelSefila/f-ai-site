@@ -3947,7 +3947,8 @@ body.ord-in-corso *{cursor:grabbing !important}
 .cest__fin{opacity:.14}
 .cest__cono{opacity:.1}
 @media (prefers-reduced-motion:no-preference){
-  .cest__drone{animation:cest-vola 5.2s ease-in-out infinite}
+  .cest__drone{animation:cest-giro 28s ease-in-out infinite}
+  .cest__scena--stretto .cest__drone{animation-name:cest-giro-stretto}
   .cest__rotore{transform-box:fill-box;transform-origin:center;
     animation:cest-rotore .16s linear infinite alternate}
   .cest__cono{animation:cest-cono 3.4s ease-in-out infinite}
@@ -4344,3 +4345,54 @@ body.mirino-on, body.mirino-on * { cursor: none !important; }
   .hero__actions { margin-top: clamp(64px, 10vh, 112px); margin-bottom: clamp(24px, 4vh, 48px); gap: 16px; }
   .hero__actions .btn { min-height: 64px; padding: 0 40px; font-size: clamp(14px, 1.05vw, 17px); }
 }
+
+
+/* ── Prestazioni: fuori schermo le animazioni si fermano ── */
+.fuori, .fuori *, .fuori *::before, .fuori *::after { animation-play-state: paused !important; }
+
+
+/* ── 360°: maniglie che pulsano ai lati, per far capire che si gira ── */
+.eso__360-maniglia {
+  position: absolute; top: 46%; width: 28px; height: 28px; margin-top: -14px;
+  display: grid; place-items: center; border-radius: 50%; pointer-events: none;
+  border: 1px solid var(--em); background: color-mix(in srgb, var(--em) 14%, transparent);
+  color: var(--em-bright); font: 600 16px/1 var(--mono); transition: opacity .3s var(--ease);
+}
+.eso__360-maniglia--sx { left: 6px; }
+.eso__360-maniglia--dx { right: 6px; }
+.eso__360-maniglia i { font-style: normal; transform: translateY(-1px); }
+.eso__360-maniglia::after {
+  content: ""; position: absolute; inset: -1px; border-radius: inherit; border: 1px solid var(--em-bright);
+  opacity: 0; animation: eso360-onda 2.4s cubic-bezier(.23, 1, .32, 1) infinite;
+}
+.eso__360-maniglia--dx::after { animation-delay: 1.2s; }
+@keyframes eso360-onda { 0% { transform: scale(1); opacity: .7; } 100% { transform: scale(1.9); opacity: 0; } }
+.eso__360-stage--via .eso__360-maniglia { opacity: 0; }
+@media (prefers-reduced-motion: reduce) { .eso__360-maniglia::after { animation: none; } }
+
+
+/* Il drone di Studio CETS gira per tutta la scheda: un giro largo che passa su tutta la scena
+   e ritorna al punto di partenza, inclinandosi nelle curve. Solo transform. */
+@media (prefers-reduced-motion:no-preference){
+  @keyframes cest-giro{
+    0%,100%{transform:translate(0,0) rotate(0deg)}
+    14%{transform:translate(-330px,-140px) rotate(-7deg)}
+    30%{transform:translate(-680px,-40px) rotate(-3deg)}
+    46%{transform:translate(-560px,250px) rotate(6deg)}
+    62%{transform:translate(-120px,300px) rotate(4deg)}
+    78%{transform:translate(330px,170px) rotate(-4deg)}
+    90%{transform:translate(250px,-110px) rotate(-7deg)}}
+  @keyframes cest-giro-stretto{
+    0%,100%{transform:translate(0,0) rotate(0deg)}
+    16%{transform:translate(-200px,-260px) rotate(-7deg)}
+    34%{transform:translate(-120px,-560px) rotate(-3deg)}
+    52%{transform:translate(200px,-420px) rotate(6deg)}
+    70%{transform:translate(250px,-80px) rotate(4deg)}
+    86%{transform:translate(-80px,260px) rotate(-5deg)}}
+}
+
+/* 360: il canvas sta sopra l'immagine; quando disegna, l'immagine sotto resta solo per chi non ha JS */
+.eso__360-canvas{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;display:none}
+.eso__360-stage--canvas .eso__360-canvas{display:block}
+.eso__360-stage--canvas .eso__360-img{visibility:hidden}
+.eso__360-canvas{filter:drop-shadow(0 0 34px var(--sk-alone)) drop-shadow(0 18px 30px rgba(0,0,0,.5))}

@@ -5,7 +5,7 @@
  * 2. WebGPU Locale (WebLLM Qwen3-1.7B via Web Worker)
  * 3. Motore A Deterministico (Zero rete, offline, instant fallback)
  */
-import { CONFIG } from './chatbot.config.js?v=20260928-132';
+import { CONFIG } from './chatbot.config.js?v=20260928-139';
 
 /* ───────────────────────── RAG lessicale (BM25, zero librerie) ─────────────────────────
    I chunk si costruiscono a runtime dalla knowledge.json; retrieve() e' una funzione pura. */
@@ -276,7 +276,7 @@ export class ChatEngine {
   }
 
   static async create() {
-    const res = await fetch(new URL('./knowledge.json?v=20260928-132', import.meta.url));
+    const res = await fetch(new URL('./knowledge.json?v=20260928-139', import.meta.url));
     const kb = await res.json();
     return new ChatEngine(kb);
   }
@@ -398,7 +398,7 @@ REGOLE DI RISPOSTA:
       };
       try {
         const initId = ++this._gpuReqId;
-        this.worker = new Worker(new URL('./chatbot.worker.js?v=20260928-132', import.meta.url), { type: 'module' });
+        this.worker = new Worker(new URL('./chatbot.worker.js?v=20260928-139', import.meta.url), { type: 'module' });
 
         this.worker.onmessage = (e) => {
           const { type, progress, text, error, id } = e.data || {};
@@ -730,7 +730,7 @@ REGOLE DI RISPOSTA:
         replies: [
           `Sì, sono **Nous**, un assistente automatico: rispondo solo con quello che c'è scritto sul sito. **Fabrizio** invece è una persona reale.\n\nPer parlare con lui scrivi a **${EMAIL}** o compila il brief.`,
           `Sono un'AI, sì: un assistente che conosce il sito e nient'altro. **Fabrizio Mana** è una persona vera, con base in Piemonte. Lo raggiungi a **${EMAIL}**.`,
-          `Non sono una persona: sono **Nous**, l'assistente automatico di questo sito. Fabrizio invece è reale, e per scrivergli c'è **${EMAIL}** oppure il brief.`
+          `Non sono una persona: sono **Nous**, l'assistente automatico di questo sito. Fabrizio invece è reale e per scrivergli c'è **${EMAIL}** oppure il brief.`
         ],
         action: { type: 'scroll', target: '#contatto', label: 'Vai ai contatti' }
       },
@@ -759,7 +759,7 @@ REGOLE DI RISPOSTA:
           'specializz*', 'competenze', 'cosa sai fare', 'sai fare', 'cosa sa fare'
         ],
         replies: [
-          `Fabrizio fa grafica pubblicitaria, video, social, siti, web app, campagne media e jingle. Sono **otto servizi**, e in più usa l'AI dove serve per costruire flussi e prototipi.\n\nIn pratica: prende un'idea e la porta fino alla pubblicazione.`,
+          `Fabrizio fa grafica pubblicitaria, video, social, siti, web app, campagne media e jingle. Sono **otto servizi** e in più usa l'AI dove serve per costruire flussi e prototipi.\n\nIn pratica: prende un'idea e la porta fino alla pubblicazione.`,
           `Le cose che fa sono otto:\n\n• Grafica pubblicitaria\n• Video e post-produzione\n• Sistemi per social media\n• Flussi e prototipi AI\n• Siti internet\n• Web app\n• Campagne media\n• Jingle e canzoni pubblicitarie`,
           `Dipende da cosa ti serve: da un marchio a una campagna completa, da un video a un sito o a un'applicazione. Ha base in Piemonte e lavora con strumenti tradizionali e con l'AI, insieme o separati, a seconda del bisogno.`
         ],
@@ -831,8 +831,8 @@ REGOLE DI RISPOSTA:
         ],
         replies: [
           `**Human Robots** — *un prodotto che si vede prima di poterlo fotografare.*\n\nEsoscheletri attivi per chi fatica a camminare e per chi va in montagna. Il lancio italiano è costruito tutto a monte: ricerca di mercato, immagini del dispositivo, spot, sito. Niente set, niente attori, niente prodotto in mano.\n\n• **9 pezzi**, **1 sito**, **6 documenti**\n• **Strumenti:** GPT Image, Photoshop, Adobe Premiere Pro`,
-          `La parte difficile di Human Robots è che il dispositivo sia lo **stesso** in ogni inquadratura, e che il tono regga sia in una palestra di riabilitazione sia su un crinale a duemila metri.\n\nPer questo c'è una tavola con quattro viste master, e sul sito il dispositivo si ruota a 360 gradi trascinando.`,
-          `Le scene nascono come immagini con **GPT Image**, si sistemano in **Photoshop** e si montano in **Premiere Pro**: sono inquadrature generate una per una, e di una cinquantina di spezzoni ne entra meno della metà.\n\nIl resto: sei documenti di analisi del mercato italiano e un sito scritto su misura, con schede tecniche, configuratore, dati di mercato e modulo di pre-ordine.`
+          `La parte difficile di Human Robots è che il dispositivo sia lo **stesso** in ogni inquadratura e che il tono regga sia in una palestra di riabilitazione sia su un crinale a duemila metri.\n\nPer questo c'è una tavola con quattro viste master e sul sito il dispositivo si ruota a 360 gradi trascinando.`,
+          `Le scene nascono come immagini con **GPT Image**, si sistemano in **Photoshop** e si montano in **Premiere Pro**: sono inquadrature generate una per una e di una cinquantina di spezzoni ne entra meno della metà.\n\nIl resto: sei documenti di analisi del mercato italiano e un sito scritto su misura, con schede tecniche, configuratore, dati di mercato e modulo di pre-ordine.`
         ],
         action: { type: 'scroll', target: '#caso-eso', label: 'Vedi Human Robots' }
       },
@@ -875,7 +875,7 @@ REGOLE DI RISPOSTA:
           'fritto', 'pio vii', 'brani', 'the shared table'
         ],
         replies: [
-          `**La Locanda del Castello** (Rocca de' Baldi) — *dal marchio alla locandina di sabato sera.*\n\nUn ristorante nel parco di un castello, senza un'identità sua: prima il marchio, poi una locandina animata per ogni serata, e cinque brani scritti su misura.\n\n• **1 marchio**, **12 pezzi**, **5 brani**\n• **Strumenti:** GPT Image, Photoshop, Grok Video, Adobe Premiere Pro, Lyria`,
+          `**La Locanda del Castello** (Rocca de' Baldi) — *dal marchio alla locandina di sabato sera.*\n\nUn ristorante nel parco di un castello, senza un'identità sua: prima il marchio, poi una locandina animata per ogni serata e cinque brani scritti su misura.\n\n• **1 marchio**, **12 pezzi**, **5 brani**\n• **Strumenti:** GPT Image, Photoshop, Grok Video, Adobe Premiere Pro, Lyria`,
           `Alla Locanda serate diverse hanno un tono diverso — dalla degustazione di champagne al fritto misto — ma in due secondi su un telefono si deve capire che è sempre la stessa casa.\n\nLe locandine nascono con **GPT Image**, si sistemano in **Photoshop**, si muovono con **Grok Video** e si montano in **Premiere Pro**, che aggiunge testi, prezzo e marchio di chiusura.`,
           `Il marchio della Locanda è disegnato e chiuso in vettoriale: monogramma, lettering e tre versioni (intera, tonda, solo simbolo). Poi ci sono dodici pezzi animati e cinque brani da trenta secondi, generati con **Lyria** e scritti per il posto.`
         ],
@@ -891,7 +891,7 @@ REGOLE DI RISPOSTA:
         ],
         replies: [
           `**CDI Infissi** — *un sito nel sito.*\n\nFinestre, scorrevoli, porte e sistemi ombreggianti **QFORT** per un rivenditore piemontese: un catalogo di **51 prodotti** consultabile, filtrabile e pronto a portare a una richiesta di sopralluogo.\n\n• **4 pagine**, **4 categorie**\n• Scritto in puro codice, senza builder`,
-          `Il sito di CDI Infissi è scritto da zero in HTML, CSS e JavaScript: nessun tema, nessun builder, nessuna dipendenza esterna oltre ai dati del produttore **QFORT**.\n\nNel portfolio lo vedi funzionare in diretta, non in uno screenshot, e puoi aprirlo a schermo intero.`
+          `Il sito di CDI Infissi è scritto da zero in HTML, CSS e JavaScript: nessun tema, nessun builder, nessuna dipendenza esterna oltre ai dati del produttore **QFORT**.\n\nNel portfolio lo vedi funzionare in diretta, non in uno screenshot e puoi aprirlo a schermo intero.`
         ],
         action: { type: 'scroll', target: '#caso-cdi', label: 'Vedi CDI Infissi' }
       },
@@ -919,7 +919,7 @@ REGOLE DI RISPOSTA:
         ],
         replies: [
           `Sul sito non c'è una classifica. Ogni lavoro ha la sua difficoltà:\n\n• **Union Energia** — costruire un mondo e farlo crescere\n• **Human Robots** — un prodotto identico in ogni inquadratura, prima che esista\n• **Studio CETS** — parlare a un pubblico stretto che compra ore, non sogni\n• **La Locanda** — serate diverse, una sola casa\n• **CDI Infissi** — un catalogo di 51 prodotti da rendere consultabile`,
-          `Difficile dirlo, e il sito non lo dice. Se cerchi il più difficile da tenere in piedi, Human Robots: l'oggetto doveva essere lo stesso in ogni inquadratura anche se non esisteva ancora. Se cerchi il più ricco di pezzi, la Locanda: 12 locandine animate e 5 brani.`
+          `Difficile dirlo e il sito non lo dice. Se cerchi il più difficile da tenere in piedi, Human Robots: l'oggetto doveva essere lo stesso in ogni inquadratura anche se non esisteva ancora. Se cerchi il più ricco di pezzi, la Locanda: 12 locandine animate e 5 brani.`
         ],
         action: { type: 'scroll', target: '#lavori', label: 'Vedi i lavori' }
       },
@@ -987,7 +987,7 @@ REGOLE DI RISPOSTA:
           'modelli in locale', 'locale', 'open source'
         ],
         replies: [
-          `**ComfyUI** è un sistema a nodi, gratuito e aperto, per far generare all'AI immagini, video, testi e musica sul proprio computer. Fabrizio lo usa per adattare flussi già pronti, modificarli o costruirne di nuovi, e per ripetere la stessa lavorazione su cento immagini di fila.`,
+          `**ComfyUI** è un sistema a nodi, gratuito e aperto, per far generare all'AI immagini, video, testi e musica sul proprio computer. Fabrizio lo usa per adattare flussi già pronti, modificarli o costruirne di nuovi e per ripetere la stessa lavorazione su cento immagini di fila.`,
           `In locale girano **ComfyUI**, **Stable Diffusion**, **Ollama** e **LM Studio**. Il motivo: i materiali del cliente non escono dal computer, non c'è costo per immagine e si lavora anche senza rete. Locale, cloud o ibrido si sceglie caso per caso su riservatezza, costo e velocità.`
         ],
         action: { type: 'scroll', target: '#strumenti', label: 'Vedi gli strumenti' }
@@ -1045,7 +1045,7 @@ REGOLE DI RISPOSTA:
         ],
         replies: [
           `**Flussi e prototipi AI** è uno degli otto servizi: automazioni che lavorano da sole (anche di notte), agenti con memoria e strumenti collegati, applicazioni su misura e prototipi navigabili per decidere guardando invece che immaginando. Un controllo umano resta sempre nel punto in cui un errore costerebbe caro.`,
-          `Per le automazioni Fabrizio usa **n8n**, **ComfyUI**, **Ollama**, **LM Studio** e agenti AI con memoria persistente (Mem0). Prima il prototipo, e solo se serve l'applicazione: molte idee muoiono al prototipo, ed è un risparmio.`
+          `Per le automazioni Fabrizio usa **n8n**, **ComfyUI**, **Ollama**, **LM Studio** e agenti AI con memoria persistente (Mem0). Prima il prototipo e solo se serve l'applicazione: molte idee muoiono al prototipo, ed è un risparmio.`
         ],
         action: { type: 'scroll', target: '#banchi', label: 'Vedi i servizi' }
       },
@@ -1144,7 +1144,7 @@ REGOLE DI RISPOSTA:
         ],
         replies: [
           `Gli **otto servizi** di Fabrizio:\n\n1. Grafica pubblicitaria\n2. Video e post-produzione\n3. Sistemi per social media\n4. Flussi e prototipi AI\n5. Siti internet (in puro codice e WordPress)\n6. Web app\n7. Campagne media\n8. Jingle e canzoni pubblicitarie\n\nNel sito ognuna si apre con il dettaglio di cosa consegna.`,
-          `Si va dalla grafica e dal video ai social, dai siti (anche WordPress) alle web app, dalle campagne media ai jingle, più flussi e prototipi AI. Sono otto servizi, e ognuno ha una scheda con cosa ti arriva in mano e come ci si arriva.`
+          `Si va dalla grafica e dal video ai social, dai siti (anche WordPress) alle web app, dalle campagne media ai jingle, più flussi e prototipi AI. Sono otto servizi e ognuno ha una scheda con cosa ti arriva in mano e come ci si arriva.`
         ],
         action: { type: 'scroll', target: '#banchi', label: 'Vedi i servizi' }
       },
@@ -1188,8 +1188,8 @@ REGOLE DI RISPOSTA:
           /\bdati\b.*\b(salv|invi|mand|finisc)\w*\b/
         ],
         replies: [
-          `No, il brief **non invia e non salva niente**: resta nel tuo browser. Sono sei domande (cosa vuoi ottenere, da cosa partiamo, dove dovrà funzionare, quando ti serve, che supporto cerchi, come ricontattarti). Alla fine copi il riepilogo o apri il programma di posta con il testo già scritto, e lo mandi tu.`,
-          `Il brief è un testo pronto da mandare a Fabrizio, compilato nel tuo browser: il sito non lo salva né lo invia. Nome ed email sono obbligatori, azienda, fascia di investimento e nota sono facoltative, e ogni altra domanda si può saltare.`
+          `No, il brief **non invia e non salva niente**: resta nel tuo browser. Sono sei domande (cosa vuoi ottenere, da cosa partiamo, dove dovrà funzionare, quando ti serve, che supporto cerchi, come ricontattarti). Alla fine copi il riepilogo o apri il programma di posta con il testo già scritto e lo mandi tu.`,
+          `Il brief è un testo pronto da mandare a Fabrizio, compilato nel tuo browser: il sito non lo salva né lo invia. Nome ed email sono obbligatori, azienda, fascia di investimento e nota sono facoltative e ogni altra domanda si può saltare.`
         ],
         action: { type: 'scroll', target: '#brief', label: 'Apri il brief' }
       },
@@ -1215,7 +1215,7 @@ REGOLE DI RISPOSTA:
         ],
         replies: [
           `Sul sito non ci sono prezzi né listini. Nel brief c'è una domanda facoltativa sulla fascia di investimento: puoi indicarla, non indicarla o definirla insieme. Il brief però non calcola nessun preventivo: è un riepilogo da mandare a Fabrizio.`,
-          `Non ho cifre da darti, e non ne trovi sul sito. Per capire i costi di un progetto il passo è scrivere a **${EMAIL}** o compilare il brief e mandare il riepilogo.`,
+          `Non ho cifre da darti e non ne trovi sul sito. Per capire i costi di un progetto il passo è scrivere a **${EMAIL}** o compilare il brief e mandare il riepilogo.`,
           `I prezzi non sono pubblicati. Ogni progetto è diverso: per un preventivo racconta cosa ti serve nel brief (la fascia di investimento è facoltativa) e mandalo a Fabrizio.`
         ],
         action: { type: 'scroll', target: '#brief', label: 'Apri il brief' }
@@ -1230,7 +1230,7 @@ REGOLE DI RISPOSTA:
         ],
         replies: [
           `Sul sito non sono dichiarati tempi. Cambiano molto da un progetto all'altro. Nel brief c'è la domanda *Quando ti serve*, dove puoi indicare una data, dire che è flessibile o che non è ancora definita: poi i tempi si concordano con Fabrizio.`,
-          `Non ho tempi da darti, e inventarli non serve. Se hai una scadenza, scrivila nel brief o in mail a **${EMAIL}**: è la prima cosa da sapere per dirti se è fattibile.`
+          `Non ho tempi da darti e inventarli non serve. Se hai una scadenza, scrivila nel brief o in mail a **${EMAIL}**: è la prima cosa da sapere per dirti se è fattibile.`
         ],
         action: { type: 'scroll', target: '#brief', label: 'Apri il brief' }
       },
@@ -1258,7 +1258,7 @@ REGOLE DI RISPOSTA:
         ],
         replies: [
           `Fabrizio usa l'AI *dove serve, mai a caso*. Strumenti tradizionali, agentica e modelli in locale o in cloud, separati o combinati: i migliori per ogni bisogno.\n\nSul sito lo dice così: che l'AI sappia scrivere, disegnare, montare non è più una domanda; dove finisce lo strumento e comincia il giudizio, quella parte resta sua.`,
-          `L'AI è uno strumento dentro un metodo: le immagini si generano una per una, e su una cinquantina di spezzoni ne entra in montaggio meno della metà. Selezione, ritmo e coerenza restano decisioni di Fabrizio.`
+          `L'AI è uno strumento dentro un metodo: le immagini si generano una per una e su una cinquantina di spezzoni ne entra in montaggio meno della metà. Selezione, ritmo e coerenza restano decisioni di Fabrizio.`
         ],
         action: { type: 'scroll', target: '#profilo', label: 'Leggi il profilo' }
       },
@@ -1324,7 +1324,7 @@ REGOLE DI RISPOSTA:
           'workstation', 'hardware', 'gpu', 'rtx', 'scheda video', 'vram', 'locale o cloud', 'cloud', 'ibrido', 'pc', 'computer'
         ],
         replies: [
-          `Fabrizio installa, confronta e integra modelli su una **workstation sua**, e sceglie fra locale, cloud e ibrido in base a riservatezza, costo e velocità. Il modello di scheda video non è indicato sul sito. Le percentuali della sezione Tecnologia sono stime dalla sua esperienza, non misure di laboratorio.`
+          `Fabrizio installa, confronta e integra modelli su una **workstation sua** e sceglie fra locale, cloud e ibrido in base a riservatezza, costo e velocità. Il modello di scheda video non è indicato sul sito. Le percentuali della sezione Tecnologia sono stime dalla sua esperienza, non misure di laboratorio.`
         ],
         action: { type: 'scroll', target: '#strumenti', label: 'Vedi gli strumenti' }
       },

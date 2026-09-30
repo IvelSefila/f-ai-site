@@ -3,7 +3,7 @@
  *
  * È la stessa idea di Bootstrap, scritta a mano in una trentina di
  * righe di CSS: dodici colonne uguali e una gronda. Non si vede, ma
- * ogni contenitore ci si appoggia, e ogni riquadro occupa un numero
+ * ogni contenitore ci si appoggia e ogni riquadro occupa un numero
  * intero di colonne. Dodici perché si divide per 2, 3, 4 e 6: sono le
  * impaginazioni che servono davvero.
  *
@@ -86,7 +86,7 @@ export function grigliaVisibile() {
 /* Rimette ogni contenitore al preset di partenza, spegne la griglia a
    vista e butta le due chiavi di memoria. Non si limita a cancellare la
    memoria: senza rimettere anche i data-gr, il reso resterebbe quello
-   scelto fino al prossimo ricarico, e un tasto "rimetti com'era" che
+   scelto fino al prossimo ricarico e un tasto "rimetti com'era" che
    chiede di ricaricare non e' un tasto, e' un consiglio. */
 export function azzeraGriglia() {
   for (const [sel, def] of CONTENITORI)

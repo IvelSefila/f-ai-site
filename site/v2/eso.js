@@ -5,9 +5,9 @@
  * piu' bottone, il video nasce al clic con preload="none", uno alla
  * volta in tutta la pagina. Qui c'e' solo la roba di questo lavoro.
  *
- * I formati sono due, orizzontale e verticale, e stanno insieme nella
+ * I formati sono due, orizzontale e verticale e stanno insieme nella
  * stessa griglia: un trailer da mettere su YouTube e uno spot da mettere
- * in un reel sono due cose diverse anche a guardarle ferme, e la forma
+ * in un reel sono due cose diverse anche a guardarle ferme e la forma
  * della copertina lo dice prima della didascalia.
  *
  * La scelta dei sei e' spiegata in audit/porta-eso.py. Vale la pena
@@ -15,7 +15,7 @@
  * primo fotogramma la scritta diventa "HUJMAN ROBOTS"; e i due pezzi da
  * due minuti e mezzo — la camminata dentro il sito e un video di
  * approfondimento — che qui erano fuori tono. In una fila di spot da
- * dieci secondi due registrazioni lunghe non si guardano, e pesavano
+ * dieci secondi due registrazioni lunghe non si guardano e pesavano
  * 10,4 MB dei 24,3 di tutta la sezione.
  * ═══════════════════════════════════════════════════════════════════ */
 
@@ -27,7 +27,7 @@ export const PEZZI = [
   { id: 'trekking', t: 'Trekking', d: '0:16', w: 720, h: 1280,
     n: 'Il verticale per i social: un uomo sale un crinale con l’esoscheletro, senza sforzo visibile.' },
   { id: 'spot', t: 'Più forza, più libertà', d: '0:32', w: 720, h: 1280,
-    n: 'Lo spot che finisce sulla scheda prodotto: il dispositivo staccato sul bianco, il claim, e basta.' },
+    n: 'Lo spot che finisce sulla scheda prodotto: il dispositivo staccato sul bianco, il claim e basta.' },
   { id: 'prodotto', t: 'Il dispositivo', d: '0:10', w: 720, h: 1280,
     n: 'Product film: solo l’oggetto, fumo e luce radente — com’è fatto, quando il resto è narrazione.' },
   { id: 'prova0', t: 'Vista frontale, studio', d: '0:10', w: 720, h: 1280,

@@ -3,7 +3,7 @@
  *
  * Stessa regola di Union Energia: aprendo la pagina non si scarica
  * nessun video e nessuna canzone. Ogni pezzo e' una copertina piu' un
- * bottone, e il file nasce al clic con preload="none".
+ * bottone e il file nasce al clic con preload="none".
  *
  * Una cosa diversa c'e': qui i formati non sono tutti uguali. La
  * cartella di partenza ha tre forme — 720x1280, 816x1104 e 1086x1448 —
@@ -27,9 +27,9 @@ export const PEZZI = [
   { id: 'dehor', t: 'Inaugurazione del dehors', d: '0:15', w: 720, h: 1280,
     n: 'Dall’alto alle luci del dehors: sull’ultima inquadratura compare la locandina della serata di apertura.' },
   { id: 'fritto', t: 'Serata fritto misto', d: '0:27', w: 720, h: 1280,
-    n: 'Il pezzo lungo: i piatti da vicino, la data grande, e alla fine l’indirizzo inciso in oro sulla pietra.' },
+    n: 'Il pezzo lungo: i piatti da vicino, la data grande e alla fine l’indirizzo inciso in oro sulla pietra.' },
   { id: 'fritto-nuovo', t: 'Serata fritto misto, versione nuova', d: '0:27', w: 720, h: 1280,
-    n: 'La stessa serata rifatta: gocce, gamberi e calamari da vicino, e alla fine la locandina con data e indirizzo.' },
+    n: 'La stessa serata rifatta: gocce, gamberi e calamari da vicino e alla fine la locandina con data e indirizzo.' },
   { id: 'champagne', t: 'Serata degustazione Champagne', d: '0:10', w: 946, h: 1280,
     n: 'La locandina della serata: le bottiglie in fila, i piatti in abbinamento, la data e il prezzo.' },
   { id: 'tradition', t: 'Brut Tradition, il primo assaggio', d: '0:10', w: 946, h: 1280,

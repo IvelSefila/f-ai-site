@@ -2,7 +2,7 @@
  * GLI STRUMENTI, UNO PER UNO
  *
  * L'elenco diceva soltanto dei nomi. Un nome non e' una competenza:
- * "Photoshop" lo scrivono tutti, e chi legge non sa se ci ritocco una
+ * "Photoshop" lo scrivono tutti e chi legge non sa se ci ritocco una
  * foto o ci costruisco un key visual — e se non e' del mestiere, non sa
  * nemmeno cosa sia "Postiz" o "ComfyUI".
  *
@@ -17,7 +17,7 @@
  *          Voci brevi, verbi, niente metafore.
  *
  * I nomi restano scritti nell'HTML e non qui: sono trentacinque parole
- * che un motore di ricerca deve poter leggere, e senza JavaScript la
+ * che un motore di ricerca deve poter leggere e senza JavaScript la
  * lista si legge lo stesso — semplicemente non si apre. Questo file
  * aggiunge le schede e trasforma le pastiglie in bottoni veri, non in
  * finti bottoni con role="button": la tastiera, il lettore di schermo e
@@ -222,7 +222,7 @@ export const SCHEDE = {
          'collegando scatole una dopo l’altra — quale modello usare, il testo, quante ' +
          'passate fare, l’ingrandimento, il salvataggio — invece di scrivere in un ' +
          'riquadro e sperare. Ogni scatola è un passaggio che si cambia da solo senza ' +
-         'rifare il resto, e il flusso finito si salva e si riusa.',
+         'rifare il resto e il flusso finito si salva e si riusa.',
     io: ['Usare flussi già pronti e adattarli a quello che mi serve',
          'Modificare un flusso: aggiungere, togliere o sostituire un passaggio',
          'Costruirne di nuovi quando quelli in giro non fanno la cosa giusta',
@@ -291,7 +291,7 @@ export const SCHEDE = {
   'Webapp su misura': {
     cos: 'Vibecoding: descrivere a un assistente cosa deve fare un’applicazione, ' +
          'guardarla funzionare, correggerla e rifarla finché fa quella cosa. Non si parte ' +
-         'da un modello già pronto — si parte dal problema, e quello che esce serve solo ' +
+         'da un modello già pronto — si parte dal problema e quello che esce serve solo ' +
          'a chi l’ha chiesto.',
     io: ['Strumenti interni per lavori che nessun programma in commercio copre',
          'Pannelli per seguire un flusso mentre gira',
@@ -399,7 +399,7 @@ export function initStrumenti() {
     }
   }
   /* Un nome nuovo nell'elenco senza la sua scheda resterebbe una
-     pastiglia morta in mezzo a trentaquattro vive, e nessuno se ne
+     pastiglia morta in mezzo a trentaquattro vive e nessuno se ne
      accorgerebbe guardando. Lo dico qui e lo controlla audit/strumenti.mjs. */
   if (senza.length) console.warn('strumenti senza scheda:', senza.join(', '));
   return senza;

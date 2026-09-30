@@ -1,4 +1,4 @@
-import { accentoGL } from './palette.js?v=20260928-132';
+import { accentoGL } from './palette.js?v=20260928-139';
 /* ═══════════════════════════════════════════════════════════════════
  * materia.js — Prova 07.
  *
@@ -267,8 +267,9 @@ export async function initMateria(canvas, onState) {
   }
   const start = () => { if (!raf) { last = performance.now(); raf = requestAnimationFrame(frame); } };
   const stop = () => { cancelAnimationFrame(raf); raf = 0; };
-  new IntersectionObserver(([e]) => e.isIntersecting ? start() : stop()).observe(canvas);
-  document.addEventListener('visibilitychange', () => document.hidden ? stop() : start());
+  let inVista = false;
+  new IntersectionObserver(([e]) => { inVista = e.isIntersecting; inVista ? start() : stop(); }).observe(canvas);
+  document.addEventListener('visibilitychange', () => (document.hidden || !inVista) ? stop() : start());
   start();
 
   return { setMode, points: L.n, names: NAMES };

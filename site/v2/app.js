@@ -2,19 +2,19 @@
 * app.js — la sessione. Tiene il filo fra le prove, parla, misura,
 * e alla fine scrive il dossier. Nessuna libreria.
 * ═══════════════════════════════════════════════════════════════════ */
-import { initTipografia } from './tipografia.js?v=20260928-132';
+import { initTipografia } from './tipografia.js?v=20260928-139';
 initTipografia();
 // cursore a mirino tolto su richiesta (mirino.js resta nel progetto)
-import { initHero } from './hero.js?v=20260928-132';
-import { initStrumenti } from './strumenti.js?v=20260928-132';
-import { initUnion } from './union.js?v=20260928-132';
-import { initEso } from './eso.js?v=20260928-132';
-import { initLocanda } from './locanda.js?v=20260928-132';
-import { initCest } from './cest.js?v=20260928-132';
-import { initPalette } from './palette.js?v=20260928-132';
-import { keyVisual, radar, MODES, rng, leggiColori} from './engine.js?v=20260928-132';
-import { initBrief } from './brief.js?v=20260928-132';
-import { initServizi } from './servizi.js?v=20260928-132';
+import { initHero } from './hero.js?v=20260928-139';
+import { initStrumenti } from './strumenti.js?v=20260928-139';
+import { initUnion } from './union.js?v=20260928-139';
+import { initEso } from './eso.js?v=20260928-139';
+import { initLocanda } from './locanda.js?v=20260928-139';
+import { initCest } from './cest.js?v=20260928-139';
+import { initPalette } from './palette.js?v=20260928-139';
+import { keyVisual, radar, MODES, rng, leggiColori} from './engine.js?v=20260928-139';
+import { initBrief } from './brief.js?v=20260928-139';
+import { initServizi } from './servizi.js?v=20260928-139';
 
 const $ = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => [...r.querySelectorAll(s)];
@@ -62,7 +62,7 @@ function say(text, sticky = false) {
 }
 /* Questi numeri erano rimasti a una versione precedente: arrivando sui
    servizi il messaggio diceva "Prova 03" e l'intestazione della sezione
-   diceva "Prova 01". Adesso sono gli stessi dell'HTML, e sono cinque
+   diceva "Prova 01". Adesso sono gli stessi dell'HTML e sono cinque
    perche' due sezioni sono diventate blocchi dentro altre due. */
 const VOICE = {
   banchi: 'Prova 01. Otto servizi. Apri ognuno per il dettaglio.',
@@ -87,7 +87,7 @@ const READS = [
   [.74, 'Il sistema guida la produzione. Tu tieni il controllo qualità.'],
   [.9,  'Automazione spinta. Serve una revisione umana prima dell’output.'],
 ];
-let readIx = -1, rTyped = '', rTo = '', rAt = 0;
+let readIx = -1, rTyped = '', rTo = '', rAt = 0, cAi = -1, cEr = '', cFps = '';
 
 const hero = initHero($('#gl'), (st, kind) => {
     if (kind === 'grab') { act(); }
@@ -98,12 +98,18 @@ const hero = initHero($('#gl'), (st, kind) => {
       return;
     }
     const ai = Math.round(st.split * 100);
-    hHuman.textContent = `${100 - ai}%`;
-    hAi.textContent = `${ai}%`;
-    hEr.textContent = st.erode.toFixed(2);
-    hFps.textContent = st.fps ? `${st.fps} fps` : '—';
-    railFill.style.width = `${ai}%`;
-    railKnob.style.left = `${ai}%`;
+    /* si scrive nel DOM solo quando il valore cambia davvero */
+    if (ai !== cAi) {
+      cAi = ai;
+      hHuman.textContent = `${100 - ai}%`;
+      hAi.textContent = `${ai}%`;
+      railFill.style.width = `${ai}%`;
+      railKnob.style.left = `${ai}%`;
+    }
+    const er = st.erode.toFixed(2);
+    if (er !== cEr) { cEr = er; hEr.textContent = er; }
+    const fp = st.fps ? `${st.fps} fps` : '—';
+    if (fp !== cFps) { cFps = fp; hFps.textContent = fp; }
     if (st.fps) { S.fps.push(st.fps); if (S.fps.length > 400) S.fps.shift(); }
 
     let i = 0;
@@ -183,7 +189,7 @@ function drawFormats() {
     });
 }
 /* Lo slider spara 'input' molto piu' spesso di un frame durante il
-   trascinamento (misurato: fino a decine di eventi al secondo), e ogni
+   trascinamento (misurato: fino a decine di eventi al secondo) e ogni
    volta ridisegna sei canvas col motore key visual — grana inclusa.
    Il valore intermedio non e' percepibile a quella frequenza: si
    raggruppano gli eventi nello stesso frame con requestAnimationFrame,
@@ -910,7 +916,7 @@ estratto in brief.js: i dati restano nel browser e finiscono in una
 email solo se è lui ad aprirla. */
 const brief = initBrief();
 /* Le quattro schede dei servizi si aprono in una finestra che spiega il
-   mestiere, e la finestra finisce con l'invito al brief — con la
+   mestiere e la finestra finisce con l'invito al brief — con la
    risposta gia' segnata. Prima si spiega, poi si chiede. */
 initServizi((tipo) => { brief?.apriCon?.(tipo); act(); });
 
@@ -1005,7 +1011,7 @@ const rvIO = new IntersectionObserver(es => es.forEach(e => {
     }), { threshold: .12, rootMargin: '0px 0px -8% 0px' });
 $$('.rv').forEach(el => rvIO.observe(el));
 
-/* Due sezioni possono essere in vista insieme, e prima vinceva quella
+/* Due sezioni possono essere in vista insieme e prima vinceva quella
    che arrivava per ultima nella lista: arrivando sul laboratorio la
    testata accendeva ancora il numero della tecnologia. Adesso vince
    quella che sta piu' in alto fra quelle visibili — che e' quella che
@@ -1060,6 +1066,7 @@ if (navdockBersagli.length) {
 
 /* orologio di sessione */
 setInterval(() => {
+    if (document.hidden) return;
     barTime.textContent = mmss(performance.now() - S.t0);
     if (!$('#verdetto').hidden) renderDossier();
   }, 1000);
@@ -1089,6 +1096,7 @@ setTimeout(() => say('Sessione aperta. Ti mostro cosa so fare, non te lo raccont
   heroScene.textContent = FRASI[0];
   const riduci = () => matchMedia('(prefers-reduced-motion: reduce)').matches;
   setInterval(() => {
+    if (document.hidden) return;
     i = (i + 1) % FRASI.length;
     if (riduci()) { heroScene.textContent = FRASI[i]; return; }
     heroScene.animate(
@@ -1119,7 +1127,7 @@ initPalette();
 initStrumenti();
 
 /* Il manifesto (site/v2/v2.css): un <details> che apre le istruzioni.
-   Senza JavaScript apre e chiude di scatto, e va benissimo — e'
+   Senza JavaScript apre e chiude di scatto e va benissimo — e'
    corretto sempre, il browser gestisce lui la visibilita'.
    Con JavaScript, l'apertura si anima. Il come conta piu' del perche':
    due tecniche via CSS pura (grid-template-rows 0fr/1fr, poi
@@ -1179,7 +1187,7 @@ initStrumenti();
   });
 })();
 /* I quattro casi avvisano quando qualcuno guarda davvero un pezzo: e'
-   la prova "Lavori" del dossier, e vale piu' di uno scorrimento. */
+   la prova "Lavori" del dossier e vale piu' di uno scorrimento. */
 const guardato = () => { act(); proof('lavori'); };
 initUnion(guardato);
 initEso(guardato);
@@ -1286,8 +1294,36 @@ $$('.eso__360-stage').forEach(stage360 => {
      oggetto a parte, non l'immagine visibile, che cambia src mentre gira */
   cache360[0] = new Image(); cache360[0].src = img360.src; pronti[0] = true;
 
+  /* I fotogrammi si disegnano su un canvas invece di cambiare src all'immagine:
+     cambiare src puo' mostrare un attimo di vuoto (lampo bianco) mentre il browser
+     decodifica. Col canvas il fotogramma gia' decodificato si copia e basta. */
+  const cv360 = document.createElement('canvas');
+  cv360.className = 'eso__360-canvas';
+  cv360.setAttribute('aria-hidden', 'true');
+  stage360.insertBefore(cv360, img360.nextSibling);
+  const cx360 = cv360.getContext('2d', { alpha: true });
+  let disegnato360 = -1;
+  function misura360() {
+    const dpr = Math.min(devicePixelRatio || 1, 2);
+    const w = Math.round(stage360.clientWidth * dpr), h = Math.round(stage360.clientHeight * dpr);
+    if (w && h && (cv360.width !== w || cv360.height !== h)) { cv360.width = w; cv360.height = h; disegnato360 = -1; disegna360(frame); }
+  }
+  function disegna360(i) {
+    const im = cache360[i];
+    if (!im || !pronti[i] || !cv360.width || disegnato360 === i) return;
+    const r = Math.min(cv360.width / im.naturalWidth, cv360.height / im.naturalHeight);
+    const w = im.naturalWidth * r, h = im.naturalHeight * r;
+    cx360.clearRect(0, 0, cv360.width, cv360.height);
+    cx360.drawImage(im, (cv360.width - w) / 2, (cv360.height - h) / 2, w, h);
+    disegnato360 = i;
+    if (!stage360.classList.contains('eso__360-stage--canvas')) stage360.classList.add('eso__360-stage--canvas');
+  }
+  new ResizeObserver(misura360).observe(stage360);
+  misura360();
+  cache360[0].decode?.().then(() => { disegna360(frame); }).catch(() => {});
+
   /* "completo" (evento load) non basta: un'immagine puo' essere
-     scaricata e non ancora decodificata, e assegnarla comunque a
+     scaricata e non ancora decodificata e assegnarla comunque a
      .src forza il browser a decodificarla li' per li' — un istante di
      vuoto bianco proprio mentre si trascina. decode() risolve solo
      quando il bitmap e' davvero pronto da disegnare, senza scatti. */
@@ -1300,7 +1336,7 @@ $$('.eso__360-stage').forEach(stage360 => {
       cache360[i] = im;
       const segnaPronto = () => {
         pronti[i] = true;
-        if (frame === i && mostrato !== i) { img360.src = im.src; mostrato = i; }
+        if (frame === i && mostrato !== i) { disegna360(i); mostrato = i; }
       };
       if (im.decode) im.decode().then(segnaPronto).catch(segnaPronto);
       else im.addEventListener('load', segnaPronto);
@@ -1312,12 +1348,40 @@ $$('.eso__360-stage').forEach(stage360 => {
   io360.observe(stage360);
 
   /* mai passare a un fotogramma non ancora decodificato: si resta
-     fermi sull'ultimo buono, e si aggiorna da solo appena e' pronto
+     fermi sull'ultimo buono e si aggiorna da solo appena e' pronto
      (dentro segnaPronto, se nel frattempo il dito e' rimasto li'). */
   function vaAFrame(i) {
     frame = ((i % TOT) + TOT) % TOT;
-    if (pronti[frame] && mostrato !== frame) { img360.src = cache360[frame].src; mostrato = frame; }
+    if (pronti[frame] && mostrato !== frame) { disegna360(frame); mostrato = frame; }
   }
+  /* Due maniglie piccole ai lati che pulsano, e un leggero dondolio del dispositivo:
+     dicono che si puo' girare. Spariscono al primo tocco; con "riduci movimento" niente dondolio. */
+  for (const lato of ['sx', 'dx']) {
+    const m = document.createElement('span');
+    m.className = `eso__360-maniglia eso__360-maniglia--${lato}`;
+    m.setAttribute('aria-hidden', 'true');
+    m.innerHTML = lato === 'sx' ? '<i>‹</i>' : '<i>›</i>';
+    stage360.append(m);
+  }
+  let toccato = false, dondolaId = 0, inVista360 = false, t0dondolo = 0;
+  const riduci = matchMedia('(prefers-reduced-motion: reduce)');
+  function dondola(now) {
+    if (toccato || !inVista360 || riduci.matches || document.hidden) { dondolaId = 0; return; }
+    if (pronto && pronti.slice(0, 12).every(Boolean) && pronti.slice(TOT - 11).every(Boolean)) {
+      if (!t0dondolo) t0dondolo = now;
+      /* parte da fermo (seno) e sale piano: nessuno scatto a inizio movimento */
+      const salita = Math.min(1, (now - t0dondolo) / 1200);
+      vaAFrame(Math.round(Math.sin((now - t0dondolo) / 520) * 11 * salita));
+    }
+    dondolaId = requestAnimationFrame(dondola);
+  }
+  new IntersectionObserver(es => {
+    inVista360 = es[0].isIntersecting;
+    if (inVista360 && !dondolaId && !toccato) dondolaId = requestAnimationFrame(dondola);
+  }, { rootMargin: '40px' }).observe(stage360);
+  const finitoDondolio = () => { if (toccato) return; toccato = true; cancelAnimationFrame(dondolaId); stage360.classList.add('eso__360-stage--via'); };
+  stage360.addEventListener('pointerdown', finitoDondolio, { capture: true });
+  stage360.addEventListener('keydown', finitoDondolio, { capture: true });
   stage360.setAttribute('role', 'slider');
   stage360.setAttribute('tabindex', '0');
   stage360.setAttribute('aria-label', 'Vista a 360 gradi del dispositivo, trascina o usa le frecce per ruotarlo');
@@ -1425,7 +1489,7 @@ if (matchMedia('(hover:hover)').matches) {
 /* Sezione delle skill: agli incroci della griglia compaiono e spariscono
    dei punti, ognuno col suo ritmo, come una luce che si accende a caso.
    Ne bastano una novantina fra i circa cinquecento incroci: di piu'
-   sarebbe rumore, e ogni punto e' un'animazione in piu' da tenere
+   sarebbe rumore e ogni punto e' un'animazione in piu' da tenere
    accesa. Si animano solo mentre la sezione e' in vista. */
 (() => {
   const sez = $('#strumenti');
@@ -1559,7 +1623,7 @@ if (filaVetrina) {
   filaVetrina.addEventListener('pointerenter', e => { if (e.pointerType === 'mouse') sopra = true; });
   filaVetrina.addEventListener('pointerleave', e => { if (e.pointerType === 'mouse') sopra = false; });
   /* con la tastiera la copertina che prende il fuoco viene portata in
-     vista, e il giro si ferma finche' il fuoco resta nella fila */
+     vista e il giro si ferma finche' il fuoco resta nella fila */
   filaVetrina.addEventListener('focusin', e => {
     fuoco = true;
     const el = e.target.closest('.vetrina__caso');
@@ -1646,4 +1710,14 @@ if (macchinaSpan && !window.matchMedia('(prefers-reduced-motion: reduce)').match
   let ricordato = false;
   try { ricordato = localStorage.getItem(chiave) === '1'; } catch (e) {}
   if (ricordato) imposta(true, false);
+})();
+
+
+/* Le animazioni infinite delle sezioni si fermano quando la sezione e' fuori schermo: stesso aspetto, meno lavoro. */
+(() => {
+  if (!('IntersectionObserver' in window)) return;
+  const io = new IntersectionObserver(voci => {
+    for (const v of voci) v.target.classList.toggle('fuori', !v.isIntersecting);
+  }, { rootMargin: '120px 0px' });
+  document.querySelectorAll('main section, main .sec').forEach(el => io.observe(el));
 })();

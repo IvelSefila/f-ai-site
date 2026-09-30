@@ -8,7 +8,7 @@
  * andare a vedere se e' successo davvero.
  *
  * Ogni scheda adesso apre una finestra che risponde a quattro domande
- * separate, e in quest'ordine:
+ * separate e in quest'ordine:
  *
  *   consegno  → COSA TI ARRIVA. Oggetti, non aggettivi: file, formati,
  *               pezzi finiti. E' la prima perche' e' la prima che uno si
@@ -42,14 +42,14 @@ export const SERVIZI = {
     num: '01', cat: 'Campagne', tit: 'Grafica pubblicitaria',
     lede: 'La direzione visiva di una campagna e tutte le sue declinazioni. Parte da un’idea da difendere, non da un formato da riempire.',
     consegno: [
-      'Il key visual, e le varianti che servono a reggerlo',
+      'Il key visual e le varianti che servono a reggerlo',
       'Le declinazioni per ogni formato: stampa, social, digitale',
       'Locandine e manifesti, fermi o animati',
       'Marchi e lettering chiusi in vettoriale, con le versioni per ogni uso',
       'I file sorgente, non solo le esportazioni',
     ],
     lavoro: [
-      'Prima capisco il risultato, poi scelgo gli strumenti. È in quest’ordine, e non è una frase: decide tutto il resto.',
+      'Prima capisco il risultato, poi scelgo gli strumenti. È in quest’ordine e non è una frase: decide tutto il resto.',
       'Il key visual lo verifico su tre proporzioni prima di dichiararlo finito. Se regge solo in una, non è finito.',
       'Le declinazioni non sono ridimensionamenti: cambiano la griglia, la scala tipografica e cosa resta fuori.',
     ],
@@ -74,7 +74,7 @@ export const SERVIZI = {
     lavoro: [
       'Il montaggio decide prima dell’AI: il ritmo si stabilisce sulla timeline, non in fase di generazione.',
       'Quello che non si può riprendere si genera un’inquadratura per volta. Di una cinquantina di spezzoni ne entra in montaggio meno della metà: è il costo di tenere solo quelli buoni.',
-      'Il verticale non è l’orizzontale ritagliato. Sono due montaggi, e si vede subito quando non lo sono.',
+      'Il verticale non è l’orizzontale ritagliato. Sono due montaggi e si vede subito quando non lo sono.',
     ],
     con: ['Adobe Premiere Pro', 'Adobe Audition', 'Gemini Omni', 'Grok Video', 'Seedance 2.5', 'ElevenLabs'],
     dove: [
@@ -90,7 +90,7 @@ export const SERVIZI = {
       'Format riconoscibili, cioè ripetibili senza ridisegnarli ogni volta',
       'Template che si riempiono, non si reinventano',
       'Gli adattamenti per ogni piattaforma e proporzione',
-      'Un flusso di revisione: chi guarda cosa, e prima di cosa',
+      'Un flusso di revisione: chi guarda cosa e prima di cosa',
       'Coda e calendario di pubblicazione',
     ],
     lavoro: [
@@ -107,7 +107,7 @@ export const SERVIZI = {
 
   ai: {
     num: '04', cat: 'Sistemi', tit: 'Flussi e prototipi AI',
-    lede: 'Automazioni che tolgono di mezzo il lavoro ripetitivo, e prototipi per provare un’idea prima di pagarla.',
+    lede: 'Automazioni che tolgono di mezzo il lavoro ripetitivo e prototipi per provare un’idea prima di pagarla.',
     consegno: [
       'Automazioni che lavorano da sole, anche di notte',
       'Agenti con memoria e strumenti collegati',
@@ -118,7 +118,7 @@ export const SERVIZI = {
     lavoro: [
       'Scelgo fra locale e cloud sulle cose che contano: riservatezza, costo, velocità. Non per moda.',
       'Un controllo umano resta sempre dentro il flusso, nel punto in cui un errore costerebbe caro.',
-      'Prima il prototipo, e solo se serve davvero l’applicazione. Molte idee muoiono al prototipo, ed è un risparmio.',
+      'Prima il prototipo e solo se serve davvero l’applicazione. Molte idee muoiono al prototipo, ed è un risparmio.',
     ],
     con: ['n8n', 'ComfyUI', 'Ollama', 'LM Studio', 'Memoria persistente AI / Mem0', 'Agenti AI', 'Webapp su misura'],
     dove: [
@@ -291,7 +291,7 @@ function apri(chiave) {
   b.onclick = () => { finestra.close(); apriBrief?.(chiave); };
 
   if (!finestra.open) finestra.showModal();
-  /* L'ordine conta, e la prima versione lo aveva sbagliato. Azzerare lo
+  /* L'ordine conta e la prima versione lo aveva sbagliato. Azzerare lo
      scorrimento PRIMA di showModal() non serve a niente: la finestra e'
      ancora display:none e non ha niente da scorrere. E dare il fuoco al
      bottone Chiudi, che sta nel piede appiccicato in fondo, la trascina

@@ -2,9 +2,9 @@
  * SCHEDA — il motore comune ai casi con la lastra scura
  *
  * eso.js e cest.js facevano la stessa identica cosa: costruire una
- * griglia di copertine, aprire un video al clic, e rimettere la
+ * griglia di copertine, aprire un video al clic e rimettere la
  * copertina a posto quando il turno passa a un altro. Erano centodieci
- * righe uguali in due file, e la seconda copia sarebbe diventata il
+ * righe uguali in due file e la seconda copia sarebbe diventata il
  * posto dove un giorno si corregge un bug che nell'altra resta.
  *
  * Qui c'e' una volta sola. Ogni caso passa il suo prefisso di classe

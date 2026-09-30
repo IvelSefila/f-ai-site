@@ -30,7 +30,7 @@
         { "title": "Azzeriamola green", "desc": "La locandina animata della campagna: il payoff, i tre passaggi e l'invito a scrivere (7 secondi)." },
         { "title": "Caro benzina", "desc": "Davide l'alpaca davanti a una pompa di benzina, nel primo dei corti che lo presentano." },
         { "title": "La bolletta di luce e gas", "desc": "Davide sulla porta di casa, con la bolletta appena arrivata." },
-        { "title": "Luca l'asino sommerso", "desc": "Un salotto sepolto sotto un mare di bollette, e Luca l'asino in mezzo." },
+        { "title": "Luca l'asino sommerso", "desc": "Un salotto sepolto sotto un mare di bollette e Luca l'asino in mezzo." },
         { "title": "La cometa a forma di zero", "desc": "L'origine di tutto: una cometa a forma di 0 entra nell'atmosfera e nasce il mondo parallelo." },
         { "title": "Insieme si può", "desc": "Il pezzo lungo (1:18): la richiesta di partecipazione e il gancio finale, sottotitolato." },
         { "title": "Rapito dalle bollette", "desc": "Un uomo sollevato in cielo da un disco volante sopra un prato: le bollette che ti portano via." },
@@ -47,9 +47,9 @@
       "highlights": [
         "9 pezzi, 1 sito e 6 documenti di ricerca, dal trailer alle riprese di studio",
         "Il lancio italiano di esoscheletri per la mobilità (nomi sul sito: Strider-X ed E-Legs) costruito tutto a monte: niente set, niente attori, niente prodotto in mano",
-        "Una vista 360 del dispositivo che si ruota trascinando, e quattro viste master perché sia identico in ogni inquadratura"
+        "Una vista 360 del dispositivo che si ruota trascinando e quattro viste master perché sia identico in ogni inquadratura"
       ],
-      "challenge": "Far sì che l'oggetto sia lo stesso in ogni inquadratura, e che il tono regga sia in una palestra di riabilitazione sia su un crinale a duemila metri.",
+      "challenge": "Far sì che l'oggetto sia lo stesso in ogni inquadratura e che il tono regga sia in una palestra di riabilitazione sia su un crinale a duemila metri.",
       "stack": ["GPT Image", "Photoshop", "Adobe Premiere Pro"],
       "pipeline": "Le scene nascono come immagini con GPT Image, si sistemano in Photoshop e si montano in Adobe Premiere Pro: inquadrature generate una per una, di una cinquantina di spezzoni ne entra meno della metà.",
       "method": "Una tavola con quattro viste del dispositivo, per averlo identico in ogni inquadratura. Ricerca: sei documenti di analisi del mercato italiano (numeri, concorrenti, canali, prezzi) e video di approfondimento fatti con NotebookLM. Sito: codice su misura, non un tema, con schede tecniche, configuratore, dati di mercato e modulo di pre-ordine.",
@@ -69,7 +69,7 @@
       ],
       "challenge": "Un pubblico stretto che non compra sogni, compra ore: ogni pezzo parte da un problema vero del mestiere e arriva alla stessa promessa (Alleggerisci la tua burocrazia) da una porta diversa.",
       "stack": ["Adobe Premiere Pro"],
-      "method": "Lo scudo nasce in vettoriale e solo dopo si muove. Le inquadrature sono generate una per una, senza set e senza attore, e scritte, ritmo e montaggio si chiudono in Adobe Premiere Pro.",
+      "method": "Lo scudo nasce in vettoriale e solo dopo si muove. Le inquadrature sono generate una per una, senza set e senza attore e scritte, ritmo e montaggio si chiudono in Adobe Premiere Pro.",
       "pieces": ["Il marchio che si costruisce (verticale)", "La scadenza (la manutenzione antincendio dopo fine settembre la firma solo un tecnico qualificato)", "Il servizio, per intero", "Caro amministratore", "Riprenditi la tua vita", "Lo stesso marchio in orizzontale"],
       "section_id": "caso-cest"
     },
@@ -109,7 +109,7 @@
       ],
       "challenge": "Un sito per un rivenditore piemontese che renda consultabile un catalogo grande e porti chi lo guarda a chiedere un sopralluogo.",
       "stack": ["HTML", "CSS", "JavaScript"],
-      "method": "Struttura, testi e catalogo scritti da zero. Nella pagina del portfolio il sito si vede in diretta, non in uno screenshot, e si può aprire a schermo intero.",
+      "method": "Struttura, testi e catalogo scritti da zero. Nella pagina del portfolio il sito si vede in diretta, non in uno screenshot e si può aprire a schermo intero.",
       "section_id": "caso-cdi"
     }
   ],
@@ -118,7 +118,7 @@
       "id": "alfred",
       "name": "Alfred",
       "kind": "Applicazione web, assistente editoriale",
-      "desc": "Porta i canali social di Fabrizio dall'inizio alla fine: legge cinque fonti in ordine di priorità con le API ufficiali dove esistono, sceglie cosa vale la pena raccontare, trasforma un'immagine ferma in un Reel (un modello scrive il movimento, ComfyUI lo esegue) con una base musicale diversa per ogni Reel, e pubblica su Facebook, Instagram, YouTube, LinkedIn, Threads e Telegram, solo con API ufficiali e solo su account collegati da lui. Calendario visibile, stop immediato, ripartenza senza doppioni, statistiche per canale. Lo usa tutti i giorni.",
+      "desc": "Porta i canali social di Fabrizio dall'inizio alla fine: legge cinque fonti in ordine di priorità con le API ufficiali dove esistono, sceglie cosa vale la pena raccontare, trasforma un'immagine ferma in un Reel (un modello scrive il movimento, ComfyUI lo esegue) con una base musicale diversa per ogni Reel e pubblica su Facebook, Instagram, YouTube, LinkedIn, Threads e Telegram, solo con API ufficiali e solo su account collegati da lui. Calendario visibile, stop immediato, ripartenza senza doppioni, statistiche per canale. Lo usa tutti i giorni.",
       "under_the_hood": "Python con FastAPI e Uvicorn, APScheduler, PostgreSQL, Docker, Playwright, accesso con JWT e segreti cifrati. Si collega a qualunque AI da riga di comando (Claude, GPT, Gemini, Grok o un modello locale) con un server MCP."
     },
     {
@@ -126,7 +126,7 @@
       "name": "Max Video Downloader",
       "kind": "Applicazione per Windows",
       "desc": "Scarica video da fonti autorizzate (in coda, riprende se cade la rete) e ne ricava trascrizione e sottotitoli, tutto sul computer, senza caricamenti e senza costo al minuto. Trascrive con Voxtral e Whisper di riserva; i sottotitoli sono sincronizzati e correggibili parola per parola. Usa la scheda video, esiste in versione portatile con tutto dentro e Fabrizio la usa ogni giorno per lavoro.",
-      "under_the_hood": "Tauri 2 con React e TypeScript, motore in Python con la scheda video via CUDA, e un'AI da riga di comando che ripassa il testo con mano leggera: corregge, non riscrive."
+      "under_the_hood": "Tauri 2 con React e TypeScript, motore in Python con la scheda video via CUDA e un'AI da riga di comando che ripassa il testo con mano leggera: corregge, non riscrive."
     }
   ],
   "site": {
@@ -209,7 +209,7 @@
     { "title": "Video e post-produzione", "desc": "Montaggio, motion, compositing e sottotitoli, con riprese esistenti o generazione assistita." },
     { "title": "Sistemi per social media", "desc": "Format riconoscibili, template, adattamenti per ogni piattaforma e un flusso di revisione." },
     { "title": "Flussi e prototipi AI", "desc": "Automazioni, agenti e prototipi, in locale o in cloud." },
-    { "title": "Siti internet", "desc": "Siti in puro codice, e anche temi e plugin WordPress su misura quando serve quella piattaforma." },
+    { "title": "Siti internet", "desc": "Siti in puro codice e anche temi e plugin WordPress su misura quando serve quella piattaforma." },
     { "title": "Web app", "desc": "Applicazioni vere, non demo: quando lo strumento che serve non esiste ancora, lo scrive." },
     { "title": "Campagne media", "desc": "La campagna di marketing da zero, seguita fino alla pubblicazione, su più canali insieme, digitali e non." },
     { "title": "Jingle e canzoni pubblicitarie", "desc": "Musiche e jingle originali per spot e campagne, con voce e mix." }
@@ -234,7 +234,7 @@
       "Che supporto cerchi?",
       "Come posso ricontattarti? (nome ed email obbligatori; azienda, fascia di investimento e nota facoltative)"
     ],
-    "data": "Il brief viene compilato nel tuo browser. Il sito non salva e non invia niente: alla fine si copia il riepilogo oppure si apre il programma di posta con il testo già dentro, e lo mandi tu."
+    "data": "Il brief viene compilato nel tuo browser. Il sito non salva e non invia niente: alla fine si copia il riepilogo oppure si apre il programma di posta con il testo già dentro e lo mandi tu."
   },
   "pricing": {
     "note": "Sul sito non ci sono prezzi né listini.",
@@ -245,7 +245,7 @@
     "sectors": ["Energia", "Prodotti per la mobilità e robotica", "Servizi per amministratori di condominio", "Ristorazione", "Serramenti"]
   },
   "techSetup": {
-    "note": "Installa, confronta e integra modelli su una workstation sua, e sceglie fra locale, cloud e ibrido. Le percentuali della sezione Tecnologia sono stime dalla sua esperienza, non misure di laboratorio."
+    "note": "Installa, confronta e integra modelli su una workstation sua e sceglie fra locale, cloud e ibrido. Le percentuali della sezione Tecnologia sono stime dalla sua esperienza, non misure di laboratorio."
   },
   "faq": [
     {
@@ -254,7 +254,7 @@
     },
     {
       "q": "Sei un'AI? Sei un bot?",
-      "a": "Sì, sono Nous, un assistente automatico: rispondo solo con quello che c'è scritto sul sito. Fabrizio invece è una persona reale, e per parlargli scrivi a fabriziomana@gmail.com o compila il brief."
+      "a": "Sì, sono Nous, un assistente automatico: rispondo solo con quello che c'è scritto sul sito. Fabrizio invece è una persona reale e per parlargli scrivi a fabriziomana@gmail.com o compila il brief."
     },
     {
       "q": "Come lavora con l'intelligenza artificiale?",
@@ -266,7 +266,7 @@
     },
     {
       "q": "Il brief invia i miei dati?",
-      "a": "No. Il brief resta nel tuo browser: il sito non salva e non invia niente. A fine compilazione copi il riepilogo o apri il programma di posta con il testo già scritto, e lo mandi tu."
+      "a": "No. Il brief resta nel tuo browser: il sito non salva e non invia niente. A fine compilazione copi il riepilogo o apri il programma di posta con il testo già scritto e lo mandi tu."
     },
     {
       "q": "Quali sono i lavori visibili sul sito?",
