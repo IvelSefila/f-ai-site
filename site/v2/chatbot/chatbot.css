@@ -1919,3 +1919,25 @@
   color: #f3d38a;
   font-size: 13px;
 }
+
+/* ── Telefono: la barra di scrittura non esce mai dallo schermo; con la tastiera
+   la finestra diventa un foglio a tutta altezza agganciato alla parte visibile ── */
+.nodo-input { min-width: 0; }
+.nodo-input-bar > button { flex: none; }
+@media (max-width: 640px) {
+  .nodo-input-bar { gap: 6px; padding-inline: 10px; }
+  .nodo-mic-btn, .nodo-slash-btn { width: 36px; height: 36px; }
+  .nodo-send-btn { width: 44px; height: 44px; }
+  .nodo-window.is-keyboard {
+    position: fixed; left: 0; right: 0; bottom: auto; width: auto;
+    top: var(--nodo-vvtop, 0px);
+    height: var(--nodo-vvh, 100dvh); max-height: none;
+    border-radius: 0; border-inline: 0;
+  }
+  .nodo-window.is-keyboard .nodo-chips { display: none !important; }
+  .nodo-window.is-keyboard .nodo-privacy-note { display: none !important; }
+  .nodo-window.is-keyboard .nodo-x,
+  .nodo-window.is-keyboard .nodo-privacy-note,
+  .nodo-window.is-keyboard .nodo-notice { display: none !important; }
+  .nodo-window.is-keyboard .nodo-input-bar { padding-bottom: 8px; }
+}

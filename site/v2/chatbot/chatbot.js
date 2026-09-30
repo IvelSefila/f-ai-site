@@ -2,8 +2,8 @@
  * Widget Controller "Nous" — F/AI Portfolio
  * Versione 1.0 (Settembre 2026)
  */
-import { CONFIG } from './chatbot.config.js?v=20260928-131';
-import { ChatEngine } from './chatbot.engine.js?v=20260928-131';
+import { CONFIG } from './chatbot.config.js?v=20260928-132';
+import { ChatEngine } from './chatbot.engine.js?v=20260928-132';
 
 /* Cosa sta girando: testi mostrati in alto e nel pannello dettagli (italiano semplice) */
 const ENGINE_INFO = {
@@ -537,9 +537,11 @@ class NodoWidget {
     const keyboard = window.innerHeight - vv.height - vv.offsetTop > 80;
     win.classList.toggle('is-keyboard', keyboard);
     if (keyboard) {
-      win.style.setProperty('--nodo-vvh', `${Math.max(240, Math.round(vv.height - 16))}px`);
+      win.style.setProperty('--nodo-vvh', `${Math.max(200, Math.round(vv.height))}px`);
+      win.style.setProperty('--nodo-vvtop', `${Math.round(vv.offsetTop)}px`);
     } else {
       win.style.removeProperty('--nodo-vvh');
+      win.style.removeProperty('--nodo-vvtop');
     }
   }
 
