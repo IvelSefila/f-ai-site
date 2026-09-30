@@ -2,19 +2,19 @@
 * app.js — la sessione. Tiene il filo fra le prove, parla, misura,
 * e alla fine scrive il dossier. Nessuna libreria.
 * ═══════════════════════════════════════════════════════════════════ */
-import { initTipografia } from './tipografia.js?v=20260928-145';
+import { initTipografia } from './tipografia.js?v=20260928-149';
 initTipografia();
 // cursore a mirino tolto su richiesta (mirino.js resta nel progetto)
-import { initHero } from './hero.js?v=20260928-145';
-import { initStrumenti } from './strumenti.js?v=20260928-145';
-import { initUnion } from './union.js?v=20260928-145';
-import { initEso } from './eso.js?v=20260928-145';
-import { initLocanda } from './locanda.js?v=20260928-145';
-import { initCest } from './cest.js?v=20260928-145';
-import { initPalette } from './palette.js?v=20260928-145';
-import { keyVisual, radar, MODES, rng, leggiColori} from './engine.js?v=20260928-145';
-import { initBrief } from './brief.js?v=20260928-145';
-import { initServizi } from './servizi.js?v=20260928-145';
+import { initHero } from './hero.js?v=20260928-149';
+import { initStrumenti } from './strumenti.js?v=20260928-149';
+import { initUnion } from './union.js?v=20260928-149';
+import { initEso } from './eso.js?v=20260928-149';
+import { initLocanda } from './locanda.js?v=20260928-149';
+import { initCest } from './cest.js?v=20260928-149';
+import { initPalette } from './palette.js?v=20260928-149';
+import { keyVisual, radar, MODES, rng, leggiColori} from './engine.js?v=20260928-149';
+import { initBrief } from './brief.js?v=20260928-149';
+import { initServizi } from './servizi.js?v=20260928-149';
 
 const $ = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => [...r.querySelectorAll(s)];
@@ -1304,7 +1304,7 @@ $$('.eso__360-stage').forEach(stage360 => {
   const cx360 = cv360.getContext('2d', { alpha: true });
   let disegnato360 = -1;
   function misura360() {
-    const dpr = Math.min(devicePixelRatio || 1, 2);
+    const dpr = Math.min(devicePixelRatio || 1, 1.5);
     const w = Math.round(stage360.clientWidth * dpr), h = Math.round(stage360.clientHeight * dpr);
     if (w && h && (cv360.width !== w || cv360.height !== h)) { cv360.width = w; cv360.height = h; disegnato360 = -1; disegna360(frame); }
   }
@@ -1363,25 +1363,56 @@ $$('.eso__360-stage').forEach(stage360 => {
     m.innerHTML = lato === 'sx' ? '<i>‹</i>' : '<i>›</i>';
     stage360.append(m);
   }
-  let toccato = false, dondolaId = 0, inVista360 = false, t0dondolo = 0;
+  /* Rotazione lenta e continua: un giro completo di 360 gradi in circa 24 secondi. Fra un
+     fotogramma e il successivo i due si sfumano (crossfade), cosi' a questa velocita' il moto
+     resta fluido. Si ferma mentre lo giri tu e riparte da solo dopo qualche secondo. */
+  const SECONDI_GIRO = 24;
+  let toccato = false, dondolaId = 0, inVista360 = false, posAuto = 0, ultimaAzione = -1e9, ultimoT = 0;
   const riduci = matchMedia('(prefers-reduced-motion: reduce)');
+  function disegnaMix(pos) {
+    const f0 = Math.floor(pos), t = pos - f0;
+    const i0 = ((f0 % TOT) + TOT) % TOT, i1 = (i0 + 1) % TOT;
+    const a0 = cache360[i0], a1 = cache360[i1];
+    if (!pronti[i0] || !pronti[i1] || !cv360.width) return;
+    const fit = im => { const r = Math.min(cv360.width / im.naturalWidth, cv360.height / im.naturalHeight); return [im.naturalWidth * r, im.naturalHeight * r]; };
+    cx360.clearRect(0, 0, cv360.width, cv360.height);
+    const [w0, h0] = fit(a0);
+    cx360.globalAlpha = 1;
+    cx360.drawImage(a0, (cv360.width - w0) / 2, (cv360.height - h0) / 2, w0, h0);
+    if (t > 0.02) {
+      const [w1, h1] = fit(a1);
+      cx360.globalAlpha = t;
+      cx360.drawImage(a1, (cv360.width - w1) / 2, (cv360.height - h1) / 2, w1, h1);
+      cx360.globalAlpha = 1;
+    }
+    disegnato360 = -1;
+    frame = Math.round(pos) % TOT; mostrato = frame;
+    if (!stage360.classList.contains('eso__360-stage--canvas')) stage360.classList.add('eso__360-stage--canvas');
+  }
   function dondola(now) {
-    if (toccato || !inVista360 || riduci.matches || document.hidden) { dondolaId = 0; return; }
-    if (pronto && pronti.slice(0, 12).every(Boolean) && pronti.slice(TOT - 11).every(Boolean)) {
-      if (!t0dondolo) t0dondolo = now;
-      /* parte da fermo (seno) e sale piano: nessuno scatto a inizio movimento */
-      const salita = Math.min(1, (now - t0dondolo) / 1200);
-      vaAFrame(Math.round(Math.sin((now - t0dondolo) / 520) * 11 * salita));
+    if (!inVista360 || riduci.matches || document.hidden) { dondolaId = 0; return; }
+    const dt = Math.min(0.1, (now - (ultimoT || now)) / 1000); ultimoT = now;
+    const tuttiPronti = pronto && pronti.every(Boolean);
+    if (tuttiPronti) {
+      if (trascinando || now - ultimaAzione < 2500) {
+        posAuto = frame;
+      } else {
+        posAuto = (posAuto + dt * TOT / SECONDI_GIRO) % TOT;
+        disegnaMix(posAuto);
+      }
     }
     dondolaId = requestAnimationFrame(dondola);
   }
   new IntersectionObserver(es => {
     inVista360 = es[0].isIntersecting;
-    if (inVista360 && !dondolaId && !toccato) dondolaId = requestAnimationFrame(dondola);
+    if (inVista360 && !dondolaId) { ultimoT = 0; dondolaId = requestAnimationFrame(dondola); }
   }, { rootMargin: '40px' }).observe(stage360);
-  const finitoDondolio = () => { if (toccato) return; toccato = true; cancelAnimationFrame(dondolaId); stage360.classList.add('eso__360-stage--via'); };
-  stage360.addEventListener('pointerdown', finitoDondolio, { capture: true });
-  stage360.addEventListener('keydown', finitoDondolio, { capture: true });
+  const azione360 = () => {
+    ultimaAzione = performance.now();
+    if (!toccato) { toccato = true; stage360.classList.add('eso__360-stage--via'); }
+  };
+  for (const ev of ['pointerdown', 'pointerup', 'pointercancel', 'keydown']) stage360.addEventListener(ev, azione360, { capture: true });
+  stage360.addEventListener('pointermove', () => { if (trascinando) ultimaAzione = performance.now(); }, { passive: true });
   stage360.setAttribute('role', 'slider');
   stage360.setAttribute('tabindex', '0');
   stage360.setAttribute('aria-label', 'Vista a 360 gradi del dispositivo, trascina o usa le frecce per ruotarlo');

@@ -4395,7 +4395,27 @@ body.mirino-on, body.mirino-on * { cursor: none !important; }
 .eso__360-canvas{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;display:none}
 .eso__360-stage--canvas .eso__360-canvas{display:block}
 .eso__360-stage--canvas .eso__360-img{visibility:hidden}
-.eso__360-canvas{filter:drop-shadow(0 0 34px var(--sk-alone)) drop-shadow(0 18px 30px rgba(0,0,0,.5))}
+/* niente filtri sul canvas che cambia a ogni frame (troppo costosi): l'alone e l'ombra sono statici, dietro */
+.eso__360-stage::before{content:"";position:absolute;inset:6% 8% 4%;z-index:0;pointer-events:none;border-radius:50%;
+  background:radial-gradient(ellipse at 50% 46%,color-mix(in srgb,var(--sk-alone,#14c08a) 30%,transparent),transparent 68%)}
+.eso__360-stage::after{content:"";position:absolute;left:18%;right:18%;bottom:1%;height:5%;z-index:0;pointer-events:none;
+  background:radial-gradient(ellipse at 50% 50%,rgba(0,0,0,.5),transparent 70%)}
+.eso__360-canvas,.eso__360-img{position:relative;z-index:1}
+.eso__360-canvas{position:absolute}
 
 /* Su desktop la sezione "Posizione nella pagina" del pannello e' nascosta */
 @media (min-width: 901px) { .pal__sez--pos { display: none !important; } }
+
+
+/* le due maniglie battono a ritmi diversi: una piu' veloce, una piu' lenta, sfasate */
+@media (prefers-reduced-motion:no-preference){
+  .eso__360-maniglia--sx{animation:eso360-batte 1.9s ease-in-out infinite}
+  .eso__360-maniglia--dx{animation:eso360-batte 2.7s ease-in-out .8s infinite}
+  .eso__360-maniglia--sx::after{animation-duration:1.9s;animation-delay:0s}
+  .eso__360-maniglia--dx::after{animation-duration:2.7s;animation-delay:.8s}
+}
+@keyframes eso360-batte{0%,100%{transform:scale(1);box-shadow:0 0 0 0 transparent}50%{transform:scale(1.14);box-shadow:0 0 14px color-mix(in srgb,var(--em) 55%,transparent)}}
+
+.piede__legale{font-size:inherit}
+.piede__legale a{color:inherit;text-decoration:underline;text-underline-offset:3px}
+.piede__legale a:hover{color:var(--em-bright)}

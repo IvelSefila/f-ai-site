@@ -1,0 +1,30 @@
+/* Avviso cookie: una striscia in basso, discreta, che non copre i comandi importanti */
+.cookie{
+  position:fixed;z-index:500;left:16px;right:16px;bottom:16px;max-width:760px;margin-inline:auto;
+  display:flex;align-items:center;gap:18px;padding:16px 18px;border-radius:16px;
+  background:rgba(11,15,22,.97);border:1px solid rgba(221,231,242,.16);
+  box-shadow:0 18px 50px rgba(0,0,0,.6);color:#c3ccd6;font:400 14px/1.55 "Manrope",system-ui,Arial,sans-serif;
+  animation:cookie-su .35s cubic-bezier(.23,1,.32,1) both;transition:opacity .25s,transform .25s
+}
+.cookie--via{opacity:0;transform:translateY(12px)}
+@keyframes cookie-su{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+.cookie__testo{flex:1;min-width:0}
+.cookie__testo p{margin:0}
+.cookie__titolo{font:700 12px/1 ui-monospace,Consolas,monospace!important;letter-spacing:.1em;text-transform:uppercase;color:#7f8b98;margin-bottom:6px!important}
+.cookie strong{color:#f2f4f7}
+.cookie__azioni{display:flex;align-items:center;gap:14px;flex:none}
+.cookie__link{color:#4fe3b0;font-weight:700;white-space:nowrap;min-height:44px;display:inline-flex;align-items:center;padding:0 16px;border:1px solid rgba(79,227,176,.5);border-radius:999px;text-decoration:none}
+.cookie__link:hover{color:#f2f4f7}
+.cookie__ok{
+  min-height:44px;padding:0 20px;border-radius:999px;border:1px solid #14c08a;background:#14c08a;color:#04150f;
+  font:700 13px/1 ui-monospace,Consolas,monospace;letter-spacing:.06em;text-transform:uppercase;cursor:pointer
+}
+.cookie__ok:hover{background:#4fe3b0}
+.cookie :focus-visible{outline:2px solid #4fe3b0;outline-offset:3px}
+@media (max-width:640px){
+  .cookie{flex-direction:column;align-items:stretch;gap:12px;left:10px;right:10px;bottom:calc(10px + env(safe-area-inset-bottom,0px))}
+  .cookie__azioni{justify-content:space-between}
+  /* sopra alla barra in basso della pagina */
+  body:has(.navdock) .cookie{bottom:calc(96px + env(safe-area-inset-bottom,0px))}
+}
+@media (prefers-reduced-motion:reduce){.cookie{animation:none}}
