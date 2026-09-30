@@ -2,8 +2,8 @@
  * Widget Controller "Nous" — F/AI Portfolio
  * Versione 1.0 (Settembre 2026)
  */
-import { CONFIG } from './chatbot.config.js?v=20260928-143';
-import { ChatEngine } from './chatbot.engine.js?v=20260928-143';
+import { CONFIG } from './chatbot.config.js?v=20260928-145';
+import { ChatEngine } from './chatbot.engine.js?v=20260928-145';
 
 /* Cosa sta girando: testi mostrati in alto e nel pannello dettagli (italiano semplice) */
 const ENGINE_INFO = {
@@ -1202,7 +1202,7 @@ class NodoWidget {
     const msg = document.createElement('div');
     msg.className = 'nodo-msg nodo-msg--bot nodo-msg--brief-wizard';
     msg.innerHTML = `
-      <div class="nodo-msg-text"><b>Ultima domanda.</b> Come posso farti ricontattare? Nome ed email servono, il resto è facoltativo. Restano nel tuo browser: il sito non li salva e non li invia.</div>
+      <div class="nodo-msg-text"><b>Ultima domanda.</b> Come posso farti ricontattare? Nome ed email servono, il resto è facoltativo. Li usa solo Fabrizio per risponderti.</div>
       <form class="nodo-brief-contatti" novalidate>
         <input name="name" type="text" placeholder="Nome *" autocomplete="name" aria-label="Nome" />
         <input name="email" type="email" placeholder="Email *" autocomplete="email" inputmode="email" aria-label="Email" />
@@ -1271,12 +1271,12 @@ class NodoWidget {
           ${righe.map(([l, v]) => `<div class="nodo-brief-row"><span class="lbl">${l}:</span><span class="val">${esc(v)}</span></div>`).join('')}
         </div>
         <button class="nodo-brief-submit-cta" type="button">Compila il modulo del preventivo &rarr;</button>
-        <p class="nodo-brief-nota">Compilo io tutta la scheda. Alla fine ti resta solo la conferma sulla privacy e l’invio, che fai tu.</p>
+        <p class="nodo-brief-nota">Compilo io tutta la scheda. Ti resta solo il consenso e il tasto di invio: è quello che manda la richiesta a Fabrizio per email.</p>
       </div>`;
     card.querySelector('.nodo-brief-submit-cta').addEventListener('click', ev => {
       ev.currentTarget.disabled = true;
       this.briefCompilaModulo();
-      this.appendBotMessage('Fatto: ho compilato la scheda con le tue risposte. Controlla, conferma la privacy e invia.');
+      this.appendBotMessage('Fatto: ho compilato la scheda con le tue risposte. Controlla, spunta il consenso e premi invia: la richiesta arriva a Fabrizio per email.');
     });
     this.elements.messages.appendChild(card);
     this.scrollToBottom();
@@ -1625,7 +1625,7 @@ class NodoWidget {
     this._fineVoce = alFinire || null;
     let base = 'chatbot/voce/';
     try { base = new URL('./voce/', import.meta.url).href; } catch (e) {}
-    const audio = new Audio(`${base}${nome}.mp3?v=1`);
+    const audio = new Audio(`${base}${nome}.mp3?v=2`);
     audio.preload = 'auto';
     this.ttsAudio = audio;
     const finito = () => { if (this.ttsAudio === audio) { this.stopSpeaking(); } this.finePar(); };
@@ -1639,18 +1639,18 @@ class NodoWidget {
 
   guidaPassi() {
     return [
-      { target: '#top', testo: "Siamo in cima. Le immagini di sfondo le ho generate con l'AI, ma il confine fra l'una e l'altra lo calcola il tuo browser in tempo reale. Prova a trascinare a destra e a sinistra: lo sposti fra il lavoro fatto a mano, in bianco e nero, e lo stesso soggetto reso come sistema AI. In alto a destra i pallini cambiano il colore di tutto il sito." },
-      { target: '#come', testo: "Questo è il libretto di istruzioni. Dice una cosa semplice: il sito non racconta il lavoro di Fabrizio, lo fa mentre lo guardi. Tenendo premuto su un riquadro lo puoi spostare, cambiare l'impaginazione o il colore. Tutto resta nel tuo browser: il sito non salva e non manda niente a nessuno." },
-      { target: '#banchi', testo: "Qui ci sono i servizi, otto in tutto: grafica pubblicitaria, video e post-produzione, sistemi per i social, flussi e prototipi AI, siti internet, web app, campagne media e jingle. Apri una scheda e vedi cosa consegna, come ci arriva e dove puoi vederlo già fatto." },
-      { target: '#lavori', testo: "Da qui iniziano i lavori veri: cinque marchi seguiti dall'idea fino alla pubblicazione. Nessun video parte da solo, scegli tu cosa guardare. Adesso ti porto a vederli uno alla volta." },
-      { target: '#caso-union', testo: "Union Energia. Una campagna dentro un marchio che esisteva già: un mondo parallelo dove una cometa a forma di zero azzera le bollette, con Davide l'alpaca, Luca l'asino e gli altri. Sono nove pezzi video, senza nessuna ripresa dal vivo: nascono come immagini e poi si muovono." },
-      { target: '#caso-eso', testo: "Human Robots. Il lancio di un esoscheletro che non si poteva fotografare. Il dispositivo lo giri a 360 gradi trascinandolo con il mouse o con il dito, e più sotto c'è una nuvola di punti in WebGL che puoi manovrare." },
-      { target: '#caso-cest', testo: "Studio CETS. Un'attività già avviata ma ancora poco conosciuta fra chi amministra condomìni. Il marchio è stato rifatto da capo, con scudo, tricolore, palazzo e drone, e poi animato. Il drone che vedi volare sullo sfondo fa parte del lavoro." },
-      { target: '#caso-locanda', testo: "La Locanda del Castello, a Rocca de' Baldi. Dal marchio alla locandina di sabato sera: l'identità di un ristorante nel parco di un castello. Qui trovi anche i jingle musicali, da ascoltare quando vuoi." },
-      { target: '#caso-cdi', testo: "CDI Infissi. Un sito scritto da zero in HTML, CSS e JavaScript, senza temi né builder, con i dati del produttore. Nella pagina lo vedi in diretta, non in uno screenshot, e lo puoi aprire a schermo intero." },
-      { target: '#strumenti', testo: "Questi sono gli strumenti che Fabrizio usa, quarantaquattro voci in tutto. Toccane una e ti dico a cosa gli serve." },
-      { target: '#profilo', testo: "Il profilo. Un occhio da grafico e un metodo da tecnico. Che l'AI sappia scrivere, disegnare e montare non è più una domanda: dove finisce lo strumento e comincia il giudizio, quello resta di Fabrizio." },
-      { target: '#brief', testo: "E qui il brief: sei domande, due minuti. Scegli quello che sai già e salta il resto. Il sito non salva e non invia niente: alla fine copi tu il riepilogo e decidi dove mandarlo." }
+      { target: '#top', testo: "Benvenuto. Questo è il portfolio di Fabrizio Mana e funziona in modo insolito: invece di elencare le competenze, le mette in pratica mentre lo guardi. Lo sfondo mostra due versioni della stessa scena. A sinistra il lavoro fatto a mano, in bianco e nero. A destra lo stesso soggetto costruito come sistema di intelligenza artificiale. Trascina e sposta il confine: è l'idea di tutto il sito." },
+      { target: '#come', testo: "Qui trovi le istruzioni. Il sito si può toccare: cambi il colore dai pallini in alto, sposti le schede tenendole premute, riordini le sezioni a modo tuo. Serve a farti capire una cosa. Questo portfolio non è un'immagine da guardare ma uno strumento da provare. Quello che cambi resta nel tuo browser." },
+      { target: '#banchi', testo: "Questi sono i servizi, otto in tutto. Grafica pubblicitaria, video, social, automazioni con l'intelligenza artificiale, siti internet, web app, campagne media e jingle. Ogni scheda si apre e ti dice tre cose: cosa consegna, come ci arriva e dove puoi vederlo già fatto. Se cerchi qualcosa di preciso, parti da qui." },
+      { target: '#lavori', testo: "Ora i lavori. Sono cinque marchi seguiti dall'idea fino alla pubblicazione, quindi non singoli pezzi ma progetti interi. Nessun video parte da solo: scegli tu cosa guardare. Ti porto a vederli uno alla volta." },
+      { target: '#caso-union', testo: "Il primo è Union Energia, una campagna per un marchio che esisteva già. Fabrizio ha inventato un mondo parallelo dove una cometa a forma di zero azzera le bollette, con Davide l'alpaca e Luca l'asino come protagonisti. Sono nove video senza nessuna ripresa dal vivo: nascono come immagini e poi vengono animati." },
+      { target: '#caso-eso', testo: "Poi Human Robots, il lancio di un esoscheletro, cioè un prodotto che non si poteva fotografare. Qui il dispositivo lo puoi girare a trecentosessanta gradi trascinandolo con il mouse o con il dito. Più in basso c'è una nuvola di punti in tre dimensioni che puoi manovrare." },
+      { target: '#caso-cest', testo: "Studio CETS è il caso opposto: un'attività già avviata ma ancora poco conosciuta tra chi amministra condomini. Il lavoro è stato darle un volto credibile. Il marchio è rifatto da capo, con scudo, tricolore, palazzo e drone, e poi animato. Il drone che vola sullo sfondo fa parte del marchio." },
+      { target: '#caso-locanda', testo: "La Locanda del Castello, a Rocca de' Baldi, è l'identità di un ristorante nel parco di un castello: dal marchio fino alla locandina della serata di sabato. Trovi le locandine animate e cinque jingle musicali, che puoi ascoltare quando vuoi." },
+      { target: '#caso-cdi', testo: "CDI Infissi è un sito vero, scritto da zero in HTML, CSS e JavaScript, senza temi né builder, con il catalogo del produttore. Non è uno screenshot: lo vedi funzionare dentro la pagina e lo puoi aprire a schermo intero." },
+      { target: '#strumenti', testo: "Questa è la cassetta degli attrezzi: quarantaquattro strumenti tra grafica, video, intelligenza artificiale e sviluppo. Toccane uno e ti dico a cosa serve a Fabrizio. Conta il modo in cui li usa, non la lista." },
+      { target: '#profilo', testo: "Il profilo spiega il metodo. Ormai l'intelligenza artificiale sa scrivere, disegnare e montare. La domanda è dove finisce lo strumento e comincia il giudizio, e quella parte resta di Fabrizio: decide lui e la macchina esegue." },
+      { target: '#brief', testo: "Ed eccoci al punto: se hai un progetto, questo è il modulo per raccontarlo. Sono sei domande e bastano due minuti. Puoi anche farlo con me: ti faccio le domande qui in chat e compilo io la scheda. Quando la invii, la richiesta arriva direttamente a Fabrizio per email." }
     ];
   }
 

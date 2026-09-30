@@ -4396,3 +4396,6 @@ body.mirino-on, body.mirino-on * { cursor: none !important; }
 .eso__360-stage--canvas .eso__360-canvas{display:block}
 .eso__360-stage--canvas .eso__360-img{visibility:hidden}
 .eso__360-canvas{filter:drop-shadow(0 0 34px var(--sk-alone)) drop-shadow(0 18px 30px rgba(0,0,0,.5))}
+
+/* Su desktop la sezione "Posizione nella pagina" del pannello e' nascosta */
+@media (min-width: 901px) { .pal__sez--pos { display: none !important; } }

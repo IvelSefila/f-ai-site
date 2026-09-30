@@ -97,7 +97,7 @@ function createBriefController() {
       "AVANTI",
       "AVANTI",
       "AVANTI",
-      "PREPARA IL RIEPILOGO",
+      "INVIA LA RICHIESTA",
     ];
 
     function saveBriefSession() {
@@ -308,6 +308,49 @@ function createBriefController() {
         summary.focus({ preventScroll: true });
       }
       if (summaryStatus) summaryStatus.textContent = "";
+      inviaPerEmail(built);
+    }
+
+    /* Invio automatico a Fabrizio. Parte SOLO qui: alla conferma dell'ultimo passo, dopo il
+       consenso spuntato dall'utente. Il servizio e' FormSubmit (nessun server nostro, niente
+       chiavi nel sito). Se non risponde resta il tasto della posta: nessuna richiesta si perde. */
+    let invioInCorso = false, inviato = false;
+    async function inviaPerEmail(built) {
+      if (inviato || invioInCorso) return;
+      const recapito = document.getElementById('recapito');
+      const indirizzo = ((recapito && recapito.getAttribute('href')) || '').replace(/^mailto:/i, '').split('?')[0];
+      if (!indirizzo) return;
+      invioInCorso = true;
+      if (summaryStatus) summaryStatus.textContent = "Sto inviando la richiesta a Fabrizio…";
+      try {
+        const risposta = await fetch('https://formsubmit.co/ajax/' + encodeURIComponent(indirizzo), {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+          body: JSON.stringify({
+            _subject: 'Nuovo brief dal sito MF/AI — ' + (built.projectLabel || 'progetto'),
+            _template: 'table',
+            _captcha: 'false',
+            _honey: '',
+            name: fieldValue('name'),
+            email: fieldValue('email'),
+            company: fieldValue('company') || 'Non indicata',
+            budget: readable('budget', fieldValue('budget')),
+            message: built.text,
+          }),
+        });
+        const dati = await risposta.json().catch(() => ({}));
+        if (risposta.ok && String(dati.success) !== 'false') {
+          inviato = true;
+          if (summaryStatus) summaryStatus.textContent = "Richiesta inviata a Fabrizio. Ti risponde all'email che hai indicato.";
+          document.dispatchEvent(new CustomEvent('brief:inviato'));
+        } else {
+          throw new Error(dati.message || 'invio non riuscito');
+        }
+      } catch (_) {
+        if (summaryStatus) summaryStatus.textContent = "Non sono riuscito a inviarla in automatico. Usa «Mandamelo per email» qui sotto: il testo è già pronto.";
+      } finally {
+        invioInCorso = false;
+      }
     }
 
     function nextStep() {
@@ -402,11 +445,11 @@ function createBriefController() {
 
     mailLink?.addEventListener("click", () => {
       if (summaryStatus) {
-        summaryStatus.textContent = "Conferma l’invio nel tuo programma email: il sito non invia nulla automaticamente.";
+        summaryStatus.textContent = "Conferma l’invio nel tuo programma di posta.";
       }
     });
 
-    editButton?.addEventListener("click", () => open(steps.length - 1, true));
+    editButton?.addEventListener("click", () => { inviato = false; open(steps.length - 1, true); });
     showStep(currentStep, false);
 
     /* Apre il brief con una risposta gia' scelta alla prima domanda.

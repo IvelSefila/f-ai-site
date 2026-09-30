@@ -130,7 +130,7 @@
     }
   ],
   "site": {
-    "about": "Il sito è stato progettato da Fabrizio e scritto riga per riga con le migliori AI di frontiera: grafica, animazioni, interazioni, codice. Gli sfondi dell'eroe sono immagini generate con l'AI (Higgsfield): il confine fra le due, gli effetti e le forme li calcola il browser in tempo reale. Tutto quello che cambi resta nel tuo browser: il sito non salva e non manda niente a nessuno.",
+    "about": "Il sito è stato progettato da Fabrizio e scritto riga per riga con le migliori AI di frontiera: grafica, animazioni, interazioni, codice. Gli sfondi dell'eroe sono immagini generate con l'AI (Higgsfield): il confine fra le due, gli effetti e le forme li calcola il browser in tempo reale. Tutto quello che cambi resta nel tuo browser e il sito non salva niente. L'unica cosa che parte è il brief, e solo quando lo invii tu.",
     "palette": "Nove palette di colore, dai pallini in alto a destra: Smeraldo, Ciano, Indaco, Magenta, Corallo, Ambra, Lime, Blu, Rubino. Ognuna è calcolata perché il testo resti leggibile su fondo scuro e su carta.",
     "interactions": [
       "Cambiare il colore di tutto il sito",
@@ -234,7 +234,7 @@
       "Che supporto cerchi?",
       "Come posso ricontattarti? (nome ed email obbligatori; azienda, fascia di investimento e nota facoltative)"
     ],
-    "data": "Il brief viene compilato nel tuo browser. Il sito non salva e non invia niente: alla fine si copia il riepilogo oppure si apre il programma di posta con il testo già dentro e lo mandi tu."
+    "data": "Il brief si compila nel tuo browser. Quando lo invii, nome, email e risposte arrivano a Fabrizio per email tramite il servizio FormSubmit. Il sito non le conserva. Se l'invio automatico non riesce, si apre il programma di posta con il testo già dentro."
   },
   "pricing": {
     "note": "Sul sito non ci sono prezzi né listini.",
@@ -266,7 +266,7 @@
     },
     {
       "q": "Il brief invia i miei dati?",
-      "a": "No. Il brief resta nel tuo browser: il sito non salva e non invia niente. A fine compilazione copi il riepilogo o apri il programma di posta con il testo già scritto e lo mandi tu."
+      "a": "Sì, ma solo quando lo invii tu. Alla fine del brief e dopo il tuo consenso, la richiesta arriva a Fabrizio per email. Il sito non salva i dati. Se l'invio non riesce, puoi mandarla dal tuo programma di posta o copiare il riepilogo."
     },
     {
       "q": "Quali sono i lavori visibili sul sito?",

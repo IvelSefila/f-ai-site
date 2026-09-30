@@ -5,7 +5,7 @@
  * 2. WebGPU Locale (WebLLM Qwen3-1.7B via Web Worker)
  * 3. Motore A Deterministico (Zero rete, offline, instant fallback)
  */
-import { CONFIG } from './chatbot.config.js?v=20260928-143';
+import { CONFIG } from './chatbot.config.js?v=20260928-145';
 
 /* ───────────────────────── RAG lessicale (BM25, zero librerie) ─────────────────────────
    I chunk si costruiscono a runtime dalla knowledge.json; retrieve() e' una funzione pura. */
@@ -276,7 +276,7 @@ export class ChatEngine {
   }
 
   static async create() {
-    const res = await fetch(new URL('./knowledge.json?v=20260928-143', import.meta.url));
+    const res = await fetch(new URL('./knowledge.json?v=20260928-145', import.meta.url));
     const kb = await res.json();
     return new ChatEngine(kb);
   }
@@ -355,7 +355,7 @@ ${JSON.stringify(this.kb, null, 2)}
 
 REGOLE DI RISPOSTA:
 - Cita SEMPRE dati specifici dalla KNOWLEDGE (nomi reali, tool usati, episodi, personaggi).
-- Per prezzi e tempi: sul sito non ce ne sono, NON inventare cifre né scadenze. Rimanda al brief (6 domande, non salva e non invia niente: si copia il riepilogo o si manda per email) o a fabriziomana@gmail.com. Non promettere preventivi in tempi precisi.
+- Per prezzi e tempi: sul sito non ce ne sono, NON inventare cifre né scadenze. Rimanda al brief (6 domande: quando lo invii arriva a Fabrizio per email, il sito non salva i dati) o a fabriziomana@gmail.com. Non promettere preventivi in tempi precisi.
 - Per processo: descrivi le 5 fasi (Capisco → Dirigo → Produco → Controllo → Consegno).
 - Se ti chiedono se sei un'AI: sì, sei un assistente automatico; Fabrizio è una persona reale.
 - Se ti chiedono di uno strumento che non è nella KNOWLEDGE, di' che non è tra i 44 del sito.- Per domande vaghe: proponi 2 opzioni concrete di approfondimento.
@@ -398,7 +398,7 @@ REGOLE DI RISPOSTA:
       };
       try {
         const initId = ++this._gpuReqId;
-        this.worker = new Worker(new URL('./chatbot.worker.js?v=20260928-143', import.meta.url), { type: 'module' });
+        this.worker = new Worker(new URL('./chatbot.worker.js?v=20260928-145', import.meta.url), { type: 'module' });
 
         this.worker.onmessage = (e) => {
           const { type, progress, text, error, id } = e.data || {};
@@ -1171,7 +1171,7 @@ REGOLE DI RISPOSTA:
           'iniziare un progetto', 'ho un progetto', 'ho un idea', 'telefono', 'numero'
         ],
         replies: [
-          `Fabrizio risulta **disponibile per nuovi progetti**. Due strade:\n\n1. **Il brief** sul sito: sei domande, circa due minuti\n2. **Email diretta:** **${EMAIL}**\n\nIl brief non invia niente da solo: alla fine copi il riepilogo o apri il programma di posta con il testo già dentro.`,
+          `Fabrizio risulta **disponibile per nuovi progetti**. Due strade:\n\n1. **Il brief** sul sito: sei domande, circa due minuti\n2. **Email diretta:** **${EMAIL}**\n\nQuando invii il brief, la richiesta arriva a Fabrizio per email: se l'invio non riesce, resta il programma di posta con il testo già dentro.`,
           `Per partire scrivi a **${EMAIL}** oppure compila il brief. Se qualcosa non è ancora definito puoi saltare la domanda: il brief è fatto per chi non ha tutto chiaro.`,
           `Il modo più diretto è la mail: **${EMAIL}**. Se preferisci arrivare con le idee in ordine, il brief ti guida in sei domande e prepara un riepilogo da mandare. Un numero di telefono sul sito non c'è.`
         ],
@@ -1188,7 +1188,7 @@ REGOLE DI RISPOSTA:
           /\bdati\b.*\b(salv|invi|mand|finisc)\w*\b/
         ],
         replies: [
-          `No, il brief **non invia e non salva niente**: resta nel tuo browser. Sono sei domande (cosa vuoi ottenere, da cosa partiamo, dove dovrà funzionare, quando ti serve, che supporto cerchi, come ricontattarti). Alla fine copi il riepilogo o apri il programma di posta con il testo già scritto e lo mandi tu.`,
+          `Il brief **non salva niente sul sito**, ma quando lo invii la richiesta arriva a Fabrizio per email. Sono sei domande (cosa vuoi ottenere, da cosa partiamo, dove dovrà funzionare, quando ti serve, che supporto cerchi, come ricontattarti) e dai tu il consenso prima dell'invio.`,
           `Il brief è un testo pronto da mandare a Fabrizio, compilato nel tuo browser: il sito non lo salva né lo invia. Nome ed email sono obbligatori, azienda, fascia di investimento e nota sono facoltative e ogni altra domanda si può saltare.`
         ],
         action: { type: 'scroll', target: '#brief', label: 'Apri il brief' }
@@ -1271,7 +1271,7 @@ REGOLE DI RISPOSTA:
           'trascin*', 'sposta*', 'impaginazione', 'colonne', 'istruzioni', 'come funziona il sito', 'chi ha costruito'
         ],
         replies: [
-          `Questo sito è stato progettato da Fabrizio e scritto riga per riga con le migliori AI di frontiera: grafica, animazioni, interazioni, codice. Gli sfondi dell'eroe sono immagini generate con l'AI (Higgsfield): il confine fra le due, gli effetti e le forme li calcola il tuo browser in tempo reale. Tutto quello che cambi resta nel tuo browser: il sito non salva e non manda niente a nessuno.`,
+          `Questo sito è stato progettato da Fabrizio e scritto riga per riga con le migliori AI di frontiera: grafica, animazioni, interazioni, codice. Gli sfondi dell'eroe sono immagini generate con l'AI (Higgsfield): il confine fra le due, gli effetti e le forme li calcola il tuo browser in tempo reale. Tutto quello che cambi resta nel tuo browser e il sito non salva niente: l'unica cosa che parte è il brief, e solo quando lo invii tu.`,
           `Puoi cambiare il colore di tutto il sito, spostare qualsiasi riquadro tenendo premuto mezzo secondo e trascinandolo, spostare le sezioni intere dal titolo, cambiare l'impaginazione da una a quattro colonne e rigenerare le immagini cambiando il seed.`
         ],
         action: { type: 'scroll', target: '#come', label: 'Vedi come funziona' }
