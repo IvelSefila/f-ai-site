@@ -1,4 +1,4 @@
-import { accentoGL } from './palette.js?v=20260928-172';
+import { accentoGL } from './palette.js?v=20260928-174';
 /* ═══════════════════════════════════════════════════════════════════
  * materia.js — Prova 07.
  *

@@ -45,7 +45,7 @@ function apri(conFuoco) {
   banner.innerHTML = `
     <div class="cookie__testo">
       <p class="cookie__titolo" id="cookie-titolo">Cookie e privacy</p>
-      <p>Questo sito <strong>non usa cookie di profilazione</strong> e non ha pubblicità né statistiche. Ricorda le tue scelte (colori, caratteri, chat) solo nel tuo browser. Dati verso l'esterno partono solo se li usi tu: la chat con Nous in modalità cloud e l'invio del brief.</p>
+      <p>Questo sito <strong>non usa cookie di profilazione</strong> e non ha pubblicità né statistiche. Ricorda le tue scelte (colori, caratteri, chat) solo nel tuo browser. Dati verso l'esterno partono solo se li usi tu: la chat con Nous in modalità cloud e l'invio del brief. Nous può ricordarsi di te (visite e nome) nel browser, ma solo se glielo permetti tu.</p>
     </div>
     <div class="cookie__azioni">
       ${inPrivacy ? '' : '<a class="cookie__link" href="privacy.html">Leggi l\'informativa</a>'}

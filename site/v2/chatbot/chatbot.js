@@ -2,8 +2,9 @@
  * Widget Controller "Nous" — F/AI Portfolio
  * Versione 1.0 (Settembre 2026)
  */
-import { CONFIG } from './chatbot.config.js?v=20260928-172';
-import { ChatEngine } from './chatbot.engine.js?v=20260928-172';
+import { CONFIG } from './chatbot.config.js?v=20260928-174';
+import { ChatEngine } from './chatbot.engine.js?v=20260928-174';
+import * as Persona from './nous-personalita.js?v=20260928-174';
 
 /* Cosa sta girando: testi mostrati in alto e nel pannello dettagli (italiano semplice) */
 const ENGINE_INFO = {
@@ -72,6 +73,8 @@ class NodoWidget {
     this.suggerimentiSezione();
     this.vitaOrb();
     this.mostraBenvenuto();
+    this.inizializzaMemoria();
+    this.rimuginaInattivo();
     this.updateModeBadge();
 
     try {
@@ -681,12 +684,12 @@ class NodoWidget {
   fraseBenvenuto() {
     const scegli = (elenco, chiave) => {
       let ultime = [];
-      try { ultime = JSON.parse(localStorage.getItem('nodo_benv_' + chiave) || '[]'); } catch (e) {}
+      try { ultime = JSON.parse(sessionStorage.getItem('nodo_benv_' + chiave) || '[]'); } catch (e) {}
       const liberi = elenco.map((_, i) => i).filter(i => !ultime.includes(i));
       const pool = liberi.length ? liberi : elenco.map((_, i) => i);
       const i = pool[Math.floor(Math.random() * pool.length)];
       ultime = [...ultime, i].slice(-Math.min(6, Math.max(1, elenco.length - 2)));
-      try { localStorage.setItem('nodo_benv_' + chiave, JSON.stringify(ultime)); } catch (e) {}
+      try { sessionStorage.setItem('nodo_benv_' + chiave, JSON.stringify(ultime)); } catch (e) {}
       return elenco[i];
     };
     const ora = new Date().getHours();
@@ -742,62 +745,221 @@ class NodoWidget {
       'Fai con calma: io non mi stanco mai, è uno dei pochi vantaggi.',
       'Scorri pure: io ti seguo con lo sguardo.',
     ];
-    return [scegli(aperture, 'ap'), scegli(presentazioni, 'pr'), scegli(battute, 'ba'), scegli(chiusure, 'ch')].join(' ');
+    return [scegli(aperture, 'ap'), scegli(presentazioni, 'pr'), scegli([...battute, ...Persona.BATTUTE_HAL], 'ba'), scegli(chiusure, 'ch')].join(' ');
   }
 
   mostraBenvenuto() {
+    const P = Persona;
     const esc = t => String(t).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
     const spiegazione = "Qui sopra c'è l'header: lo sfondo mostra la stessa scena in due versioni. A sinistra il lavoro fatto a mano, in bianco e nero, a destra il sistema di intelligenza artificiale. Trascina per spostare il confine. In alto ci sono i colori del sito e il tasto Contatti, in basso la barra per saltare da una sezione all'altra.";
-    let giaSpiegato = false;
-    try { giaSpiegato = sessionStorage.getItem('nodo_benv_spiegato') === '1'; } catch (e) {}
     setTimeout(() => {
       if (this.isOpen || this.tourState || this.benvenuto) return;
       if (window.scrollY > innerHeight * 0.8) return;            /* e' gia' sceso: niente benvenuto fuori luogo */
-      const frase = this.fraseBenvenuto();
+
+      /* 1. cosa sa di te: la memoria del visitatore c'e' solo se hai detto di si' */
+      const consenso = P.consensoMemoria();                      /* '1' si', '0' no, null mai chiesto */
+      const v = consenso === '1' ? P.leggiVisitatore() : { visite: 0, ultima: 0, nome: '', nomeChiesto: false };
+      const ora = Date.now();
+      const minuti = v.ultima ? (ora - v.ultima) / 60000 : null;
+      const giorni = v.ultima ? Math.floor((ora - v.ultima) / 86400000) : 0;
+      const nome = v.nome || '';
+      let spiegatoInSessione = false;
+      try { spiegatoInSessione = sessionStorage.getItem('nodo_benv_spiegato') === '1'; } catch (e) {}
+      const ritorna = consenso === '1' && v.visite > 0;
+      const ricorda = ritorna || spiegatoInSessione;           /* chi torna: si chiede se vuole rivedere la spiegazione */
+
+      /* 2. cosa dice */
+      const paragrafi = [];
+      const momento = (() => { const h = new Date().getHours(); return h < 6 ? 'notte' : h < 12 ? 'mattina' : h < 18 ? 'pomeriggio' : 'sera'; })();
+      const battutaCasuale = () => P.scegli(P.BATTUTE_HAL, 'bh');
+      if (ritorna) {
+        paragrafi.push(nome ? P.riempi(P.scegli(P.CON_NOME, 'cn'), { nome }) : P.scegli(P.SALUTI_ORARIO[momento], 'so'));
+        if (minuti < 3) paragrafi.push(P.scegli(P.RITORNO_POCO, 'rp'));
+        else if (giorni >= 14) paragrafi.push(P.riempi(P.scegli(P.RITORNO_SETTIMANE, 'rs'), { giorni }));
+        else if (giorni >= 1) paragrafi.push(P.riempi(P.scegli(nome ? P.RITORNO_GIORNI_NOME : P.RITORNO_GIORNI, nome ? 'rgn' : 'rg'), { giorni, nome }));
+        const n = v.visite + 1;
+        const chiaveN = n === 3 ? 3 : n === 5 ? 5 : (n >= 10 && n % 5 === 0) ? 10 : 0;
+        if (chiaveN) paragrafi.push(P.riempi(P.scegli(P.VISITA_N[chiaveN], 'vn'), { n }));
+        if (Math.random() < 0.6) paragrafi.push(battutaCasuale());
+        paragrafi.push(nome ? P.riempi(P.scegli(P.CHIEDI_SPIEGAZIONE_NOME, 'csn'), { nome }) : P.scegli(P.CHIEDI_SPIEGAZIONE, 'cs'));
+        P.salvaVisitatore({ ...v, visite: v.visite + 1, ultima: ora });
+      } else if (spiegatoInSessione) {
+        paragrafi.push(this.fraseBenvenuto());
+        paragrafi.push(P.scegli(P.CHIEDI_SPIEGAZIONE, 'cs'));
+      } else {
+        paragrafi.push(this.fraseBenvenuto());
+      }
       try { sessionStorage.setItem('nodo_benv_spiegato', '1'); } catch (e) {}
+
+      /* 3. la nuvoletta */
       const b = document.createElement('div');
       b.className = 'nodo-tour-bubble nodo-guida nodo-benvenuto';
       b.setAttribute('role', 'status');
       b.setAttribute('aria-live', 'polite');
+      const righe = paragrafi.map(t => `<p class="nodo-guida__testo">${esc(t)}</p>`).join('');
+      const conSpiegazione = !ricorda ? `<p class="nodo-guida__testo nodo-guida__testo--corpo" data-spieg>${esc(spiegazione)}</p>` : '';
+      const pulsanti = ricorda
+        ? `<button class="nodo-guida__btn nodo-guida__btn--si" type="button" data-b="si">Sì, rispiegami</button>
+           <button class="nodo-guida__btn" type="button" data-b="no">No, grazie</button>
+           <button class="nodo-guida__btn" type="button" data-b="giro">Fammi il giro</button>`
+        : `<button class="nodo-guida__btn nodo-guida__btn--si" type="button" data-b="giro">Fammi il giro</button>
+           <button class="nodo-guida__btn" type="button" data-b="voce">Ascolta</button>
+           <button class="nodo-guida__btn" type="button" data-b="scorro">Scorro io</button>`;
+      const ricordami = consenso === null
+        ? `<div class="nodo-guida__ricordami" data-ricordami>
+             <p class="nodo-guida__testo nodo-guida__testo--corpo">${esc(P.scegli(P.CHIEDI_RICORDARMI, 'cr'))}</p>
+             <div class="nodo-guida__scelta">
+               <button class="nodo-guida__btn nodo-guida__btn--si" type="button" data-r="si">Sì, ricordami</button>
+               <button class="nodo-guida__btn" type="button" data-r="no">No, grazie</button>
+             </div>
+           </div>`
+        : '';
       b.innerHTML = `
         <button class="nodo-guida__x" type="button" aria-label="Chiudi">✕</button>
-        <p class="nodo-guida__testo">${esc(frase)}</p>
-        ${giaSpiegato ? '' : `<p class="nodo-guida__testo nodo-guida__testo--corpo">${esc(spiegazione)}</p>`}
-        <div class="nodo-guida__scelta">
-          <button class="nodo-guida__btn nodo-guida__btn--si" type="button" data-b="giro">Fammi il giro</button>
-          <button class="nodo-guida__btn" type="button" data-b="voce">Ascolta</button>
-          <button class="nodo-guida__btn" type="button" data-b="scorro">Scorro io</button>
-        </div>`;
+        <div data-testi>${righe}${conSpiegazione}</div>
+        <div class="nodo-guida__scelta" data-pulsanti>${pulsanti}</div>
+        ${ricordami}
+        <div data-extra></div>`;
       document.body.appendChild(b);
       this.benvenuto = b;
       this.elements.fab?.classList.add('nodo-saluta');
       const chiudi = () => this.chiudiBenvenuto();
+      const testi = b.querySelector('[data-testi]');
+      const extra = b.querySelector('[data-extra]');
+      const riga = (t, corpo) => { const p = document.createElement('p'); p.className = 'nodo-guida__testo' + (corpo ? ' nodo-guida__testo--corpo' : ''); p.textContent = t; testi.appendChild(p); return p; };
       b.querySelector('.nodo-guida__x').addEventListener('click', chiudi);
-      b.querySelector('[data-b="scorro"]').addEventListener('click', chiudi);
-      b.querySelector('[data-b="giro"]').addEventListener('click', () => { chiudi(); this.startStudioTour(); });
-      const bv = b.querySelector('[data-b="voce"]');
-      /* la frase e' nuova ogni volta e non esiste una registrazione: si legge con la voce del browser, senza nessuna chiamata di rete */
-      bv.addEventListener('click', () => {
-        if ('speechSynthesis' in window && window.speechSynthesis.speaking) { this.stopSpeaking(); bv.textContent = 'Ascolta'; return; }
-        const prima = this.voiceEnabled;
-        this.voiceEnabled = true;
-        this.stopSpeaking();
-        this.fallbackBrowserSpeech(this.cleanTextForSpeech(frase + (giaSpiegato ? '' : ' ' + spiegazione)));
-        this.voiceEnabled = prima;
-        bv.textContent = 'Ferma';
-        const fine = setInterval(() => {
-          if (!('speechSynthesis' in window) || !window.speechSynthesis.speaking) { bv.textContent = 'Ascolta'; clearInterval(fine); }
-        }, 500);
+
+      const leggi = () => Array.from(testi.querySelectorAll('p')).map(p => p.textContent).join(' ');
+      const collegaPulsanti = () => {
+        b.querySelector('[data-b="scorro"]')?.addEventListener('click', chiudi);
+        b.querySelector('[data-b="giro"]')?.addEventListener('click', () => { chiudi(); this.startStudioTour(); });
+        const bv = b.querySelector('[data-b="voce"]');
+        /* la frase e' nuova ogni volta e non esiste una registrazione: si legge con la voce del browser, senza nessuna chiamata di rete */
+        bv?.addEventListener('click', () => {
+          if ('speechSynthesis' in window && window.speechSynthesis.speaking) { this.stopSpeaking(); bv.textContent = 'Ascolta'; return; }
+          const prima = this.voiceEnabled;
+          this.voiceEnabled = true;
+          this.stopSpeaking();
+          this.fallbackBrowserSpeech(this.cleanTextForSpeech(leggi()));
+          this.voiceEnabled = prima;
+          bv.textContent = 'Ferma';
+          const fine = setInterval(() => {
+            if (!('speechSynthesis' in window) || !window.speechSynthesis.speaking) { bv.textContent = 'Ascolta'; clearInterval(fine); }
+          }, 500);
+        });
+      };
+      collegaPulsanti();
+
+      /* "Sì, rispiegami" / "No, grazie" per chi torna */
+      b.querySelector('[data-b="si"]')?.addEventListener('click', () => {
+        riga(P.scegli(P.RISPOSTA_SI, 'rsi'));
+        riga(spiegazione, true);
+        const blocco = b.querySelector('[data-pulsanti]');
+        blocco.innerHTML = `<button class="nodo-guida__btn nodo-guida__btn--si" type="button" data-b="giro">Fammi il giro</button>
+          <button class="nodo-guida__btn" type="button" data-b="voce">Ascolta</button>
+          <button class="nodo-guida__btn" type="button" data-b="scorro">Ok, scorro io</button>`;
+        collegaPulsanti();
       });
+      b.querySelector('[data-b="no"]')?.addEventListener('click', () => {
+        testi.innerHTML = '';
+        riga(P.scegli(P.RISPOSTA_NO, 'rno'));
+        b.querySelector('[data-pulsanti]').innerHTML = '';
+        b.querySelector('[data-ricordami]')?.remove();
+        setTimeout(chiudi, 3800);
+      });
+
+      /* il nome: si chiede solo a chi ha detto di si' alla memoria */
+      const chiediNome = () => {
+        riga(P.scegli(P.CHIEDI_NOME_LUNGHE.concat(P.CHIEDI_NOME_CORTE), 'cn2'), true);
+        extra.innerHTML = `<form class="nodo-brief-contatti nodo-guida__nome" novalidate>
+            <input name="nome" type="text" maxlength="30" autocomplete="given-name" placeholder="Il tuo nome" aria-label="Il tuo nome" />
+            <div class="nodo-guida__scelta">
+              <button class="nodo-guida__btn nodo-guida__btn--si" type="submit">Ok</button>
+              <button class="nodo-guida__btn" type="button" data-salta>Preferisco di no</button>
+            </div>
+          </form>`;
+        const f = extra.querySelector('form');
+        f.nome.focus({ preventScroll: true });
+        const salva = (n) => { const x = P.leggiVisitatore(); P.salvaVisitatore({ ...x, nome: n, nomeChiesto: true }); };
+        f.addEventListener('submit', e => {
+          e.preventDefault();
+          const n = P.nomeValido(f.nome.value);
+          if (!n) { f.nome.focus(); return; }
+          salva(n);
+          extra.innerHTML = '';
+          riga(P.riempi(P.scegli(P.NOME_OK, 'nok'), { nome: n }));
+        });
+        f.querySelector('[data-salta]').addEventListener('click', () => {
+          salva('');
+          extra.innerHTML = '';
+          riga(P.scegli(P.NOME_SALTA, 'nsa'));
+        });
+      };
+
+      /* la scelta "ricordami": senza un si' esplicito non viene scritto niente */
+      b.querySelector('[data-r="si"]')?.addEventListener('click', () => {
+        P.impostaConsensoMemoria(true);
+        P.salvaVisitatore({ visite: 1, ultima: ora, nome: '', nomeChiesto: false });
+        b.querySelector('[data-ricordami]')?.remove();
+        riga(P.scegli(P.RICORDARMI_SI, 'rmsi'));
+        chiediNome();
+      });
+      b.querySelector('[data-r="no"]')?.addEventListener('click', () => {
+        P.impostaConsensoMemoria(false);
+        b.querySelector('[data-ricordami]')?.remove();
+        riga(P.scegli(P.RICORDARMI_NO, 'rmno'));
+      });
+
+      /* se sei tornato e non ti ha ancora chiesto il nome, lo fa una volta sola */
+      if (ritorna && !v.nome && !v.nomeChiesto) setTimeout(() => { if (this.benvenuto === b) chiediNome(); }, 1500);
+
       this.stopSpeakingSeBenvenuto = () => { if ('speechSynthesis' in window) window.speechSynthesis.cancel(); };
       /* quando si scende oltre l'header il benvenuto ha fatto il suo dovere */
       const hero = document.querySelector('#top');
       if (hero && 'IntersectionObserver' in window) {
-        const io = new IntersectionObserver(es => { if (!es[0].isIntersecting) { chiudi(); io.disconnect(); } }, { threshold: 0 });
+        const io = new IntersectionObserver(es => { if (!es[0].isIntersecting && !b.querySelector('form')) { chiudi(); io.disconnect(); } }, { threshold: 0 });
         io.observe(hero);
       }
-      setTimeout(chiudi, 60000);
+      setTimeout(chiudi, 90000);
     }, 3800);
+  }
+
+  /* Interruttore nel piede: "Memoria di Nous" dimentica tutto quello che il browser sa del visitatore e rimette la domanda. */
+  inizializzaMemoria() {
+    document.addEventListener('click', e => {
+      const t = e.target instanceof Element ? e.target.closest('[data-nous-memoria]') : null;
+      if (!t) return;
+      e.preventDefault();
+      Persona.dimenticaVisitatore();
+      this.showToast('Ho dimenticato tutto di te. La prossima volta ti chiederò di nuovo se vuoi essere ricordato.', false, 3200);
+    });
+  }
+
+  /* Se resti fermo e inattivo, Nous ogni tanto dice una microfrase da macchina. Al massimo due per visita, mai a chat aperta,
+     mai durante la visita guidata e solo se i suggerimenti non sono spenti. */
+  rimuginaInattivo() {
+    const hint = this.elements.hint;
+    const testoEl = hint?.querySelector('.nodo-hint-testo');
+    if (!hint || !testoEl) return;
+    let ultimaAttivita = Date.now();
+    const segna = () => { ultimaAttivita = Date.now(); };
+    for (const ev of ['pointermove', 'pointerdown', 'keydown', 'scroll', 'touchstart']) window.addEventListener(ev, segna, { passive: true });
+    let dette = 0;
+    try { dette = Number(sessionStorage.getItem('nodo_rimugina') || 0); } catch (e) {}
+    const esc = t => String(t).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+    setInterval(() => {
+      if (document.hidden || dette >= 2 || this.isOpen || this.tourState || this.benvenuto) return;
+      if (hint.classList.contains('is-visible')) return;
+      try { if (localStorage.getItem('nodo_sugg_off') === '1') return; } catch (e) {}
+      if (Date.now() - ultimaAttivita < 55000) return;
+      const frase = Persona.scegli([...Persona.RIMUGINA, ...Persona.RIMUGINA_HAL], 'rim');
+      testoEl.innerHTML = `<b>Nous</b> · ${esc(frase)}`;
+      hint.classList.add('is-visible', 'is-sezione');
+      setTimeout(() => hint.classList.remove('is-visible'), 9000);
+      dette += 1;
+      try { sessionStorage.setItem('nodo_rimugina', String(dette)); } catch (e) {}
+      ultimaAttivita = Date.now();
+    }, 10000);
   }
 
   /* ── Nous e' viva ──────────────────────────────────────────────────

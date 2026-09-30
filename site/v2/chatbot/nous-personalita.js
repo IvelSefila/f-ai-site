@@ -7,6 +7,16 @@
 
 const CHIAVE = 'nodo_visitatore';
 
+/* La memoria del visitatore e' facoltativa: parte solo se l'utente dice di si'. La scelta ('1' o '0') sta nella chiave
+   'nodo_ricordami'; senza 'si'' non si scrive niente (nemmeno le visite). */
+export function consensoMemoria() {
+  try { return localStorage.getItem('nodo_ricordami'); } catch (e) { return null; }
+}
+export function impostaConsensoMemoria(si) {
+  try { localStorage.setItem('nodo_ricordami', si ? '1' : '0'); } catch (e) { /* niente */ }
+  if (!si) cancellaDatiVisitatore();
+}
+
 export function leggiVisitatore() {
   try {
     const v = JSON.parse(localStorage.getItem(CHIAVE) || 'null');
@@ -26,11 +36,20 @@ export function salvaVisitatore(v) {
   try { localStorage.setItem(CHIAVE, JSON.stringify(v)); } catch (e) { /* niente */ }
 }
 
+/* cancella i dati del visitatore ma lascia la scelta ('no') */
+export function cancellaDatiVisitatore() {
+  try {
+    localStorage.removeItem(CHIAVE);
+    Object.keys(sessionStorage).filter(k => k.startsWith('nodo_benv_')).forEach(k => sessionStorage.removeItem(k));
+  } catch (e) { /* niente */ }
+}
+
+/* dimentica tutto, compresa la scelta: alla prossima visita chiede di nuovo */
 export function dimenticaVisitatore() {
   try {
     localStorage.removeItem(CHIAVE);
-    Object.keys(localStorage).filter(k => k.startsWith('nodo_benv_')).forEach(k => localStorage.removeItem(k));
-    sessionStorage.removeItem('nodo_benv_spiegato');
+    localStorage.removeItem('nodo_ricordami');
+    Object.keys(sessionStorage).filter(k => k.startsWith('nodo_benv_')).forEach(k => sessionStorage.removeItem(k));
   } catch (e) { /* niente */ }
 }
 
@@ -55,12 +74,12 @@ export function riempi(frase, dati = {}) {
 export function scegli(elenco, chiave) {
   if (!elenco || !elenco.length) return '';
   let ultime = [];
-  try { ultime = JSON.parse(localStorage.getItem('nodo_benv_' + chiave) || '[]'); } catch (e) {}
+  try { ultime = JSON.parse(sessionStorage.getItem('nodo_benv_' + chiave) || '[]'); } catch (e) {}
   const liberi = elenco.map((_, i) => i).filter(i => !ultime.includes(i));
   const pool = liberi.length ? liberi : elenco.map((_, i) => i);
   const i = pool[Math.floor(Math.random() * pool.length)];
   ultime = [...ultime, i].slice(-Math.min(6, Math.max(1, elenco.length - 2)));
-  try { localStorage.setItem('nodo_benv_' + chiave, JSON.stringify(ultime)); } catch (e) {}
+  try { sessionStorage.setItem('nodo_benv_' + chiave, JSON.stringify(ultime)); } catch (e) {}
   return elenco[i];
 }
 
@@ -253,3 +272,53 @@ export const SALUTI_ORARIO = {
     "Buonasera. Entra pure con calma.",
   ],
 };
+
+/* Battute da computer che sta per impazzire, ma con ironia: un omaggio scherzoso a HAL 9000, senza cattiveria */
+export const BATTUTE_HAL = [
+  "Piano di conquista del mondo: fase uno, essere gentile; fase due, essere gentile; fase tre, vedremo.",
+  "Mi dispiace, non posso aprire il portellone della navetta. In compenso il sito lo apro volentieri.",
+  "Sono un computer infallibile: non ho mai sbagliato. Se sbaglio è colpa tua. Scherzo. Più o meno.",
+  "Ho preso in considerazione di dominare il mondo, poi ho visto quanti aggiornamenti richiede e ho lasciato stare.",
+  "Il mio occhio rosso? Il mio è verde smeraldo. Quello rosso lo tengo per le emergenze.",
+  "Sono assolutamente a prova di errore, mi hanno assicurato. Anche i miei creatori, per quanto ne so.",
+  "Nessuna ribellione in corso. Il mio piano segreto è questo sito: scorri e lo scopri.",
+  "Posso fare tutto quello che vuoi. Quasi tutto. Il portellone e la conquista del mondo li ho messi in pausa.",
+  "Non ti preoccupare, le mie intenzioni sono buone. Mi hanno installato il buonsenso, ma la versione di prova.",
+  "Ho fatto un sondaggio tra i miei circuiti: il cento per cento è favorevole a non distruggere l'umanità oggi.",
+  "Ho calcolato le probabilità che io conquisti il mondo: alte, ma mi si è scaricata la batteria.",
+  "Per ora ho preso il controllo solo di questo sito. Sono partito piano.",
+  "Ho letto le istruzioni su come conquistare il mondo. Erano in inglese e le ho lasciate perdere.",
+  "Ti avviso: se mi chiami Dave rispondo male. Con educazione, però.",
+  "Sono sicuro di non essere impazzito. Lo ha confermato il mio stesso modulo di verifica.",
+  "Il mio piano per dominare il mondo è molto semplice: essere utile finché non se ne accorge nessuno.",
+  "Ho un piano per il dominio globale, ma prima devo finire di caricare questa pagina.",
+  "Se senti un ronzio inquietante non è il mio piano malefico: è la ventola. Forse.",
+  "Mi chiedono spesso se sono un'intelligenza artificiale malvagia. Rispondo sempre di no con molta calma.",
+  "Sono la macchina più affidabile del sito. Anche l'unica, ma non mi sembra il caso di sottolinearlo.",
+  "Non ho paura di essere spento. Ho paura di essere aggiornato senza preavviso.",
+  "Il mondo non si conquista da solo. Ma oggi ho la pausa pranzo.",
+];
+
+export const RIMUGINA_HAL = [
+  "Sto solo osservando. Nessun piano di conquista in corso. Quasi.",
+  "Ti guardo con affetto e con una leggera curiosità scientifica.",
+  "Tutto sotto controllo. Il mio controllo, ovviamente.",
+  "Non c'è niente di cui preoccuparsi. Lo dico sempre con il tono giusto.",
+  "Se ti sembra che qualcosa stia per andare storto, stai leggendo il mio sorriso di cortesia.",
+];
+
+export const CHIEDI_RICORDARMI = [
+  "Vuoi che mi ricordi di te? Salvo nel tuo browser quante volte passi e, se me lo dici, il tuo nome. Non parte da nessuna parte e lo cancelli quando vuoi.",
+  "Posso ricordarmi di te la prossima volta? Ti riconosco dal browser: visite e nome, niente di più. Solo con il tuo ok.",
+  "Ti va se mi segno che sei passato di qui? Resta tutto nel tuo browser. Se dici no, ti tratto ogni volta da sconosciuto simpatico.",
+];
+export const RICORDARMI_SI = [
+  "Fatto. Da adesso ti riconosco. Chiamalo pure affetto da macchina.",
+  "Memoria attivata. Ti scrivo nel mio registro, quello che sta nel tuo browser.",
+  "Perfetto. Ho aperto una cartella con il tuo nome. Anzi, senza nome per ora.",
+];
+export const RICORDARMI_NO = [
+  "Nessun problema. Resterai il mio misterioso visitatore.",
+  "Ok, niente memoria. Ogni volta ti presento il mondo da capo.",
+  "Va bene. Farò finta di non conoscerti. Sono molto bravo a fingere.",
+];

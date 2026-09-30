@@ -4493,3 +4493,9 @@ body.mirino-on, body.mirino-on * { cursor: none !important; }
 .eso__360-maniglia:hover, .eso__360-maniglia:focus-visible { opacity: 1 !important; border-color: var(--em-bright); background: color-mix(in srgb, var(--em) 28%, transparent); }
 .eso__360-maniglia:active { transform: scale(.92); }
 .eso__360-maniglia:focus-visible { outline: 2px solid var(--em-bright); outline-offset: 3px; }
+
+/* Hero desktop: i pulsanti stanno a meta' fra il carosello dei lavori e la fine del blocco (stesso spazio sopra e sotto) */
+@media (min-width: 901px) {
+  .hero { --gap-az: clamp(120px, 12vw, 190px); padding-bottom: calc(var(--gap-az) - 36px) !important; }
+  .hero__actions { margin-top: var(--gap-az) !important; margin-bottom: 36px !important; }
+}
