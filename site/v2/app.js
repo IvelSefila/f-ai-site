@@ -2,19 +2,19 @@
 * app.js — la sessione. Tiene il filo fra le prove, parla, misura,
 * e alla fine scrive il dossier. Nessuna libreria.
 * ═══════════════════════════════════════════════════════════════════ */
-import { initTipografia } from './tipografia.js?v=20260928-167';
+import { initTipografia } from './tipografia.js?v=20260928-172';
 initTipografia();
 // cursore a mirino tolto su richiesta (mirino.js resta nel progetto)
-import { initHero } from './hero.js?v=20260928-167';
-import { initStrumenti } from './strumenti.js?v=20260928-167';
-import { initUnion } from './union.js?v=20260928-167';
-import { initEso } from './eso.js?v=20260928-167';
-import { initLocanda } from './locanda.js?v=20260928-167';
-import { initCest } from './cest.js?v=20260928-167';
-import { initPalette } from './palette.js?v=20260928-167';
-import { keyVisual, radar, MODES, rng, leggiColori} from './engine.js?v=20260928-167';
-import { initBrief } from './brief.js?v=20260928-167';
-import { initServizi } from './servizi.js?v=20260928-167';
+import { initHero } from './hero.js?v=20260928-172';
+import { initStrumenti } from './strumenti.js?v=20260928-172';
+import { initUnion } from './union.js?v=20260928-172';
+import { initEso } from './eso.js?v=20260928-172';
+import { initLocanda } from './locanda.js?v=20260928-172';
+import { initCest } from './cest.js?v=20260928-172';
+import { initPalette } from './palette.js?v=20260928-172';
+import { keyVisual, radar, MODES, rng, leggiColori} from './engine.js?v=20260928-172';
+import { initBrief } from './brief.js?v=20260928-172';
+import { initServizi } from './servizi.js?v=20260928-172';
 
 const $ = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => [...r.querySelectorAll(s)];
@@ -1341,7 +1341,13 @@ $$('.eso__360-stage').forEach(stage360 => {
   function precarica360() {
     if (pronto) return;
     pronto = true;
-    for (let i = 1; i < TOT; i++) {
+    /* Prima i fotogrammi vicini al frontale (quelli che servono al dondolio e al giro), poi gli altri, a gruppi
+       di 6 ogni ~90 ms e solo quando il browser e' libero: decodificarli tutti insieme saturava il processore
+       nel momento in cui partiva la voce della visita guidata, e l'audio andava a tratti. */
+    const ordine = [];
+    for (let k = 1; k <= TOT / 2; k++) { ordine.push(k); if (TOT - k !== k) ordine.push(TOT - k); }
+    const caricaUno = i => {
+      if (i <= 0 || i >= TOT || cache360[i]) return;
       const im = new Image();
       im.src = src360(i);
       cache360[i] = im;
@@ -1351,7 +1357,16 @@ $$('.eso__360-stage').forEach(stage360 => {
       });
       if (im.decode) im.decode().then(segnaPronto).catch(segnaPronto);
       else im.addEventListener('load', segnaPronto);
-    }
+    };
+    let n = 0;
+    const gruppo = () => {
+      for (let k = 0; k < 6 && n < ordine.length; k++) caricaUno(ordine[n++]);
+      if (n < ordine.length) {
+        const prossimo = () => setTimeout(gruppo, 90);
+        if ('requestIdleCallback' in window) requestIdleCallback(prossimo, { timeout: 400 }); else prossimo();
+      }
+    };
+    gruppo();
   }
   const io360 = new IntersectionObserver(es => {
     es.forEach(e => { if (e.isIntersecting) { precarica360(); io360.disconnect(); } });

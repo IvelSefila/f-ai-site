@@ -20,6 +20,7 @@
       "highlights": [
         "9 pezzi di campagna, nessuna ripresa dal vivo, 4:09 di girato in tutto",
         "Un universo parallelo dove una cometa a forma di zero azzera le bollette e gli animali diventano bipedi che parlano",
+        "Marco, un personaggio creato interamente con l'AI, fa da volto umano per le campagne",
         "Voci generate dentro Omni insieme al video, o con ElevenLabs quando serve la stessa voce da un episodio all'altro"
       ],
       "challenge": "Brand identity dentro un marchio che esisteva già: raccontare l'energia pulita senza fare una lezione, con una storia che continua a crescere.",
@@ -34,7 +35,7 @@
         { "title": "La cometa a forma di zero", "desc": "L'origine di tutto: una cometa a forma di 0 entra nell'atmosfera e nasce il mondo parallelo." },
         { "title": "Insieme si può", "desc": "Il pezzo lungo (1:18): la richiesta di partecipazione e il gancio finale, sottotitolato." },
         { "title": "Rapito dalle bollette", "desc": "Un uomo sollevato in cielo da un disco volante sopra un prato: le bollette che ti portano via." },
-        { "title": "Marco", "desc": "Sembra una ripresa dal vivo in un viale alberato e non lo è: persona, luce e movimento sono tutti generati." },
+        { "title": "Marco", "desc": "Marco è il volto umano delle campagne, un personaggio creato interamente con l'AI: sembra una ripresa dal vivo in un viale alberato e non lo è, persona, luce e movimento sono tutti generati." },
         { "title": "Quanto ti costa la tua casa", "desc": "Un dialogo fra due persone su una panchina. L'unico video orizzontale della serie (1:08)." }
       ],
       "section_id": "caso-union"
@@ -234,7 +235,7 @@
       "Che supporto cerchi?",
       "Come posso ricontattarti? (nome ed email obbligatori; azienda, fascia di investimento e nota facoltative)"
     ],
-    "data": "Il brief si compila nel tuo browser. Quando lo invii, nome, email e risposte arrivano a Fabrizio per email tramite il servizio FormSubmit. Il sito non le conserva. Se l'invio automatico non riesce, si apre il programma di posta con il testo già dentro."
+    "data": "Il brief si compila nel tuo browser. Quando lo invii, nome, email e risposte arrivano a Fabrizio per email tramite il servizio di posta Resend. Il sito non le conserva. Se l'invio automatico non riesce, si apre il programma di posta con il testo già dentro."
   },
   "pricing": {
     "note": "Sul sito non ci sono prezzi né listini.",

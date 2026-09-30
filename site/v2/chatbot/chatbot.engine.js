@@ -5,7 +5,7 @@
  * 2. WebGPU Locale (WebLLM Qwen3-1.7B via Web Worker)
  * 3. Motore A Deterministico (Zero rete, offline, instant fallback)
  */
-import { CONFIG } from './chatbot.config.js?v=20260928-167';
+import { CONFIG } from './chatbot.config.js?v=20260928-172';
 
 /* ───────────────────────── RAG lessicale (BM25, zero librerie) ─────────────────────────
    I chunk si costruiscono a runtime dalla knowledge.json; retrieve() e' una funzione pura. */
@@ -276,7 +276,7 @@ export class ChatEngine {
   }
 
   static async create() {
-    const res = await fetch(new URL('./knowledge.json?v=20260928-167', import.meta.url));
+    const res = await fetch(new URL('./knowledge.json?v=20260928-172', import.meta.url));
     const kb = await res.json();
     return new ChatEngine(kb);
   }
@@ -398,7 +398,7 @@ REGOLE DI RISPOSTA:
       };
       try {
         const initId = ++this._gpuReqId;
-        this.worker = new Worker(new URL('./chatbot.worker.js?v=20260928-167', import.meta.url), { type: 'module' });
+        this.worker = new Worker(new URL('./chatbot.worker.js?v=20260928-172', import.meta.url), { type: 'module' });
 
         this.worker.onmessage = (e) => {
           const { type, progress, text, error, id } = e.data || {};
@@ -788,7 +788,7 @@ REGOLE DI RISPOSTA:
           'luce e gas', 'baldizzone', 'roberto', 'campagna union', 'azzeriamola'
         ],
         replies: [
-          `**Union Energia** — *un mondo dove le bollette sono andate a zero.*\n\nUn universo parallelo dove una cometa a forma di 0 azzera le bollette e gli animali diventano bipedi che parlano: Davide l'alpaca, Luca l'asino e gli altri. Energia pulita raccontata senza fare una lezione.\n\n• **9 pezzi**, nessuna ripresa dal vivo\n• **Strumenti:** GPT Image, Gemini Omni, Adobe Premiere Pro, ElevenLabs, Lyria\n• Lavoro per Roberto Baldizzone, dentro un marchio che esisteva già`,
+          `**Union Energia** — *un mondo dove le bollette sono andate a zero.*\n\nUn universo parallelo dove una cometa a forma di 0 azzera le bollette e gli animali diventano bipedi che parlano: Davide l'alpaca, Luca l'asino e gli altri. A fare da volto umano alle campagne c'è **Marco**, un personaggio creato interamente con l'AI. Energia pulita raccontata senza fare una lezione.\n\n• **9 pezzi**, nessuna ripresa dal vivo\n• **Strumenti:** GPT Image, Gemini Omni, Adobe Premiere Pro, ElevenLabs, Lyria\n• Lavoro per Roberto Baldizzone, dentro un marchio che esisteva già`,
           `Union Energia è la campagna con il mondo inventato: nove pezzi, senza una ripresa dal vivo.\n\nI pezzi nascono come immagini con **GPT Image**, si muovono con **Gemini Omni** e si montano in **Adobe Premiere Pro**, con ritmo, sottotitoli e grafica di campagna. Il sito la definisce una storia che continua a crescere.`,
           `9 pezzi, 4:09 di girato in tutto e nessuna ripresa dal vivo: è **Union Energia**.\n\nLe voci sono generate dentro Omni insieme al video, oppure con ElevenLabs quando serve la stessa voce da un episodio all'altro. La musica è in parte di Lyria e in parte presa da librerie con licenza commerciale.`
         ],
@@ -803,8 +803,8 @@ REGOLE DI RISPOSTA:
           /\b(chi e|chi sono|cos e)\b.*\b(davide|luca|marco)\b/
         ],
         replies: [
-          `I personaggi di **Union Energia**:\n\n• **Davide l'alpaca** — compare nei corti che lo presentano, davanti a una pompa di benzina o alla porta di casa con la bolletta\n• **Luca l'asino** — lo trovi sommerso da un mare di bollette in salotto\n• **Marco** — sembra una ripresa dal vivo in un viale alberato, ma persona, luce e movimento sono tutti generati`,
-          `Davide l'alpaca, Luca l'asino e Marco. I primi due sono animali che parlano nell'universo inventato della campagna; Marco è una persona che sembra vera e non lo è: **Gemini Omni** costruisce anche i personaggi che sembrano persone.\n\nSe serve la stessa voce da un episodio all'altro, si usa **ElevenLabs**.`
+          `I personaggi di **Union Energia**:\n\n• **Davide l'alpaca** — compare nei corti che lo presentano, davanti a una pompa di benzina o alla porta di casa con la bolletta\n• **Luca l'asino** — lo trovi sommerso da un mare di bollette in salotto\n• **Marco** — il volto umano delle campagne, un personaggio creato interamente con l'AI: sembra una ripresa dal vivo in un viale alberato, ma persona, luce e movimento sono tutti generati`,
+          `Davide l'alpaca, Luca l'asino e Marco. I primi due sono animali che parlano nell'universo inventato della campagna; Marco è il volto umano delle campagne, un personaggio creato interamente con l'AI: sembra una persona vera e non lo è. **Gemini Omni** costruisce anche i personaggi che sembrano persone.\n\nSe serve la stessa voce da un episodio all'altro, si usa **ElevenLabs**.`
         ],
         action: { type: 'video_union', target: '#caso-union', label: 'Vedi i personaggi' }
       },

@@ -311,40 +311,39 @@ function createBriefController() {
       inviaPerEmail(built);
     }
 
-    /* Invio automatico a Fabrizio. Parte SOLO qui: alla conferma dell'ultimo passo, dopo il
-       consenso spuntato dall'utente. Il servizio e' FormSubmit (nessun server nostro, niente
-       chiavi nel sito). Se non risponde resta il tasto della posta: nessuna richiesta si perde. */
+    /* Invio automatico a Fabrizio. Parte SOLO qui: alla conferma dell'ultimo passo, dopo il consenso spuntato
+       dall'utente. Il brief va al Worker Cloudflare del sito (/brief), che lo inoltra per email tramite Resend:
+       nessuna chiave sta nella pagina. Se l'invio non riesce resta il tasto della posta: nessuna richiesta si perde. */
+    const BRIEF_ENDPOINT = 'https://nodo-proxy.fabrizio-mana.workers.dev/brief';
     let invioInCorso = false, inviato = false;
     async function inviaPerEmail(built) {
       if (inviato || invioInCorso) return;
-      const recapito = document.getElementById('recapito');
-      const indirizzo = ((recapito && recapito.getAttribute('href')) || '').replace(/^mailto:/i, '').split('?')[0];
-      if (!indirizzo) return;
       invioInCorso = true;
       if (summaryStatus) summaryStatus.textContent = "Sto inviando la richiesta a Fabrizio…";
       try {
-        const risposta = await fetch('https://formsubmit.co/ajax/' + encodeURIComponent(indirizzo), {
+        const ctrl = new AbortController();
+        const timer = setTimeout(() => ctrl.abort(), 15000);
+        const risposta = await fetch(BRIEF_ENDPOINT, {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+          signal: ctrl.signal,
+          headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
-            _subject: 'Nuovo brief dal sito MF/AI — ' + (built.projectLabel || 'progetto'),
-            _template: 'table',
-            _captcha: 'false',
-            _honey: '',
             name: fieldValue('name'),
             email: fieldValue('email'),
-            company: fieldValue('company') || 'Non indicata',
+            company: fieldValue('company'),
             budget: readable('budget', fieldValue('budget')),
             message: built.text,
+            website: '',
           }),
         });
+        clearTimeout(timer);
         const dati = await risposta.json().catch(() => ({}));
-        if (risposta.ok && String(dati.success) !== 'false') {
+        if (risposta.ok && dati.ok) {
           inviato = true;
           if (summaryStatus) summaryStatus.textContent = "Richiesta inviata a Fabrizio. Ti risponde all'email che hai indicato.";
           document.dispatchEvent(new CustomEvent('brief:inviato'));
         } else {
-          throw new Error(dati.message || 'invio non riuscito');
+          throw new Error('invio non riuscito');
         }
       } catch (_) {
         if (summaryStatus) summaryStatus.textContent = "Non sono riuscito a inviarla in automatico. Usa «Mandamelo per email» qui sotto: il testo è già pronto.";

@@ -48,7 +48,7 @@
     <ul>
       <li><strong>Perché:</strong> per rispondere alla tua richiesta e, se vuoi, preparare un preventivo.</li>
       <li><strong>Base giuridica:</strong> il tuo consenso, che dai spuntando la casella prima dell'invio, e le misure precontrattuali richieste da te (art. 6, par. 1, lett. a e b GDPR).</li>
-      <li><strong>Come viaggiano:</strong> quando premi «Invia la richiesta» il testo arriva al mio indirizzo email tramite il servizio FormSubmit. Il sito non ha un database e non conserva nulla.</li>
+      <li><strong>Come viaggiano:</strong> quando premi «Invia la richiesta» il testo passa dal Worker di Cloudflare del sito e arriva al mio indirizzo email tramite il servizio di posta Resend. Il sito non ha un database e non conserva nulla.</li>
       <li>Conferire i dati è facoltativo, ma senza nome ed email non posso risponderti.</li>
     </ul>
 
@@ -94,7 +94,8 @@
     <p>Per far funzionare queste parti mi appoggio a fornitori che possono trattare dati fuori dallo Spazio Economico Europeo, in particolare negli Stati Uniti. Questo avviene con le garanzie previste dalla normativa (decisione di adeguatezza o clausole contrattuali standard), secondo le informative dei rispettivi fornitori.</p>
     <ul>
       <li><strong>GitHub (GitHub Pages)</strong>: ospita il sito.</li>
-      <li><strong>FormSubmit</strong>: recapita il brief alla mia email.</li>
+      <li><strong>Resend</strong>: recapita il brief alla mia email.</li>
+      <li><strong>Microsoft (Azure Speech) e Google (Cloud Text-to-Speech)</strong>: trasformano in voce le risposte di Nous quando è attiva la voce. Ricevono il testo della risposta letta, non i tuoi dati personali.</li>
       <li><strong>Groq</strong> e <strong>Cloudflare</strong>: generano le risposte di Nous in modalità cloud e fanno da intermediario.</li>
       <li><strong>jsDelivr e Hugging Face</strong>: solo se attivi il modello di Nous che gira nel tuo dispositivo, il browser scarica da lì il programma e il modello; in quel momento questi servizi vedono il tuo indirizzo IP.</li>
     </ul>
@@ -134,6 +135,6 @@
   <p class="fine"><a href="index.html">← Torna al sito</a></p>
 </main>
 
-<script type="module" src="cookie.js?v=1"></script>
+<script type="module" src="cookie.js?v=3"></script>
 </body>
 </html>
