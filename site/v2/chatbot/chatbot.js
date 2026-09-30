@@ -2,8 +2,8 @@
  * Widget Controller "Nous" — F/AI Portfolio
  * Versione 1.0 (Settembre 2026)
  */
-import { CONFIG } from './chatbot.config.js?v=20260928-141';
-import { ChatEngine } from './chatbot.engine.js?v=20260928-141';
+import { CONFIG } from './chatbot.config.js?v=20260928-143';
+import { ChatEngine } from './chatbot.engine.js?v=20260928-143';
 
 /* Cosa sta girando: testi mostrati in alto e nel pannello dettagli (italiano semplice) */
 const ENGINE_INFO = {
@@ -1143,149 +1143,143 @@ class NodoWidget {
   }
 
   /* ── Conversational Brief Wizard ───────────────────────────────── */
+  /* ── Brief con Nous ────────────────────────────────────────────────
+     Nous fa le stesse domande del modulo del sito, una alla volta, poi chiede nome e email.
+     Alla fine compila da solo tutta la scheda di richiesta di preventivo e ti porta
+     all'ultimo passo: manca solo la tua conferma sulla privacy (quella la dai tu). */
+  briefDomande() {
+    return [
+      { key: 'project_type', titolo: 'Che cosa vuoi ottenere?', opzioni: [
+        ['grafica', 'Una campagna o identità'], ['video', 'Un video'], ['social', 'Un sistema social'],
+        ['ai', 'Un flusso o prototipo AI'], ['siti', 'Un sito internet'], ['webapp', 'Una web app'],
+        ['marketing', 'Una campagna media multicanale'], ['jingle', 'Un jingle o una canzone pubblicitaria'],
+        ['da-definire', 'Non lo so ancora'] ] },
+      { key: 'starting_point', titolo: 'Da cosa partiamo?', opzioni: [
+        ['brief', 'Ho un brief'], ['brand', 'Ho un’identità o linee guida'], ['materials', 'Ho il materiale'],
+        ['zero', 'Partiamo da zero'], ['other', 'Altro'] ] },
+      { key: 'channels', titolo: 'Dove dovrà funzionare?', opzioni: [
+        ['social', 'Social'], ['web', 'Web o landing'], ['advertising', 'Advertising'],
+        ['event', 'Evento o schermo'], ['internal', 'Uso interno'], ['multiple', 'Più canali'] ] },
+      { key: 'timing', titolo: 'Quando ti serve?', opzioni: [
+        ['date', 'Ho una data indicativa'], ['flexible', 'La data è flessibile'], ['unknown', 'Non è ancora definita'] ] },
+      { key: 'support', titolo: 'Che supporto cerchi?', opzioni: [
+        ['single', 'Un singolo progetto'], ['package', 'Un pacchetto di contenuti'],
+        ['continuous', 'Una collaborazione continuativa'], ['consulting', 'Una consulenza o un prototipo'],
+        ['unknown', 'Non lo so ancora'] ] }
+    ];
+  }
+
   startBriefWizard() {
-    this.briefState = {
-      project_type: null,
-      project_label: '',
-      channels: null,
-      channels_label: '',
-      timing: null,
-      timing_label: ''
-    };
+    this.briefState = { risposte: {}, etichette: {}, contatti: {} };
+    this.briefDomandaN(0);
+  }
 
-    const step1Msg = document.createElement('div');
-    step1Msg.className = 'nodo-msg nodo-msg--bot nodo-msg--brief-wizard';
-    step1Msg.innerHTML = `
-      <div class="nodo-msg-text">🎯 <b>Passo 1 di 3:</b> Che tipo di progetto hai in mente?</div>
+  briefDomandaN(i) {
+    const domande = this.briefDomande();
+    if (i >= domande.length) { this.briefContatti(); return; }
+    const d = domande[i];
+    const msg = document.createElement('div');
+    msg.className = 'nodo-msg nodo-msg--bot nodo-msg--brief-wizard';
+    msg.innerHTML = `
+      <div class="nodo-msg-text"><b>Domanda ${i + 1} di ${domande.length + 1}.</b> ${d.titolo}</div>
       <div class="nodo-wizard-chips">
-        <button class="nodo-wiz-btn" data-val="video" data-label="Video &amp; Spot AI" type="button">🎬 Video &amp; Spot AI</button>
-        <button class="nodo-wiz-btn" data-val="grafica" data-label="Grafica &amp; Identità" type="button">🎨 Grafica &amp; Identità</button>
-        <button class="nodo-wiz-btn" data-val="siti" data-label="Sito Web Statico" type="button">🌐 Sito Web Statico</button>
-        <button class="nodo-wiz-btn" data-val="jingle" data-label="Jingle &amp; Audio" type="button">🎵 Jingle &amp; Audio</button>
-        <button class="nodo-wiz-btn" data-val="ai" data-label="Pipeline AI su misura" type="button">⚡ Pipeline AI su misura</button>
-      </div>
-    `;
-
-    step1Msg.querySelectorAll('.nodo-wiz-btn').forEach(btn => {
+        ${d.opzioni.map(([v, l]) => `<button class="nodo-wiz-btn" data-val="${v}" type="button">${l}</button>`).join('')}
+      </div>`;
+    msg.querySelectorAll('.nodo-wiz-btn').forEach(btn => {
       btn.addEventListener('click', () => {
-        this.briefState.project_type = btn.dataset.val;
-        this.briefState.project_label = btn.dataset.label;
-        step1Msg.querySelectorAll('.nodo-wiz-btn').forEach(b => b.disabled = true);
+        this.briefState.risposte[d.key] = btn.dataset.val;
+        this.briefState.etichette[d.key] = btn.textContent.trim();
+        msg.querySelectorAll('.nodo-wiz-btn').forEach(b => b.disabled = true);
         btn.classList.add('is-selected');
-        this.askBriefStep2();
+        setTimeout(() => this.briefDomandaN(i + 1), 280);
       });
     });
-
-    this.elements.messages.appendChild(step1Msg);
+    this.elements.messages.appendChild(msg);
     this.scrollToBottom();
   }
 
-  askBriefStep2() {
-    setTimeout(() => {
-      const step2Msg = document.createElement('div');
-      step2Msg.className = 'nodo-msg nodo-msg--bot nodo-msg--brief-wizard';
-      step2Msg.innerHTML = `
-        <div class="nodo-msg-text">📡 <b>Passo 2 di 3:</b> Qual è il canale principale di diffusione?</div>
-        <div class="nodo-wizard-chips">
-          <button class="nodo-wiz-btn" data-val="social" data-label="Social (Reels/Feed)" type="button">📱 Social (Reels/Feed)</button>
-          <button class="nodo-wiz-btn" data-val="web" data-label="Web o Landing" type="button">🖥️ Web o Landing</button>
-          <button class="nodo-wiz-btn" data-val="advertising" data-label="Advertising / Ads" type="button">📢 Advertising / Ads</button>
-          <button class="nodo-wiz-btn" data-val="multiple" data-label="Più canali" type="button">🌐 Più canali</button>
-        </div>
-      `;
-
-      step2Msg.querySelectorAll('.nodo-wiz-btn').forEach(btn => {
-        btn.addEventListener('click', () => {
-          this.briefState.channels = [btn.dataset.val];
-          this.briefState.channels_label = btn.dataset.label;
-          step2Msg.querySelectorAll('.nodo-wiz-btn').forEach(b => b.disabled = true);
-          btn.classList.add('is-selected');
-          this.askBriefStep3();
-        });
-      });
-
-      this.elements.messages.appendChild(step2Msg);
-      this.scrollToBottom();
-    }, 350);
+  briefContatti() {
+    const msg = document.createElement('div');
+    msg.className = 'nodo-msg nodo-msg--bot nodo-msg--brief-wizard';
+    msg.innerHTML = `
+      <div class="nodo-msg-text"><b>Ultima domanda.</b> Come posso farti ricontattare? Nome ed email servono, il resto è facoltativo. Restano nel tuo browser: il sito non li salva e non li invia.</div>
+      <form class="nodo-brief-contatti" novalidate>
+        <input name="name" type="text" placeholder="Nome *" autocomplete="name" aria-label="Nome" />
+        <input name="email" type="email" placeholder="Email *" autocomplete="email" inputmode="email" aria-label="Email" />
+        <input name="company" type="text" placeholder="Azienda (facoltativa)" autocomplete="organization" aria-label="Azienda" />
+        <textarea name="note" rows="2" placeholder="Una nota (facoltativa)" aria-label="Nota"></textarea>
+        <p class="nodo-brief-errore" role="alert" hidden></p>
+        <button class="nodo-wiz-btn is-primary" type="submit">Continua</button>
+      </form>`;
+    const form = msg.querySelector('form');
+    form.addEventListener('submit', e => {
+      e.preventDefault();
+      const nome = form.name.value.trim();
+      const mail = form.email.value.trim();
+      const err = form.querySelector('.nodo-brief-errore');
+      if (!nome || !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(mail)) {
+        err.textContent = !nome ? 'Scrivi il tuo nome.' : 'Controlla l’email: sembra incompleta.';
+        err.hidden = false;
+        return;
+      }
+      err.hidden = true;
+      this.briefState.contatti = { name: nome, email: mail, company: form.company.value.trim(), note: form.note.value.trim() };
+      form.querySelectorAll('input, textarea, button').forEach(el => { el.disabled = true; });
+      this.briefRiepilogo();
+    });
+    this.elements.messages.appendChild(msg);
+    this.scrollToBottom();
+    setTimeout(() => form.name.focus({ preventScroll: true }), 50);
   }
 
-  askBriefStep3() {
-    setTimeout(() => {
-      const step3Msg = document.createElement('div');
-      step3Msg.className = 'nodo-msg nodo-msg--bot nodo-msg--brief-wizard';
-      step3Msg.innerHTML = `
-        <div class="nodo-msg-text">⏳ <b>Passo 3 di 3:</b> Che tempistiche hai a disposizione?</div>
-        <div class="nodo-wizard-chips">
-          <button class="nodo-wiz-btn" data-val="date" data-label="Breve termine (&lt; 3 sett.)" type="button">⚡ Breve termine (&lt; 3 sett.)</button>
-          <button class="nodo-wiz-btn" data-val="flexible" data-label="Data flessibile" type="button">🗓️ Data flessibile</button>
-          <button class="nodo-wiz-btn" data-val="unknown" data-label="Da definire insieme" type="button">💡 Da definire insieme</button>
-        </div>
-      `;
-
-      step3Msg.querySelectorAll('.nodo-wiz-btn').forEach(btn => {
-        btn.addEventListener('click', () => {
-          this.briefState.timing = btn.dataset.val;
-          this.briefState.timing_label = btn.dataset.label;
-          step3Msg.querySelectorAll('.nodo-wiz-btn').forEach(b => b.disabled = true);
-          btn.classList.add('is-selected');
-          this.showBriefSummaryCard();
-        });
-      });
-
-      this.elements.messages.appendChild(step3Msg);
-      this.scrollToBottom();
-    }, 350);
+  /* riempie davvero la scheda del sito e ci porta dentro */
+  briefCompilaModulo() {
+    const r = this.briefState.risposte, c = this.briefState.contatti;
+    const dati = {
+      project_type: r.project_type,
+      starting_point: r.starting_point,
+      channels: r.channels ? [r.channels] : null,
+      timing: r.timing,
+      support: r.support,
+      name: c.name,
+      email: c.email,
+      company: c.company || '',
+      note: c.note || ''
+    };
+    const evento = { detail: dati };
+    document.dispatchEvent(new CustomEvent('nous:fill-brief', evento));
+    document.dispatchEvent(new CustomEvent('nodo:fill-brief', evento));
+    if (window.innerWidth <= 640) this.close();
+    document.querySelector('#brief')?.scrollIntoView({ behavior: 'smooth' });
+    this.saveHistory('bot', '[Brief compilato con Nous e trasferito nel modulo: manca solo la conferma privacy]');
   }
 
-  showBriefSummaryCard() {
-    setTimeout(() => {
-      const cardMsg = document.createElement('div');
-      cardMsg.className = 'nodo-msg nodo-msg--bot nodo-brief-card-wrapper';
-      cardMsg.innerHTML = `
-        <div class="nodo-brief-card">
-          <div class="nodo-brief-header">
-            <span class="nodo-brief-icon">📋</span>
-            <b>RIEPILOGO BRIEF CONFIGURATO</b>
-          </div>
-          <div class="nodo-brief-rows">
-            <div class="nodo-brief-row">
-              <span class="lbl">Progetto:</span>
-              <span class="val">${this.briefState.project_label}</span>
-            </div>
-            <div class="nodo-brief-row">
-              <span class="lbl">Canale:</span>
-              <span class="val">${this.briefState.channels_label}</span>
-            </div>
-            <div class="nodo-brief-row">
-              <span class="lbl">Tempistica:</span>
-              <span class="val">${this.briefState.timing_label}</span>
-            </div>
-          </div>
-          <button class="nodo-brief-submit-cta" type="button">
-            🚀 Trasferisci al modulo e completa (1 Clic) &rarr;
-          </button>
+  briefRiepilogo() {
+    const e = this.briefState.etichette, c = this.briefState.contatti;
+    const righe = [
+      ['Progetto', e.project_type], ['Si parte da', e.starting_point], ['Dove', e.channels],
+      ['Quando', e.timing], ['Supporto', e.support], ['Contatto', `${c.name} · ${c.email}`]
+    ];
+    if (c.company) righe.push(['Azienda', c.company]);
+    const esc = t => String(t ?? '').replace(/[&<>"]/g, ch => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[ch]));
+    const card = document.createElement('div');
+    card.className = 'nodo-msg nodo-msg--bot nodo-brief-card-wrapper';
+    card.innerHTML = `
+      <div class="nodo-brief-card">
+        <div class="nodo-brief-header"><b>Riepilogo della tua richiesta</b></div>
+        <div class="nodo-brief-rows">
+          ${righe.map(([l, v]) => `<div class="nodo-brief-row"><span class="lbl">${l}:</span><span class="val">${esc(v)}</span></div>`).join('')}
         </div>
-      `;
-
-      cardMsg.querySelector('.nodo-brief-submit-cta').addEventListener('click', () => {
-        const briefData = {
-          detail: {
-            project_type: this.briefState.project_type,
-            channels: this.briefState.channels,
-            timing: this.briefState.timing
-          }
-        };
-        document.dispatchEvent(new CustomEvent('nous:fill-brief', briefData));
-        document.dispatchEvent(new CustomEvent('nodo:fill-brief', briefData));
-        if (window.innerWidth <= 640) this.close();
-        const brief = document.querySelector('#brief');
-        if (brief) brief.scrollIntoView({ behavior: 'smooth' });
-        this.saveHistory('bot', `[Brief configurato: ${this.briefState.project_label}, ${this.briefState.channels_label}, ${this.briefState.timing_label}]`);
-      });
-
-      this.elements.messages.appendChild(cardMsg);
-      this.scrollToBottom();
-    }, 400);
+        <button class="nodo-brief-submit-cta" type="button">Compila il modulo del preventivo &rarr;</button>
+        <p class="nodo-brief-nota">Compilo io tutta la scheda. Alla fine ti resta solo la conferma sulla privacy e l’invio, che fai tu.</p>
+      </div>`;
+    card.querySelector('.nodo-brief-submit-cta').addEventListener('click', ev => {
+      ev.currentTarget.disabled = true;
+      this.briefCompilaModulo();
+      this.appendBotMessage('Fatto: ho compilato la scheda con le tue risposte. Controlla, conferma la privacy e invia.');
+    });
+    this.elements.messages.appendChild(card);
+    this.scrollToBottom();
   }
 
   toggleVoice() {
@@ -1624,9 +1618,28 @@ class NodoWidget {
      al pallino. Prima chiede se si vuole anche la voce, poi accompagna sezione per sezione
      spiegando cosa c'è davvero in ognuna. Avanza da sola (a fine lettura o a fine voce)
      e si ferma quando vuoi. */
+  /* La voce della visita e' registrata (Elsa, voce neurale): suona uguale su ogni dispositivo,
+     senza la sintesi meccanica del browser. Se il file non parte si ripiega sulla voce del browser. */
+  suonaVoce(nome, testo, alFinire) {
+    this.stopSpeaking();
+    this._fineVoce = alFinire || null;
+    let base = 'chatbot/voce/';
+    try { base = new URL('./voce/', import.meta.url).href; } catch (e) {}
+    const audio = new Audio(`${base}${nome}.mp3?v=1`);
+    audio.preload = 'auto';
+    this.ttsAudio = audio;
+    const finito = () => { if (this.ttsAudio === audio) { this.stopSpeaking(); } this.finePar(); };
+    audio.onended = finito;
+    audio.onerror = () => { if (this.ttsAudio === audio) this.ttsAudio = null; this.speakText(testo, alFinire); };
+    audio.play().then(() => {
+      this.elements.header?.classList.add('is-speaking');
+      this.elements.fab?.classList.add('is-speaking');
+    }).catch(() => { if (this.ttsAudio === audio) this.ttsAudio = null; this.speakText(testo, alFinire); });
+  }
+
   guidaPassi() {
     return [
-      { target: '#top', testo: "Siamo in cima. Lo sfondo non è una foto caricata: lo disegna il tuo browser in questo momento. Prova a trascinare a destra e a sinistra: sposti il confine fra il lavoro fatto a mano, in bianco e nero, e lo stesso soggetto reso come sistema AI. In alto a destra i pallini cambiano il colore di tutto il sito." },
+      { target: '#top', testo: "Siamo in cima. Le immagini di sfondo le ho generate con l'AI, ma il confine fra l'una e l'altra lo calcola il tuo browser in tempo reale. Prova a trascinare a destra e a sinistra: lo sposti fra il lavoro fatto a mano, in bianco e nero, e lo stesso soggetto reso come sistema AI. In alto a destra i pallini cambiano il colore di tutto il sito." },
       { target: '#come', testo: "Questo è il libretto di istruzioni. Dice una cosa semplice: il sito non racconta il lavoro di Fabrizio, lo fa mentre lo guardi. Tenendo premuto su un riquadro lo puoi spostare, cambiare l'impaginazione o il colore. Tutto resta nel tuo browser: il sito non salva e non manda niente a nessuno." },
       { target: '#banchi', testo: "Qui ci sono i servizi, otto in tutto: grafica pubblicitaria, video e post-produzione, sistemi per i social, flussi e prototipi AI, siti internet, web app, campagne media e jingle. Apri una scheda e vedi cosa consegna, come ci arriva e dove puoi vederlo già fatto." },
       { target: '#lavori', testo: "Da qui iniziano i lavori veri: cinque marchi seguiti dall'idea fino alla pubblicazione. Nessun video parte da solo, scegli tu cosa guardare. Adesso ti porto a vederli uno alla volta." },
@@ -1682,6 +1695,7 @@ class NodoWidget {
       this.elements.voiceBtn?.setAttribute('aria-pressed', String(conVoce));
       this.renderTourStep(0);
     }));
+    if (this.voiceEnabled) this.suonaVoce('intro', 'Ciao, sono Nous. Ti faccio fare un giro del sito. Vuoi che ti legga anche la spiegazione?');
   }
 
   clearTourTimer() {
@@ -1706,7 +1720,7 @@ class NodoWidget {
     };
     if (st.voce && this.voiceEnabled) {
       let finita = false;
-      this.speakText(testo, () => { finita = true; if (this.tourState) this.tourState.timer = setTimeout(avanti, 1100); });
+      this.suonaVoce('passo-' + String(index + 1).padStart(2, '0'), testo, () => { finita = true; if (this.tourState) this.tourState.timer = setTimeout(avanti, 900); });
       /* rete di sicurezza: se la voce non parte o non finisce */
       st.timer = setTimeout(() => { if (!finita) avanti(); }, lettura * 2.2 + 6000);
     } else {
@@ -1801,7 +1815,7 @@ class NodoWidget {
       this.stopStudioTour(false);
       document.querySelector('#brief')?.scrollIntoView({ behavior: 'smooth' });
     });
-    if (this.tourState?.voce && this.voiceEnabled) this.speakText(fine);
+    if (this.tourState?.voce && this.voiceEnabled) this.suonaVoce('fine', fine);
     this.tourState = null;
   }
 
@@ -2009,9 +2023,10 @@ class NodoWidget {
   /* ── 4. Dossier & Export Card ──────────────────────────────────── */
   generateDossierCard() {
     const brief = this.briefState || {};
-    const proj = brief.project_label || 'Da definire (Video / AI / Web)';
-    const chan = brief.channels_label || 'Social & Web';
-    const time = brief.timing_label || 'Flessibile / Da concordare';
+    const et = brief.etichette || {};
+    const proj = et.project_type || 'Da definire (Video / AI / Web)';
+    const chan = et.channels || 'Social & Web';
+    const time = et.timing || 'Flessibile / Da concordare';
 
     const dossierText = `--- DOSSIER DI PRODUZIONE F/AI ---
 Progetto: ${proj}

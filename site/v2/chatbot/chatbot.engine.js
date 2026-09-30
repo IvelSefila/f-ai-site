@@ -5,7 +5,7 @@
  * 2. WebGPU Locale (WebLLM Qwen3-1.7B via Web Worker)
  * 3. Motore A Deterministico (Zero rete, offline, instant fallback)
  */
-import { CONFIG } from './chatbot.config.js?v=20260928-141';
+import { CONFIG } from './chatbot.config.js?v=20260928-143';
 
 /* ───────────────────────── RAG lessicale (BM25, zero librerie) ─────────────────────────
    I chunk si costruiscono a runtime dalla knowledge.json; retrieve() e' una funzione pura. */
@@ -276,7 +276,7 @@ export class ChatEngine {
   }
 
   static async create() {
-    const res = await fetch(new URL('./knowledge.json?v=20260928-141', import.meta.url));
+    const res = await fetch(new URL('./knowledge.json?v=20260928-143', import.meta.url));
     const kb = await res.json();
     return new ChatEngine(kb);
   }
@@ -398,7 +398,7 @@ REGOLE DI RISPOSTA:
       };
       try {
         const initId = ++this._gpuReqId;
-        this.worker = new Worker(new URL('./chatbot.worker.js?v=20260928-141', import.meta.url), { type: 'module' });
+        this.worker = new Worker(new URL('./chatbot.worker.js?v=20260928-143', import.meta.url), { type: 'module' });
 
         this.worker.onmessage = (e) => {
           const { type, progress, text, error, id } = e.data || {};
@@ -1271,7 +1271,7 @@ REGOLE DI RISPOSTA:
           'trascin*', 'sposta*', 'impaginazione', 'colonne', 'istruzioni', 'come funziona il sito', 'chi ha costruito'
         ],
         replies: [
-          `Questo sito è stato progettato da Fabrizio e scritto riga per riga con le migliori AI di frontiera: grafica, animazioni, interazioni, codice. Le immagini non sono file caricati: le disegna il tuo browser, da un numero chiamato *seed*. Tutto quello che cambi resta nel tuo browser: il sito non salva e non manda niente a nessuno.`,
+          `Questo sito è stato progettato da Fabrizio e scritto riga per riga con le migliori AI di frontiera: grafica, animazioni, interazioni, codice. Gli sfondi dell'eroe sono immagini generate con l'AI (Higgsfield): il confine fra le due, gli effetti e le forme li calcola il tuo browser in tempo reale. Tutto quello che cambi resta nel tuo browser: il sito non salva e non manda niente a nessuno.`,
           `Puoi cambiare il colore di tutto il sito, spostare qualsiasi riquadro tenendo premuto mezzo secondo e trascinandolo, spostare le sezioni intere dal titolo, cambiare l'impaginazione da una a quattro colonne e rigenerare le immagini cambiando il seed.`
         ],
         action: { type: 'scroll', target: '#come', label: 'Vedi come funziona' }

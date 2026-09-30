@@ -423,10 +423,27 @@ function createBriefController() {
         }
       }
       if (dati.starting_point) {
-        const el = $(`input[name="starting_point"][value="${dati.starting_point}"]`, form);
+        const arr = Array.isArray(dati.starting_point) ? dati.starting_point : [dati.starting_point];
+        arr.forEach(val => {
+          const el = $(`input[name="starting_point"][value="${val}"]`, form);
+          if (el) {
+            el.checked = true;
+            el.dispatchEvent(new Event('change', { bubbles: true }));
+          }
+        });
+      }
+      if (dati.support) {
+        const el = $(`input[name="support"][value="${dati.support}"]`, form);
         if (el) {
           el.checked = true;
           el.dispatchEvent(new Event('change', { bubbles: true }));
+        }
+      }
+      if (dati.company) {
+        const el = $(`input[name="company"]`, form);
+        if (el) {
+          el.value = dati.company;
+          el.dispatchEvent(new Event('input', { bubbles: true }));
         }
       }
       if (dati.channels) {
@@ -456,7 +473,7 @@ function createBriefController() {
       if (dati.note) {
         const el = $(`textarea[name="note"]`, form);
         if (el) {
-          el.value = (el.value ? el.value + "\n" : "") + dati.note;
+          if (!el.value.includes(dati.note)) el.value = (el.value ? el.value + "\n" : "") + dati.note;
           el.dispatchEvent(new Event('input', { bubbles: true }));
         }
       }
@@ -479,7 +496,9 @@ function createBriefController() {
       if (dati.project_type) targetStep = 1;
       if (dati.channels) targetStep = 3;
       if (dati.timing) targetStep = 4;
-      if (dati.budget) targetStep = 5;
+      if (dati.budget || dati.support || dati.name || dati.email) targetStep = 5;
+      /* con "ho una data" il giorno va scelto nel modulo: si torna a quella domanda */
+      if (dati.timing === 'date') targetStep = 3;
       open(targetStep, true);
     }
 

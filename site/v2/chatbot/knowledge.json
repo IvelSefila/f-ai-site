@@ -130,7 +130,7 @@
     }
   ],
   "site": {
-    "about": "Il sito è stato progettato da Fabrizio e scritto riga per riga con le migliori AI di frontiera: grafica, animazioni, interazioni, codice. Le immagini non sono file caricati: le disegna il browser, da un numero chiamato seed. Tutto quello che cambi resta nel tuo browser: il sito non salva e non manda niente a nessuno.",
+    "about": "Il sito è stato progettato da Fabrizio e scritto riga per riga con le migliori AI di frontiera: grafica, animazioni, interazioni, codice. Gli sfondi dell'eroe sono immagini generate con l'AI (Higgsfield): il confine fra le due, gli effetti e le forme li calcola il browser in tempo reale. Tutto quello che cambi resta nel tuo browser: il sito non salva e non manda niente a nessuno.",
     "palette": "Nove palette di colore, dai pallini in alto a destra: Smeraldo, Ciano, Indaco, Magenta, Corallo, Ambra, Lime, Blu, Rubino. Ognuna è calcolata perché il testo resti leggibile su fondo scuro e su carta.",
     "interactions": [
       "Cambiare il colore di tutto il sito",

@@ -1972,3 +1972,16 @@
   .nodo-guida::after { display: none; }
 }
 @media (prefers-reduced-motion: reduce) { .nodo-guida__testo { animation: none; } }
+
+
+/* ── Brief in chat: modulo contatti e nota ── */
+.nodo-brief-contatti { display: grid; gap: 8px; margin-top: 10px; }
+.nodo-brief-contatti input, .nodo-brief-contatti textarea {
+  width: 100%; box-sizing: border-box; padding: 10px 12px; border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, .14); background: rgba(255, 255, 255, .05);
+  color: var(--nodo-title); font: 400 16px/1.4 var(--nodo-font-body); outline: none; resize: vertical;
+}
+.nodo-brief-contatti input:focus, .nodo-brief-contatti textarea:focus { border-color: var(--nodo-em); }
+.nodo-brief-errore { margin: 0; font-size: 13px; color: #ff8a8a; }
+.nodo-brief-nota { margin: 8px 0 0; font-size: 12.5px; line-height: 1.5; color: var(--nodo-muted); }
+.nodo-wiz-btn.is-primary { background: var(--nodo-em); border-color: var(--nodo-em); color: #070a0f; justify-self: start; }
