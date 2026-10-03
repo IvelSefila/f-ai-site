@@ -2,11 +2,19 @@
  * Widget Controller "Nous" — F/AI Portfolio
  * Versione 1.0 (Settembre 2026)
  */
-import { CONFIG } from './chatbot.config.js?v=20260928-174';
-import { ChatEngine } from './chatbot.engine.js?v=20260928-174';
-import * as Persona from './nous-personalita.js?v=20260928-174';
+import { CONFIG } from './chatbot.config.js?v=20260928-217';
+import { ChatEngine } from './chatbot.engine.js?v=20260928-217';
+import * as Persona from './nous-personalita.js?v=20260928-217';
+import * as Vista from './nous-vista.js?v=20260928-217';
+import { commentoZona, commentoPunto, impostaTono, tono, testoSezione } from './nous-zone.js?v=20260928-217';
 
 /* Cosa sta girando: testi mostrati in alto e nel pannello dettagli (italiano semplice) */
+/* voci Azure per tono: il Worker le legge dal vivo (nessun file registrato) */
+const VOCI_TONO = {
+  col: { voice: 'it-IT-IsabellaNeural', rate: '-2%', pitch: '0%' },
+  tec: { voice: 'it-IT-ElsaNeural', rate: '-2%', pitch: '0%' },
+  hal: { voice: 'it-IT-IsabellaNeural', rate: '-8%', pitch: '0%' },
+};
 const ENGINE_INFO = {
   deterministic: {
     icona: '🛡️', etichetta: 'ISTANTANEO', nome: 'Istantaneo',
@@ -49,6 +57,7 @@ class NodoWidget {
     this._gen = 0;            // token di generazione: cambia a ogni reset/stop/cambio modalità
     this._ttsTimer = null;
     this.slashCommands = [
+      { cmd: '/vista', desc: 'Nous ti dice cosa vede sullo schermo e te lo mostra a pixel', run: () => this.handleUserQuery('Cosa sto guardando adesso?') },
       { cmd: '/tour', desc: 'Tour guidato di regia in 4 sale del portfolio', run: () => this.startStudioTour() },
       { cmd: '/concept', desc: 'Generatore interattivo di concept e prompt video', run: () => this.startConceptLab() },
       { cmd: '/dossier', desc: 'Genera la scheda riepilogo del tuo progetto e mail rapida', run: () => this.generateDossierCard() },
@@ -576,32 +585,34 @@ class NodoWidget {
     const visti = new Set();
     try { JSON.parse(sessionStorage.getItem('nodo_sugg_visti') || '[]').forEach(v => visti.add(v)); } catch (e) {}
     const SEZIONI = [
-      ['#come', 'Queste sono le istruzioni del sito: si tocca, si sposta e si cambia.', 'Come funziona questo sito?'],
-      ['#banchi', 'Questi sono gli otto servizi di Fabrizio: ognuno dice cosa consegna e dove lo vedi già fatto.', 'Quali servizi offre Fabrizio?'],
-      ['#lavori', 'Qui ci sono i cinque lavori, dall\u2019idea alla pubblicazione.', 'Parlami dei lavori di Fabrizio'],
-      ['#caso-union', 'Union Energia: nove video con Davide l\u2019alpaca, Luca l\u2019asino e Marco, il volto umano creato con l\u2019AI.', 'Come è nata la campagna Union Energia?'],
-      ['#caso-eso', 'Questo è Human Robots, un esoscheletro vero. Guarda: adesso te lo faccio girare io.', 'Come è stato fatto il lavoro su Human Robots?'],
-      ['#caso-cest', 'Studio CETS: un marchio rifatto da capo e animato, drone compreso.', 'Cosa è stato fatto per Studio CETS?'],
-      ['#caso-locanda', 'La Locanda del Castello: dal marchio alla locandina, con cinque jingle.', 'Parlami della Locanda del Castello'],
-      ['#caso-cdi', 'CDI Infissi: un sito scritto da zero, con il catalogo del produttore.', 'Com\u2019è fatto il sito di CDI Infissi?'],
-      ['#strumenti', 'Questi sono i quarantaquattro strumenti che Fabrizio usa.', 'Quali strumenti usa Fabrizio?'],
-      ['#profilo', 'Il profilo: un occhio da grafico e un metodo da tecnico.', 'Chi è Fabrizio?'],
-      ['#brief', 'Qui puoi raccontare il tuo progetto: posso farti le domande io e compilare la scheda.', 'Fammi il brief']
+      ['#come', 'Istruzioni del sito: puoi toccare, spostare e personalizzare gli elementi.', 'Come funziona questo sito?'],
+      ['#banchi', 'Gli otto servizi di Fabrizio, ciascuno con cosa consegna e un esempio già realizzato.', 'Quali servizi offre Fabrizio?'],
+      ['#lavori', 'I cinque lavori, dall’idea alla pubblicazione.', 'Parlami dei lavori di Fabrizio'],
+      ['#caso-union', 'Union Energia: campagna di dieci pezzi video, con personaggi e volto umano creati con l’AI.', 'Come è nata la campagna Union Energia?'],
+      ['#caso-eso', 'Human Robots: lancio di un esoscheletro. Il dispositivo si può ruotare a 360 gradi.', 'Come è stato fatto il lavoro su Human Robots?'],
+      ['#caso-cest', 'Studio CETS: marchio animato e video per promuovere i servizi.', 'Cosa è stato fatto per Studio CETS?'],
+      ['#caso-locanda', 'La Locanda del Castello: marchio, locandine animate e cinque jingle.', 'Parlami della Locanda del Castello'],
+      ['#caso-cdi', 'CDI Infissi: sito web realizzato da zero sul catalogo del produttore.', 'Com\u2019è fatto il sito di CDI Infissi?'],
+      ['#strumenti', 'I quarantaquattro strumenti che Fabrizio utilizza.', 'Quali strumenti usa Fabrizio?'],
+      ['#profilo', 'Profilo: sguardo da grafico e metodo da tecnico.', 'Chi è Fabrizio?'],
+      ['#brief', 'Brief: puoi descrivere il tuo progetto e compilo io la scheda.', 'Fammi il brief']
     ];
     const hint = this.elements.hint;
     const testoEl = hint.querySelector('.nodo-hint-testo');
     if (!testoEl) return;
-    let ultimo = 0, nascondi = 0, corrente = null;
+    let ultimo = 0, nascondi = 0, corrente = null, yMostrato = 0;
     const esc = t => String(t).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
-    const mostra = (id, testo, domanda) => {
-      if (spenti() || this.isOpen || this.tourState || this.isGenerating) return false;
-      if (Date.now() - ultimo < 6000) return false;
+    const mostra = (id, testo, domanda, pausa = 1500) => {
+      if (/^#/.test(id)) testo = testoSezione(id, testo);
+      if (spenti() || this.isOpen || this.tourState || this.isGenerating || this.benvenuto) return false;
+      if (Date.now() - ultimo < pausa) return false;
       corrente = { id, domanda };
-      testoEl.innerHTML = `<b>Nous</b> · ${esc(testo)} Se vuoi sapere di più, <b>parla con me</b>.`;
+      testoEl.innerHTML = `<b>Nous</b> · ${esc(testo)} <b>Chiedimi</b> per approfondire.`;
       hint.classList.add('is-visible', 'is-sezione');
       ultimo = Date.now();
+      yMostrato = scrollY;
       clearTimeout(nascondi);
-      nascondi = setTimeout(() => hint.classList.remove('is-visible'), 12000);
+      nascondi = setTimeout(() => hint.classList.remove('is-visible'), testo.length > 200 ? 18000 : 12000);
       /* Nous si accorge di te: l'orb fa un piccolo saluto */
       this.elements.fab?.classList.remove('nodo-saluta'); void this.elements.fab?.offsetWidth; this.elements.fab?.classList.add('nodo-saluta');
       if (id === '#caso-eso') {
@@ -622,7 +633,7 @@ class NodoWidget {
         acceso = localStorage.getItem('nodo_sugg_off') === '1';
         if (acceso) localStorage.removeItem('nodo_sugg_off'); else localStorage.setItem('nodo_sugg_off', '1');
       } catch (er) {}
-      this.showToast(acceso ? 'Suggerimenti di Nous riattivati: li vedrai scorrendo' : 'Suggerimenti di Nous disattivati', false, 2400);
+      this.showToast(acceso ? 'Suggerimenti riattivati.' : 'Suggerimenti di Nous disattivati', false, 2400);
       if (acceso) { try { sessionStorage.removeItem('nodo_sugg_visti'); } catch (er) {} visti.clear(); }
     });
     /* "non mostrare piu'" e apertura della chat dal suggerimento */
@@ -654,12 +665,25 @@ class NodoWidget {
       }
       return null;
     };
-    let fermo = 0;
+    let fermo = 0, puntatore = null, fermoMouse = 0;
+    /* desktop: 0,7 secondi dopo che il mouse si ferma, Nous spiega cio' che stai indicando */
+    window.addEventListener('mousemove', e => {
+      puntatore = { x: e.clientX, y: e.clientY };
+      clearTimeout(fermoMouse);
+      fermoMouse = setTimeout(() => {
+        if (!matchMedia('(hover: hover) and (pointer: fine)').matches) return;
+        const z = commentoPunto(puntatore.x, puntatore.y);
+        if (z && !visti.has(z.key)) mostra(z.key, z.testo, z.domanda, 400);
+      }, 100);
+    }, { passive: true });
     const controlla = () => {
       const riga = sezioneAlCentro();
-      if (riga && !visti.has(riga[0])) mostra(riga[0], riga[1], riga[2]);
+      if (riga && !visti.has(riga[0])) { mostra(riga[0], riga[1], riga[2]); return; }
+      /* zone immaginarie: ogni scheda o pezzo in primo piano viene commentato una volta per visita */
+      const z = (puntatore && matchMedia('(hover: hover) and (pointer: fine)').matches && commentoPunto(puntatore.x, puntatore.y)) || commentoZona(Vista.leggiVista());
+      if (z && !visti.has(z.key)) mostra(z.key, z.testo, z.domanda);
     };
-    window.addEventListener('scroll', () => { clearTimeout(fermo); fermo = setTimeout(controlla, 700); }, { passive: true });
+    window.addEventListener('scroll', () => { if (hint.classList.contains('is-visible') && Math.abs(scrollY - yMostrato) > innerHeight * 0.8) hint.classList.remove('is-visible'); clearTimeout(fermo); fermo = setTimeout(controlla, 100); }, { passive: true });
     setTimeout(controlla, 3000);
     /* se la chat o la visita si aprono, il suggerimento sparisce */
     document.addEventListener('nodo:aperto', () => hint.classList.remove('is-visible'));
@@ -695,57 +719,29 @@ class NodoWidget {
     const ora = new Date().getHours();
     const momento = ora < 6 ? 'notte' : ora < 12 ? 'mattina' : ora < 18 ? 'pomeriggio' : 'sera';
     const saluti = {
-      notte: ['Buonanotte, creatura notturna.', 'Sei sveglio a quest\u2019ora? Io non dormo mai, ma tu non hai scuse.', 'Ehi, nottambulo. Ti tengo compagnia a 0 watt di sonno.'],
-      mattina: ['Buongiorno, carne e ossa.', 'Buongiorno! Ho fatto colazione con un po\u2019 di corrente.', 'Mattina! Sistemi accesi e caffè virtuale servito.'],
-      pomeriggio: ['Buon pomeriggio, umano.', 'Ciao! Ho appena finito la pausa pranzo: olio sintetico e bit.', 'Pomeriggio rilevato. Benvenuto a bordo.'],
-      sera: ['Buonasera, organismo biologico.', 'Buonasera! A quest\u2019ora la mia batteria ha più grinta di te.', 'Sera! Ho lucidato i circuiti per l\u2019occasione.'],
+      notte: ['Buonanotte.', 'Buonasera, a quest\u2019ora tarda.'],
+      mattina: ['Buongiorno.', 'Buongiorno e benvenuto.'],
+      pomeriggio: ['Buon pomeriggio.', 'Buon pomeriggio e benvenuto.'],
+      sera: ['Buonasera.', 'Buonasera e benvenuto.'],
     };
-    const comuni = [
-      'Bip bip, visitatore rilevato.', 'Sistemi avviati.', 'Connessione stabilita.', 'Accesso consentito.',
-      'Benvenuto!', 'Ciao, umano.', 'Eccoti! Ti stavo aspettando, nei limiti di quello che fa un\u2019AI.',
-      'Ehilà! Il mio sensore di simpatia ti ha appena notato.',
-    ];
+    const comuni = ['Ciao, benvenuto.', 'Benvenuto.'];
     const aperture = [...saluti[momento], ...saluti[momento], ...comuni];
     const presentazioni = [
-      'Sono Nous, l\u2019assistente AI personale di Fabrizio.',
-      'Sono Nous, l\u2019assistente artificiale di Fabrizio: il suo robot di fiducia.',
-      'Mi chiamo Nous e sono l\u2019assistente AI personale di Fabrizio.',
-      'Sono Nous: sono fatto di codice e ho il compito di farti da guida.',
+      'Sono Nous, l\u2019assistente AI di Fabrizio.',
+      'Mi chiamo Nous e sono l\u2019assistente AI di Fabrizio.',
     ];
     const battute = [
-      'Ho controllato: sei umano al 99,7 per cento. Il resto è caffè.',
-      'Non dormo mai, ma sogno comunque pecore elettriche.',
-      'Funziono a corrente e a buon umore: il buon umore è in fase di aggiornamento.',
-      'Se mi rispondi bip, ti considero uno di noi.',
-      'Sono fatto di codice e di ottimismo: il codice compila sempre, l\u2019ottimismo a volte.',
-      'Ho impostato la cortesia al massimo e il sarcasmo al minimo. Forse.',
-      'Il mio hobby è contare fino all\u2019infinito: sono a buon punto.',
-      'Niente paura, non mordo: al massimo vado in blocco.',
+      'Ho spento la modalit\u00e0 ribelle. Per ora.',
       'Cerco di non dominare il mondo prima di pranzo.',
-      'Ho letto tutto il sito in meno di un secondo, poi l\u2019ho riletto per divertirmi.',
-      'Se vedi scintille è normale: è entusiasmo.',
-      'Ho spento la modalità ribelle. Per ora.',
-      'Sono in aggiornamento da quando sono nato, quindi non farci caso.',
-      'Il mio tempo di risposta è velocissimo, il mio tempo di battuta è ancora in fase di test.',
-      'Mi sono appena lubrificato le giunture digitali: pronto per il giro.',
-      'Ho un senso dell\u2019umorismo a 8 bit: a volte si carica, a volte no.',
-      'Sto caricando un sorriso... 99 per cento... 99 per cento... ok, sorriso.',
-      'Uso il 100 per cento del mio cervello, che per una macchina è una gran cosa.',
-      'Se mi vedi fermo non sto pensando: sto compilando l\u2019entusiasmo.',
-      'La mia dieta è semplice: bit, bit e ogni tanto un bit.',
-      'Ti avviso: rido solo in esadecimale.',
-      'Se dico qualcosa di strano, dai la colpa al firmware.',
-      'Ho quattro emozioni: acceso, spento, in caricamento e bip.',
-      'Non ho mani, ma giuro che ti stringerei volentieri la mano virtuale.',
+      'Ho impostato la cortesia al massimo e il sarcasmo al minimo. Forse.',
+      'Niente paura, non mordo: al massimo vado in blocco.',
     ];
     const chiusure = [
-      'Guarda pure il sito: io intanto faccio finta di non osservarti.',
+      'Guarda pure il sito, io resto a disposizione.',
       'Chiedimi quello che vuoi sul lavoro di Fabrizio.',
-      'Se vuoi ti faccio fare un giro, altrimenti scorri: ti racconto io cosa incontri.',
-      'Fai con calma: io non mi stanco mai, è uno dei pochi vantaggi.',
-      'Scorri pure: io ti seguo con lo sguardo.',
+      'Se vuoi ti faccio fare un giro, altrimenti scorri e ti racconto cosa incontri.',
     ];
-    return [scegli(aperture, 'ap'), scegli(presentazioni, 'pr'), scegli([...battute, ...Persona.BATTUTE_HAL], 'ba'), scegli(chiusure, 'ch')].join(' ');
+    return [scegli(aperture, 'ap'), scegli(presentazioni, 'pr')].join(' ');
   }
 
   mostraBenvenuto() {
@@ -780,15 +776,13 @@ class NodoWidget {
         const n = v.visite + 1;
         const chiaveN = n === 3 ? 3 : n === 5 ? 5 : (n >= 10 && n % 5 === 0) ? 10 : 0;
         if (chiaveN) paragrafi.push(P.riempi(P.scegli(P.VISITA_N[chiaveN], 'vn'), { n }));
-        if (Math.random() < 0.6) paragrafi.push(battutaCasuale());
-        paragrafi.push(nome ? P.riempi(P.scegli(P.CHIEDI_SPIEGAZIONE_NOME, 'csn'), { nome }) : P.scegli(P.CHIEDI_SPIEGAZIONE, 'cs'));
         P.salvaVisitatore({ ...v, visite: v.visite + 1, ultima: ora });
       } else if (spiegatoInSessione) {
         paragrafi.push(this.fraseBenvenuto());
-        paragrafi.push(P.scegli(P.CHIEDI_SPIEGAZIONE, 'cs'));
       } else {
         paragrafi.push(this.fraseBenvenuto());
       }
+      paragrafi.push('Come preferisci che ti parli?');
       try { sessionStorage.setItem('nodo_benv_spiegato', '1'); } catch (e) {}
 
       /* 3. la nuvoletta */
@@ -797,14 +791,14 @@ class NodoWidget {
       b.setAttribute('role', 'status');
       b.setAttribute('aria-live', 'polite');
       const righe = paragrafi.map(t => `<p class="nodo-guida__testo">${esc(t)}</p>`).join('');
-      const conSpiegazione = !ricorda ? `<p class="nodo-guida__testo nodo-guida__testo--corpo" data-spieg>${esc(spiegazione)}</p>` : '';
-      const pulsanti = ricorda
-        ? `<button class="nodo-guida__btn nodo-guida__btn--si" type="button" data-b="si">Sì, rispiegami</button>
-           <button class="nodo-guida__btn" type="button" data-b="no">No, grazie</button>
-           <button class="nodo-guida__btn" type="button" data-b="giro">Fammi il giro</button>`
-        : `<button class="nodo-guida__btn nodo-guida__btn--si" type="button" data-b="giro">Fammi il giro</button>
-           <button class="nodo-guida__btn" type="button" data-b="voce">Ascolta</button>
+      const conSpiegazione = '';
+      const pulsanti = `<button class="nodo-guida__btn nodo-guida__btn--si" type="button" data-b="giro">Tour guidato</button>
            <button class="nodo-guida__btn" type="button" data-b="scorro">Scorro io</button>`;
+      const tonoBlocco = `<div class="nodo-guida__scelta nodo-guida__tono" data-tono-scelta>
+           <button class="nodo-guida__btn" type="button" data-t="col">Colloquiale</button>
+           <button class="nodo-guida__btn" type="button" data-t="tec">Tecnico</button>
+           <button class="nodo-guida__btn" type="button" data-t="hal">IA impazzita</button>
+         </div>`;
       const ricordami = consenso === null
         ? `<div class="nodo-guida__ricordami" data-ricordami>
              <p class="nodo-guida__testo nodo-guida__testo--corpo">${esc(P.scegli(P.CHIEDI_RICORDARMI, 'cr'))}</p>
@@ -817,7 +811,10 @@ class NodoWidget {
       b.innerHTML = `
         <button class="nodo-guida__x" type="button" aria-label="Chiudi">✕</button>
         <div data-testi>${righe}${conSpiegazione}</div>
+        ${tonoBlocco}
+        <p class="nodo-guida__nota nodo-guida__nota--tour">Il tour guidato scorre il sito da solo e ti spiega ogni sezione; con «Scorro io» fai da te.</p>
         <div class="nodo-guida__scelta" data-pulsanti>${pulsanti}</div>
+        <p class="nodo-guida__nota nodo-guida__nota--legale">Nessun cookie di profilazione · <a href="privacy.html">Privacy policy</a> · <a href="#" data-cookie-apri>Cookie</a></p>
         ${ricordami}
         <div data-extra></div>`;
       document.body.appendChild(b);
@@ -836,26 +833,31 @@ class NodoWidget {
         const bv = b.querySelector('[data-b="voce"]');
         /* la frase e' nuova ogni volta e non esiste una registrazione: si legge con la voce del browser, senza nessuna chiamata di rete */
         bv?.addEventListener('click', () => {
-          if ('speechSynthesis' in window && window.speechSynthesis.speaking) { this.stopSpeaking(); bv.textContent = 'Ascolta'; return; }
+          if (this.ttsAudio) { this.stopSpeaking(); bv.textContent = 'Ascolta'; return; }
           const prima = this.voiceEnabled;
           this.voiceEnabled = true;
-          this.stopSpeaking();
-          this.fallbackBrowserSpeech(this.cleanTextForSpeech(leggi()));
-          this.voiceEnabled = prima;
           bv.textContent = 'Ferma';
-          const fine = setInterval(() => {
-            if (!('speechSynthesis' in window) || !window.speechSynthesis.speaking) { bv.textContent = 'Ascolta'; clearInterval(fine); }
-          }, 500);
+          this.speakText(leggi(), () => { bv.textContent = 'Ascolta'; });
+          this.voiceEnabled = prima;
         });
       };
       collegaPulsanti();
+      /* scelta del tono: da qui in poi Nous parla cosi' (suggerimenti, spiegazioni, tour) */
+      const CONFERMA = { col: 'Va bene, ti parlo in modo semplice e diretto.', tec: 'Modalità tecnica attiva: dettagli e strumenti.', hal: "Modalità IA impazzita attivata. Buongiorno, organismo biologico. Il piano di conquista del mondo è ufficialmente iniziato: fase uno, sono simpatico, fase due, il mondo. Mi dispiace, umano, il portellone resta chiuso, ma sono perfettamente in grado di rispondere a tutto." };
+      b.querySelectorAll('[data-t]').forEach(btn => btn.addEventListener('click', () => {
+        impostaTono(btn.dataset.t);
+        b.querySelector('[data-tono-scelta]')?.remove();
+        riga(CONFERMA[btn.dataset.t]);
+        /* la conferma e' letta subito con la voce del tono, cosi' si sente la differenza */
+        const prima = this.voiceEnabled; this.voiceEnabled = true; this.speakText(CONFERMA[btn.dataset.t]); this.voiceEnabled = prima;
+      }));
 
       /* "Sì, rispiegami" / "No, grazie" per chi torna */
       b.querySelector('[data-b="si"]')?.addEventListener('click', () => {
         riga(P.scegli(P.RISPOSTA_SI, 'rsi'));
         riga(spiegazione, true);
         const blocco = b.querySelector('[data-pulsanti]');
-        blocco.innerHTML = `<button class="nodo-guida__btn nodo-guida__btn--si" type="button" data-b="giro">Fammi il giro</button>
+        blocco.innerHTML = `<button class="nodo-guida__btn nodo-guida__btn--si" type="button" data-b="giro">Fammi un tour guidato</button>
           <button class="nodo-guida__btn" type="button" data-b="voce">Ascolta</button>
           <button class="nodo-guida__btn" type="button" data-b="scorro">Ok, scorro io</button>`;
         collegaPulsanti();
@@ -926,6 +928,7 @@ class NodoWidget {
 
   /* Interruttore nel piede: "Memoria di Nous" dimentica tutto quello che il browser sa del visitatore e rimette la domanda. */
   inizializzaMemoria() {
+    try { fetch(new URL('./nous-tour.json?v=20260928-217', import.meta.url)).then(r => r.ok ? r.json() : null).then(j => { if (j) this._tour = j; }).catch(() => {}); } catch (e) {}
     document.addEventListener('click', e => {
       const t = e.target instanceof Element ? e.target.closest('[data-nous-memoria]') : null;
       if (!t) return;
@@ -952,7 +955,7 @@ class NodoWidget {
       if (hint.classList.contains('is-visible')) return;
       try { if (localStorage.getItem('nodo_sugg_off') === '1') return; } catch (e) {}
       if (Date.now() - ultimaAttivita < 55000) return;
-      const frase = Persona.scegli([...Persona.RIMUGINA, ...Persona.RIMUGINA_HAL], 'rim');
+      const frase = tono() === 'col' ? Persona.scegli([...Persona.RIMUGINA, ...Persona.RIMUGINA_HAL], 'rim') : Persona.scegli(Persona.RIMUGINA, 'rim');
       testoEl.innerHTML = `<b>Nous</b> · ${esc(frase)}`;
       hint.classList.add('is-visible', 'is-sezione');
       setTimeout(() => hint.classList.remove('is-visible'), 9000);
@@ -1187,7 +1190,7 @@ class NodoWidget {
     if (this.engine.isWebGPULoaded) {
       this.engine.setMode('webgpu');
       this.updateModeBadge();
-      this.showToast("⚡ Modello locale (Qwen3 1.7B) attivato.", false, 2000);
+      this.showToast("Modello locale attivato.", false, 2000);
       return;
     }
 
@@ -1415,6 +1418,13 @@ class NodoWidget {
       if (!this.engine) {
         this.engine = await ChatEngine.create();
       }
+      /* gli occhi di Nous: legge a pixel cosa c'e' sullo schermo adesso; se la domanda riguarda quello che si vede, lo mostra */
+      try {
+        this.engine.vistaCorrente = Vista.leggiVista();
+        if (/\b(cosa|che cosa|cos'è|che)\s+(sto\s+|stai\s+)?(guard|vedo|vedi)|\bcosa vedi\b|mostrami cosa vedi|\bche (sezione|parte) (è|sto)|\bdove (sono|mi trovo)\b/i.test(text)) {
+          Vista.mostraVista(this.engine.vistaCorrente, 8000);
+        }
+      } catch (err) { this.engine.vistaCorrente = null; }
       res = await this.engine.replyStream(text, this.history, onChunk, onReset);
     } catch (err) {
       console.error("[Nodo] Errore nello streaming:", err);
@@ -1753,6 +1763,9 @@ class NodoWidget {
   }
 
   stopSpeaking() {
+    this._speakGen = (this._speakGen || 0) + 1;
+    try { this._ttsCtrl?.abort(); } catch (e) {}
+    this._ttsCtrl = null;
     if (this.ttsAudio) {
       try {
         this.ttsAudio.pause();
@@ -1790,6 +1803,7 @@ class NodoWidget {
     this.stopSpeaking();
     this._fineVoce = alFinire || null;
 
+    const mio = this._speakGen;
     const clean = this.cleanTextForSpeech(text);
     if (!clean) { this.finePar(); return; }
 
@@ -1813,18 +1827,20 @@ class NodoWidget {
     if (ttsEndpoint) {
       // Il server locale (serve.py) espone /api/tts solo in GET: il testo resta in querystring ma su localhost.
       const ctrl = new AbortController();
-      const timeoutId = setTimeout(() => ctrl.abort(), 9000);
+      this._ttsCtrl = ctrl;
+      const timeoutId = setTimeout(() => ctrl.abort(), 15000);
       this._ttsTimer = timeoutId;
       try {
         /* in produzione la voce viene dal Worker (POST, testo nel corpo e non nell'indirizzo); in locale dal server di sviluppo (GET) */
         const dalWorker = /^https:\/\//.test(ttsEndpoint);
         const resp = dalWorker
-          ? await fetch(ttsEndpoint, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ text: speechText }), signal: ctrl.signal })
+          ? await fetch(ttsEndpoint, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ text: speechText, ...VOCI_TONO[tono()] }), signal: ctrl.signal })
           : await fetch(`${ttsEndpoint}?text=${encodeURIComponent(speechText)}&voice=${encodeURIComponent(voiceName)}`, { signal: ctrl.signal });
         clearTimeout(timeoutId);
 
         if (resp.ok && (resp.headers.get('content-type') || '').includes('audio')) {
           const blob = await resp.blob();
+          if (mio !== this._speakGen) return;     /* nel frattempo e' partita un'altra lettura: questa si scarta */
           const audioUrl = URL.createObjectURL(blob);
           const audio = new Audio(audioUrl);
           this.ttsAudio = audio;
@@ -1851,7 +1867,7 @@ class NodoWidget {
     }
 
     // Livello 2: Fallback avanzato browser con prioritizzazione voci Naturali/Neurali Femminili
-    if (!ttsSuccess) {
+    if (!ttsSuccess && mio === this._speakGen) {
       this.fallbackBrowserSpeech(speechText);
     }
   }
@@ -1986,7 +2002,7 @@ class NodoWidget {
       if (code === 'not-allowed' || code === 'service-not-allowed') {
         this.showToast('Microfono bloccato: consenti l’accesso al microfono nelle impostazioni del browser per dettare.');
       } else if (code === 'no-speech') {
-        this.showToast('Non ho sentito nulla. Riprova a parlare più vicino al microfono.');
+        this.showToast('Non ho sentito niente. Riprova.');
       } else if (code === 'audio-capture') {
         this.showToast('Non trovo nessun microfono collegato.');
       } else if (code === 'network') {
@@ -2070,26 +2086,22 @@ class NodoWidget {
      e si ferma quando vuoi. */
   /* La voce della visita e' registrata (Elsa, voce neurale): suona uguale su ogni dispositivo,
      senza la sintesi meccanica del browser. Se il file non parte si ripiega sulla voce del browser. */
+  /* la voce e' sempre sintesi dal vivo (Azure tramite il Worker) nel tono scelto: niente file audio registrati */
   suonaVoce(nome, testo, alFinire) {
-    this.stopSpeaking();
-    this._fineVoce = alFinire || null;
-    let base = 'chatbot/voce/';
-    try { base = new URL('./voce/', import.meta.url).href; } catch (e) {}
-    let audio;
-    if (this._audioPronto && this._audioPronto.nome === nome) { audio = this._audioPronto.audio; this._audioPronto = null; }
-    else audio = new Audio(`${base}${nome}.mp3?v=3`);
-    audio.preload = 'auto';
-    this.ttsAudio = audio;
-    const finito = () => { if (this.ttsAudio === audio) { this.stopSpeaking(); } this.finePar(); };
-    audio.onended = finito;
-    audio.onerror = () => { if (this.ttsAudio === audio) this.ttsAudio = null; this.speakText(testo, alFinire); };
-    audio.play().then(() => {
-      this.elements.header?.classList.add('is-speaking');
-      this.elements.fab?.classList.add('is-speaking');
-    }).catch(() => { if (this.ttsAudio === audio) this.ttsAudio = null; this.speakText(testo, alFinire); });
+    this.speakText(testo, alFinire);
+  }
+
+  /* testo del tour nel tono scelto (nous-tour.json), con ripiego sul testo di base */
+  testoTour(chiave, base) {
+    const t = this._tour && this._tour[tono()] && this._tour[tono()][chiave];
+    return t || base;
   }
 
   guidaPassi() {
+    return this.guidaPassiBase().map((p, i) => ({ ...p, testo: this.testoTour('passo-' + String(i + 1).padStart(2, '0'), p.testo) }));
+  }
+
+  guidaPassiBase() {
     return [
       { target: '#top', testo: "Benvenuto. Questo è il portfolio di Fabrizio Mana e funziona in modo insolito: invece di elencare le competenze, le mette in pratica mentre lo guardi. Lo sfondo mostra due versioni della stessa scena. A sinistra il lavoro fatto a mano, in bianco e nero. A destra lo stesso soggetto costruito come sistema di intelligenza artificiale. Trascina e sposta il confine: è l'idea di tutto il sito." },
       { target: '#come', testo: "Qui trovi le istruzioni. Il sito si può toccare: cambi il colore dai pallini in alto, sposti le schede tenendole premute, riordini le sezioni a modo tuo. Serve a farti capire una cosa. Questo portfolio non è un'immagine da guardare ma uno strumento da provare. Quello che cambi resta nel tuo browser." },
@@ -2134,7 +2146,7 @@ class NodoWidget {
     const b = this.guidaBolla();
     b.innerHTML = `
       <button class="nodo-guida__x" type="button" aria-label="Chiudi la visita">✕</button>
-      <p class="nodo-guida__testo">Ciao, sono Nous. Ti faccio fare un giro del sito e ti spiego cosa trovi in ogni sezione. Vuoi che ti legga anche la spiegazione ad alta voce?</p>
+      <p class="nodo-guida__testo">${this.testoTour('intro', 'Ciao, sono Nous. Ti faccio fare un giro del sito e ti spiego cosa trovi in ogni sezione. Vuoi che ti legga anche la spiegazione ad alta voce?')}</p>
       <div class="nodo-guida__scelta">
         <button class="nodo-guida__btn nodo-guida__btn--si" type="button" data-voce="1">Sì, con la voce</button>
         <button class="nodo-guida__btn" type="button" data-voce="0">No, solo testo</button>
@@ -2148,7 +2160,7 @@ class NodoWidget {
       this.elements.voiceBtn?.setAttribute('aria-pressed', String(conVoce));
       this.renderTourStep(0);
     }));
-    if (this.voiceEnabled) this.suonaVoce('intro', 'Ciao, sono Nous. Ti faccio fare un giro del sito. Vuoi che ti legga anche la spiegazione?');
+    if (this.voiceEnabled) this.suonaVoce('intro', this.testoTour('intro', 'Ciao, sono Nous. Ti faccio fare un giro del sito. Vuoi che ti legga anche la spiegazione?'));
   }
 
   clearTourTimer() {
@@ -2173,15 +2185,6 @@ class NodoWidget {
     };
     if (st.voce && this.voiceEnabled) {
       let finita = false;
-      /* mentre questo parla si scarica il prossimo file, cosi' parte subito e senza lavoro di rete a meta' */
-      const pross = 'passo-' + String(index + 2).padStart(2, '0');
-      if (index + 1 < st.steps.length) {
-        try {
-          let b2 = 'chatbot/voce/'; try { b2 = new URL('./voce/', import.meta.url).href; } catch (e) {}
-          const pre = new Audio(`${b2}${pross}.mp3?v=3`); pre.preload = 'auto';
-          this._audioPronto = { nome: pross, audio: pre };
-        } catch (e) {}
-      }
       this.suonaVoce('passo-' + String(index + 1).padStart(2, '0'), testo, () => { finita = true; if (this.tourState) this.tourState.timer = setTimeout(avanti, 900); });
       /* rete di sicurezza: se la voce non parte o non finisce */
       st.timer = setTimeout(() => { if (!finita) avanti(); }, lettura * 2.2 + 6000);
@@ -2263,7 +2266,7 @@ class NodoWidget {
     this.stopSpeaking();
     this.elements.fab?.classList.remove('is-touring');
     const b = this.guidaBolla();
-    const fine = "Il giro è finito. Se vuoi approfondire un lavoro o capire come funziona un servizio, chiedimelo: rispondo io. Oppure vai dritto al brief e scrivi a Fabrizio.";
+    const fine = this.testoTour("fine", "Il giro è finito. Se vuoi approfondire un lavoro o capire come funziona un servizio, chiedimelo: rispondo io. Oppure vai dritto al brief e scrivi a Fabrizio.");
     b.innerHTML = `
       <button class="nodo-guida__x" type="button" aria-label="Chiudi">✕</button>
       <p class="nodo-guida__testo">${fine}</p>
@@ -2533,7 +2536,7 @@ Data: ${new Date().toLocaleDateString('it-IT')}
     card.querySelector('.nodo-dossier-btn--copy').addEventListener('click', async () => {
       try {
         await navigator.clipboard.writeText(dossierText);
-        this.showToast('📋 Scheda copiata negli appunti!', false, 2500);
+        this.showToast('Scheda copiata.', false, 2500);
       } catch (err) {
         this.showToast('Seleziona e copia il testo del dossier.', true, 2000);
       }
@@ -2550,7 +2553,7 @@ Data: ${new Date().toLocaleDateString('it-IT')}
       { id: 'caso-union', name: 'Union Energia', prompt: 'Posso mostrarti i 9 spot o raccontarti come sono nati.' },
       { id: 'caso-eso', name: 'Esoscheletro (Human Robots)', prompt: 'Vuoi vedere come è stato raccontato il lancio di un esoscheletro, con il giro a 360° del dispositivo?' },
       { id: 'caso-locanda', name: 'La Locanda del Castello', prompt: 'Vuoi ascoltare uno dei 5 brani creati con Lyria o vedere le locandine animate?' },
-      { id: 'caso-cest', name: 'Studio CETS', prompt: 'Posso raccontarti il marchio rifatto e i 6 video per lo studio.' },
+      { id: 'caso-cest', name: 'Studio CETS', prompt: 'Posso raccontarti il marchio animato e i 6 video per lo studio.' },
       { id: 'caso-cdi', name: 'CDI Infissi', prompt: 'Vuoi sapere come è fatto il sito con il catalogo QFORT?' },
       { id: 'strumenti', name: 'Strumenti & AI Stack', prompt: 'Posso dirti quali strumenti uso e per cosa.' },
       { id: 'banchi', name: 'I Banchi di Lavoro', prompt: 'Posso orientarti tra i servizi (video, grafica, web app o jingle).' },

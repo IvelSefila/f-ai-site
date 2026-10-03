@@ -23,23 +23,23 @@ import { scheda } from './scheda.js';
 
 export const PEZZI = [
   { id: 'trailer', t: 'Il trailer', d: '0:24', w: 1280, h: 720,
-    n: 'Ventiquattro secondi nelle tre vite del prodotto: casa, palestra di riabilitazione, montagna.' },
+    n: 'Filmato principale del lancio: mostra il dispositivo in casa, in riabilitazione e in montagna, per YouTube e sito.' },
   { id: 'trekking', t: 'Trekking', d: '0:16', w: 720, h: 1280,
-    n: 'Il verticale per i social: un uomo sale un crinale con l’esoscheletro, senza sforzo visibile.' },
+    n: 'Spot verticale per i social, rivolto a chi cerca aiuto nelle camminate in montagna.' },
   { id: 'spot', t: 'Più forza, più libertà', d: '0:32', w: 720, h: 1280,
-    n: 'Lo spot che finisce sulla scheda prodotto: il dispositivo staccato sul bianco, il claim e basta.' },
+    n: 'Spot verticale per la scheda prodotto: mostra l’uso quotidiano del dispositivo, chiuso dal marchio.' },
   { id: 'prodotto', t: 'Il dispositivo', d: '0:10', w: 720, h: 1280,
-    n: 'Product film: solo l’oggetto, fumo e luce radente — com’è fatto, quando il resto è narrazione.' },
+    n: 'Presentazione breve del dispositivo, da usare come apertura nei reel e nella pagina prodotto.' },
   { id: 'prova0', t: 'Vista frontale, studio', d: '0:10', w: 720, h: 1280,
-    n: 'Il dispositivo intero su fondale neutro: la vista che spiega la forma prima di ogni dettaglio.' },
+    n: 'Prova di giro completo, per mostrare tutti i lati e mantenere identico l’aspetto in ogni inquadratura.' },
   { id: 'prova5', t: 'Vista frontale, controluce', d: '0:06', w: 720, h: 1302,
-    n: 'Stessa inquadratura, luce radente su pavimento riflettente: il taglio più drammatico dello studio.' },
+    n: 'Prova di inquadratura con luci da studio, per scegliere atmosfera e dettagli dei video del lancio.' },
   { id: 'prova3', t: 'Modulo centrale, dettaglio', d: '0:10', w: 720, h: 1302,
-    n: 'Il blocco degli aggangi rossi visto da vicino: dove il dispositivo si apre e si chiude sul corpo.' },
+    n: 'Prova sui ganci e sul retro della cintura, per spot e schede che spiegano l’aggancio.' },
   { id: 'prova1', t: 'Dettaglio, macro', d: '0:05', w: 720, h: 1280,
-    n: 'Il profilo del bracciolo, a un centimetro dall’obiettivo: la striscia rossa che identifica il marchio.' },
+    n: 'Prova ravvicinata da usare come stacco nei montaggi, dal particolare rosso al dispositivo intero.' },
   { id: 'prova6', t: 'Dettaglio, texture carbonio', d: '0:08', w: 720, h: 1254,
-    n: 'La trama della fibra di carbonio in macro: la finitura che nelle riprese larghe non si legge.' },
+    n: 'Prova su materiali e articolazioni, da usare come inserto nei video per mostrare la costruzione.' },
 ];
 
 const mio = scheda({ nome: 'eso', cartella: 'eso/', pezzi: PEZZI });

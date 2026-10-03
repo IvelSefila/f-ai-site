@@ -21,9 +21,8 @@ export const CONFIG = {
 
   // Sintesi Vocale Neurale HD (Edge TTS / Fallback neurale browser)
   tts: {
-    endpoint: (typeof window !== 'undefined' && (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'))
-      ? '/api/tts'
-      : CLOUD_PROXY_URL_PRODUZIONE + '/tts',
+    /* sempre il Worker (Azure): anche in locale, altrimenti senza /api/tts si sentiva la voce di ripiego del browser */
+    endpoint: CLOUD_PROXY_URL_PRODUZIONE + '/tts',
     defaultVoice: 'it-IT-ElsaNeural'
   },
 

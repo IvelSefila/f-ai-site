@@ -31,24 +31,26 @@
 import { apriVideo } from './video-lightbox.js';
 
 export const PEZZI = [
+  { id: 'cashback', t: 'Il cashback', d: '0:21', forma: 'alto',
+    n: 'Spiega il cashback sulla bolletta a chi segue la campagna sui social.' },
   { id: 'locandina', t: 'Azzeriamola green', d: '0:07', forma: 'alto',
-    n: 'La locandina animata della campagna: il payoff, i tre passaggi e l’invito a scrivere.' },
+    n: 'Apre la campagna e invita a scrivere in privato per saperne di più.' },
   { id: 'davide-01', t: 'Caro benzina', d: '0:04', forma: 'alto',
-    n: 'Davide l’alpaca davanti a una pompa di benzina, nel primo dei corti che lo presentano.' },
+    n: 'Primo corto con Davide: parte dal costo del carburante per arrivare alle bollette.' },
   { id: 'davide-02', t: 'La bolletta di luce e gas', d: '0:08', forma: 'alto',
-    n: 'Davide sulla porta di casa, con la bolletta appena arrivata.' },
+    n: 'Secondo corto con Davide: porta il discorso dalla benzina alla bolletta di luce e gas.' },
   { id: 'luca-asino', t: 'Luca l’asino sommerso', d: '0:07', forma: 'alto',
-    n: 'Un salotto sepolto sotto un mare di bollette e Luca l’asino in mezzo.' },
+    n: 'Corto con Luca, che rappresenta chi subisce la bolletta senza sapere come uscirne.' },
   { id: 'davide-03', t: 'La cometa a forma di zero', d: '0:12', forma: 'alto',
-    n: 'L’origine di tutto: una cometa a forma di 0 entra nell’atmosfera e nasce il mondo parallelo.' },
+    n: 'Racconta da dove nasce l’idea dello zero e invita a diventare Cliente Privilegiato.' },
   { id: 'insieme', t: 'Insieme si può', d: '1:18', forma: 'alto',
-    n: 'Il pezzo lungo: la richiesta di partecipazione e il gancio finale, sottotitolato.' },
+    n: 'Pezzo lungo in cui una persona presenta l’iniziativa e invita a partecipare.' },
   { id: 'bollette-roby', t: 'Rapito dalle bollette', d: '0:30', forma: 'alto',
-    n: 'Un uomo sollevato in cielo da un disco volante sopra un prato: le bollette che ti portano via.' },
+    n: 'Racconta il peso delle bollette con una scena di fantasia, poi mostra la bolletta a zero.' },
   { id: 'marco', t: 'Marco', d: '0:35', forma: 'alto',
-    n: 'Sembra una ripresa dal vivo in un viale alberato e non lo è: persona, luce e movimento sono tutti generati.' },
+    n: 'Testimonial creato con l’AI: spiega la condivisione dei risparmi e rimanda al contatto diretto.' },
   { id: 'dialogo-roby', t: 'Quanto ti costa la tua casa', d: '1:08', forma: 'largo',
-    n: 'Un dialogo fra due persone su una panchina. L’unico orizzontale della serie.' },
+    n: 'Conversazione tra amici per far capire l’idea della campagna e invitare alla diretta.' },
 ];
 
 const CARTELLA = 'lavori/';

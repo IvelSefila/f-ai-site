@@ -20,17 +20,17 @@ import { scheda } from './scheda.js';
 
 export const PEZZI = [
   { id: 'marchio-alto', t: 'Il marchio che si costruisce', d: '0:05', w: 720, h: 1280,
-    n: 'Il logo animato in 9:16 per le storie: la linea che gira, lo scudo tricolore, il drone che si posa.' },
+    n: 'Anima il marchio dello studio per aprire e chiudere i video verticali di storie e reel.' },
   { id: 'antincendio', t: 'La scadenza', d: '0:31', w: 720, h: 1280,
-    n: 'Una scintilla in un quadro elettrico, poi la data: da fine settembre la manutenzione antincendio la firma solo un tecnico qualificato.' },
+    n: 'Promuove il servizio antincendio agli amministratori: gli interventi spettano a tecnici qualificati.' },
   { id: 'amministratori', t: 'Il servizio, per intero', d: '0:40', w: 720, h: 1280,
-    n: 'Il giro completo: la firma che non copre, la rivalsa, il rilievo con drone, lo scudo — il pezzo da mandare a chi ha già chiesto.' },
+    n: 'Presenta agli amministratori i servizi dello studio, dal rilievo con drone alla tutela nelle contestazioni.' },
   { id: 'ced-voce', t: 'Caro amministratore', d: '0:14', w: 1280, h: 860,
-    n: 'Zero giorni liberi, sommerso dalle scartoffie: parla uno che ci è passato e finisce con cosa cambia — niente più caos, tempi dimezzati.' },
+    n: 'Propone agli amministratori di affidare le pratiche al CED dello studio, per dimezzare i tempi.' },
   { id: 'ced-vita', t: 'Riprenditi la tua vita', d: '0:16', w: 720, h: 1280,
-    n: 'Stessa promessa senza parole: i fogli che sommergono la scrivania, poi lo stesso uomo che esce dallo studio.' },
+    n: 'Versione verticale senza voce della proposta del CED agli amministratori, pensata per storie e reel.' },
   { id: 'marchio-largo', t: 'Lo stesso, in orizzontale', d: '0:05', w: 1280, h: 720,
-    n: 'La versione 16:9, sigla di apertura e chiusura degli altri pezzi: non il verticale ritagliato, ma l’aria ridistribuita ai lati.' },
+    n: 'Anima il marchio in formato orizzontale per aprire e chiudere gli altri video dello studio.' },
 ];
 
 const mio = scheda({ nome: 'cest', cartella: 'cest/', pezzi: PEZZI });

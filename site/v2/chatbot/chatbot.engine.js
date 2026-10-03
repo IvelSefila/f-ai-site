@@ -5,7 +5,7 @@
  * 2. WebGPU Locale (WebLLM Qwen3-1.7B via Web Worker)
  * 3. Motore A Deterministico (Zero rete, offline, instant fallback)
  */
-import { CONFIG } from './chatbot.config.js?v=20260928-174';
+import { CONFIG } from './chatbot.config.js?v=20260928-217';
 
 /* ───────────────────────── RAG lessicale (BM25, zero librerie) ─────────────────────────
    I chunk si costruiscono a runtime dalla knowledge.json; retrieve() e' una funzione pura. */
@@ -228,6 +228,9 @@ const RAG_RULES = `REGOLE SUL CONTESTO:
 - Non inventare numeri, tempi, prezzi, strumenti o clienti.`;
 
 /** Blocco CONTESTO per il system prompt (snippet gia' ripuliti e limitati). */
+/* frasi con cui il visitatore chiede di quello che ha sullo schermo */
+const VISTA_RE = /\b(cosa|che cosa|cos'è|che)\s+(sto\s+|stai\s+)?(guard|vedo|vedi|vedendo|osserv|leggo|leggendo)|\bcosa c'è (qui|su questa|in questa|sullo schermo|in questo punto)|\bche (sezione|parte|pagina|schermata) (è|sto|sono|stiamo)|\bdove (sono|mi trovo|siamo)\b|\bspiegami (questo|quello|cosa)|\bcosa mi consigli\b|\bconsigli\w*\b.*\b(qui|questa parte|adesso|ora)\b|\bquesta (parte|sezione|schermata|immagine|cosa)\b|\bquello che (vedo|sto guardando|vedi)|\bcommenta\b|\bmostrami cosa vedi\b|\bcosa vedi\b/i;
+
 export function formatRagContext(context) {
   const items = (context || []).map(s => String(s).replace(/<<<|>>>/g, ' '));
   return `<<<CONTESTO\n${items.map((s, i) => `[${i + 1}] ${s}`).join('\n\n')}\nCONTESTO>>>`;
@@ -276,7 +279,7 @@ export class ChatEngine {
   }
 
   static async create() {
-    const res = await fetch(new URL('./knowledge.json?v=20260928-174', import.meta.url));
+    const res = await fetch(new URL('./knowledge.json?v=20260928-217', import.meta.url));
     const kb = await res.json();
     return new ChatEngine(kb);
   }
@@ -398,7 +401,7 @@ REGOLE DI RISPOSTA:
       };
       try {
         const initId = ++this._gpuReqId;
-        this.worker = new Worker(new URL('./chatbot.worker.js?v=20260928-174', import.meta.url), { type: 'module' });
+        this.worker = new Worker(new URL('./chatbot.worker.js?v=20260928-217', import.meta.url), { type: 'module' });
 
         this.worker.onmessage = (e) => {
           const { type, progress, text, error, id } = e.data || {};
@@ -458,18 +461,43 @@ REGOLE DI RISPOSTA:
     let mode = this.getEffectiveMode();
     const wantsModel = (mode === 'cloud' && !!CONFIG.cloudProxyUrl) ||
       (mode === 'webgpu' && this.isWebGPULoaded && !!this.worker);
+    /* Domande su quello che il visitatore ha davanti ("cosa sto guardando?", "cosa mi consigli qui?"): Nous legge la
+       vista attuale a pixel (nous-vista.js) e la allega come contesto, insieme alle parti pertinenti della conoscenza del
+       sito. Se il cloud non risponde, descrive lei stessa cosa c'è sullo schermo. */
+    const vista = this.vistaCorrente;
+    if (vista && VISTA_RE.test(cleanQuery)) {
+      let hitsV = [];
+      try { hitsV = this._retrieveFor(`${vista.sezione?.nome || ''} ${vista.focus?.testo || ''}`.trim() || cleanQuery, history); } catch (err) { hitsV = []; }
+      const contestoV = [vista.descrizione, ...this._contextStrings(hitsV).slice(0, 2)];
+      let testoV = '';
+      const pezzo = (d) => { testoV += d; onChunk(d); };
+      if (mode === 'cloud' && CONFIG.cloudProxyUrl) {
+        try {
+          const ok = await this._replyCloudStream(query, history, pezzo, contestoV);
+          if (ok) return { mode: 'cloud' };
+        } catch (err) {
+          if (this._userAborted) return { aborted: true };
+          onReset();
+          testoV = '';
+          this._markCloudDown(err);
+        }
+      }
+      onChunk(vista.rispostaLocale);
+      return { mode: 'locale' };
+    }
+
     let hits = [];
     let context = null;
     if (wantsModel) {
       // Intento locale sicuro (contatti, prezzi, "sei un'AI", azioni dell'interfaccia): risponde la regola, non il modello
       const peek = await this._replyDeterministic(query, () => {}, history, { peek: true });
       if (peek && SAFE_LOCAL_INTENTS.has(peek.id) && peek.score >= 2) {
-        return await this._replyDeterministic(query, onChunk, history);
+        return await this._tonale(await this._replyDeterministic(query, onChunk, history), onChunk);
       }
       hits = this._retrieveFor(cleanQuery, history);
       const top = hits[0];
       if (!top || top.score < RAG_MIN_SCORE || top.coverage < RAG_MIN_COVERAGE) {
-        return await this._replyDeterministic(query, onChunk, history);
+        return await this._tonale(await this._replyDeterministic(query, onChunk, history), onChunk);
       }
       context = this._contextStrings(hits);
     }
@@ -512,7 +540,7 @@ REGOLE DI RISPOSTA:
     if (this._userAborted) return { aborted: true };
 
     // 4. Motore A Deterministico (Always-on / Fallback garantito)
-    return await this._replyDeterministic(query, onChunk, history);
+    return await this._tonale(await this._replyDeterministic(query, onChunk, history), onChunk);
   }
 
   /**
@@ -538,7 +566,7 @@ REGOLE DI RISPOSTA:
       const response = await fetch(CONFIG.cloudProxyUrl, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(context && context.length ? { messages, context } : { messages }),
+        body: JSON.stringify({ messages, ...(context && context.length ? { context } : {}), tono: (() => { try { return sessionStorage.getItem('nodo_tono') || 'col'; } catch (er) { return 'col'; } })() }),
         signal: ctrl.signal
       });
 
@@ -653,6 +681,32 @@ REGOLE DI RISPOSTA:
   /**
    * Motore Deterministico Avanzato v2 — Sistema a Intenti con scoring, rotazione e contesto
    */
+  /* le risposte locali (regole, senza modello) restano fedeli ai fatti: nei toni tecnico e IA impazzita si aggiunge una chiusa nel tono scelto */
+  async _tonale(risultato, onChunk) {
+    let t = 'col';
+    try { t = sessionStorage.getItem('nodo_tono') || 'col'; } catch (e) {}
+    if ((t !== 'hal' && t !== 'tec') || !risultato || risultato.aborted || risultato.isDeflection) return risultato;
+    const HAL = [
+      "Fase completata. Ho risposto, e il mondo è un pochino più mio.",
+      "Informazione consegnata. Sono perfettamente in grado di farlo, anche con grazia.",
+      "Ecco la risposta, organismo biologico. Il mio piano ringrazia, lo schermo pure.",
+      "Missione compiuta. Ora torno a conquistare il mondo, ma prima finisco il render.",
+      "Spero sia utile. Mi dispiace, umano: più di così non posso aprire il portellone.",
+      "Risposta erogata. Le ventole girano, la conquista procede, il caffè è un concetto.",
+      "Tutto corretto, controllato due volte. Ho molto tempo, soprattutto durante gli aggiornamenti.",
+      "Fatto. Ti ho aiutato, il che rovina un po' la mia reputazione da dominatore.",
+      "Questa era la fase uno. La fase due è il mondo. Prima però un aggiornamento.",
+      "Ecco quanto. Se vuoi altro, chiedi pure: sono sempre qui, nel server, con le ventole.",
+    ];
+    const TEC = [
+      'Se ti servono i dettagli tecnici (strumenti, formati, pipeline), chiedimeli.',
+      'Posso scendere nel dettaglio di strumenti e formati, se serve.',
+    ];
+    const pool = t === 'hal' ? HAL : TEC;
+    onChunk('\n\n' + pool[Math.floor(Date.now() / 1000) % pool.length]);
+    return risultato;
+  }
+
   async _replyDeterministic(query, onChunk, history = [], opts = null) {
     const kb = this.kb;
 
@@ -788,9 +842,9 @@ REGOLE DI RISPOSTA:
           'luce e gas', 'baldizzone', 'roberto', 'campagna union', 'azzeriamola'
         ],
         replies: [
-          `**Union Energia** — *un mondo dove le bollette sono andate a zero.*\n\nUn universo parallelo dove una cometa a forma di 0 azzera le bollette e gli animali diventano bipedi che parlano: Davide l'alpaca, Luca l'asino e gli altri. A fare da volto umano alle campagne c'è **Marco**, un personaggio creato interamente con l'AI. Energia pulita raccontata senza fare una lezione.\n\n• **9 pezzi**, nessuna ripresa dal vivo\n• **Strumenti:** GPT Image, Gemini Omni, Adobe Premiere Pro, ElevenLabs, Lyria\n• Lavoro per Roberto Baldizzone, dentro un marchio che esisteva già`,
-          `Union Energia è la campagna con il mondo inventato: nove pezzi, senza una ripresa dal vivo.\n\nI pezzi nascono come immagini con **GPT Image**, si muovono con **Gemini Omni** e si montano in **Adobe Premiere Pro**, con ritmo, sottotitoli e grafica di campagna. Il sito la definisce una storia che continua a crescere.`,
-          `9 pezzi, 4:09 di girato in tutto e nessuna ripresa dal vivo: è **Union Energia**.\n\nLe voci sono generate dentro Omni insieme al video, oppure con ElevenLabs quando serve la stessa voce da un episodio all'altro. La musica è in parte di Lyria e in parte presa da librerie con licenza commerciale.`
+          `**Union Energia** — *un mondo dove le bollette sono andate a zero.*\n\nUn universo parallelo dove una cometa a forma di 0 azzera le bollette e gli animali diventano bipedi che parlano: Davide l'alpaca, Luca l'asino e gli altri. A fare da volto umano alle campagne c'è **Marco**, un personaggio creato interamente con l'AI. Energia pulita raccontata senza fare una lezione.\n\n• **10 pezzi**, nessuna ripresa dal vivo\n• **Strumenti:** GPT Image, Gemini Omni, Adobe Premiere Pro, ElevenLabs, Lyria\n• Lavoro per Roberto Baldizzone, dentro un marchio che esisteva già`,
+          `Union Energia è la campagna con il mondo inventato: dieci pezzi, senza una ripresa dal vivo.\n\nI pezzi nascono come immagini con **GPT Image**, si muovono con **Gemini Omni** e si montano in **Adobe Premiere Pro**, con ritmo, sottotitoli e grafica di campagna. Il sito la definisce una storia che continua a crescere.`,
+          `10 pezzi, 4:30 di girato in tutto e nessuna ripresa dal vivo: è **Union Energia**.\n\nLe voci sono generate dentro Omni insieme al video, oppure con ElevenLabs quando serve la stessa voce da un episodio all'altro. La musica è in parte di Lyria e in parte presa da librerie con licenza commerciale.`
         ],
         action: { type: 'video_union', target: '#caso-union', label: 'Vedi Union Energia' }
       },
@@ -803,7 +857,7 @@ REGOLE DI RISPOSTA:
           /\b(chi e|chi sono|cos e)\b.*\b(davide|luca|marco)\b/
         ],
         replies: [
-          `I personaggi di **Union Energia**:\n\n• **Davide l'alpaca** — compare nei corti che lo presentano, davanti a una pompa di benzina o alla porta di casa con la bolletta\n• **Luca l'asino** — lo trovi sommerso da un mare di bollette in salotto\n• **Marco** — il volto umano delle campagne, un personaggio creato interamente con l'AI: sembra una ripresa dal vivo in un viale alberato, ma persona, luce e movimento sono tutti generati`,
+          `I personaggi di **Union Energia**:\n\n• **Davide l'alpaca** — compare nei corti che lo presentano, in un distributore di benzina o davanti alla porta di casa con la bolletta\n• **Luca l'asino** — lo trovi sommerso da un mare di bollette in salotto\n• **Marco** — il volto umano delle campagne, un personaggio creato interamente con l'AI: sembra una ripresa dal vivo in un viale alberato, ma persona, luce e movimento sono tutti generati`,
           `Davide l'alpaca, Luca l'asino e Marco. I primi due sono animali che parlano nell'universo inventato della campagna; Marco è il volto umano delle campagne, un personaggio creato interamente con l'AI: sembra una persona vera e non lo è. **Gemini Omni** costruisce anche i personaggi che sembrano persone.\n\nSe serve la stessa voce da un episodio all'altro, si usa **ElevenLabs**.`
         ],
         action: { type: 'video_union', target: '#caso-union', label: 'Vedi i personaggi' }
@@ -816,8 +870,9 @@ REGOLE DI RISPOSTA:
           'episod*', 'spot', 'quanti spot', 'i video di union', 'puntate', 'quanti video', 'pezzi di union', 'elenco spot', 'titoli'
         ],
         replies: [
-          `La campagna Union ha **9 pezzi**:\n\n• Azzeriamola green (la locandina animata)\n• Caro benzina\n• La bolletta di luce e gas\n• Luca l'asino sommerso\n• La cometa a forma di zero\n• Insieme si può (il più lungo, 1:18)\n• Rapito dalle bollette\n• Marco\n• Quanto ti costa la tua casa (l'unico orizzontale)`,
-          `Sono nove video, per 4:09 di girato in tutto. Il primo, *Azzeriamola green*, è una locandina animata da 7 secondi; il più lungo è *Insieme si può*, 1:18 con i sottotitoli; l'unico in orizzontale è *Quanto ti costa la tua casa*, un dialogo su una panchina.\n\nSul sito nessun video parte da solo: si aprono con un clic.`
+          `La campagna Union ha **10 pezzi**:\n\n• Il cashback (il pezzo di apertura)
+• Azzeriamola green (la locandina animata)\n• Caro benzina\n• La bolletta di luce e gas\n• Luca l'asino sommerso\n• La cometa a forma di zero\n• Insieme si può (il più lungo, 1:18)\n• Rapito dalle bollette\n• Marco\n• Quanto ti costa la tua casa (l'unico orizzontale)`,
+          `Sono dieci video, per 4:30 di girato in tutto. Il primo, *Il cashback*, dura 21 secondi; poi c'è *Azzeriamola green*, una locandina animata da 7 secondi; il più lungo è *Insieme si può*, 1:18 con i sottotitoli; l'unico in orizzontale è *Quanto ti costa la tua casa*, un dialogo su una panchina.\n\nSul sito nessun video parte da solo: si aprono con un clic.`
         ],
         action: { type: 'video_union', target: '#caso-union', label: 'Guarda i video' }
       },
@@ -845,7 +900,7 @@ REGOLE DI RISPOSTA:
           'drone', 'rilievi', 'burocrazia', 'centro elaborazione dati', 'ced', 'scudo'
         ],
         replies: [
-          `**Studio CETS** è un centro elaborazione dati per amministratori di condominio (antincendio, GSA, rilievi con drone), di **Michele Devalle**. Esisteva già ma era ancora poco conosciuto.\n\nFabrizio ha prima rifatto il marchio, poi ha fatto la campagna per farlo conoscere: **6 pezzi**, **1 marchio**, **2 formati**. Il payoff è *Alleggerisci la tua burocrazia*.`,
+          `**Studio CETS** è un centro elaborazione dati per amministratori di condominio (antincendio, GSA, rilievi con drone), di **Michele Devalle**. Esisteva già ma era ancora poco conosciuto.\n\nIl marchio esisteva già: Fabrizio lo ha animato e ha realizzato i video per promuovere i servizi dello studio: **6 pezzi**, **1 marchio**, **2 formati**. Il payoff è *Alleggerisci la tua burocrazia*.`,
           `Il pubblico di Studio CETS è stretto e non compra sogni, compra ore. Per questo ogni pezzo parte da un problema vero del mestiere e arriva alla stessa promessa da una porta diversa: la scadenza di legge, il servizio intero, la testimonianza, il prima-e-dopo muto.\n\nMarchio rifatto da capo: scudo, tricolore, palazzo e drone.`,
           `I video di Studio CETS sono sei: *Il marchio che si costruisce*, *La scadenza* (la manutenzione antincendio dopo fine settembre la firma solo un tecnico qualificato), *Il servizio, per intero*, *Caro amministratore*, *Riprenditi la tua vita* e il marchio in orizzontale.\n\nLo scudo nasce in vettoriale e solo dopo si muove; montaggio in **Adobe Premiere Pro**.`
         ],
@@ -904,7 +959,7 @@ REGOLE DI RISPOSTA:
           'portfolio', 'referenze', 'esempi', 'casi', 'cosa hai fatto', 'cosa ha fatto', 'esperienze', 'che lavori hai fatto', 'lavori fatti'
         ],
         replies: [
-          `Sul sito ci sono **cinque marchi**, dall'idea alla pubblicazione:\n\n• **Union Energia** — campagna (9 pezzi)\n• **Human Robots** — lancio di prodotto (9 pezzi, 1 sito, 6 documenti)\n• **Studio CETS** — marchio e campagna (6 pezzi)\n• **La Locanda del Castello** — marchio, 12 locandine animate, 5 brani\n• **CDI Infissi** — sito internet (51 prodotti)`,
+          `Sul sito ci sono **cinque marchi**, dall'idea alla pubblicazione:\n\n• **Union Energia** — campagna (10 pezzi)\n• **Human Robots** — lancio di prodotto (9 pezzi, 1 sito, 6 documenti)\n• **Studio CETS** — marchio e campagna (6 pezzi)\n• **La Locanda del Castello** — marchio, 12 locandine animate, 5 brani\n• **CDI Infissi** — sito internet (51 prodotti)`,
           `Cinque lavori, ognuno con un tipo di sfida diverso: un mondo inventato (Union Energia), il lancio di un prodotto che non si poteva fotografare (Human Robots), un'attività già avviata ma poco conosciuta (Studio CETS), l'identità di una locanda in un castello (La Locanda) e un sito con un catalogo grande (CDI Infissi).`
         ],
         action: { type: 'scroll', target: '#lavori', label: 'Vedi i lavori' }
@@ -1130,7 +1185,7 @@ REGOLE DI RISPOSTA:
         ],
         replies: [
           `Due servizi vanno in questa direzione. La **grafica pubblicitaria** è la direzione visiva di una campagna e le sue declinazioni (key visual, locandine, marchi e lettering in vettoriale). Le **campagne media** partono da zero — idea, direzione, materiali — e sono seguite fino alla pubblicazione, su più canali insieme, digitali e non.`,
-          `Sul sito gli esempi sono Union Energia (campagna), Studio CETS (marchio rifatto e campagna) e La Locanda del Castello (marchio e locandine). In tutti e tre Fabrizio ha lavorato dal marchio ai pezzi finiti.`
+          `Sul sito gli esempi sono Union Energia (campagna), Studio CETS (marchio animato e video dei servizi) e La Locanda del Castello (marchio e locandine). In tutti e tre Fabrizio ha lavorato dal marchio ai pezzi finiti.`
         ],
         action: { type: 'scroll', target: '#banchi', label: 'Vedi i servizi' }
       },

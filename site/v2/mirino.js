@@ -20,6 +20,8 @@ let emettiSc = () => {};
 export function emetti(x, y, n, forza) { emettiSc(x, y, n, forza); }
 export function mirinoTieni(v) { stato.tieni = !!v; }
 export function mirinoDati(testo) { stato.dati = testo || null; }
+/* x del confine mano/macchina (px schermo): quando il mirino ci passa sopra si trasforma in una presa orizzontale */
+export function mirinoConfine(x) { stato.confine = x == null ? null : x; }
 
 export function initMirino() {
   if (avviato || !matchMedia('(pointer: fine)').matches) return;
@@ -33,6 +35,7 @@ export function initMirino() {
       <g class="c-anello"><circle r="30" stroke-dasharray="3 8"/></g>
       <g class="c-archi"><path d="M-21 0A21 21 0 0 1 0 -21"/><path d="M21 0A21 21 0 0 1 0 21"/></g>
       <g class="c-angoli"><path d="M-40 -30V-40H-30M30 -40H40V-30M40 30V40H30M-30 40H-40V30"/></g>
+      <g class="c-frecce"><path d="M-46 -10L-58 0L-46 10M46 -10L58 0L46 10"/><path d="M-36 0H-27M27 0H36"/></g>
       <path class="c-mirino" d="M-11 0H-4M4 0H11M0 -11V-4M0 4V11"/>
       <circle class="c-punto" r="1.8"/>
     </svg><span class="hero-cursore__dati mono"></span>`;
@@ -93,7 +96,8 @@ export function initMirino() {
     archi.setAttribute('transform', `rotate(${p.b.toFixed(1)})`);
     const link = el.classList.contains('is-link');
     const stringi = (giu ? .78 : link ? 1.14 : 1) + (stato.tieni ? Math.sin(now * .02) * .05 : 0);
-    angoli.setAttribute('transform', `scale(${stringi.toFixed(3)})`);
+    const presa = el.classList.contains('is-presa');
+    angoli.setAttribute('transform', presa ? `scale(${(stringi * 1.45).toFixed(3)} ${(stringi * .62).toFixed(3)})` : `scale(${stringi.toFixed(3)})`);
     const sc = (giu ? .88 : 1) * (1 + Math.min(vel / 4000, .15));
     el.style.transform = `translate3d(${p.x.toFixed(1)}px,${p.y.toFixed(1)}px,0) scale(${sc.toFixed(3)})`;
     if (stato.dati !== ultimoDati) { ultimoDati = stato.dati; dati.textContent = stato.dati || ''; }
@@ -131,6 +135,8 @@ export function initMirino() {
     const isLink = !!t && !nativo && !!t.closest(LINK);
     el.classList.toggle('on', sopra && !nativo);
     el.classList.toggle('is-link', isLink);
+    const vicino = stato.confine != null && !!t && t.id === 'gl' && Math.abs(e.clientX - stato.confine) < 36;
+    el.classList.toggle('is-presa', vicino);
     document.body.classList.toggle('mirino-on', sopra && !nativo);
   };
   document.addEventListener('pointermove', e => {

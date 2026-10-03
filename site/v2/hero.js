@@ -1,5 +1,5 @@
-import { accentoGL } from './palette.js?v=20260928-174';
-import { emetti, mirinoTieni, mirinoDati } from './mirino.js?v=20260928-174';
+import { accentoGL } from './palette.js?v=20260928-217';
+import { emetti, mirinoTieni, mirinoDati, mirinoConfine } from './mirino.js?v=20260928-217';
 /* ═══════════════════════════════════════════════════════════════════
  * hero.js — il confine fra mano e macchina, calcolato a ogni frame.
  * WebGL2, nessuna libreria. Se manca, la pagina resta intera.
@@ -341,6 +341,7 @@ export function initHero(canvas, onState) {
     gl.drawArrays(gl.TRIANGLES, 0, 3);
     /* cursore globale (mirino.js): tiene, etichetta, scintille lungo il confine */
     mirinoTieni(holding);
+    { const rc = canvas.getBoundingClientRect(); mirinoConfine(rc.bottom > 0 && rc.top < innerHeight ? rc.left + split * rc.width : null); }
     mirinoDati(dragging ? `TU ${100 - Math.round(split * 100)} · AI ${Math.round(split * 100)}` : null);
     if (!reduce.matches && kick > .25) {
       const rc = canvas.getBoundingClientRect();
@@ -357,7 +358,7 @@ export function initHero(canvas, onState) {
     onState?.(state, 'frame');
   }
   const start = () => { if (raf) return; last = performance.now(); if (!startedAt) startedAt = last; lastFps = last; raf = requestAnimationFrame(frame); };
-  const stop = () => { cancelAnimationFrame(raf); raf = 0; mirinoTieni(false); mirinoDati(null); };
+  const stop = () => { cancelAnimationFrame(raf); raf = 0; mirinoTieni(false); mirinoDati(null); mirinoConfine(null); };
   let inVista = false;
   new IntersectionObserver(([e]) => { inVista = e.isIntersecting; inVista ? start() : stop(); }).observe(canvas);
   document.addEventListener('visibilitychange', () => (document.hidden || !inVista) ? stop() : start());

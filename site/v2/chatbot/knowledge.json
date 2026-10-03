@@ -18,7 +18,7 @@
       "tag": "Campagna marketing",
       "commissioner": "Roberto Baldizzone",
       "highlights": [
-        "9 pezzi di campagna, nessuna ripresa dal vivo, 4:09 di girato in tutto",
+        "10 pezzi di campagna, nessuna ripresa dal vivo, 4:30 di girato in tutto",
         "Un universo parallelo dove una cometa a forma di zero azzera le bollette e gli animali diventano bipedi che parlano",
         "Marco, un personaggio creato interamente con l'AI, fa da volto umano per le campagne",
         "Voci generate dentro Omni insieme al video, o con ElevenLabs quando serve la stessa voce da un episodio all'altro"
@@ -28,15 +28,15 @@
       "method": "I pezzi nascono come immagini con GPT Image, si muovono con Gemini Omni (che costruisce anche i personaggi che sembrano persone vere) e si montano in Adobe Premiere Pro, con ritmo, sottotitoli e grafica di campagna. La musica è in parte generata con Lyria e in parte presa da librerie con licenza per uso commerciale.",
       "characters": ["Davide l'alpaca", "Luca l'asino", "Marco"],
       "episodes": [
-        { "title": "Azzeriamola green", "desc": "La locandina animata della campagna: il payoff, i tre passaggi e l'invito a scrivere (7 secondi)." },
-        { "title": "Caro benzina", "desc": "Davide l'alpaca davanti a una pompa di benzina, nel primo dei corti che lo presentano." },
-        { "title": "La bolletta di luce e gas", "desc": "Davide sulla porta di casa, con la bolletta appena arrivata." },
-        { "title": "Luca l'asino sommerso", "desc": "Un salotto sepolto sotto un mare di bollette e Luca l'asino in mezzo." },
-        { "title": "La cometa a forma di zero", "desc": "L'origine di tutto: una cometa a forma di 0 entra nell'atmosfera e nasce il mondo parallelo." },
-        { "title": "Insieme si può", "desc": "Il pezzo lungo (1:18): la richiesta di partecipazione e il gancio finale, sottotitolato." },
-        { "title": "Rapito dalle bollette", "desc": "Un uomo sollevato in cielo da un disco volante sopra un prato: le bollette che ti portano via." },
-        { "title": "Marco", "desc": "Marco è il volto umano delle campagne, un personaggio creato interamente con l'AI: sembra una ripresa dal vivo in un viale alberato e non lo è, persona, luce e movimento sono tutti generati." },
-        { "title": "Quanto ti costa la tua casa", "desc": "Un dialogo fra due persone su una panchina. L'unico video orizzontale della serie (1:08)." }
+        { "title": "Azzeriamola green", "desc": "Apre la campagna e invita a scrivere in privato per saperne di più." },
+        { "title": "Caro benzina", "desc": "Primo corto con Davide: parte dal costo del carburante per arrivare alle bollette." },
+        { "title": "La bolletta di luce e gas", "desc": "Secondo corto con Davide: porta il discorso dalla benzina alla bolletta di luce e gas." },
+        { "title": "Luca l'asino sommerso", "desc": "Luca l'asino in un salotto pieno di bollette." },
+        { "title": "La cometa a forma di zero", "desc": "Racconta da dove nasce l’idea dello zero e invita a diventare Cliente Privilegiato." },
+        { "title": "Insieme si può", "desc": "Pezzo lungo in cui una persona presenta l’iniziativa e invita a partecipare." },
+        { "title": "Rapito dalle bollette", "desc": "Racconta il peso delle bollette con una scena di fantasia, poi mostra la bolletta a zero." },
+        { "title": "Marco", "desc": "Testimonial creato con l’AI: spiega la condivisione dei risparmi e rimanda al contatto diretto." },
+        { "title": "Quanto ti costa la tua casa", "desc": "Conversazione tra amici per far capire l’idea della campagna e invitare alla diretta." }
       ],
       "section_id": "caso-union"
     },
@@ -65,7 +65,7 @@
       "commissioner": "Michele Devalle",
       "highlights": [
         "Un centro elaborazione dati per amministratori di condominio (antincendio, GSA, rilievi con drone) che esisteva già ma era ancora poco conosciuto",
-        "Prima il marchio rifatto da capo (scudo, tricolore, palazzo e drone), poi la campagna per farlo conoscere",
+        "Il marchio esisteva già: l'ho animato (scudo, tricolore, palazzo e drone) e ho realizzato i video per promuovere i servizi dello studio",
         "6 pezzi video, 1 marchio, 2 formati: verticale e orizzontale sono due montaggi, non un ritaglio"
       ],
       "challenge": "Un pubblico stretto che non compra sogni, compra ore: ogni pezzo parte da un problema vero del mestiere e arriva alla stessa promessa (Alleggerisci la tua burocrazia) da una porta diversa.",
@@ -283,7 +283,7 @@
     },
     {
       "q": "Cos'è Studio CETS?",
-      "a": "È un centro elaborazione dati per amministratori di condominio (antincendio, GSA, rilievi con drone), di Michele Devalle. Fabrizio ha rifatto il marchio e poi ha fatto una campagna di sei video per farlo conoscere."
+      "a": "È un centro elaborazione dati per amministratori di condominio (antincendio, GSA, rilievi con drone), di Michele Devalle. Il marchio esisteva già: Fabrizio lo ha animato e ha realizzato sei video per promuovere i servizi dello studio."
     },
     {
       "q": "Fai anche siti WordPress?",

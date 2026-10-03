@@ -2011,3 +2011,28 @@
 .nodo-benvenuto { width: min(400px, calc(100vw - 120px)); }
 .nodo-benvenuto .nodo-guida__testo { margin-bottom: 8px; }
 .nodo-benvenuto .nodo-guida__testo--corpo { font-size: 14px; color: var(--nodo-text); }
+
+
+/* ── Quello che vede Nous, mostrato a pixel ── */
+.nodo-vista { position: fixed; inset: 0; z-index: 2147483000; pointer-events: none; }
+.nodo-vista__r { position: absolute; box-sizing: border-box; border: 1.5px dashed rgba(79, 227, 176, .75); border-radius: 4px; background: rgba(20, 192, 138, .07);
+  animation: nodo-vista-entra .35s cubic-bezier(.23, 1, .32, 1) both; }
+.nodo-vista__r.is-focus { border: 2px solid #4fe3b0; background: rgba(79, 227, 176, .14); box-shadow: 0 0 0 1px rgba(5, 7, 11, .6), 0 0 24px rgba(79, 227, 176, .35); }
+.nodo-vista__r span { position: absolute; left: 0; top: 0; transform: translateY(-100%); max-width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  font: 600 10.5px/1 var(--nodo-font-mono, ui-monospace, Consolas, monospace); letter-spacing: .02em; color: #04150f; background: #4fe3b0; padding: 3px 6px; border-radius: 4px 4px 0 0; }
+.nodo-vista__mirino { position: absolute; width: 34px; height: 34px; margin: -17px 0 0 -17px; border: 1.5px solid #4fe3b0; border-radius: 50%; }
+.nodo-vista__mirino::before, .nodo-vista__mirino::after { content: ""; position: absolute; background: #4fe3b0; }
+.nodo-vista__mirino::before { left: 50%; top: -8px; bottom: -8px; width: 1.5px; margin-left: -.75px; }
+.nodo-vista__mirino::after { top: 50%; left: -8px; right: -8px; height: 1.5px; margin-top: -.75px; }
+@keyframes nodo-vista-entra { from { opacity: 0; transform: scale(.985); } to { opacity: 1; transform: none; } }
+@media (prefers-reduced-motion: reduce) { .nodo-vista__r { animation: none; } }
+
+/* Benvenuto: nota sul tour, riga legale e posizione sopra l'avviso cookie */
+.nodo-guida__nota { margin: 8px 22px 0 0; font-size: 12.5px; line-height: 1.5; color: var(--nodo-muted); }
+.nodo-guida__nota--legale { margin-top: 6px; font-size: 12px; }
+.nodo-guida__nota a { color: var(--nodo-em); text-decoration: underline; text-underline-offset: 2px; }
+body:has(.cookie:not(.cookie--via)) .nodo-benvenuto { bottom: 215px; }
+@media (max-width: 760px) { body:has(.cookie:not(.cookie--via)) .nodo-benvenuto { bottom: calc(330px + env(safe-area-inset-bottom, 0px)); } }
+
+/* Nota sul tour: in bianco, sopra i pulsanti del tour, con un filo che la stacca dalla scelta del tono */
+.nodo-guida__nota--tour { color: #fff; font-size: 13px; margin: 14px 22px 8px 0; padding-top: 12px; border-top: 1px solid rgba(255, 255, 255, .14); }

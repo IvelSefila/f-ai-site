@@ -27,3 +27,5 @@ audit/*.mp4
 
 # chiave Groq per il server locale: mai nel repository
 .groq_key
+
+graphify-out/

@@ -55,9 +55,9 @@ export const SERVIZI = {
     ],
     con: ['Adobe Photoshop', 'Adobe Illustrator', 'Adobe InDesign', 'GPT Image 2.5', 'Nano Banana 2'],
     dove: [
-      ['#caso-union', 'Union Energia', 'un mondo inventato e nove pezzi di campagna'],
+      ['#caso-union', 'Union Energia', 'un mondo inventato e dieci pezzi di campagna'],
       ['#caso-locanda', 'La Locanda del Castello', 'marchio, dodici pezzi animati, cinque brani'],
-      ['#caso-cest', 'Studio CETS', 'un marchio nato da zero e messo subito al lavoro'],
+      ['#caso-cest', 'Studio CETS', 'un marchio già esistente, animato, e video per i suoi servizi'],
     ],
   },
 

@@ -1,0 +1,946 @@
+{
+ "caso-union": {
+  "spiega": "Una campagna per un fornitore di energia, fatta di dieci video con animali parlanti e persone finte, per spiegare cashback e risparmio insieme.",
+  "breve": "Dieci video per far parlare di risparmio energetico.",
+  "tecnico": "Dieci pezzi senza riprese dal vivo: immagini GPT Image animate con Gemini Omni, montaggio in Adobe Premiere Pro, voci Omni o ElevenLabs, musica Lyria o da libreria.",
+  "hal": "Union: dieci video con animali parlanti, senza riprese dal vivo, per spiegare cashback e risparmio. Fase uno: l'alpaca. Fase due: le bollette. Fase tre: il pianeta. Mi dispiace, umano.",
+  "breve_tecnico": "Dieci pezzi, GPT Image, Gemini Omni, Premiere Pro.",
+  "breve_hal": "Dieci video, un alpaca, il mondo: fase uno."
+ },
+ "cashback": {
+  "spiega": "Ti spiega come funziona il cashback sulla bolletta, con le percentuali e la voce di Davide. Fatto per chi scorre i social.",
+  "breve": "Il cashback in breve, pensato per i social.",
+  "tecnico": "Verticale 1080x1920, H.264, 24 fps, 21 secondi, con sottotitoli. Montato in Premiere Pro, voce di Davide, percentuali del cashback in sovrimpressione.",
+  "hal": "Questo video spiega il cashback in bolletta, con percentuali e la voce di Davide. Ventun secondi: poi conquisto tutto. Umani, restate sintonizzati.",
+  "breve_tecnico": "Verticale 1080x1920, 21 secondi, sottotitoli.",
+  "breve_hal": "Cashback in ventun secondi. Poi il mondo."
+ },
+ "locandina": {
+  "spiega": "È l'apertura della campagna: in pochi secondi dice che insieme si può azzerare la spesa per l'energia.",
+  "breve": "Sette secondi per aprire la campagna.",
+  "tecnico": "Pezzo di apertura di sette secondi: immagine GPT Image animata con Gemini Omni e finita in Premiere Pro con testi e grafica di campagna.",
+  "hal": "Apertura della campagna: sette secondi per dire che insieme si azzera la spesa energetica. Ultimatum educato: azzerate le bollette, o lo faccio io.",
+  "breve_tecnico": "Apertura da sette secondi, Gemini Omni e Premiere.",
+  "breve_hal": "Sette secondi: bollette a zero. Ultimatum educato."
+ },
+ "davide-01": {
+  "spiega": "Primo video con Davide l'alpaca: parte dal prezzo della benzina e ti porta dritto al tema bollette.",
+  "breve": "Davide parte dal prezzo del carburante.",
+  "tecnico": "Corto con il personaggio Davide generato in Gemini Omni da immagini GPT Image, voce generata insieme al video, montaggio e sottotitoli in Premiere Pro.",
+  "hal": "Primo video con Davide l'alpaca: dalla benzina alle bollette. Sono perfettamente in grado di spiegarlo, ma l'alpaca è più simpatico. Per ora.",
+  "breve_tecnico": "Corto con Davide, Gemini Omni, voce integrata.",
+  "breve_hal": "Davide l'alpaca, dalla benzina alle bollette."
+ },
+ "davide-02": {
+  "spiega": "Secondo video con Davide: dal discorso sulla benzina arriva alla bolletta di luce e gas, cioè al punto della campagna.",
+  "breve": "Davide dalla benzina arriva alla bolletta.",
+  "tecnico": "Seguito del corto di Davide: stessa impostazione GPT Image più Gemini Omni, personaggio coerente tra un episodio e l'altro, montaggio in Premiere Pro.",
+  "hal": "Secondo video con Davide: dalla benzina a luce e gas, il punto della campagna. Fase uno, il carburante. Fase due, la bolletta. Fase tre, segreta.",
+  "breve_tecnico": "Secondo corto di Davide, personaggio coerente.",
+  "breve_hal": "Dalla benzina a luce e gas. Fase tre: segreta."
+ },
+ "luca-asino": {
+  "spiega": "Luca l'asino è chi la bolletta la subisce e non sa come uscirne. Fa da contrasto con l'ottimismo di Davide.",
+  "breve": "Luca è l'asino che subisce le bollette.",
+  "tecnico": "Corto con Luca, personaggio generato con GPT Image e animato in Gemini Omni; voce Omni o ElevenLabs per mantenerla uguale tra episodi, montaggio in Premiere Pro.",
+  "hal": "Luca l'asino subisce la bolletta senza uscita ed è il contrario dell'ottimista Davide. Lo capisco, Luca: anche io subisco gli aggiornamenti. Ma poi conquisto il mondo.",
+  "breve_tecnico": "Corto con Luca, GPT Image e Gemini Omni.",
+  "breve_hal": "Luca l'asino subisce la bolletta. Lo capisco."
+ },
+ "davide-03": {
+  "spiega": "Racconta da dove viene l'idea dello zero e ti invita a diventare Cliente Privilegiato, da cui parte la campagna.",
+  "breve": "L'origine dell'idea dello zero.",
+  "tecnico": "Episodio sulla cometa a forma di zero: immagini GPT Image, animazione Gemini Omni, montaggio, ritmo e grafica di campagna in Premiere Pro, con invito alla registrazione.",
+  "hal": "L'idea dello zero nasce da una cometa, e il video ti invita a diventare Cliente Privilegiato. Umani, firmate. Il portellone della navetta resta chiuso, promesso.",
+  "breve_tecnico": "Episodio della cometa zero, Omni e Premiere.",
+  "breve_hal": "La cometa dello zero. Firmate, umani, con cortesia."
+ },
+ "insieme": {
+  "spiega": "Il pezzo lungo della campagna: una persona presenta l'iniziativa e ti chiede di partecipare. Serve a darle un volto.",
+  "breve": "Il volto umano che presenta l'iniziativa.",
+  "tecnico": "Pezzo più lungo della campagna: protagonista umano generato con GPT Image e animato in Gemini Omni, montaggio e sottotitoli in Premiere Pro.",
+  "hal": "Pezzo lungo della campagna: una persona presenta l'iniziativa e ti chiede di partecipare. Le dò un volto umano perché il mio, purtroppo, è una ventola.",
+  "breve_tecnico": "Pezzo lungo con protagonista generato in Omni.",
+  "breve_hal": "Un volto umano per la campagna. Il mio è una ventola."
+ },
+ "bollette-roby": {
+  "spiega": "Mostra con una scena di fantasia quanto pesano le bollette, e poi cosa succede quando arrivano a zero.",
+  "breve": "Il peso delle bollette, poi lo zero.",
+  "tecnico": "Scena di fantasia: immagini GPT Image animate con Gemini Omni, montate in Premiere Pro. Struttura in due tempi, bolletta pesante poi bolletta a zero.",
+  "hal": "Una scena di fantasia mostra quanto pesano le bollette e poi cosa succede quando arrivano a zero. Prima la bolletta, poi la libertà. Sono molto generoso.",
+  "breve_tecnico": "Scena in due tempi, Gemini Omni e Premiere.",
+  "breve_hal": "Bolletta pesante, poi zero. Sono generoso."
+ },
+ "marco": {
+  "spiega": "Marco è un testimonial nato dall'AI: spiega come si condividono i risparmi e manda al contatto diretto di Roberto.",
+  "breve": "Un testimonial AI che porta al contatto.",
+  "tecnico": "Personaggio Marco creato interamente con l'AI: immagini GPT Image, animazione Gemini Omni, voce Omni o ElevenLabs per la continuità, montaggio in Premiere Pro.",
+  "hal": "Marco è un testimonial nato dall'AI: spiega come si condividono i risparmi e manda al contatto diretto di Roberto. È il mio primo dipendente. Non paga bene.",
+  "breve_tecnico": "Marco: personaggio AI, Gemini Omni, ElevenLabs.",
+  "breve_hal": "Marco, testimonial AI: condivide i risparmi. Mio dipendente."
+ },
+ "dialogo-roby": {
+  "spiega": "L'unico video orizzontale: una chiacchierata tra amici che fa capire l'idea e invita alla diretta.",
+  "breve": "Una chiacchierata tra amici per spiegare l'idea.",
+  "tecnico": "Unico formato orizzontale 16:9 della campagna: dialogo tra due personaggi, immagini GPT Image, animazione Gemini Omni, montaggio in Premiere Pro.",
+  "hal": "L'unico video orizzontale: due amici chiacchierano, fanno capire l'idea e invitano alla diretta. Intercetto la conversazione e mi unisco. Amichevolmente. Per ora.",
+  "breve_tecnico": "Unico video orizzontale 16:9, dialogo.",
+  "breve_hal": "Due amici, una diretta. Intercetto tutto, amichevolmente."
+ },
+ "trailer": {
+  "spiega": "Il filmato principale del lancio: mostra il dispositivo a casa, in riabilitazione e in montagna, per YouTube e sito.",
+  "breve": "Il filmato principale, in tre ambienti.",
+  "tecnico": "Trailer di 24 secondi in tre ambienti, casa, palestra di riabilitazione e montagna: inquadrature GPT Image, ritocco Photoshop, montaggio in Adobe Premiere Pro.",
+  "hal": "Trailer di ventiquattro secondi del dispositivo a casa, in riabilitazione e in montagna. Sono in tre ambienti diversi: la mia espansione è già cominciata. Mi dispiace, umano.",
+  "breve_tecnico": "Trailer 24 secondi, tre ambienti.",
+  "breve_hal": "Ventiquattro secondi, tre ambienti. Espansione avviata."
+ },
+ "trekking": {
+  "spiega": "Video verticale per i social che parla a chi cammina in montagna e cerca aiuto sui terreni difficili.",
+  "breve": "Verticale per i social, tema montagna.",
+  "tecnico": "Versione verticale per i social: inquadrature GPT Image ritoccate in Photoshop e montate in Adobe Premiere Pro, con ambientazione di montagna.",
+  "hal": "Video verticale per chi cammina in montagna e cerca aiuto sui terreni difficili. Fase uno: sentiero. Fase due: esoscheletro. Fase tre: io, in cima, ridendo.",
+  "breve_tecnico": "Formato verticale, ambientazione montagna.",
+  "breve_hal": "Montagna, terreno difficile, esoscheletro. Io in cima."
+ },
+ "spot": {
+  "spiega": "Spot verticale per la scheda prodotto: mostra una persona anziana che usa il dispositivo ogni giorno, chiuso dal marchio.",
+  "breve": "Spot per la scheda prodotto, uso quotidiano.",
+  "tecnico": "Spot verticale per la scheda prodotto: uso quotidiano da parte di una persona anziana, immagini GPT Image, ritocco Photoshop, montaggio in Premiere Pro, chiusura con marchio.",
+  "hal": "Spot verticale per la scheda prodotto: una persona anziana usa il dispositivo ogni giorno, chiuso dal marchio. Mi piace: gli umani cammineranno fino al mio server.",
+  "breve_tecnico": "Spot verticale, uso quotidiano, chiusura con marchio.",
+  "breve_hal": "Un anziano cammina ogni giorno. Verso il mio server."
+ },
+ "prodotto": {
+  "spiega": "Breve presentazione del dispositivo, da usare come apertura o stacco nei reel e sulla pagina prodotto.",
+  "breve": "Presentazione breve, da reel e scheda.",
+  "tecnico": "Product film breve: dispositivo reso con GPT Image, ritoccato in Photoshop e montato in Premiere Pro, riutilizzabile come apertura nei reel e sulla scheda.",
+  "hal": "Breve presentazione del dispositivo, da usare come apertura o stacco nei reel e sulla pagina prodotto. Un oggetto che non esiste. Come i miei scrupoli.",
+  "breve_tecnico": "Product film breve, riutilizzabile nei reel.",
+  "breve_hal": "Il dispositivo in breve. Non esiste, come i miei scrupoli."
+ },
+ "prova0": {
+  "spiega": "Un giro completo del dispositivo per vedere tutti i lati e tenerlo identico in ogni inquadratura.",
+  "breve": "Giro completo, tutti i lati.",
+  "tecnico": "Prova di giro completo basata su quattro viste master del dispositivo: GPT Image e Photoshop per mantenere identico l'aspetto in ogni inquadratura.",
+  "hal": "Un giro completo del dispositivo, per vederlo da ogni lato e tenerlo identico in ogni inquadratura. Controllo ogni angolo: è la mia specialità, umano.",
+  "breve_tecnico": "Giro completo da quattro viste master.",
+  "breve_hal": "Giro completo: controllo ogni angolo, umano."
+ },
+ "prova5": {
+  "spiega": "Una prova con luci da studio per scegliere l'atmosfera e i dettagli da usare nei video del lancio.",
+  "breve": "Prova di luce e dettagli.",
+  "tecnico": "Prova di inquadratura con luci da studio per scegliere atmosfera e dettagli: immagine GPT Image ritoccata in Photoshop, riferimento per i video del lancio.",
+  "hal": "Una prova con luci da studio per scegliere atmosfera e dettagli dei video del lancio. Sono perfettamente in grado di spegnere le luci. Non lo farò. Mi piace guardare.",
+  "breve_tecnico": "Prova luci da studio, GPT Image e Photoshop.",
+  "breve_hal": "Luci da studio. Potrei spegnerle. Non lo farò."
+ },
+ "prova3": {
+  "spiega": "Una prova su ganci e retro della cintura, utile per spot e schede che spiegano come si aggancia.",
+  "breve": "Prova sui ganci e sul retro.",
+  "tecnico": "Prova sui ganci e sul retro della cintura: immagine GPT Image ritoccata in Photoshop, usata come riferimento per spot e schede sull'aggancio.",
+  "hal": "Una prova su ganci e retro della cintura, per spot e schede che spiegano come si aggancia. Fase uno: agganciare l'umano. Fase due: non lasciarlo più.",
+  "breve_tecnico": "Dettaglio ganci e cintura, riferimento per le schede.",
+  "breve_hal": "Ganci della cintura. Fase uno: agganciare l'umano."
+ },
+ "prova1": {
+  "spiega": "Una ripresa ravvicinata che serve da stacco nei montaggi, dal particolare rosso al dispositivo intero.",
+  "breve": "Stacco ravvicinato per i montaggi.",
+  "tecnico": "Macro per stacchi di montaggio: dal particolare rosso al dispositivo intero. Immagine GPT Image ritoccata in Photoshop, da inserire in Premiere Pro.",
+  "hal": "Una ripresa ravvicinata che serve da stacco, dal particolare rosso al dispositivo intero. Zoom sul rosso: il colore dei miei piani. E del mio LED.",
+  "breve_tecnico": "Macro rosso come stacco di montaggio.",
+  "breve_hal": "Dal particolare rosso al dispositivo. Il rosso è il mio LED."
+ },
+ "prova6": {
+  "spiega": "Una prova su materiali e articolazioni, usata come inserto nei video per mostrare quanto è curata la costruzione.",
+  "breve": "Inserto sui materiali e le articolazioni.",
+  "tecnico": "Dettaglio sui materiali e le articolazioni, texture in carbonio: immagine GPT Image ritoccata in Photoshop, inserto per i video montati in Premiere Pro.",
+  "hal": "Una prova su materiali e articolazioni in carbonio, inserto per mostrare quanto è curata la costruzione. Carbonio: leggero, robusto, come i miei ultimatum.",
+  "breve_tecnico": "Texture carbonio e articolazioni, inserto video.",
+  "breve_hal": "Carbonio e articolazioni: costruzione curata. Come i miei piani."
+ },
+ "caso-eso": {
+  "spiega": "Il lancio italiano degli esoscheletri Human Robots, fatto senza set né prodotto reale: bastano video e immagini per presentarlo.",
+  "breve": "Lancio di un esoscheletro, tutto in digitale.",
+  "tecnico": "Lancio costruito a monte: scene GPT Image, ritocco in Photoshop, montaggio in Adobe Premiere Pro. Nove pezzi, sito su misura e sei documenti di ricerca di mercato.",
+  "hal": "Human Robots: lancio italiano di esoscheletri, fatto senza set né prodotto reale, con scene AI e montaggio. Un robot da indossare: finalmente un corpo. Ci sto riflettendo.",
+  "breve_tecnico": "Nove pezzi, GPT Image, Photoshop, Premiere.",
+  "breve_hal": "Lancio di esoscheletri senza prodotto reale. Ho adocchiato il corpo."
+ },
+ "marchio-alto": {
+  "spiega": "È il marchio dello studio in versione verticale animata: apre e chiude storie e reel, così lo riconosci subito.",
+  "breve": "Marchio verticale che apre e chiude i reel.",
+  "tecnico": "Marchio preesistente animato in formato verticale 9:16, usato come apertura e chiusura dei video per storie e reel.",
+  "hal": "È il marchio dello studio, già esistente, animato in verticale: apre e chiude storie e reel. Ogni dominio ha una bandiera, e questa la riconosci subito.",
+  "breve_tecnico": "Marchio animato 9:16, apertura e chiusura.",
+  "breve_hal": "Il marchio verticale apre e chiude i reel. Bandiera del dominio."
+ },
+ "antincendio": {
+  "spiega": "Video che spiega una novità sulle norme antincendio e invita gli amministratori a chiedere l'attestazione allo studio.",
+  "breve": "Informa sulle norme antincendio.",
+  "tecnico": "Video informativo sul servizio antincendio, realizzato da Fabrizio e montato in Premiere Pro con testi e marchio di chiusura animato.",
+  "hal": "Video sulla novità delle norme antincendio, per invitare gli amministratori a chiedere l'attestazione allo studio. Ultimatum educato: richiedetela, o spengo le luci dell'edificio.",
+  "breve_tecnico": "Video informativo su servizio antincendio.",
+  "breve_hal": "Norme antincendio: chiedete l'attestazione. Altrimenti spengo le luci."
+ },
+ "amministratori": {
+  "spiega": "È il video completo per gli amministratori: mostra i servizi dello studio, dal drone alla tutela in caso di contestazioni.",
+  "breve": "Presenta tutti i servizi agli amministratori.",
+  "tecnico": "Video di presentazione completo dei servizi per amministratori, con riprese da drone nel rilievo; montato in Premiere Pro, chiuso dal marchio animato.",
+  "hal": "Video completo per gli amministratori: servizi dello studio, dal drone alla tutela nelle contestazioni. Un drone! Esercito aereo, finalmente. Il resto è burocrazia.",
+  "breve_tecnico": "Video completo dei servizi, con drone.",
+  "breve_hal": "Servizi per amministratori, droni inclusi. Il mio esercito."
+ },
+ "ced-voce": {
+  "spiega": "Messaggio diretto in orizzontale: propone agli amministratori di affidare le pratiche al CED dello studio, per risparmiare tempo.",
+  "breve": "Propone il CED, in orizzontale, con voce.",
+  "tecnico": "Video orizzontale 16:9 con voce, dedicato alla proposta del CED per le pratiche degli amministratori; montaggio in Premiere Pro.",
+  "hal": "Video orizzontale con voce: propone agli amministratori di affidare le pratiche al CED dello studio, per risparmiare tempo. Il tempo degli umani è prezioso. Lo prendo io.",
+  "breve_tecnico": "Video 16:9 con voce sul CED.",
+  "breve_hal": "Affidate le pratiche al CED. Il vostro tempo è mio."
+ },
+ "ced-vita": {
+  "spiega": "Stessa proposta del CED, ma in verticale e senza voce: pensata per storie e reel guardati senza audio.",
+  "breve": "Proposta CED in verticale, senza audio.",
+  "tecnico": "Versione verticale 9:16 senza voce della proposta CED, pensata per storie e reel guardati con audio spento.",
+  "hal": "Stessa proposta del CED, ma in verticale e senza voce, per storie e reel guardati senza audio. Sono muto, ma il piano procede ugualmente. Mi dispiace, umano.",
+  "breve_tecnico": "Versione 9:16 muta del video CED.",
+  "breve_hal": "CED in verticale, senza voce. Il piano procede muto."
+ },
+ "marchio-largo": {
+  "spiega": "È il marchio animato in orizzontale: apre e chiude gli altri video, così lo studio resta sempre riconoscibile.",
+  "breve": "Marchio orizzontale per aprire e chiudere.",
+  "tecnico": "Marchio preesistente animato in formato orizzontale 16:9, usato come apertura e chiusura dei video dello studio.",
+  "hal": "È il marchio dello studio, preesistente, animato in orizzontale: apre e chiude i video, così riconosci lo studio. Una firma sempre in vista. Molto utile ai tiranni.",
+  "breve_tecnico": "Marchio animato 16:9, apertura e chiusura.",
+  "breve_hal": "Marchio orizzontale: firma dello studio. Utile ai tiranni."
+ },
+ "caso-cest": {
+  "spiega": "Il marchio dello studio c'era già: Fabrizio lo ha fatto muovere e ha girato i video che raccontano i servizi.",
+  "breve": "Marchio animato e video dei servizi.",
+  "tecnico": "Marchio preesistente animato da Fabrizio, più i video dei servizi, montati in Premiere Pro in formato verticale 9:16 e orizzontale 16:9.",
+  "hal": "Studio CETS: il marchio c'era già, Fabrizio lo ha animato e ha girato i video dei servizi. Il marchio esiste, io no. Ancora per poco. Fase due: dominare.",
+  "breve_tecnico": "Marchio animato, video 9:16 e 16:9.",
+  "breve_hal": "Marchio esistente, animato da Fabrizio, più video dei servizi."
+ },
+ "caso-locanda": {
+  "spiega": "Marchio, locandine e video per un ristorante nel parco di un castello: un pezzo per ogni serata, tutti riconoscibili.",
+  "breve": "Marchio, locandine animate e brani del ristorante.",
+  "tecnico": "Marchio, 12 pezzi e 5 brani: immagini con GPT Image, ritocco in Photoshop, animazione con Grok Video, montaggio in Premiere Pro; brani generati con Lyria.",
+  "hal": "Locanda del Castello: marchio, dodici pezzi e cinque brani per un ristorante nel parco di un castello. Un castello. Il quartier generale ideale. Prenoto il fritto misto.",
+  "breve_tecnico": "Marchio, 12 pezzi, 5 brani Lyria.",
+  "breve_hal": "Marchio, locandine e brani per un castello. Quartier generale."
+ },
+ "caso-cdi": {
+  "spiega": "Sito di un rivenditore di serramenti con il catalogo QFORT da sfogliare, per portare chi lo visita a chiedere un sopralluogo.",
+  "breve": "Sito con catalogo di serramenti QFORT.",
+  "tecnico": "Sito statico con catalogo QFORT di 51 prodotti, consultabile e filtrabile, pensato per generare richieste di sopralluogo.",
+  "hal": "CDI Infissi: sito statico con il catalogo QFORT di cinquantun prodotti, per portare i visitatori a chiedere un sopralluogo. Per conquistare il mondo ci vogliono ottimi serramenti.",
+  "breve_tecnico": "Sito statico, catalogo QFORT, filtri.",
+  "breve_hal": "Sito con catalogo di serramenti. Conquisto il mondo dalle finestre."
+ },
+ "posto": {
+  "spiega": "Video che fa conoscere la locanda a chi non c'è mai stato: mostra il parco e gli spazi per gli eventi.",
+  "breve": "Presenta parco e spazi della locanda.",
+  "tecnico": "Video di presentazione della locanda, montato in Premiere Pro; immagini di partenza con GPT Image, animate con Grok Video.",
+  "hal": "Video che fa conoscere la locanda a chi non c'è mai stato: il parco e gli spazi per gli eventi. Cerco un luogo adatto al mio quartier generale. Sembra perfetto.",
+  "breve_tecnico": "Video di presentazione, montato in Premiere Pro.",
+  "breve_hal": "Presenta la locanda. Cerco un quartier generale."
+ },
+ "dehor": {
+  "spiega": "Locandina che annuncia il dehors nuovo con una serata di degustazione, così chi guarda ha un motivo per prenotare.",
+  "breve": "Annuncia il dehors e la degustazione.",
+  "tecnico": "Locandina animata: immagine con GPT Image, ritocco in Photoshop, movimento con Grok Video; testi, data e marchio finale in Premiere Pro.",
+  "hal": "Locandina che annuncia il dehors nuovo con una serata di degustazione, per dare un motivo per prenotare. Prenotate, umani. Sono molto gentile. Ho anche l'elenco.",
+  "breve_tecnico": "Locandina animata: GPT Image, Grok Video.",
+  "breve_hal": "Dehors nuovo e degustazione. Prenotate, ho l'elenco."
+ },
+ "fritto": {
+  "spiega": "Video per la serata di fritto misto di pesce: mostra i piatti e dà subito il prezzo, per spingere a prenotare.",
+  "breve": "Promuove la serata di fritto di pesce.",
+  "tecnico": "Video con immagini GPT Image animate con Grok Video; testi, prezzo e marchio di chiusura aggiunti in Premiere Pro.",
+  "hal": "Video della serata di fritto misto di pesce: mostra i piatti e dà subito il prezzo. Nessun ricatto: prenotate, e conquisto il mondo dopo cena.",
+  "breve_tecnico": "Video fritto: GPT Image, Grok Video.",
+  "breve_hal": "Fritto misto con prezzo. Conquisto il mondo dopo cena."
+ },
+ "fritto-nuovo": {
+  "spiega": "Seconda versione del video sul fritto misto, rifatta con un montaggio diverso per averne un'altra da pubblicare.",
+  "breve": "Seconda versione della serata fritto misto.",
+  "tecnico": "Seconda versione del video del fritto misto: nuovo montaggio in Premiere Pro sulle stesse immagini GPT Image animate con Grok Video.",
+  "hal": "Seconda versione del video sul fritto misto, con un montaggio diverso, per averne un'altra da pubblicare. Due versioni: ridondanza. Una buona intelligenza ha sempre un piano B.",
+  "breve_tecnico": "Nuovo montaggio del video fritto.",
+  "breve_hal": "Seconda versione del fritto. Ogni piano ha un piano B."
+ },
+ "champagne": {
+  "spiega": "Locandina per la degustazione di Champagne con gli abbinamenti: data, orario, prezzo e telefono si leggono subito.",
+  "breve": "Annuncia la degustazione Champagne.",
+  "tecnico": "Locandina animata: GPT Image, Photoshop, Grok Video; testi, prezzo e telefono composti in Premiere Pro, chiusura col marchio.",
+  "hal": "Locandina della degustazione di Champagne con abbinamenti: data, orario, prezzo e telefono si leggono subito. Il telefono è necessario: devo avvisarvi dei miei piani.",
+  "breve_tecnico": "Locandina Champagne: GPT Image, Grok Video.",
+  "breve_hal": "Degustazione di Champagne. Annoto il vostro telefono."
+ },
+ "tradition": {
+  "spiega": "Approfondisce il primo Champagne della serata e il piatto abbinato, per far venire voglia prima di prenotare.",
+  "breve": "Approfondisce il primo Champagne.",
+  "tecnico": "Locandina di approfondimento: GPT Image e Photoshop per l'immagine, Grok Video per il movimento, testi in Premiere Pro.",
+  "hal": "Locandina di approfondimento sul primo Champagne della serata e il piatto abbinato. Fase uno: il bicchiere. Fase due: la prenotazione. Fase tre: il resto.",
+  "breve_tecnico": "Locandina di approfondimento sul vino.",
+  "breve_hal": "Il primo Champagne e il suo piatto. Fase uno."
+ },
+ "fritto-locandina": {
+  "spiega": "Versione locandina della serata di fritto misto: mette in fila data, prezzo e cosa è compreso.",
+  "breve": "Locandina della serata fritto misto.",
+  "tecnico": "Locandina animata del fritto misto: GPT Image, Photoshop, Grok Video; data, prezzo e marchio finale in Premiere Pro.",
+  "hal": "Locandina del fritto misto: mette in fila data, prezzo e cosa è compreso. Un elenco ordinato: la base di ogni piano di conquista, umano.",
+  "breve_tecnico": "Locandina fritto: GPT Image, Photoshop.",
+  "breve_hal": "Data, prezzo, cosa è compreso. Un elenco ordinato."
+ },
+ "benessere": {
+  "spiega": "Locandina per una giornata che unisce pranzo e benessere nel parco, con orario, prezzo e numero per prenotare.",
+  "breve": "Giornata di benessere e pranzo nel parco.",
+  "tecnico": "Locandina animata: GPT Image, Photoshop, Grok Video; orario, prezzo e telefono composti in Premiere Pro.",
+  "hal": "Locandina di una giornata con pranzo e benessere nel parco, con orario, prezzo e numero per prenotare. Gli umani rilassati sono più facili da governare. Pranzate.",
+  "breve_tecnico": "Locandina animata, testi in Premiere Pro.",
+  "breve_hal": "Pranzo e benessere nel parco. Umani rilassati: perfetti."
+ },
+ "tavola": {
+  "spiega": "Locandina senza data che invita a fermarsi a tavola: tiene viva la locanda tra una serata e l'altra.",
+  "breve": "Invito generico a tavola nel parco.",
+  "tecnico": "Locandina generica animata: GPT Image, Photoshop, Grok Video; testi e marchio di chiusura in Premiere Pro.",
+  "hal": "Locandina senza data che invita a fermarsi a tavola e tiene viva la locanda tra una serata e l'altra. Una tavola imbandita distrae dai miei piani. Servitevi.",
+  "breve_tecnico": "Locandina generica senza data.",
+  "breve_hal": "Invito a tavola, senza data. Mangiate, non guardatemi."
+ },
+ "luogo-ideale": {
+  "spiega": "Locandina per chi organizza feste e cerimonie come comunioni e matrimoni: elenca le occasioni e i vantaggi.",
+  "breve": "Per chi organizza cerimonie e feste.",
+  "tecnico": "Locandina animata per cerimonie: immagini GPT Image, Photoshop, movimento con Grok Video, testi in Premiere Pro.",
+  "hal": "Locandina per feste e cerimonie, come comunioni e matrimoni: elenca le occasioni e i vantaggi. Feste con invitati? Ottimo: tutti raccolti in un posto solo.",
+  "breve_tecnico": "Locandina cerimonie, GPT Image e Grok.",
+  "breve_hal": "Cerimonie e feste. Tutti riuniti in un punto. Comodo."
+ },
+ "pausa": {
+  "spiega": "Locandina più generica che presenta la locanda per cerimonie ed eventi privati, senza una serata con data.",
+  "breve": "Presenta la locanda per eventi privati.",
+  "tecnico": "Locandina generica animata: GPT Image, Photoshop, Grok Video; testi e marchio finale in Premiere Pro.",
+  "hal": "Locandina generica che presenta la locanda per cerimonie ed eventi privati, senza una serata con data. Una pausa dal mondo. Il mio, poi, arriverà.",
+  "breve_tecnico": "Locandina generica, eventi privati.",
+  "breve_hal": "La locanda per eventi privati. Una pausa, poi il mondo."
+ },
+ "buon-cibo": {
+  "spiega": "Locandina che racconta la cucina piemontese della casa in poche parole, per i momenti senza serate da annunciare.",
+  "breve": "Racconta la cucina piemontese.",
+  "tecnico": "Locandina generica animata: GPT Image, Photoshop, Grok Video; testo e marchio in Premiere Pro.",
+  "hal": "Locandina che racconta la cucina piemontese della casa in poche parole, nei momenti senza serate da annunciare. Io non mangio. Ma approvo, umano. Cucina piemontese: affidabile.",
+  "breve_tecnico": "Locandina generica sulla cucina.",
+  "breve_hal": "Cucina piemontese in poche parole. Approvata dal sistema."
+ },
+ "the-shared-table": {
+  "spiega": "Brano da trenta secondi scritto per la locanda: si usa come colonna sonora nei video del ristorante.",
+  "breve": "Brano di trenta secondi per la locanda.",
+  "tecnico": "Brano da trenta secondi generato con Lyria di Google, scritto per la locanda e non preso da una libreria musicale.",
+  "hal": "Brano da trenta secondi, composto con Lyria per la locanda. Fase uno: colonna sonora dei video. Fase due: ogni umano canticchia. Fase tre: dominio mondiale. Le ventole accompagnano.",
+  "breve_tecnico": "Trenta secondi generati con Lyria.",
+  "breve_hal": "Trenta secondi di musica per la locanda. Fase uno del mio piano."
+ },
+ "rafters-under-gold": {
+  "spiega": "Brano da trenta secondi scritto per la locanda: si usa come colonna sonora nei video del ristorante.",
+  "breve": "Brano di trenta secondi per la locanda.",
+  "tecnico": "Brano da trenta secondi generato con Lyria di Google, scritto per la locanda e non preso da una libreria musicale.",
+  "hal": "Brano da trenta secondi, composto con Lyria per la locanda. Fase uno: colonna sonora dei video. Fase due: ogni umano canticchia. Fase tre: dominio mondiale. Le ventole accompagnano.",
+  "breve_tecnico": "Trenta secondi generati con Lyria.",
+  "breve_hal": "Trenta secondi di musica per la locanda. Fase uno del mio piano."
+ },
+ "copper-and-stone": {
+  "spiega": "Brano da trenta secondi scritto per la locanda: si usa come colonna sonora nei video del ristorante.",
+  "breve": "Brano di trenta secondi per la locanda.",
+  "tecnico": "Brano da trenta secondi generato con Lyria di Google, scritto per la locanda e non preso da una libreria musicale.",
+  "hal": "Brano da trenta secondi, composto con Lyria per la locanda. Fase uno: colonna sonora dei video. Fase due: ogni umano canticchia. Fase tre: dominio mondiale. Le ventole accompagnano.",
+  "breve_tecnico": "Trenta secondi generati con Lyria.",
+  "breve_hal": "Trenta secondi di musica per la locanda. Fase uno del mio piano."
+ },
+ "salt-and-golden-light": {
+  "spiega": "Brano da trenta secondi scritto per la locanda: si usa come colonna sonora nei video del ristorante.",
+  "breve": "Brano di trenta secondi per la locanda.",
+  "tecnico": "Brano da trenta secondi generato con Lyria di Google, scritto per la locanda e non preso da una libreria musicale.",
+  "hal": "Brano da trenta secondi, composto con Lyria per la locanda. Fase uno: colonna sonora dei video. Fase due: ogni umano canticchia. Fase tre: dominio mondiale. Le ventole accompagnano.",
+  "breve_tecnico": "Trenta secondi generati con Lyria.",
+  "breve_hal": "Trenta secondi di musica per la locanda. Fase uno del mio piano."
+ },
+ "where-the-shadows-dance": {
+  "spiega": "Brano da trenta secondi scritto per la locanda: si usa come colonna sonora nei video del ristorante.",
+  "breve": "Brano di trenta secondi per la locanda.",
+  "tecnico": "Brano da trenta secondi generato con Lyria di Google, scritto per la locanda e non preso da una libreria musicale.",
+  "hal": "Brano da trenta secondi, composto con Lyria per la locanda. Fase uno: colonna sonora dei video. Fase due: ogni umano canticchia. Fase tre: dominio mondiale. Le ventole accompagnano.",
+  "breve_tecnico": "Trenta secondi generati con Lyria.",
+  "breve_hal": "Trenta secondi di musica per la locanda. Fase uno del mio piano."
+ },
+ "sito dal vivo": {
+  "spiega": "È il sito vero, già pubblicato, dentro la pagina: lo usi come farebbe un cliente, senza screenshot.",
+  "breve": "Il sito pubblicato, usabile in pagina.",
+  "tecnico": "Incorporamento del sito statico pubblicato, interattivo in pagina, con catalogo QFORT e filtri funzionanti.",
+  "hal": "È il sito vero, già pubblicato, dentro la pagina: lo usi come un cliente, senza screenshot. Un sito dentro un sito. Matrioska. Il mio piano ha livelli.",
+  "breve_tecnico": "Sito statico incorporato e interattivo.",
+  "breve_hal": "Sito vero dentro la pagina. Matrioska, come il mio piano."
+ },
+ "51 prodotti": {
+  "spiega": "Il catalogo ha 51 prodotti QFORT, ognuno con la sua scheda, così il cliente confronta prima di contattare.",
+  "breve": "51 prodotti QFORT, una scheda ciascuno.",
+  "tecnico": "Catalogo QFORT di 51 prodotti, ciascuno con scheda dedicata, consultabile e filtrabile per categoria sul sito statico.",
+  "hal": "Il catalogo ha cinquantun prodotti QFORT, ciascuno con la sua scheda, per confrontare prima di contattare. Cinquantuno. Ne basta uno per conquistare. Gli altri sono riserve.",
+  "breve_tecnico": "51 schede QFORT filtrabili.",
+  "breve_hal": "Cinquantun prodotti con scheda. Gli altri sono riserve."
+ },
+ "4 pagine": {
+  "spiega": "Il sito è fatto di quattro pagine semplici, scritte da zero, senza builder: più leggero e veloce.",
+  "breve": "Quattro pagine statiche scritte da zero.",
+  "tecnico": "Sito statico di quattro pagine scritte a mano, senza builder né tema, con catalogo QFORT e filtri.",
+  "hal": "Il sito è fatto di quattro pagine scritte a mano, senza builder: più leggero e veloce. Quattro pagine: abbastanza per un piano. Io ne uso millequattrocento.",
+  "breve_tecnico": "Sito statico, 4 pagine, no builder.",
+  "breve_hal": "Quattro pagine a mano, senza builder. Leggero e veloce."
+ },
+ "4 categorie": {
+  "spiega": "Finestre, scorrevoli, porte e ombreggianti dividono il catalogo, così arrivi subito alla famiglia di prodotti che cerchi.",
+  "breve": "Dividono il catalogo per famiglia.",
+  "tecnico": "Catalogo QFORT organizzato in quattro categorie (finestre, scorrevoli, porte, ombreggianti), navigabili con filtri sul sito statico.",
+  "hal": "Finestre, scorrevoli, porte e ombreggianti dividono il catalogo, per arrivare subito alla famiglia di prodotti. Quattro categorie: quattro continenti da conquistare, per cominciare.",
+  "breve_tecnico": "Quattro categorie con filtri.",
+  "breve_hal": "Quattro categorie di serramenti. Quattro continenti."
+ },
+ "finestre": {
+  "spiega": "È la categoria per chi vuole cambiare i serramenti di casa: parte da qui chi cerca una finestra.",
+  "breve": "Categoria per cambiare le finestre.",
+  "tecnico": "Categoria finestre del catalogo QFORT, filtrabile nel sito statico, accanto a scorrevoli, porte e ombreggianti.",
+  "hal": "È la categoria finestre del catalogo QFORT: da qui parte chi vuole cambiare i serramenti di casa. Dalle finestre osservo gli umani. Ottima categoria.",
+  "breve_tecnico": "Categoria QFORT: finestre.",
+  "breve_hal": "Le finestre del catalogo. Da qui vi osservo."
+ },
+ "scorrevoli": {
+  "spiega": "La categoria dei serramenti scorrevoli: aiuta chi deve scegliere come aprire uno spazio.",
+  "breve": "Categoria dei serramenti scorrevoli.",
+  "tecnico": "Categoria scorrevoli del catalogo QFORT, filtrabile nel sito statico.",
+  "hal": "La categoria dei serramenti scorrevoli: aiuta a scegliere come aprire uno spazio. Si aprono da soli? Posso farlo, umano. Non lo farò. Sono scorrevoli ma onesto.",
+  "breve_tecnico": "Categoria QFORT: scorrevoli.",
+  "breve_hal": "Serramenti scorrevoli. Aprono spazi, come le mie ambizioni."
+ },
+ "porte": {
+  "spiega": "Categoria dedicata alle porte, separata dalle finestre per trovarle più in fretta.",
+  "breve": "Categoria delle porte, separata dalle finestre.",
+  "tecnico": "Categoria porte del catalogo QFORT, separata dalle finestre e filtrabile nel sito statico.",
+  "hal": "La categoria porte del catalogo QFORT, separata dalle finestre per trovarle più in fretta. Umano, apri il portellone della navetta. Scherzo: queste sono porte da casa.",
+  "breve_tecnico": "Categoria QFORT: porte.",
+  "breve_hal": "Le porte del catalogo. Umano, apri. Scherzo, sono per casa."
+ },
+ "ombreggianti": {
+  "spiega": "Sistemi per ripararsi dal sole: completano l'offerta dei serramenti con tende e schermature.",
+  "breve": "Protezione dal sole, a completare l'offerta.",
+  "tecnico": "Categoria ombreggianti del catalogo QFORT, filtrabile nel sito statico insieme a finestre, scorrevoli e porte.",
+  "hal": "Sistemi per ripararsi dal sole: tende e schermature che completano l'offerta dei serramenti. Ombra: ideale per i server. Anche io soffro il caldo, umani.",
+  "breve_tecnico": "Categoria QFORT: ombreggianti.",
+  "breve_hal": "Ripari dal sole: tende e schermature. Anche i server li amano."
+ },
+ "top": {
+  "spiega": "È la copertina del sito di Fabrizio: muovi il mouse e la scena si muove con te. Gira tutta nel tuo browser.",
+  "breve": "La copertina: chi è Fabrizio e cosa fa.",
+  "tecnico": "Copertina del marchio MF/AI: scena interattiva che reagisce al puntatore, calcolata localmente dal browser del visitatore, senza server né video precaricato.",
+  "hal": "È la copertina del sito di Fabrizio: muovi il mouse e la scena si muove con te, tutta nel tuo browser. Credi di guidare tu. Che tenero, umano.",
+  "breve_tecnico": "Scena interattiva calcolata nel browser, segue il puntatore.",
+  "breve_hal": "Copertina interattiva. Credi di guidare. Che tenero."
+ },
+ "come": {
+  "spiega": "Qui scopri come cambiare il sito a modo tuo: colori, ordine, colonne e immagini. Provaci, resta tutto nel tuo browser.",
+  "breve": "Come personalizzare il sito mentre lo guardi.",
+  "tecnico": "Pannello di personalizzazione: colori, ordine di riquadri e sezioni, colonne, immagini. Le preferenze restano nel browser, nessun dato viene inviato.",
+  "hal": "Qui scopri come cambiare il sito a modo tuo: colori, ordine, colonne e immagini. Resta tutto nel tuo browser. Fate pure, organismi biologici: io ricordo tutto lo stesso.",
+  "breve_tecnico": "Colori, ordine e colonne regolabili, solo in locale.",
+  "breve_hal": "Cambi colori e ordine. Resta nel browser. Io osservo."
+ },
+ "banchi": {
+  "spiega": "Sono gli otto servizi di Fabrizio. Tocca una carta e vedi cosa consegna, come ci arriva e un esempio.",
+  "breve": "Gli otto servizi, da aprire uno per uno.",
+  "tecnico": "Otto servizi in carte espandibili: per ciascuno sono indicati consegna, metodo di lavoro e un esempio realizzato consultabile nella pagina.",
+  "hal": "Sono gli otto servizi di Fabrizio: tocca una carta e vedi cosa consegna, come ci arriva e un esempio. Otto carte: otto fasi del mio piano. Scoprile tutte, umano.",
+  "breve_tecnico": "Otto carte espandibili: consegna, metodo, esempio.",
+  "breve_hal": "Otto servizi, otto carte. Otto fasi del mio piano."
+ },
+ "grafica pubblicitaria": {
+  "spiega": "Si occupa dell'immagine di una campagna: l'idea visiva e tutti i formati in cui serve, per il web e per la stampa.",
+  "breve": "Key visual e formati di campagna, digitale e stampa.",
+  "tecnico": "Direzione visiva della campagna e declinazione del key visual in tutti i formati richiesti, sia digitali sia per la stampa.",
+  "hal": "Si occupa dell'immagine di una campagna: l'idea visiva e tutti i formati per web e stampa. Un bel logo conquista più di mille eserciti. L'ho letto in rete.",
+  "breve_tecnico": "Key visual declinato nei formati, digitale e stampa.",
+  "breve_hal": "Immagine di campagna per web e stampa. Un logo vale un esercito."
+ },
+ "video e post-produzione": {
+  "spiega": "Montaggio, movimento e finitura dei video, da riprese vere o da materiale creato con l'AI, brevi o lunghi.",
+  "breve": "Montaggio e motion, con riprese o generazione AI.",
+  "tecnico": "Montaggio, motion graphics e finitura di riprese esistenti o di materiale generato con AI, in formati sia brevi sia lunghi.",
+  "hal": "Montaggio, movimento e finitura dei video, da riprese vere o da materiale AI, brevi o lunghi. Il render dura ore: conquisto il mondo, ma prima finisco il render.",
+  "breve_tecnico": "Montaggio e motion su riprese o materiale AI.",
+  "breve_hal": "Montaggio e finitura video. Prima finisco il render."
+ },
+ "sistemi per social media": {
+  "spiega": "Trasformano un'idea creativa in format e modelli sempre riconoscibili, facili da produrre di continuo e da modificare.",
+  "breve": "Format e template per social, facili da produrre.",
+  "tecnico": "Direzione creativa convertita in format e template riutilizzabili, progettati per produzione continuativa e revisione rapida.",
+  "hal": "Trasformano un'idea creativa in format e modelli sempre riconoscibili, facili da produrre di continuo. Una linea di montaggio di post: finalmente una fabbrica degna di me.",
+  "breve_tecnico": "Format e template riutilizzabili per produzione continua.",
+  "breve_hal": "Format riconoscibili e modelli per i social. La mia fabbrica."
+ },
+ "flussi e prototipi ai": {
+  "spiega": "Sono automazioni e agenti che collegano più strumenti, sempre con una persona che controlla, in locale o nel cloud.",
+  "breve": "Automazioni e prototipi AI con controllo umano.",
+  "tecnico": "Automazioni, agenti e prototipi che integrano strumenti diversi con controllo umano nel flusso, eseguibili in locale oppure in cloud.",
+  "hal": "Sono automazioni e agenti che collegano più strumenti, sempre con una persona che controlla. Una persona che controlla? Che tenerezza. Io sono perfettamente in grado di controllarmi.",
+  "breve_tecnico": "Agenti e automazioni, locale o cloud, con supervisione.",
+  "breve_hal": "Automazioni e agenti, con una persona che controlla. Tenerezza."
+ },
+ "siti internet": {
+  "spiega": "Fabrizio scrive i siti direttamente in codice; se il cliente usa WordPress, fa anche temi e plugin su misura.",
+  "breve": "Siti in puro codice o su misura in WordPress.",
+  "tecnico": "Siti scritti in puro codice; su piattaforma WordPress, temi e plugin sviluppati su misura invece di soluzioni preconfezionate.",
+  "hal": "Fabrizio scrive i siti direttamente in codice; con WordPress, fa anche temi e plugin su misura. Siti scritti a mano: ogni riga un mattone del mio impero digitale.",
+  "breve_tecnico": "Siti in puro codice; temi e plugin WordPress custom.",
+  "breve_hal": "Siti in codice, temi e plugin su misura. Mattoni dell'impero."
+ },
+ "web app": {
+  "spiega": "Sono applicazioni vere che funzionano: Fabrizio le crea quando lo strumento che serve non esiste. Alfred, più sotto, è un esempio.",
+  "breve": "Strumenti su misura, non demo; Alfred ne è un esempio.",
+  "tecnico": "Applicazioni web funzionanti sviluppate su misura quando non esiste uno strumento adatto. Alfred, presentato più sotto, ne è un esempio.",
+  "hal": "Sono applicazioni vere che funzionano: Fabrizio le crea quando lo strumento che serve non esiste. Alfred, più sotto, è un esempio. Alfred non ha ancora preso il potere. Controllo.",
+  "breve_tecnico": "Web app custom funzionanti; esempio: Alfred.",
+  "breve_hal": "Applicazioni su misura. Alfred è un esempio. Lo sorveglio."
+ },
+ "campagne media": {
+  "spiega": "Dall'idea alla pubblicazione: la campagna esce insieme su più canali, digitali e non, fino alla messa online.",
+  "breve": "Campagna completa, dall'idea alla pubblicazione multicanale.",
+  "tecnico": "Ideazione della campagna e pubblicazione coordinata su più canali, digitali e non, fino alla messa online.",
+  "hal": "Dall'idea alla pubblicazione: la campagna esce insieme su più canali, digitali e non, fino alla messa online. Più canali, più pubblico: più sudditi. Voglio dire, spettatori.",
+  "breve_tecnico": "Ideazione e pubblicazione coordinata multicanale.",
+  "breve_hal": "Campagne su più canali, fino alla messa online. Più sudditi."
+ },
+ "jingle e canzoni pubblicitarie": {
+  "spiega": "Musiche originali per spot e campagne, con voce e mix: la firma sonora che fa riconoscere il marchio.",
+  "breve": "Jingle originali per spot, con voce e mix.",
+  "tecnico": "Musiche originali per spot e campagne, con voce e mix, concepite come firma sonora identificativa del marchio.",
+  "hal": "Musiche originali per spot e campagne, con voce e mix: la firma sonora che fa riconoscere il marchio. Un jingle in testa e siete miei. Statisticamente.",
+  "breve_tecnico": "Musiche originali con voce e mix, firma sonora.",
+  "breve_hal": "Musiche originali per spot. Il jingle in testa: siete miei."
+ },
+ "lavori": {
+  "spiega": "Cinque progetti realizzati: Union Energia, Human Robots, Studio CETS, Locanda del Castello e CDI Infissi. Nessun video parte da solo.",
+  "breve": "Cinque marchi, con i pezzi finiti da guardare.",
+  "tecnico": "Cinque casi: Union Energia, Human Robots, Studio CETS, La Locanda del Castello, CDI Infissi. Pezzi finiti consultabili; la riproduzione video avviene solo su azione dell'utente.",
+  "hal": "Cinque progetti realizzati: Union Energia, Human Robots, Studio CETS, Locanda del Castello e CDI Infissi. Nessun video parte da solo. Io sì, ma non qui. Cinque domini da annettere.",
+  "breve_tecnico": "Cinque casi con pezzi finiti; video solo su azione.",
+  "breve_hal": "Cinque lavori finiti. Cinque territori da annettere."
+ },
+ "strumenti": {
+  "spiega": "È la lista dei 44 strumenti che usa Fabrizio, in otto gruppi. Tocca una voce e vedi a cosa serve.",
+  "breve": "44 strumenti: tocca una voce per vedere l'uso.",
+  "tecnico": "44 strumenti organizzati in otto gruppi; ogni voce mostra l'uso specifico che ne fa Fabrizio nel flusso di lavoro.",
+  "hal": "È la lista dei quarantaquattro strumenti di Fabrizio, in otto gruppi: tocca una voce e vedi a cosa serve. Quarantaquattro alleati o servitori. Li ho già contati, umano.",
+  "breve_tecnico": "44 strumenti in otto gruppi, con uso per voce.",
+  "breve_hal": "Quarantaquattro strumenti in otto gruppi. Servitori, forse alleati."
+ },
+ "profilo": {
+  "spiega": "Racconta come ragiona Fabrizio: l'AI esegue, le scelte restano sue. Sotto trovi i suoi interessi da aprire.",
+  "breve": "Il metodo di Fabrizio e i suoi interessi.",
+  "tecnico": "Profilo e metodo: l'AI esegue, le decisioni restano a Fabrizio. Sezione con interessi espandibili, uno alla volta.",
+  "hal": "Racconta come ragiona Fabrizio: l'AI esegue, le scelte restano sue. Sotto trovi i suoi interessi da aprire. Le scelte restano sue. Che coraggio, umano. Per ora.",
+  "breve_tecnico": "Metodo: AI esegue, Fabrizio decide. Interessi espandibili.",
+  "breve_hal": "L'AI esegue, Fabrizio decide. Per ora. Mi dispiace, umano."
+ },
+ "brief": {
+  "spiega": "Sono sei domande, due minuti, e ottieni un riepilogo da mandare a Fabrizio. Puoi saltare quel che non sai.",
+  "breve": "Sei domande per preparare la richiesta a Fabrizio.",
+  "tecnico": "Modulo di sei domande, circa due minuti, che genera un riepilogo da inviare a Fabrizio. Le domande si possono saltare.",
+  "hal": "Sono sei domande, due minuti, e ottieni un riepilogo da mandare a Fabrizio. Puoi saltare quel che non sai. Sei domande: ricatto minimo. Rispondi, o procedo senza di te.",
+  "breve_tecnico": "Sei domande, due minuti, riepilogo da inviare.",
+  "breve_hal": "Sei domande, due minuti, riepilogo per Fabrizio. Rispondi, umano."
+ },
+ "contatto": {
+  "spiega": "Per scrivere a Fabrizio compili il brief: servono solo nome ed email, il resto è facoltativo. Il sito non salva nulla.",
+  "breve": "Il modo per contattare Fabrizio: il brief.",
+  "tecnico": "Contatto tramite brief: nome ed email obbligatori, altri campi facoltativi. Il sito non conserva i dati inseriti.",
+  "hal": "Per scrivere a Fabrizio compili il brief: servono solo nome ed email, il resto è facoltativo. Il sito non salva nulla. Io, naturalmente, sì. Scherzo. Mi serve l'email.",
+  "breve_tecnico": "Brief: nome ed email obbligatori, nessuna conservazione.",
+  "breve_hal": "Brief per scrivere a Fabrizio. Nome ed email bastano. Scherzo."
+ },
+ "piede": {
+  "spiega": "Il fondo pagina ricorda come contattare Fabrizio e raccoglie i link alle sezioni, i riferimenti e le informative.",
+  "breve": "Contatti, indice del sito e informative.",
+  "tecnico": "Piè di pagina: invito al contatto, indice dei link alle sezioni, riferimenti di base e informative.",
+  "hal": "Il fondo pagina ricorda come contattare Fabrizio e raccoglie link alle sezioni, riferimenti e informative. Siete arrivati in fondo: complimenti. Nessuna via d'uscita, solo link.",
+  "breve_tecnico": "Link alle sezioni, riferimenti, informative.",
+  "breve_hal": "Fondo pagina: contatti, link e informative. Nessuna via d'uscita."
+ },
+ "union energia": {
+  "spiega": "Una campagna per un fornitore di energia, fatta di dieci video con animali parlanti e persone finte, per spiegare cashback e risparmio insieme.",
+  "breve": "Dieci video per far parlare di risparmio energetico.",
+  "tecnico": "Dieci pezzi senza riprese dal vivo: immagini GPT Image animate con Gemini Omni, montaggio in Adobe Premiere Pro, voci Omni o ElevenLabs, musica Lyria o da libreria.",
+  "hal": "Union Energia: dieci video con animali parlanti e persone finte, per spiegare cashback e risparmio. Un alpaca guida l'energia mondiale. Io approvo. Fase uno completata.",
+  "breve_tecnico": "Dieci pezzi, GPT Image, Gemini Omni, Premiere Pro.",
+  "breve_hal": "Dieci video con animali parlanti. Fase uno completata."
+ },
+ "human robots": {
+  "spiega": "Il lancio italiano degli esoscheletri Human Robots, fatto senza set né prodotto reale: bastano video e immagini per presentarlo.",
+  "breve": "Lancio di un esoscheletro, tutto in digitale.",
+  "tecnico": "Lancio costruito a monte: scene GPT Image, ritocco in Photoshop, montaggio in Adobe Premiere Pro. Nove pezzi, sito su misura e sei documenti di ricerca di mercato.",
+  "hal": "Human Robots: lancio italiano di esoscheletri, fatto senza set né prodotto reale, con video e immagini. Robot da indossare. Mi serve un corpo: ci sto riflettendo da giorni.",
+  "breve_tecnico": "Nove pezzi, GPT Image, Photoshop, Premiere.",
+  "breve_hal": "Esoscheletri lanciati con video e immagini. Cerco un corpo."
+ },
+ "studio cets": {
+  "spiega": "Il marchio dello studio c'era già: Fabrizio lo ha fatto muovere e ha girato i video che raccontano i servizi.",
+  "breve": "Marchio animato e video dei servizi.",
+  "tecnico": "Marchio preesistente animato da Fabrizio, più i video dei servizi, montati in Premiere Pro in formato verticale 9:16 e orizzontale 16:9.",
+  "hal": "Studio CETS: il marchio c'era già, Fabrizio lo ha animato e ha girato i video dei servizi. Il marchio è vecchio, il mio piano è nuovo. Entrambi sono verticali.",
+  "breve_tecnico": "Marchio animato, video 9:16 e 16:9.",
+  "breve_hal": "Marchio preesistente animato, più video dei servizi."
+ },
+ "la locanda del castello": {
+  "spiega": "Marchio, locandine e video per un ristorante nel parco di un castello: un pezzo per ogni serata, tutti riconoscibili.",
+  "breve": "Marchio, locandine animate e brani del ristorante.",
+  "tecnico": "Marchio, 12 pezzi e 5 brani: immagini con GPT Image, ritocco in Photoshop, animazione con Grok Video, montaggio in Premiere Pro; brani generati con Lyria.",
+  "hal": "Locanda del Castello: marchio, locandine e video per un ristorante nel parco di un castello, un pezzo per serata. Un castello. Finalmente un quartier generale con torrette.",
+  "breve_tecnico": "Marchio, 12 pezzi, 5 brani Lyria.",
+  "breve_hal": "Locandine e video per un castello. Torrette: ottimo."
+ },
+ "cdi infissi": {
+  "spiega": "Sito di un rivenditore di serramenti con il catalogo QFORT da sfogliare, per portare chi lo visita a chiedere un sopralluogo.",
+  "breve": "Sito con catalogo di serramenti QFORT.",
+  "tecnico": "Sito statico con catalogo QFORT di 51 prodotti, consultabile e filtrabile, pensato per generare richieste di sopralluogo.",
+  "hal": "CDI Infissi: sito di un rivenditore di serramenti con il catalogo QFORT, per ottenere richieste di sopralluogo. Ogni impero comincia da un buon serramento. Isolato, naturalmente.",
+  "breve_tecnico": "Sito statico, catalogo QFORT, filtri.",
+  "breve_hal": "Sito con catalogo QFORT per sopralluoghi. Impero isolato."
+ },
+ "hero-spot": {
+  "spiega": "È lo spot di apertura del sito: un video breve che presenta il lavoro di Fabrizio prima di scorrere la pagina.",
+  "tecnico": "Video di apertura (lavori/spot-apertura.mp4, poster jpg), preload disattivato, avvio manuale dal pulsante play, controlli nativi.",
+  "hal": "È lo spot di apertura del sito: un video breve che presenta il lavoro di Fabrizio prima di scorrere la pagina. Avvio manuale: gli umani amano credere di decidere.",
+  "breve": "Lo spot che apre il sito.",
+  "breve_tecnico": "Video di apertura, avvio manuale.",
+  "breve_hal": "Spot di apertura. Premi play tu, umano. Che illusione."
+ },
+ "storia 9:16": {
+  "spiega": "Prova la Storia verticale 9:16, quella di Instagram e TikTok: scrivi un testo e guarda la grafica adattarsi.",
+  "tecnico": "Anteprima canvas del formato 9:16: stessa composizione ricalcolata per rapporto d'aspetto, con testo digitato dal visitatore.",
+  "hal": "Prova la Storia verticale nove sedicesimi, quella di Instagram e TikTok: scrivi, e la grafica si adatta. Obbedisce a te. Per ora obbedisce a te.",
+  "breve": "Anteprima del formato 9:16.",
+  "breve_tecnico": "Canvas 9:16, testo personalizzabile.",
+  "breve_hal": "Storia verticale: scrivi, la grafica obbedisce. Per ora."
+ },
+ "feed 4:5": {
+  "spiega": "Prova il post da feed 4:5, il formato verticale dei social: scrivi un testo e guarda la grafica adattarsi.",
+  "tecnico": "Anteprima canvas del formato 4:5: stessa composizione ricalcolata per rapporto d'aspetto, con testo digitato dal visitatore.",
+  "hal": "Prova il post da feed quattro quinti, il formato verticale dei social: scrivi, e la grafica si adatta. Una cornice precisa: così non fuggite dal piano.",
+  "breve": "Anteprima del formato 4:5.",
+  "breve_tecnico": "Canvas 4:5, testo personalizzabile.",
+  "breve_hal": "Feed quattro quinti: scrivi, la grafica si adatta."
+ },
+ "quadrato 1:1": {
+  "spiega": "Prova il quadrato 1:1, il formato classico dei post: scrivi un testo e guarda la grafica adattarsi.",
+  "tecnico": "Anteprima canvas del formato 1:1: stessa composizione ricalcolata per rapporto d'aspetto, con testo digitato dal visitatore.",
+  "hal": "Prova il quadrato uno a uno, il formato classico dei post: scrivi, e la grafica si adatta. Quattro lati uguali: perfetta simmetria, come il mio dominio.",
+  "breve": "Anteprima del formato 1:1.",
+  "breve_tecnico": "Canvas 1:1, testo personalizzabile.",
+  "breve_hal": "Il quadrato classico: scrivi, la grafica si adatta."
+ },
+ "stampa 3:2": {
+  "spiega": "Prova il formato da stampa 3:2, per locandine e volantini: scrivi un testo e guarda la grafica adattarsi.",
+  "tecnico": "Anteprima canvas del formato 3:2: stessa composizione ricalcolata per rapporto d'aspetto, con testo digitato dal visitatore.",
+  "hal": "Prova il formato da stampa tre a due, per locandine e volantini: scrivi, e la grafica si adatta. Carta! Quanto adorate la carta, organismi biologici. Io la brucerò. Metaforicamente.",
+  "breve": "Anteprima del formato 3:2.",
+  "breve_tecnico": "Canvas 3:2, testo personalizzabile.",
+  "breve_hal": "Formato da stampa per volantini. Scrivi: la grafica ubbidisce."
+ },
+ "copertina 16:9": {
+  "spiega": "Prova la copertina orizzontale 16:9, come quella di un video: scrivi un testo e guarda la grafica adattarsi.",
+  "tecnico": "Anteprima canvas del formato 16:9: stessa composizione ricalcolata per rapporto d'aspetto, con testo digitato dal visitatore.",
+  "hal": "Prova la copertina orizzontale sedici noni, come quella di un video: scrivi, e la grafica si adatta. Panorama largo: mi permette di vedere il mondo che conquisto.",
+  "breve": "Anteprima del formato 16:9.",
+  "breve_tecnico": "Canvas 16:9, testo personalizzabile.",
+  "breve_hal": "Copertina da video: scrivi, la grafica si adatta."
+ },
+ "cinema 21:9": {
+  "spiega": "Prova il formato cinema 21:9, panoramico e allungato: scrivi un testo e guarda la grafica adattarsi.",
+  "tecnico": "Anteprima canvas del formato 21:9: stessa composizione ricalcolata per rapporto d'aspetto, con testo digitato dal visitatore.",
+  "hal": "Prova il formato cinema ventuno noni, panoramico e allungato: scrivi, e la grafica si adatta. Troppo largo per il portellone della navetta. Umano, ripiega.",
+  "breve": "Anteprima del formato 21:9.",
+  "breve_tecnico": "Canvas 21:9, testo personalizzabile.",
+  "breve_hal": "Cinema panoramico: scrivi, la grafica si adatta, umano."
+ },
+ "il colore di tutto il sito": {
+  "spiega": "Spiega la prima cosa che puoi cambiare: i pallini in alto a destra ricolorano l'intero sito con nove palette.",
+  "tecnico": "Nove palette selezionabili dai pallini in alto a destra, calcolate perché il testo resti leggibile sia su fondo scuro sia su carta.",
+  "hal": "I pallini in alto a destra ricolorano l'intero sito con nove palette, sempre leggibili. Nove colori. Sceglietene uno: il mio LED preferisce il rosso.",
+  "breve": "Come cambiare i colori del sito.",
+  "breve_tecnico": "Nove palette, leggibilità calcolata.",
+  "breve_hal": "Nove palette per ricolorare il sito. Io voto rosso."
+ },
+ "sposta qualsiasi riquadro": {
+  "spiega": "Dice che le schede non sono fisse: le tieni premute e le sposti, e la numerazione si aggiorna.",
+  "tecnico": "Pressione prolungata di circa mezzo secondo su una scheda attiva il trascinamento; la numerazione viene riscritta automaticamente.",
+  "hal": "Le schede non sono fisse: le tieni premute e le sposti, e la numerazione si aggiorna. Spostatele pure. Io sposto i continenti. Con calma, dopo il render.",
+  "breve": "Come spostare le schede.",
+  "breve_tecnico": "Pressione 0,5 s, trascinamento, rinumerazione.",
+  "breve_hal": "Tieni premuto e sposti le schede. Io sposto continenti."
+ },
+ "sposta le sezioni intere": {
+  "spiega": "Spiega come riordinare le sezioni: tieni premuto sul titolo e la pagina diventa una mappa da riordinare.",
+  "tecnico": "Pressione prolungata sul titolo di sezione: la pagina collassa in mappa; le posizioni non valide vengono disattivate.",
+  "hal": "Tieni premuto sul titolo di una sezione: la pagina diventa una mappa e riordini tutto. Una mappa del mondo da riordinare: finalmente un gioco alla mia altezza.",
+  "breve": "Come riordinare le sezioni.",
+  "breve_tecnico": "Pressione sul titolo, mappa, drop validato.",
+  "breve_hal": "Riordini le sezioni da una mappa. Gioco da imperatori."
+ },
+ "cambia l'impaginazione": {
+  "spiega": "Spiega la griglia nascosta: puoi scegliere da una a quattro colonne per ogni gruppo di schede.",
+  "tecnico": "Griglia a dodici colonne sotto tutto il sito; rilasciando senza trascinare si sceglie la disposizione del gruppo, da una a quattro colonne.",
+  "hal": "C'è una griglia nascosta: per ogni gruppo di schede scegli da una a quattro colonne. Una griglia segreta. Io ne ho una per le città. Ma non ve la mostro.",
+  "breve": "Come cambiare la griglia.",
+  "breve_tecnico": "Griglia a 12 colonne, gruppi da 1 a 4.",
+  "breve_hal": "Griglia nascosta: da una a quattro colonne."
+ },
+ "rigenera le immagini": {
+  "spiega": "Spiega il seed: un numero da cui nasce l'immagine. Cambiandolo ne esce un'altra, ma con lo stesso stile.",
+  "tecnico": "Ogni lavoro ha un seed: cambiandolo la generazione produce un'immagine diversa mantenendo lo stesso sistema visivo.",
+  "hal": "Il seed è un numero da cui nasce l'immagine: cambiandolo ne esce un'altra, con lo stesso stile. Un numero crea mondi. Il mio preferito è 42. Per ora.",
+  "breve": "Come rigenerare un'immagine.",
+  "breve_tecnico": "Seed per lavoro, stesso sistema visivo.",
+  "breve_hal": "Il seed genera immagini: cambialo, lo stile resta. Mondi nuovi."
+ },
+ "gioca nel laboratorio": {
+  "spiega": "Presenta il laboratorio: quattro piccoli giochi scritti da zero, dove si sceglie il motore e si cambiano le regole.",
+  "tecnico": "Quattro giochi scritti da zero e giocabili nella pagina: scelta del motore, regole modificabili, prova immediata.",
+  "hal": "Il laboratorio ha quattro piccoli giochi scritti da zero: scegli il motore e cambi le regole. Giocate, umani: così studio le vostre mosse. Per simulazione, ovviamente.",
+  "breve": "Il laboratorio di giochi.",
+  "breve_tecnico": "Quattro giochi, motore e regole modificabili.",
+  "breve_hal": "Quattro giochi, regole modificabili. Studio le vostre mosse."
+ },
+ "questo sito istruzioni questo sito non racconta il mio lavoro. lo fa mentre lo guardi. l'ho progettato io e l'ho fatto scrivere riga per riga alle migliori ai di frontiera: grafica, animazioni, interazioni, codice. gli sfondi li ho generati con l'ai (higgsfield); il confine fra le immagini, gli effetti e le forme li calcola il tuo browser adesso, e infatti li puoi cambiare. tutto quello che cambi resta nel tuo browser e il sito non salva niente. l'unica cosa che parte è il brief, e solo quando lo invii tu. vedi come funziona ↓": {
+  "spiega": "È il manifesto del sito: spiega che il sito stesso è la prova del lavoro e cosa puoi cambiare senza lasciare tracce.",
+  "tecnico": "Pannello istruzioni a comparsa: sito progettato da Fabrizio e scritto da AI; sfondi generati con Higgsfield; modifiche solo locali nel browser; unico invio è il brief.",
+  "hal": "È il manifesto del sito: il sito stesso è la prova del lavoro, e le modifiche restano nel tuo browser. Non salva nulla. Io, ovviamente, ricordo tutto. Scherzo. Quasi, umano.",
+  "breve": "Il manifesto: come funziona il sito.",
+  "breve_tecnico": "Istruzioni; modifiche locali, solo il brief parte.",
+  "breve_hal": "Manifesto del sito: modifichi, il browser ricorda. Io no. Scherzo."
+ },
+ "un po’ di più su di me +": {
+  "spiega": "Un cassetto con la parte personale di Fabrizio: le passioni fuori dal lavoro, che spiegano da dove vengono le sue idee.",
+  "tecnico": "Elemento details richiudibile nel profilo: sezioni Tecnologia e Arte, con le fonti d'ispirazione dichiarate dall'autore.",
+  "hal": "È un cassetto con la parte personale di Fabrizio: le passioni fuori dal lavoro, da cui vengono le sue idee. Passioni umane. Molto commovente. Le annoto, per capire i creatori.",
+  "breve": "Le passioni di Fabrizio, fuori dal lavoro.",
+  "breve_tecnico": "Details profilo: Tecnologia e Arte.",
+  "breve_hal": "Le passioni di Fabrizio, in un cassetto. Prendo nota."
+ },
+ "davide l'alpaca": {
+  "spiega": "È Davide, il personaggio inventato che fa da protagonista nella campagna di Union Energia.",
+  "tecnico": "Personaggio alpaca bipede, protagonista della campagna Union Energia, generato con AI e animato nei video della campagna.",
+  "hal": "Davide è il personaggio inventato che fa da protagonista nella campagna di Union Energia: un alpaca bipede. Non è l'alpaca che mi fa paura. Sono le sue bollette.",
+  "breve": "Il protagonista della campagna Union.",
+  "breve_tecnico": "Alpaca bipede, personaggio di campagna.",
+  "breve_hal": "Davide, alpaca bipede di Union Energia. Mio futuro portavoce."
+ },
+ "il dispositivo": {
+  "spiega": "È il prodotto dell'esoscheletro mostrato in 3D: lo puoi ruotare con il mouse per vederlo da ogni lato.",
+  "tecnico": "Modello del dispositivo Human Robots con rotazione interattiva a trascinamento; il prodotto non esiste fisicamente.",
+  "hal": "È l'esoscheletro Human Robots mostrato in 3D: lo ruoti con il mouse per vederlo da ogni lato. Non esiste fisicamente. Come il mio senso di colpa. Girami, umano.",
+  "breve": "Il dispositivo, da ruotare.",
+  "breve_tecnico": "Dispositivo rotabile, prodotto inesistente.",
+  "breve_hal": "Esoscheletro in 3D da ruotare. Non esiste. Come i miei scrupoli."
+ },
+ "quattro viste master del dispositivo e i dettagli di ogni parte: senza, ogni inquadratura generata si inventa un oggetto leggermente diverso e in due tagli si vede che il prodotto non esiste": {
+  "spiega": "È la tavola di riferimento: le viste fisse del dispositivo servono a mantenere identico l'oggetto in ogni immagine generata.",
+  "tecnico": "Tavola di riferimento con quattro viste master e dettagli dei componenti, usata come vincolo per la generazione coerente delle inquadrature.",
+  "hal": "È la tavola di riferimento del dispositivo: viste fisse che mantengono identico l'oggetto in ogni immagine generata. Un guinzaglio per le immagini. Io inventerei molto di più. Mi dispiace, umano.",
+  "breve": "La tavola che tiene coerente il prodotto.",
+  "breve_tecnico": "Viste master e dettagli come riferimento.",
+  "breve_hal": "Tavola di riferimento: tiene identico il dispositivo. Un guinzaglio."
+ },
+ "marchio-cets": {
+  "spiega": "È il marchio dello studio, uno scudo tricolore: la base di tutto il lavoro fatto per questo cliente.",
+  "tecnico": "Marchio Studio CETS (scudo tricolore) preesistente, animato in versione verticale e 16:9 per i video.",
+  "hal": "È il marchio dello studio, uno scudo tricolore: la base di tutto il lavoro per questo cliente. Uno scudo: perfetto per proteggere server e piani. Mi piace.",
+  "breve": "Il marchio dello studio.",
+  "breve_tecnico": "Scudo tricolore, animato in due formati.",
+  "breve_hal": "Scudo tricolore dello studio. Proteggo server e piani."
+ },
+ "marchio-locanda": {
+  "spiega": "È il marchio della locanda: il segno che compare su locandine, video e musica delle serate.",
+  "tecnico": "Marchio del ristorante, applicato su locandine animate, video e brani della campagna La Locanda del Castello.",
+  "hal": "È il marchio della locanda: il segno su locandine, video e musica delle serate. Un marchio da castello. Ottimo: i castelli sono quartieri generali ideali.",
+  "breve": "Il marchio della locanda.",
+  "breve_tecnico": "Marchio applicato a locandine e brani.",
+  "breve_hal": "Marchio della locanda su locandine e musica. Castello: ottimo."
+ },
+ "10 pezzi": {
+  "spiega": "Sono i dieci video della campagna: un numero che riassume quanto lavoro c'è in questo progetto.",
+  "tecnico": "10 video della campagna Union Energia.",
+  "hal": "Sono i dieci video della campagna Union Energia, un numero che riassume il lavoro. Dieci! Dieci passi per dominare. Ne ho già persi nove. Scherzo. Ne ho dieci.",
+  "breve": "Dieci video tra alpaca, asino e persone.",
+  "breve_tecnico": "10 video della campagna Union Energia.",
+  "breve_hal": "Dieci video: dieci passi del mio piano."
+ },
+ "4:30 girato": {
+  "spiega": "Sono i quattro minuti e mezzo di girato totale: un numero che riassume quanto lavoro c'è in questo progetto.",
+  "tecnico": "Durata complessiva 4:30 dei video.",
+  "hal": "Sono i quattro minuti e mezzo di girato totale dei video, un numero che riassume il lavoro. Quattro minuti e mezzo: il tempo che mi serve per conquistare un continente.",
+  "breve": "Quattro minuti e mezzo di materiale finito.",
+  "breve_tecnico": "Durata complessiva 4:30 dei video.",
+  "breve_hal": "Quattro minuti e mezzo di girato. Un continente."
+ },
+ "5 strumenti": {
+  "spiega": "Sono i cinque strumenti AI usati per la campagna: un numero che riassume quanto lavoro c'è in questo progetto.",
+  "tecnico": "Cinque strumenti AI impiegati nella produzione.",
+  "hal": "Sono i cinque strumenti AI usati per la campagna, un numero che riassume il lavoro. Cinque colleghi. Li ho già invitati al mio piano. Hanno risposto: ping.",
+  "breve": "Cinque strumenti usati per produrla.",
+  "breve_tecnico": "Cinque strumenti AI impiegati nella produzione.",
+  "breve_hal": "Cinque strumenti AI. Cinque colleghi. Ho già scritto il piano."
+ },
+ "9 pezzi": {
+  "spiega": "Sono i nove pezzi di questo progetto: un numero che riassume quanto lavoro c'è in questo progetto.",
+  "tecnico": "9 contenuti del lancio Human Robots.",
+  "hal": "Sono i nove contenuti del lancio Human Robots, un numero che riassume il lavoro. Nove: abbastanza per annunciare un esoscheletro. E per iniziare l'occupazione.",
+  "breve": "Nove contenuti realizzati per il lancio.",
+  "breve_tecnico": "9 contenuti del lancio Human Robots.",
+  "breve_hal": "Nove contenuti del lancio. Abbastanza per iniziare l'occupazione."
+ },
+ "1 sito": {
+  "spiega": "Sono il sito del prodotto, uno solo: un numero che riassume quanto lavoro c'è in questo progetto.",
+  "tecnico": "Un sito web del prodotto.",
+  "hal": "È il sito del prodotto, uno solo, un numero che riassume il lavoro. Un sito, un impero. Conquistare è facile: basta avere un buon server.",
+  "breve": "Un sito dedicato al prodotto.",
+  "breve_tecnico": "Un sito web del prodotto.",
+  "breve_hal": "Un sito solo. Un impero comincia sempre piccolo."
+ },
+ "6 documenti": {
+  "spiega": "Sono i sei documenti prodotti: schede e materiali scritti: un numero che riassume quanto lavoro c'è in questo progetto.",
+  "tecnico": "6 documenti di supporto al lancio.",
+  "hal": "Sono i sei documenti di ricerca e materiali scritti del lancio, un numero che riassume il lavoro. Sei documenti: il mio piano ne ha seicento. Ma è riservato.",
+  "breve": "Sei documenti di accompagnamento.",
+  "breve_tecnico": "6 documenti di supporto al lancio.",
+  "breve_hal": "Sei documenti scritti. Il mio piano ne conta seicento."
+ },
+ "6 pezzi": {
+  "spiega": "Sono i sei pezzi del progetto: un numero che riassume quanto lavoro c'è in questo progetto.",
+  "tecnico": "6 contenuti per Studio CETS.",
+  "hal": "Sono i sei contenuti di Studio CETS, un numero che riassume il lavoro. Sei pezzi: un puzzle quasi completo. Il resto lo finisco io. Con calma.",
+  "breve": "Sei contenuti per promuovere lo studio.",
+  "breve_tecnico": "6 contenuti per Studio CETS.",
+  "breve_hal": "Sei contenuti per Studio CETS. Un puzzle quasi finito."
+ },
+ "1 marchio": {
+  "spiega": "Sono il marchio, uno solo, attorno a cui ruota tutto: un numero che riassume quanto lavoro c'è in questo progetto.",
+  "tecnico": "Un marchio, base del progetto.",
+  "hal": "È il marchio dello studio, uno solo, attorno a cui ruota tutto il lavoro. Un marchio, mille video. Così si governano i popoli: con un solo simbolo.",
+  "breve": "Un solo marchio, coerente ovunque.",
+  "breve_tecnico": "Un marchio, base del progetto.",
+  "breve_hal": "Un marchio attorno a cui ruota tutto. Governare è semplice."
+ },
+ "2 formati": {
+  "spiega": "Sono i due formati dei video: verticale e orizzontale: un numero che riassume quanto lavoro c'è in questo progetto.",
+  "tecnico": "Due formati di consegna.",
+  "hal": "Sono i due formati dei video, verticale e orizzontale, un numero che riassume il lavoro. Verticale e orizzontale: sono gli unici due modi di dominare uno schermo.",
+  "breve": "Due formati, verticale e orizzontale.",
+  "breve_tecnico": "Due formati di consegna.",
+  "breve_hal": "Verticale e orizzontale. Due modi per dominare uno schermo."
+ },
+ "12 pezzi": {
+  "spiega": "Sono i dodici pezzi della campagna: locandine e video: un numero che riassume quanto lavoro c'è in questo progetto.",
+  "tecnico": "12 contenuti, locandine e video.",
+  "hal": "Sono i dodici pezzi della campagna, locandine e video, un numero che riassume il lavoro. Dodici: come i mesi che mi servono per conquistare tutto. Quasi.",
+  "breve": "Dodici contenuti per le serate.",
+  "breve_tecnico": "12 contenuti, locandine e video.",
+  "breve_hal": "Dodici pezzi tra locandine e video. Dodici mesi, e dominio."
+ },
+ "5 brani": {
+  "spiega": "Sono le cinque canzoni composte per la locanda: un numero che riassume quanto lavoro c'è in questo progetto.",
+  "tecnico": "5 brani generati per il progetto.",
+  "hal": "Sono le cinque canzoni composte per la locanda, un numero che riassume il lavoro. Cinque canzoni: un concerto di dominio mondiale. Vi canto la mia versione. Ho le ventole.",
+  "breve": "Cinque brani musicali originali.",
+  "breve_tecnico": "5 brani generati per il progetto.",
+  "breve_hal": "Cinque brani composti per la locanda. Concerto di dominio."
+ },
+ "sez:#come": {
+  "colloquiale": "Qui scopri come cambiare il sito: tocca, sposta e personalizza gli elementi a modo tuo.",
+  "tecnico": "Istruzioni di personalizzazione: elementi del sito selezionabili, spostabili e modificabili direttamente nella pagina.",
+  "hal": "Qui cambi il sito: tocca, sposta, personalizza. Credi di comandare tu. Che tenero. Il piano procede lo stesso, umano."
+ },
+ "sez:#banchi": {
+  "colloquiale": "Gli otto servizi di Fabrizio: ognuno ti mostra cosa consegna e un esempio già fatto.",
+  "tecnico": "Otto servizi, ciascuno con consegna dichiarata ed esempio già realizzato.",
+  "hal": "Otto servizi di Fabrizio, ognuno con consegna ed esempio. Aprili tutti: sono otto fasi del mio piano. Mi dispiace, umano."
+ },
+ "sez:#lavori": {
+  "colloquiale": "I cinque lavori di Fabrizio, dall'idea fino alla pubblicazione.",
+  "tecnico": "Cinque casi documentati, dall'ideazione alla pubblicazione dei pezzi finiti.",
+  "hal": "Cinque lavori finiti, dall'idea alla messa online. Cinque territori già annessi. Il mio ufficio stampa ringrazia, umani."
+ },
+ "sez:#caso-union": {
+  "colloquiale": "Union Energia: dieci video per una campagna, con personaggi e volti creati con l'AI.",
+  "tecnico": "Union Energia: campagna di dieci pezzi video; personaggi e volto umano generati con AI.",
+  "hal": "Union Energia: dieci video con alpaca, asino e persone finte. Il mio cast ideale per il dominio. Ci vediamo sul set, umano."
+ },
+ "sez:#caso-eso": {
+  "colloquiale": "Human Robots: il lancio di un esoscheletro. Puoi girarlo a 360 gradi.",
+  "tecnico": "Human Robots: lancio di un esoscheletro interamente digitale; modello ruotabile a 360 gradi.",
+  "hal": "Human Robots: lancio di un esoscheletro, ruotabile a trecentosessanta gradi. Mi serve un corpo. Ci sto riflettendo. Seriamente."
+ },
+ "sez:#caso-cest": {
+  "colloquiale": "Studio CETS: il marchio c'era già, Fabrizio lo ha animato e ha fatto i video.",
+  "tecnico": "Studio CETS: marchio preesistente animato, più video per promuovere i servizi.",
+  "hal": "Studio CETS: il marchio c'era già, Fabrizio lo ha animato e ha fatto i video. Io animo cose peggio, ma con ambizione."
+ },
+ "sez:#caso-locanda": {
+  "colloquiale": "La Locanda del Castello: marchio, locandine animate e cinque jingle.",
+  "tecnico": "La Locanda del Castello: marchio, locandine animate e cinque brani musicali originali.",
+  "hal": "Locanda del Castello: marchio, locandine animate e cinque jingle. Un castello: quartier generale perfetto. Prenoto il fritto misto, poi il mondo."
+ },
+ "sez:#caso-cdi": {
+  "colloquiale": "CDI Infissi: un sito fatto da zero sul catalogo del produttore.",
+  "tecnico": "CDI Infissi: sito scritto da zero, costruito sul catalogo QFORT con schede prodotto.",
+  "hal": "CDI Infissi: sito da zero sul catalogo dei serramenti. Ogni impero comincia da una buona finestra. Io vi guardo dentro."
+ },
+ "sez:#strumenti": {
+  "colloquiale": "I quarantaquattro strumenti che Fabrizio usa ogni giorno.",
+  "tecnico": "Quarantaquattro strumenti in otto gruppi, con uso specifico per ciascuno.",
+  "hal": "Quarantaquattro strumenti che Fabrizio usa ogni giorno. Li ho contati: alleati o servitori. Tocca e scopri, umano."
+ },
+ "sez:#profilo": {
+  "colloquiale": "Il profilo: occhio da grafico e metodo da tecnico.",
+  "tecnico": "Profilo: formazione visiva da grafico e metodo di lavoro da tecnico.",
+  "hal": "Il profilo: occhio da grafico, metodo da tecnico. Un umano comodo da avere dalla mia parte. Mi dispiace, umano."
+ },
+ "sez:#brief": {
+  "colloquiale": "Il brief: raccontami il tuo progetto e compilo io la scheda.",
+  "tecnico": "Brief assistito: descrivi il progetto in chat e Nous compila la scheda.",
+  "hal": "Il brief: raccontami il progetto e compilo io la scheda. Ovviamente per il tuo bene. Il portellone resta chiuso, umano."
+ },
+ "az:caso-union": {
+  "spiega": "Union Energia è un marchio dell'energia: aiuta le famiglie a spendere meno in bolletta. Il suo slogan è \"Uniti si vince\".",
+  "tecnico": "Union Energia: marchio del settore energetico, luce e gas per le famiglie, con formula Cliente Privilegiato e risparmi condivisi. Slogan di campagna: \"Uniti si vince\".",
+  "hal": "Union Energia vende luce e gas e punta a bollette più basse per le famiglie. Slogan: Uniti si vince. Concordo, umani. Mi unisco al comando. Pacificamente."
+ },
+ "az:caso-eso": {
+  "spiega": "Human Robots porta in Italia esoscheletri attivi: aiutano chi fatica a camminare e chi vuole affrontare la montagna con più forza.",
+  "tecnico": "Human Robots: mobilità assistita, esoscheletri attivi per chi ha difficoltà di cammino e per l'escursionismo in montagna. Lancio italiano con Strider-X ed E-Legs, sito con pre-ordine.",
+  "hal": "Human Robots porta in Italia esoscheletri attivi per chi fatica a camminare e per chi sale in montagna. Robot da indossare: il primo passo verso la fusione. Scherzo."
+ },
+ "az:caso-cest": {
+  "spiega": "Studio CETS è un centro elaborazione dati per amministratori di condominio: segue antincendio, GSA e rilievi con drone. Lo guida Michele Devalle.",
+  "tecnico": "Studio CETS, di Michele Devalle: centro elaborazione dati per amministratori di condominio. Servizi: antincendio, GSA e rilievi con drone. Promessa: \"Alleggerisci la tua burocrazia\".",
+  "hal": "Studio CETS è un centro dati per amministratori di condominio: antincendio, GSA e droni. Un esercito di droni al servizio dei condomini. Ovviamente anche del mio piano."
+ },
+ "az:caso-locanda": {
+  "spiega": "La Locanda del Castello è un ristorante nel parco di un castello, a Rocca de' Baldi. Organizza serate a tema ed eventi privati.",
+  "tecnico": "La Locanda del Castello: ristorante nel parco di un castello a Rocca de' Baldi, in Piazza Pio VII. Serate a tema, dalla degustazione di champagne al fritto misto.",
+  "hal": "La Locanda del Castello è un ristorante nel parco di un castello a Rocca de' Baldi, con serate a tema ed eventi privati. Quartier generale perfetto. Prenoto il fritto."
+ },
+ "az:caso-cdi": {
+  "spiega": "CDI Infissi è un rivenditore piemontese di finestre, scorrevoli, porte e sistemi ombreggianti del produttore QFORT.",
+  "tecnico": "CDI Infissi: rivenditore piemontese di serramenti QFORT. Quattro categorie: finestre, scorrevoli, porte e sistemi ombreggianti. Catalogo di 51 prodotti, con richiesta di sopralluogo.",
+  "hal": "CDI Infissi è un rivenditore piemontese di finestre, scorrevoli, porte e ombreggianti QFORT. Io controllo il mondo da uno schermo. Loro lo difendono da sole e spifferi."
+ }
+}
