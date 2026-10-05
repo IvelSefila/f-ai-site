@@ -2,20 +2,20 @@
 * app.js — la sessione. Tiene il filo fra le prove, parla, misura,
 * e alla fine scrive il dossier. Nessuna libreria.
 * ═══════════════════════════════════════════════════════════════════ */
-import { initTipografia } from './tipografia.js?v=20260928-217';
+import { initTipografia } from './tipografia.js?v=20260928-223';
 initTipografia();
-import { initMirino } from './mirino.js?v=20260928-217';
+import { initMirino } from './mirino.js?v=20260928-223';
 initMirino();
-import { initHero } from './hero.js?v=20260928-217';
-import { initStrumenti } from './strumenti.js?v=20260928-217';
-import { initUnion } from './union.js?v=20260928-217';
-import { initEso } from './eso.js?v=20260928-217';
-import { initLocanda } from './locanda.js?v=20260928-217';
-import { initCest } from './cest.js?v=20260928-217';
-import { initPalette } from './palette.js?v=20260928-217';
-import { keyVisual, radar, MODES, rng, leggiColori} from './engine.js?v=20260928-217';
-import { initBrief } from './brief.js?v=20260928-217';
-import { initServizi } from './servizi.js?v=20260928-217';
+import { initHero } from './hero.js?v=20260928-223';
+import { initStrumenti } from './strumenti.js?v=20260928-223';
+import { initUnion } from './union.js?v=20260928-223';
+import { initEso } from './eso.js?v=20260928-223';
+import { initLocanda } from './locanda.js?v=20260928-223';
+import { initCest } from './cest.js?v=20260928-223';
+import { initPalette } from './palette.js?v=20260928-223';
+import { keyVisual, radar, MODES, rng, leggiColori} from './engine.js?v=20260928-223';
+import { initBrief } from './brief.js?v=20260928-223';
+import { initServizi } from './servizi.js?v=20260928-223';
 
 const $ = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => [...r.querySelectorAll(s)];

@@ -2,11 +2,11 @@
  * Widget Controller "Nous" — F/AI Portfolio
  * Versione 1.0 (Settembre 2026)
  */
-import { CONFIG } from './chatbot.config.js?v=20260928-217';
-import { ChatEngine } from './chatbot.engine.js?v=20260928-217';
-import * as Persona from './nous-personalita.js?v=20260928-217';
-import * as Vista from './nous-vista.js?v=20260928-217';
-import { commentoZona, commentoPunto, impostaTono, tono, testoSezione } from './nous-zone.js?v=20260928-217';
+import { CONFIG } from './chatbot.config.js?v=20260928-223';
+import { ChatEngine } from './chatbot.engine.js?v=20260928-223';
+import * as Persona from './nous-personalita.js?v=20260928-223';
+import * as Vista from './nous-vista.js?v=20260928-223';
+import { commentoZona, commentoPunto, impostaTono, tono, testoSezione } from './nous-zone.js?v=20260928-223';
 
 /* Cosa sta girando: testi mostrati in alto e nel pannello dettagli (italiano semplice) */
 /* voci Azure per tono: il Worker le legge dal vivo (nessun file registrato) */
@@ -79,6 +79,7 @@ class NodoWidget {
     this.bindEvents();
     this.loadHistory();
     this.scheduleHint();
+    if (!CONFIG.tonoHal) { try { if (sessionStorage.getItem('nodo_tono') === 'hal') sessionStorage.setItem('nodo_tono', 'col'); } catch (e) {} }
     this.suggerimentiSezione();
     this.vitaOrb();
     this.mostraBenvenuto();
@@ -580,6 +581,7 @@ class NodoWidget {
      cosa stai guardando e invita a parlarne con lei. Una volta per sezione e per visita, mai mentre
      la chat e' aperta o la visita guidata e' in corso, e si spengono per sempre con "Non mostrare piu'". */
   suggerimentiSezione() {
+    if (!CONFIG.suggerimenti) return;
     if (!('IntersectionObserver' in window)) return;
     const spenti = () => { try { return localStorage.getItem('nodo_sugg_off') === '1'; } catch (e) { return false; } };
     const visti = new Set();
@@ -797,7 +799,7 @@ class NodoWidget {
       const tonoBlocco = `<div class="nodo-guida__scelta nodo-guida__tono" data-tono-scelta>
            <button class="nodo-guida__btn" type="button" data-t="col">Colloquiale</button>
            <button class="nodo-guida__btn" type="button" data-t="tec">Tecnico</button>
-           <button class="nodo-guida__btn" type="button" data-t="hal">IA impazzita</button>
+           ${CONFIG.tonoHal ? '<button class="nodo-guida__btn" type="button" data-t="hal">IA impazzita</button>' : ''}
          </div>`;
       const ricordami = consenso === null
         ? `<div class="nodo-guida__ricordami" data-ricordami>
@@ -928,7 +930,7 @@ class NodoWidget {
 
   /* Interruttore nel piede: "Memoria di Nous" dimentica tutto quello che il browser sa del visitatore e rimette la domanda. */
   inizializzaMemoria() {
-    try { fetch(new URL('./nous-tour.json?v=20260928-217', import.meta.url)).then(r => r.ok ? r.json() : null).then(j => { if (j) this._tour = j; }).catch(() => {}); } catch (e) {}
+    try { fetch(new URL('./nous-tour.json?v=20260928-223', import.meta.url)).then(r => r.ok ? r.json() : null).then(j => { if (j) this._tour = j; }).catch(() => {}); } catch (e) {}
     document.addEventListener('click', e => {
       const t = e.target instanceof Element ? e.target.closest('[data-nous-memoria]') : null;
       if (!t) return;
@@ -941,6 +943,7 @@ class NodoWidget {
   /* Se resti fermo e inattivo, Nous ogni tanto dice una microfrase da macchina. Al massimo due per visita, mai a chat aperta,
      mai durante la visita guidata e solo se i suggerimenti non sono spenti. */
   rimuginaInattivo() {
+    if (!CONFIG.suggerimenti) return;
     const hint = this.elements.hint;
     const testoEl = hint?.querySelector('.nodo-hint-testo');
     if (!hint || !testoEl) return;

@@ -9,7 +9,7 @@
 const UNITA = 'article, .union__pezzo, .vetrina__caso, figure, li, details, [class*="card"], [class*="banco"], [id^="caso-"], section[id], footer[id]';
 /* Le spiegazioni sono scritte a mano (nous-spiega.json): Nous non rilegge il testo a schermo, dice cos'e' quel pezzo. */
 let SPIEGA = {};
-fetch(new URL('./nous-spiega.json?v=20260928-217', import.meta.url)).then(r => r.ok ? r.json() : {}).then(j => { SPIEGA = j || {}; for (const k of Object.keys(SPIEGA)) { if (/-/.test(k) && !k.startsWith('sez:')) { const sp = k.replace(/-/g, ' '); if (!SPIEGA[sp]) SPIEGA[sp] = SPIEGA[k]; } } }).catch(() => {});
+fetch(new URL('./nous-spiega.json?v=20260928-223', import.meta.url)).then(r => r.ok ? r.json() : {}).then(j => { SPIEGA = j || {}; for (const k of Object.keys(SPIEGA)) { if (/-/.test(k) && !k.startsWith('sez:')) { const sp = k.replace(/-/g, ' '); if (!SPIEGA[sp]) SPIEGA[sp] = SPIEGA[k]; } } }).catch(() => {});
 /* Tono scelto dal visitatore all'ingresso: col = colloquiale, tec = super tecnico, hal = IA impazzita */
 const CAMPI = { col: ['spiega', 'breve'], tec: ['tecnico', 'breve_tecnico'], hal: ['hal', 'breve_hal'] };
 export function tono() { try { const t = sessionStorage.getItem('nodo_tono'); return CAMPI[t] ? t : 'col'; } catch (e) { return 'col'; } }

@@ -5,7 +5,7 @@
  * Segnaposto nelle frasi: {nome} {giorni} {n}
  * ═══════════════════════════════════════════════════════════════════ */
 
-import POOL_TONI from './nous-pool-toni.js?v=20260928-217';
+import POOL_TONI from './nous-pool-toni.js?v=20260928-223';
 
 const CHIAVE = 'nodo_visitatore';
 
