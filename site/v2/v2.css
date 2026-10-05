@@ -4436,8 +4436,7 @@ body.mirino-on, body.mirino-on * { cursor: none !important; }
 .eso__360-maniglia { will-change: transform; }
 .eso__360-stage--via .eso__360-maniglia, .eso__360-stage--via .eso__360-maniglia::after { animation: none !important; }
 .eso__360-canvas { transform: translateZ(0); }
-/* il filo di luce animato sulla barra in basso si ridisegnava a ogni frame: resta come riflesso fermo */
-.navdock::before { animation: none !important; background-position: 30% 0; opacity: .55; }
+/* il filo di luce sulla barra in basso e' tornato: scorre da sinistra a destra con un transform (leggero, niente ridisegno dello sfondo) */
 
 
 /* ── 360: oscillazione a riposo con trasformazione 3D (niente cambio di fotogramma) ── */
@@ -4484,7 +4483,7 @@ body.mirino-on, body.mirino-on * { cursor: none !important; }
   .bar { background: rgba(5, 7, 11, .94); }
   .navdock { background: rgba(9, 13, 20, .95); }
   .union__scena, .eso__scena, .cest__scena, .locanda__scena { animation: none !important; }
-  .navdock::before, .navdock::after { animation: none !important; }
+  .navdock::after { animation: none !important; }
 }
 
 
@@ -4532,3 +4531,17 @@ body.mirino-on, body.mirino-on * { cursor: none !important; }
 /* Mirino più piccolo (da 96 a 60 px): meno ingombrante sopra i contenuti */
 .hero-cursore { width: 60px; height: 60px; margin: -30px 0 0 -30px; }
 .hero-cursore svg { width: 100%; height: 100%; }
+
+
+/* Fascio di luce sulla barra in basso: un punto luminoso con coda che scorre da sinistra a destra, in ciclo */
+.navdock::before {
+  inset: 0; width: 100%; background-size: auto; background-position: 0 0; opacity: 1;
+  background: linear-gradient(100deg, transparent 30%,
+    color-mix(in srgb, var(--em-light) 28%, transparent) 44%,
+    color-mix(in srgb, var(--em-light) 85%, transparent) 50%,
+    color-mix(in srgb, var(--em-light) 28%, transparent) 56%, transparent 70%);
+  transform: translate3d(-100%, 0, 0); will-change: transform;
+  animation: navdock-fascio 4.6s cubic-bezier(.45, 0, .55, 1) infinite;
+}
+@keyframes navdock-fascio { 0% { transform: translate3d(-100%, 0, 0); } 100% { transform: translate3d(100%, 0, 0); } }
+@media (prefers-reduced-motion: reduce) { .navdock::before { animation: none; transform: translate3d(0, 0, 0); opacity: .35; } }

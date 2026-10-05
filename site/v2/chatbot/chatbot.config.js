@@ -10,6 +10,7 @@ export const CONFIG = {
   /* interruttori provvisori: suggerimenti di Nous (sezione, puntatore, rimugina) e tono IA impazzita con la sua voce */
   suggerimenti: false,
   tonoHal: false,
+  sceltaTono: false,
   name: "Nous",
   brand: "MF/AI",
   role: "Intelligenza di Regia Portfolio",

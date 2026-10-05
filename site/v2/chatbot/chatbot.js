@@ -2,11 +2,11 @@
  * Widget Controller "Nous" — F/AI Portfolio
  * Versione 1.0 (Settembre 2026)
  */
-import { CONFIG } from './chatbot.config.js?v=20260928-224';
-import { ChatEngine } from './chatbot.engine.js?v=20260928-224';
-import * as Persona from './nous-personalita.js?v=20260928-224';
-import * as Vista from './nous-vista.js?v=20260928-224';
-import { commentoZona, commentoPunto, impostaTono, tono, testoSezione } from './nous-zone.js?v=20260928-224';
+import { CONFIG } from './chatbot.config.js?v=20260928-226';
+import { ChatEngine } from './chatbot.engine.js?v=20260928-226';
+import * as Persona from './nous-personalita.js?v=20260928-226';
+import * as Vista from './nous-vista.js?v=20260928-226';
+import { commentoZona, commentoPunto, impostaTono, tono, testoSezione } from './nous-zone.js?v=20260928-226';
 
 /* Cosa sta girando: testi mostrati in alto e nel pannello dettagli (italiano semplice) */
 /* voci Azure per tono: il Worker le legge dal vivo (nessun file registrato) */
@@ -79,6 +79,7 @@ class NodoWidget {
     this.bindEvents();
     this.loadHistory();
     this.scheduleHint();
+    if (!CONFIG.sceltaTono) { try { sessionStorage.setItem('nodo_tono', 'col'); } catch (e) {} }
     if (!CONFIG.tonoHal) { try { if (sessionStorage.getItem('nodo_tono') === 'hal') sessionStorage.setItem('nodo_tono', 'col'); } catch (e) {} }
     this.suggerimentiSezione();
     this.vitaOrb();
@@ -784,7 +785,7 @@ class NodoWidget {
       } else {
         paragrafi.push(this.fraseBenvenuto());
       }
-      paragrafi.push('Come preferisci che ti parli?');
+      if (CONFIG.sceltaTono) paragrafi.push('Come preferisci che ti parli?');
       try { sessionStorage.setItem('nodo_benv_spiegato', '1'); } catch (e) {}
 
       /* 3. la nuvoletta */
@@ -796,7 +797,7 @@ class NodoWidget {
       const conSpiegazione = '';
       const pulsanti = `<button class="nodo-guida__btn nodo-guida__btn--si" type="button" data-b="giro">Tour guidato</button>
            <button class="nodo-guida__btn" type="button" data-b="scorro">Scorro io</button>`;
-      const tonoBlocco = `<div class="nodo-guida__scelta nodo-guida__tono" data-tono-scelta>
+      const tonoBlocco = !CONFIG.sceltaTono ? '' : `<div class="nodo-guida__scelta nodo-guida__tono" data-tono-scelta>
            <button class="nodo-guida__btn" type="button" data-t="col">Colloquiale</button>
            <button class="nodo-guida__btn" type="button" data-t="tec">Tecnico</button>
            ${CONFIG.tonoHal ? '<button class="nodo-guida__btn" type="button" data-t="hal">IA impazzita</button>' : ''}
@@ -930,7 +931,7 @@ class NodoWidget {
 
   /* Interruttore nel piede: "Memoria di Nous" dimentica tutto quello che il browser sa del visitatore e rimette la domanda. */
   inizializzaMemoria() {
-    try { fetch(new URL('./nous-tour.json?v=20260928-224', import.meta.url)).then(r => r.ok ? r.json() : null).then(j => { if (j) this._tour = j; }).catch(() => {}); } catch (e) {}
+    try { fetch(new URL('./nous-tour.json?v=20260928-226', import.meta.url)).then(r => r.ok ? r.json() : null).then(j => { if (j) this._tour = j; }).catch(() => {}); } catch (e) {}
     document.addEventListener('click', e => {
       const t = e.target instanceof Element ? e.target.closest('[data-nous-memoria]') : null;
       if (!t) return;
