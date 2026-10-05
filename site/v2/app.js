@@ -2,20 +2,20 @@
 * app.js — la sessione. Tiene il filo fra le prove, parla, misura,
 * e alla fine scrive il dossier. Nessuna libreria.
 * ═══════════════════════════════════════════════════════════════════ */
-import { initTipografia } from './tipografia.js?v=20260928-223';
+import { initTipografia } from './tipografia.js?v=20260928-224';
 initTipografia();
-import { initMirino } from './mirino.js?v=20260928-223';
+import { initMirino } from './mirino.js?v=20260928-224';
 initMirino();
-import { initHero } from './hero.js?v=20260928-223';
-import { initStrumenti } from './strumenti.js?v=20260928-223';
-import { initUnion } from './union.js?v=20260928-223';
-import { initEso } from './eso.js?v=20260928-223';
-import { initLocanda } from './locanda.js?v=20260928-223';
-import { initCest } from './cest.js?v=20260928-223';
-import { initPalette } from './palette.js?v=20260928-223';
-import { keyVisual, radar, MODES, rng, leggiColori} from './engine.js?v=20260928-223';
-import { initBrief } from './brief.js?v=20260928-223';
-import { initServizi } from './servizi.js?v=20260928-223';
+import { initHero } from './hero.js?v=20260928-224';
+import { initStrumenti } from './strumenti.js?v=20260928-224';
+import { initUnion } from './union.js?v=20260928-224';
+import { initEso } from './eso.js?v=20260928-224';
+import { initLocanda } from './locanda.js?v=20260928-224';
+import { initCest } from './cest.js?v=20260928-224';
+import { initPalette } from './palette.js?v=20260928-224';
+import { keyVisual, radar, MODES, rng, leggiColori} from './engine.js?v=20260928-224';
+import { initBrief } from './brief.js?v=20260928-224';
+import { initServizi } from './servizi.js?v=20260928-224';
 
 const $ = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => [...r.querySelectorAll(s)];
@@ -1204,7 +1204,18 @@ const cdiFrame = $('.cdi__frame');
 const cdiOverlay = $('[data-cdi-attiva]');
 const cdiToggle = $('[data-cdi-toggle]');
 if (cdiFrame && cdiOverlay && cdiToggle) {
+  /* Anteprima automatica: finche' la navigazione e' spenta il sito nella cornice scorre da solo (solo se la cornice e' in vista);
+     attivando la navigazione si ferma e torna all'header. Il sito CDI ascolta questi messaggi (js/main.js del suo repo). */
+  let cdiAttivo = false, cdiInVista = false, cdiPronto = false;
+  const cdiInvia = (on, top) => { try { cdiFrame.contentWindow.postMessage({ nousCdi: 'demo', on, top: !!top }, '*'); } catch (e) {} };
+  const cdiAggiorna = () => cdiInvia(cdiInVista && !cdiAttivo && cdiPronto, false);
+  cdiFrame.addEventListener('load', () => { cdiPronto = true; cdiAggiorna(); });
+  if ('IntersectionObserver' in window) {
+    new IntersectionObserver(es => { cdiInVista = es[0].isIntersecting; cdiAggiorna(); }, { threshold: 0.35 }).observe(cdiFrame);
+  }
   const stato = attivo => {
+    cdiAttivo = attivo;
+    if (attivo) cdiInvia(false, true); else cdiAggiorna();
     cdiOverlay.classList.toggle('cdi__attiva--via', attivo);
     cdiToggle.setAttribute('aria-pressed', String(attivo));
     cdiToggle.innerHTML = attivo

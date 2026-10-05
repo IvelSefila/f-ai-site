@@ -2,11 +2,11 @@
  * Widget Controller "Nous" — F/AI Portfolio
  * Versione 1.0 (Settembre 2026)
  */
-import { CONFIG } from './chatbot.config.js?v=20260928-223';
-import { ChatEngine } from './chatbot.engine.js?v=20260928-223';
-import * as Persona from './nous-personalita.js?v=20260928-223';
-import * as Vista from './nous-vista.js?v=20260928-223';
-import { commentoZona, commentoPunto, impostaTono, tono, testoSezione } from './nous-zone.js?v=20260928-223';
+import { CONFIG } from './chatbot.config.js?v=20260928-224';
+import { ChatEngine } from './chatbot.engine.js?v=20260928-224';
+import * as Persona from './nous-personalita.js?v=20260928-224';
+import * as Vista from './nous-vista.js?v=20260928-224';
+import { commentoZona, commentoPunto, impostaTono, tono, testoSezione } from './nous-zone.js?v=20260928-224';
 
 /* Cosa sta girando: testi mostrati in alto e nel pannello dettagli (italiano semplice) */
 /* voci Azure per tono: il Worker le legge dal vivo (nessun file registrato) */
@@ -930,7 +930,7 @@ class NodoWidget {
 
   /* Interruttore nel piede: "Memoria di Nous" dimentica tutto quello che il browser sa del visitatore e rimette la domanda. */
   inizializzaMemoria() {
-    try { fetch(new URL('./nous-tour.json?v=20260928-223', import.meta.url)).then(r => r.ok ? r.json() : null).then(j => { if (j) this._tour = j; }).catch(() => {}); } catch (e) {}
+    try { fetch(new URL('./nous-tour.json?v=20260928-224', import.meta.url)).then(r => r.ok ? r.json() : null).then(j => { if (j) this._tour = j; }).catch(() => {}); } catch (e) {}
     document.addEventListener('click', e => {
       const t = e.target instanceof Element ? e.target.closest('[data-nous-memoria]') : null;
       if (!t) return;
